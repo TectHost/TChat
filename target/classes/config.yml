@@ -1,0 +1,2 @@
+chat:
+  format: "&7[&cTEST&7] %player% &e>> &7%message%"

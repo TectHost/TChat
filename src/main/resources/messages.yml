@@ -1,0 +1,5 @@
+messages:
+  no-permission: "&5TChat &e> &cInsufficient permissions."
+  version-message: "&5TChat &e> &fVersion: &a%version%"
+  reload-message: "&5TChat &e> &aReload complete."
+  unknown-command: "&5TChat &e> &cUnknown command."
