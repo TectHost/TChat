@@ -1,5 +1,7 @@
+prefix: "&#c03afeT&#ac2ff9C&#9824f4h&#8319eea&#6f0ee9t &e> "
+
 messages:
-  no-permission: "&5TChat &e> &cInsufficient permissions."
-  version-message: "&5TChat &e> &fVersion: &a%version%"
-  reload-message: "&5TChat &e> &aReload complete."
-  unknown-command: "&5TChat &e> &cUnknown command."
+  no-permission: "&cInsufficient permissions."
+  version-message: "&fVersion: &a%version%"
+  reload-message: "&aReload complete."
+  unknown-command: "&cUnknown command."

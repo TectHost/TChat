@@ -1,5 +1,5 @@
 main: minealex.tchat.TChat
-version: 4.0.0-DEV-1
+version: 4.0.0-DEV-2
 name: TChat
 author: Mine_Alex
 api-version: 1.13

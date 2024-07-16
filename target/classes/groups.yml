@@ -1,0 +1,123 @@
+config:
+  default-group: "default"
+  op-group: "op"
+
+groups:
+  op:
+    # You can use any permission
+    permission: tchat.group.op
+    # Prefix of the group (%tchat_prefix%)
+    prefix: "&4&lOWNER"
+    # Suffix of the group (%tchat_suffix%)
+    suffix: ""
+    # Format of the group (read config.yml)
+    format: "%tchat_prefix% &f%player% &e> &f%message%"
+    # Per group hover text
+    hover:
+      player:
+        # Enable/disable player hover text part
+        enabled: true
+        # Hover text lineas of the player part
+        hover:
+          - "This is the player"
+          - "&7Hover text"
+          - "Supporting"
+          - "&#ff0000R&#ff5f00G&#ffbf00B &#bfff00C&#00ff00o&#0040bfl&#2600c0o&#5d0096r&#9400d3s"
+        # Clic actions
+        click:
+          # Enable/disable this option
+          enabled: true
+          # Tags: [SUGGEST], [EXECUTE], [OPEN]
+          action: "[SUGGEST] /msg %player% "
+      message:
+        # Enable/disable player hover text part
+        enabled: true
+        # Hover text lineas of the player part
+        hover:
+          - "This is the message"
+          - "&7Hover text"
+          - "Supporting"
+          - "&#ff0000R&#ff5f00G&#ffbf00B &#bfff00C&#00ff00o&#0040bfl&#2600c0o&#5d0096r&#9400d3s"
+        # Clic actions
+        click:
+          # Enable/disable this option
+          enabled: true
+          # Tags: [SUGGEST], [EXECUTE], [OPEN]
+          action: "[SUGGEST] /msg %player% "
+  admin:
+    permission: tchat.group.admin
+    prefix: "&c&lADMIN"
+    suffix: ""
+    format: "%tchat_prefix% &f%player% &e> &f%message%"
+    hover:
+      player:
+        enabled: true
+        hover:
+          - "This is the player"
+          - "&7Hover text"
+          - "Supporting"
+          - "&#ff0000R&#ff5f00G&#ffbf00B &#bfff00C&#00ff00o&#0040bfl&#2600c0o&#5d0096r&#9400d3s"
+        click:
+          enabled: true
+          action: "[SUGGEST] /msg %player% "
+      message:
+        enabled: true
+        hover:
+          - "This is the message"
+          - "&7Hover text"
+          - "Supporting"
+          - "&#ff0000R&#ff5f00G&#ffbf00B &#bfff00C&#00ff00o&#0040bfl&#2600c0o&#5d0096r&#9400d3s"
+        click:
+          enabled: true
+          action: "[SUGGEST] /msg %player% "
+  mod:
+    permission: tchat.group.mod
+    prefix: "&a&lMOD"
+    suffix: ""
+    format: "%tchat_prefix% &f%player% &e> &f%message%"
+    hover:
+      player:
+        enabled: true
+        hover:
+          - "This is the player"
+          - "&7Hover text"
+          - "Supporting"
+          - "&#ff0000R&#ff5f00G&#ffbf00B &#bfff00C&#00ff00o&#0040bfl&#2600c0o&#5d0096r&#9400d3s"
+        click:
+          enabled: true
+          action: "[SUGGEST] /msg %player% "
+      message:
+        enabled: true
+        hover:
+          - "This is the message"
+          - "&7Hover text"
+          - "Supporting"
+          - "&#ff0000R&#ff5f00G&#ffbf00B &#bfff00C&#00ff00o&#0040bfl&#2600c0o&#5d0096r&#9400d3s"
+        click:
+          enabled: true
+          action: "[SUGGEST] /msg %player% "
+  default:
+    prefix: "&7User"
+    suffix: ""
+    format: "%tchat_prefix% &f%player% &e> &f%message%"
+    hover:
+      player:
+        enabled: true
+        hover:
+          - "This is the player"
+          - "&7Hover text"
+          - "Supporting"
+          - "&#ff0000R&#ff5f00G&#ffbf00B &#bfff00C&#00ff00o&#0040bfl&#2600c0o&#5d0096r&#9400d3s"
+        click:
+          enabled: true
+          action: "[SUGGEST] /msg %player% "
+      message:
+        enabled: true
+        hover:
+          - "This is the message"
+          - "&7Hover text"
+          - "Supporting"
+          - "&#ff0000R&#ff5f00G&#ffbf00B &#bfff00C&#00ff00o&#0040bfl&#2600c0o&#5d0096r&#9400d3s"
+        click:
+          enabled: true
+          action: "[SUGGEST] /msg %player% "

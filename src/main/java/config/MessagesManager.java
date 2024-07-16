@@ -10,6 +10,7 @@ public class MessagesManager {
     private String versionMessage;
     private String reloadMessage;
     private String unknownMessage;
+    private String prefix;
 
     public MessagesManager(TChat plugin){
         this.messagesFile = new ConfigFile("messages.yml", null, plugin);
@@ -19,6 +20,7 @@ public class MessagesManager {
 
     public void loadConfig(){
         FileConfiguration config = messagesFile.getConfig();
+        prefix = config.getString("prefix");
         noPermission = config.getString("messages.no-permission");
         versionMessage = config.getString("messages.version-message");
         reloadMessage = config.getString("messages.reload-message");
@@ -44,6 +46,10 @@ public class MessagesManager {
 
     public String getUnknownMessage(){
         return unknownMessage;
+    }
+
+    public String getPrefix() {
+        return prefix;
     }
 }
 
