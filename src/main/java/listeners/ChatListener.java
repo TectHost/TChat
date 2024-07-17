@@ -1,18 +1,40 @@
 package listeners;
 
+import minealex.tchat.TChat;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import blocked.BannedCommands;
 
 public class ChatListener implements Listener {
+    private final TChat plugin;
     private final ChatFormatListener chatFormatListener;
+    private final BannedCommands bannedCommands;
 
-    public ChatListener(ChatFormatListener chatFormatListener) {
+    public ChatListener(TChat plugin, ChatFormatListener chatFormatListener) {
+        this.plugin = plugin;
         this.chatFormatListener = chatFormatListener;
+        this.bannedCommands = new BannedCommands(plugin);
     }
 
     @EventHandler
     public void onPlayerChat(AsyncPlayerChatEvent event) {
-        chatFormatListener.playerFormat(event);
+        plugin.getBannedWords().playerBannedWords(event);
+
+        if (!event.isCancelled()) {
+            if (plugin.getReplacerManager().getReplacerEnabled()) {
+                String message = event.getMessage();
+                message = plugin.getReplacerManager().replaceWords(message, event.getPlayer());
+                event.setMessage(message);
+            }
+
+            chatFormatListener.playerFormat(event);
+        }
+    }
+
+    @EventHandler
+    public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
+        bannedCommands.onPlayerCommandPreprocess(event);
     }
 }

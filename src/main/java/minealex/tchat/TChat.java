@@ -1,16 +1,15 @@
 package minealex.tchat;
 
 import commands.Commands;
-import config.ConfigManager;
-import config.MessagesManager;
-import config.GroupManager;
-import listeners.ChatFormatListener;
-import listeners.ChatListener;
+import config.*;
+import listeners.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 import placeholders.Placeholders;
 import utils.TranslateHexColorCodes;
+import blocked.BannedWords;
+import blocked.BannedCommands;
 
 import java.util.Objects;
 
@@ -21,6 +20,11 @@ public class TChat extends JavaPlugin {
     private ChatListener chatListener;
     private TranslateHexColorCodes translateHexColorCodes;
     private GroupManager groupManager;
+    private BannedWordsManager bannedWordsManager;
+    private BannedWords bannedWords;
+    private BannedCommandsManager bannedCommandsManager;
+    private BannedCommands bannedCommands;
+    private ReplacerManager replacerManager;
 
     @Override
     public void onEnable() {
@@ -38,13 +42,19 @@ public class TChat extends JavaPlugin {
 
     public void registerListeners() {
         chatFormatListener = new ChatFormatListener(configManager, groupManager, translateHexColorCodes);
-        chatListener = new ChatListener(chatFormatListener);
+        bannedWords = new BannedWords(bannedWordsManager, translateHexColorCodes);
+        chatListener = new ChatListener(this, chatFormatListener);
         getServer().getPluginManager().registerEvents(chatListener, this);
+        getServer().getPluginManager().registerEvents(bannedWords, this);
+        getServer().getPluginManager().registerEvents(new TabCompleteListener(this), this);
     }
 
     public void registerConfigFiles() {
         configManager = new ConfigManager(this);
         messagesManager = new MessagesManager(this);
+        bannedWordsManager = new BannedWordsManager(this);
+        bannedCommandsManager = new BannedCommandsManager(this);
+        replacerManager = new ReplacerManager(this);
     }
 
     public void initializeManagers() {
@@ -70,5 +80,25 @@ public class TChat extends JavaPlugin {
 
     public GroupManager getGroupManager() {
         return groupManager;
+    }
+
+    public BannedWordsManager getBannedWordsManager() {
+        return bannedWordsManager;
+    }
+
+    public BannedWords getBannedWords() {
+        return bannedWords;
+    }
+
+    public BannedCommandsManager getBannedCommandsManager() {
+        return bannedCommandsManager;
+    }
+
+    public BannedCommands getBannedCommands() {
+        return bannedCommands;
+    }
+
+    public ReplacerManager getReplacerManager() {
+        return replacerManager;
     }
 }

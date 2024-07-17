@@ -1,0 +1,55 @@
+# List of banned commands
+bannedCommands:
+  - pl
+  - plugins
+  - icanhasbukkit
+  - about
+  - "?"
+  - ver
+  - bukkit:ver
+  - bukkit:about
+  - bukkit:pl
+  - bukkit:plugins
+  - bukkit:help
+  - bukkit:?
+
+tab:
+  # Blocks all commands that contain ":"
+  block-all-additional-commands: true
+  noTabCompleteCommands:
+    - pl
+    - plugins
+    - icanhasbukkit
+    - about
+    - "?"
+    - ver
+
+# Message displayed when someone executes a banned command
+blockedMessage:
+  - "&8--------- { &#c03afeT&#a72cf8C&#8e1ff1h&#7411eba&#5b03e4t &8} ---------"
+  - "   &cYou can't use this command!"
+  - "&8---------------------------"
+
+# Title displayed to players when they type a blocked word
+title:
+  # Enable/disable the title
+  enabled: true
+  # Title
+  title: "✶ &#fe0000Y&#f50101o&#ec0202u &#e20202c&#d90303a&#d00404n&#c70505'&#bd0606t &#b40707w&#ab0707r&#a20808i&#980909t&#8f0a0ae &#860b0bt&#7d0b0bh&#730c0ca&#6a0d0dt &f✶"
+  # Subtitle
+  subtitle: "&#A5A5A5Execute another command."
+
+# Action bar displayed to players when they type a blocked word
+actionbar:
+  # Enable/disable the title
+  enabled: true
+  # Action bar text
+  bar: "&7[&#c03afeT&#a72cf8C&#8e1ff1h&#7411eba&#5b03e4t&7] &#fe0000Y&#f50101o&#ec0202u &#e20202c&#d90303a&#d00404n&#c70505'&#bd0606t &#b40707w&#ab0707r&#a20808i&#980909t&#8f0a0ae &#860b0bt&#7d0b0bh&#730c0ca&#6a0d0dt"
+
+# Sound executed to players when they type a blocked word
+sound:
+  # Enable/disable the title
+  enabled: true
+  # Sound
+  # https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Sound.html
+  sound: "ENTITY_VILLAGER_NO"

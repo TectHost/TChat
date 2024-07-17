@@ -17,7 +17,7 @@ groups:
       player:
         # Enable/disable player hover text part
         enabled: true
-        # Hover text lineas of the player part
+        # Hover text lines of the player part
         hover:
           - "This is the player"
           - "&7Hover text"
@@ -32,7 +32,7 @@ groups:
       message:
         # Enable/disable player hover text part
         enabled: true
-        # Hover text lineas of the player part
+        # Hover text lines of the player part
         hover:
           - "This is the message"
           - "&7Hover text"

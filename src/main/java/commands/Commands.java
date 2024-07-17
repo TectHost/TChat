@@ -30,6 +30,9 @@ public class Commands implements CommandExecutor, TabCompleter {
                     plugin.getConfigManager().reloadConfig();
                     plugin.getMessagesManager().reloadConfig();
                     plugin.getGroupManager().reloadGroups();
+                    plugin.getBannedWordsManager().reloadBannedWords();
+                    plugin.getBannedCommandsManager().reloadConfig();
+                    plugin.getReplacerManager().reloadConfig();
                     String message = plugin.getMessagesManager().getReloadMessage();
                     String prefix = plugin.getMessagesManager().getPrefix();
                     sender.sendMessage(translateColors(prefix) + ChatColor.translateAlternateColorCodes('&', message));
