@@ -5,3 +5,13 @@ messages:
   version-message: "&fVersion: &a%version%"
   reload-message: "&aReload complete."
   unknown-command: "&cUnknown command."
+  anticap: "&cYour message has been blocked due to excessive use of uppercase letters."
+  color-selected: "&aColor selected: %id%%color%"
+  format-selected: "&aFormat selected: %id%%color%"
+  invalid-id: "&cInvalid item ID."
+  no-item-found: "&cNo item found for display name: %item%"
+  # Debug messages are only seen in the console
+  debug:
+    no-format-group: "&cError in groups.yml - No format found for group: %group%"
+    no-player: "&cOnly players can execute this command."
+    material-not-found: "&cMaterial not found: %material%"

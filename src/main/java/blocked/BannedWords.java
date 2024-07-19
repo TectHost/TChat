@@ -36,9 +36,8 @@ public class BannedWords implements Listener {
                     if ("BLOCK".equalsIgnoreCase(bannedWordsManager.getType())) {
                         List<String> blockedMessages = bannedWordsManager.getBlockedMessages();
                         for (String blockedMessage : blockedMessages) {
-                            blockedMessage = translateHexColorCodes("&#", "", blockedMessage);
-                            blockedMessage = blockedMessage.replace("{word}", word);
-                            event.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', blockedMessage));
+                            blockedMessage = translateAndReplace(blockedMessage, word);
+                            event.getPlayer().sendMessage(blockedMessage);
                         }
                         event.setCancelled(true);
 

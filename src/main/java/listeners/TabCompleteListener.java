@@ -6,7 +6,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandSendEvent;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class TabCompleteListener implements Listener {
@@ -23,16 +22,7 @@ public class TabCompleteListener implements Listener {
     void onPlayerCommandSend(PlayerCommandSendEvent event) {
         if (!event.getPlayer().hasPermission("tchat.bypass.command_blocker.tab") && !event.getPlayer().hasPermission("tchat.admin")) {
             if (bannedCommandsManager.getBlockAllCommands()) {
-                List<String> allowedCommands = new ArrayList<>();
-
-                for (String command : event.getCommands()) {
-                    if (!command.contains(":")) {
-                        allowedCommands.add(command);
-                    }
-                }
-
-                event.getCommands().clear();
-                event.getCommands().addAll(allowedCommands);
+                event.getCommands().removeIf(command -> command.contains(":"));
             }
 
             event.getCommands().removeAll(this.remove);

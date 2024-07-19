@@ -6,6 +6,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import utils.TranslateHexColorCodes;
 
@@ -24,27 +25,62 @@ public class Commands implements CommandExecutor, TabCompleter {
 
     @Override
     public boolean onCommand(CommandSender sender, @NotNull Command command, @NotNull String alias, String[] args) {
-        if (sender.hasPermission("tchat.admin")) {
+        Player Player = null;
+        if (sender.hasPermission("tchat.admin") || sender.hasPermission("tchat.admin.version") || sender.hasPermission("tchat.admin.reload")) {
             if (args.length >= 1) {
                 if (args[0].equalsIgnoreCase("reload")) {
-                    plugin.getConfigManager().reloadConfig();
-                    plugin.getMessagesManager().reloadConfig();
-                    plugin.getGroupManager().reloadGroups();
-                    plugin.getBannedWordsManager().reloadBannedWords();
-                    plugin.getBannedCommandsManager().reloadConfig();
-                    plugin.getReplacerManager().reloadConfig();
-                    String message = plugin.getMessagesManager().getReloadMessage();
-                    String prefix = plugin.getMessagesManager().getPrefix();
-                    sender.sendMessage(translateColors(prefix) + ChatColor.translateAlternateColorCodes('&', message));
+                    if (sender.hasPermission("tchat.admin") || sender.hasPermission("tchat.admin.reload")) {
+                        plugin.getConfigManager().reloadConfig();
+                        plugin.getMessagesManager().reloadConfig();
+                        plugin.getGroupManager().reloadGroups();
+                        plugin.getBannedWordsManager().reloadBannedWords();
+                        plugin.getBannedCommandsManager().reloadConfig();
+                        plugin.getReplacerManager().reloadConfig();
+                        plugin.getSaveManager().reloadConfig();
+                        plugin.getChatColorManager().reloadConfig();
+                        String message = plugin.getMessagesManager().getReloadMessage();
+                        String prefix = plugin.getMessagesManager().getPrefix();
+                        if (!(sender instanceof Player)) {
+                            sender.sendMessage(plugin.getTranslateColors().translateColors(null, prefix + message));
+                        } else {
+                            Player = ((Player) sender).getPlayer();
+                            sender.sendMessage(plugin.getTranslateColors().translateColors(Player, prefix + message));
+                        }
+                    } else {
+                        String message = plugin.getMessagesManager().getNoPermission();
+                        String prefix = plugin.getMessagesManager().getPrefix();
+                        sender.sendMessage(plugin.getTranslateColors().translateColors(Player, prefix) + ChatColor.translateAlternateColorCodes('&', message));
+                    }
                 } else if (args[0].equalsIgnoreCase("version")) {
-                    String version = plugin.getDescription().getVersion();
-                    String message = plugin.getMessagesManager().getVersionMessage().replace("%version%", version);
-                    String prefix = plugin.getMessagesManager().getPrefix();
-                    sender.sendMessage(translateColors(prefix) + ChatColor.translateAlternateColorCodes('&', message));
+                    if (sender.hasPermission("tchat.admin") || sender.hasPermission("tchat.admin.version")) {
+                        String version = plugin.getDescription().getVersion();
+                        String message = plugin.getMessagesManager().getVersionMessage().replace("%version%", version);
+                        String prefix = plugin.getMessagesManager().getPrefix();
+                        if (!(sender instanceof Player)) {
+                            sender.sendMessage(plugin.getTranslateColors().translateColors(null, prefix + message));
+                        } else {
+                            Player = ((Player) sender).getPlayer();
+                            sender.sendMessage(plugin.getTranslateColors().translateColors(Player, prefix + message));
+                        }
+                    } else {
+                        String message = plugin.getMessagesManager().getNoPermission();
+                        String prefix = plugin.getMessagesManager().getPrefix();
+                        if (!(sender instanceof Player)) {
+                            sender.sendMessage(plugin.getTranslateColors().translateColors(null, prefix + message));
+                        } else {
+                            Player = ((Player) sender).getPlayer();
+                            sender.sendMessage(plugin.getTranslateColors().translateColors(Player, prefix + message));
+                        }
+                    }
                 } else {
                     String message = plugin.getMessagesManager().getUnknownMessage();
                     String prefix = plugin.getMessagesManager().getPrefix();
-                    sender.sendMessage(translateColors(prefix) + ChatColor.translateAlternateColorCodes('&', message));
+                    if (!(sender instanceof Player)) {
+                        sender.sendMessage(plugin.getTranslateColors().translateColors(null, prefix + message));
+                    } else {
+                        Player = ((Player) sender).getPlayer();
+                        sender.sendMessage(plugin.getTranslateColors().translateColors(Player, prefix + message));
+                    }
                 }
             } else {
                 // Mensaje de ayuda
@@ -54,7 +90,12 @@ public class Commands implements CommandExecutor, TabCompleter {
         } else {
             String message = plugin.getMessagesManager().getNoPermission();
             String prefix = plugin.getMessagesManager().getPrefix();
-            sender.sendMessage(translateColors(prefix) + ChatColor.translateAlternateColorCodes('&', message));
+            if (!(sender instanceof Player)) {
+                sender.sendMessage(plugin.getTranslateColors().translateColors(null, prefix + message));
+            } else {
+                Player = ((Player) sender).getPlayer();
+                sender.sendMessage(plugin.getTranslateColors().translateColors(Player, prefix + message));
+            }
         }
         return true;
     }
@@ -69,12 +110,5 @@ public class Commands implements CommandExecutor, TabCompleter {
         }
 
         return completions;
-    }
-
-    private String translateColors(String message) {
-        message = TranslateHexColorCodes.translateHexColorCodes("&#", "", message);
-        message = ChatColor.translateAlternateColorCodes('&', message);
-
-        return message;
     }
 }

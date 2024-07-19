@@ -21,6 +21,8 @@ public class ChatListener implements Listener {
     @EventHandler
     public void onPlayerChat(AsyncPlayerChatEvent event) {
         plugin.getBannedWords().playerBannedWords(event);
+        plugin.getAntiAdvertising().checkAdvertising(event);
+        plugin.getCapListener().playerAntiCap(event);
 
         if (!event.isCancelled()) {
             if (plugin.getReplacerManager().getReplacerEnabled()) {

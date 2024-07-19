@@ -24,7 +24,7 @@ public class BannedCommands implements Listener {
 
     @EventHandler
     public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
-        if (!event.getPlayer().hasPermission("tchat.bypass.command_blocker.tab") && !event.getPlayer().hasPermission("tchat.admin")) {
+        if (!event.getPlayer().hasPermission("tchat.bypass.command_blocker.command") && !event.getPlayer().hasPermission("tchat.admin")) {
             String command = event.getMessage().split(" ")[0].substring(1).toLowerCase();
             List<String> bannedCommands = bannedCommandsManager.getBannedCommands();
 

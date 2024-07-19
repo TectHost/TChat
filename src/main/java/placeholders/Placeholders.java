@@ -2,6 +2,7 @@ package placeholders;
 
 import config.GroupManager;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
+import minealex.tchat.TChat;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -9,8 +10,10 @@ import org.jetbrains.annotations.Nullable;
 public class Placeholders extends PlaceholderExpansion {
 
     private final GroupManager groupManager;
+    private final TChat plugin;
 
-    public Placeholders(GroupManager groupManager) {
+    public Placeholders(TChat plugin, GroupManager groupManager) {
+        this.plugin = plugin;
         this.groupManager = groupManager;
     }
 
@@ -45,18 +48,14 @@ public class Placeholders extends PlaceholderExpansion {
             return "";
         }
 
-        if (identifier.equals("prefix")) {
-            return groupManager.getGroupPrefix(player);
-        }
-
-        if (identifier.equals("suffix")) {
-            return groupManager.getGroupSuffix(player);
-        }
-
-        if (identifier.equals("group")) {
-            return groupManager.getGroupName(player);
-        }
-
-        return null;
+        return switch (identifier) {
+            case "prefix" -> groupManager.getGroupPrefix(player);
+            case "suffix" -> groupManager.getGroupSuffix(player);
+            case "group" -> groupManager.getGroupName(player);
+            case "chatcolor" -> plugin.getSaveManager().getChatColor(player.getUniqueId()) + plugin.getSaveManager().getFormat(player.getUniqueId());
+            case "chatcolor_color" -> plugin.getSaveManager().getChatColor(player.getUniqueId());
+            case "chatcolor_format" -> plugin.getSaveManager().getFormat(player.getUniqueId());
+            default -> null;
+        };
     }
 }
