@@ -35,10 +35,10 @@ public class ChatColorInventoryManager implements Listener {
     }
 
     private void setBorderItems(Player player, Inventory inv) {
-        setBorderItem(player, 1, inv, 0, 8, plugin.getChatColorManager().getTopMaterial(), plugin.getChatColorManager().getAmountTop(), plugin.getChatColorManager().getTopName(), plugin.getChatColorManager().getLoreTop());
-        setBorderItem(player, 9, inv, 9, 36, plugin.getChatColorManager().getLeftMaterial(), plugin.getChatColorManager().getAmountLeft(), plugin.getChatColorManager().getLeftName(), plugin.getChatColorManager().getLoreLeft());
-        setBorderItem(player, 9, inv, 17, 44, plugin.getChatColorManager().getRightMaterial(), plugin.getChatColorManager().getAmountRight(), plugin.getChatColorManager().getRightName(), plugin.getChatColorManager().getLoreRight());
-        setBorderItem(player, 1, inv, 45, 53, plugin.getChatColorManager().getBottomMaterial(), plugin.getChatColorManager().getAmountBottom(), plugin.getChatColorManager().getBottomName(), plugin.getChatColorManager().getLoreBottom());
+        setBorderItem(player, plugin.getChatColorManager().getAddTop(), inv, plugin.getChatColorManager().getStartTop(), plugin.getChatColorManager().getEndTop(), plugin.getChatColorManager().getTopMaterial(), plugin.getChatColorManager().getAmountTop(), plugin.getChatColorManager().getTopName(), plugin.getChatColorManager().getLoreTop());
+        setBorderItem(player, plugin.getChatColorManager().getAddLeft(), inv, plugin.getChatColorManager().getStartLeft(), plugin.getChatColorManager().getEndLeft(), plugin.getChatColorManager().getLeftMaterial(), plugin.getChatColorManager().getAmountLeft(), plugin.getChatColorManager().getLeftName(), plugin.getChatColorManager().getLoreLeft());
+        setBorderItem(player, plugin.getChatColorManager().getAddRight(), inv, plugin.getChatColorManager().getStartRight(), plugin.getChatColorManager().getEndRight(), plugin.getChatColorManager().getRightMaterial(), plugin.getChatColorManager().getAmountRight(), plugin.getChatColorManager().getRightName(), plugin.getChatColorManager().getLoreRight());
+        setBorderItem(player, plugin.getChatColorManager().getAddBottom(), inv, plugin.getChatColorManager().getStartBottom(), plugin.getChatColorManager().getEndBottom(), plugin.getChatColorManager().getBottomMaterial(), plugin.getChatColorManager().getAmountBottom(), plugin.getChatColorManager().getBottomName(), plugin.getChatColorManager().getLoreBottom());
 
         setItem(player, inv, plugin.getChatColorManager().getCloseSlot(), plugin.getChatColorManager().getCloseMaterial(), plugin.getChatColorManager().getAmountClose(), plugin.getChatColorManager().getCloseName(), plugin.getChatColorManager().getLoreClose());
     }

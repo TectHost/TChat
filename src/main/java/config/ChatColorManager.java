@@ -34,6 +34,18 @@ public class ChatColorManager {
     private List<String> loreRight;
     private List<String> loreBottom;
     private List<String> loreClose;
+    private int addTop;
+    private int startTop;
+    private int endTop;
+    private int addLeft;
+    private int startLeft;
+    private int endLeft;
+    private int addRight;
+    private int startRight;
+    private int endRight;
+    private int addBottom;
+    private int startBottom;
+    private int endBottom;
 
     public final Map<String, ChatColorItem> items = new HashMap<>();
 
@@ -59,6 +71,18 @@ public class ChatColorManager {
     private static final String MENU_BACKGROUND_RIGHT_LORE = "menu.background.right.lore";
     private static final String MENU_BACKGROUND_BOTTOM_LORE = "menu.background.bottom.lore";
     private static final String MENU_BACKGROUND_CLOSE_LORE = "menu.background.close.lore";
+    private static final String MENU_BACKGROUND_TOP_ADD = "menu.background.top.for.add";
+    private static final String MENU_BACKGROUND_TOP_START = "menu.background.top.for.start-slot";
+    private static final String MENU_BACKGROUND_TOP_END = "menu.background.top.for.end-slot";
+    private static final String MENU_BACKGROUND_LEFT_ADD = "menu.background.left.for.add";
+    private static final String MENU_BACKGROUND_LEFT_START = "menu.background.left.for.start-slot";
+    private static final String MENU_BACKGROUND_LEFT_END = "menu.background.left.for.end-slot";
+    private static final String MENU_BACKGROUND_RIGHT_ADD = "menu.background.right.for.add";
+    private static final String MENU_BACKGROUND_RIGHT_START = "menu.background.right.for.start-slot";
+    private static final String MENU_BACKGROUND_RIGHT_END = "menu.background.right.for.end-slot";
+    private static final String MENU_BACKGROUND_BOTTOM_ADD = "menu.background.bottom.for.add";
+    private static final String MENU_BACKGROUND_BOTTOM_START = "menu.background.bottom.for.start-slot";
+    private static final String MENU_BACKGROUND_BOTTOM_END = "menu.background.bottom.for.end-slot";
     private static final String MENU_ITEMS_PREFIX = "menu.items.";
 
     public ChatColorManager(TChat plugin) {
@@ -74,6 +98,19 @@ public class ChatColorManager {
         leftMaterial = Material.valueOf(config.getString(MENU_BACKGROUND_LEFT_MATERIAL));
         rightMaterial = Material.valueOf(config.getString(MENU_BACKGROUND_RIGHT_MATERIAL));
         bottomMaterial = Material.valueOf(config.getString(MENU_BACKGROUND_BOTTOM_MATERIAL));
+
+        addTop = config.getInt(MENU_BACKGROUND_TOP_ADD);
+        startTop = config.getInt(MENU_BACKGROUND_TOP_START);
+        endTop = config.getInt(MENU_BACKGROUND_TOP_END);
+        addLeft = config.getInt(MENU_BACKGROUND_LEFT_ADD);
+        startLeft = config.getInt(MENU_BACKGROUND_LEFT_START);
+        endLeft = config.getInt(MENU_BACKGROUND_LEFT_END);
+        addRight = config.getInt(MENU_BACKGROUND_RIGHT_ADD);
+        startRight = config.getInt(MENU_BACKGROUND_RIGHT_START);
+        endRight = config.getInt(MENU_BACKGROUND_RIGHT_END);
+        addBottom = config.getInt(MENU_BACKGROUND_BOTTOM_ADD);
+        startBottom = config.getInt(MENU_BACKGROUND_BOTTOM_START);
+        endBottom = config.getInt(MENU_BACKGROUND_BOTTOM_END);
 
         amountTop = config.getInt(MENU_BACKGROUND_TOP_AMOUNT);
         amountLeft = config.getInt(MENU_BACKGROUND_LEFT_AMOUNT);
@@ -114,6 +151,19 @@ public class ChatColorManager {
         messagesFile.reloadConfig();
         loadConfig();
     }
+
+    public int getAddTop() { return addTop; }
+    public int getStartTop() { return startTop; }
+    public int getEndTop() { return endTop; }
+    public int getAddLeft() { return addLeft; }
+    public int getStartLeft() { return startLeft; }
+    public int getEndLeft() { return endLeft; }
+    public int getAddRight() { return addRight; }
+    public int getStartRight() { return startRight; }
+    public int getEndRight() { return endRight; }
+    public int getAddBottom() { return addBottom; }
+    public int getStartBottom() { return startBottom; }
+    public int getEndBottom() { return endBottom; }
 
     public List<String> getLoreTop() { return loreTop; }
     public List<String> getLoreLeft() { return loreLeft; }

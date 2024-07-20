@@ -1,5 +1,6 @@
 package minealex.tchat;
 
+import commands.ChannelCommand;
 import commands.Commands;
 import commands.ChatColorCommand;
 import config.*;
@@ -8,6 +9,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 import placeholders.Placeholders;
+import utils.ChannelsManager;
 import utils.ChatColorInventoryManager;
 import utils.TranslateColors;
 import utils.TranslateHexColorCodes;
@@ -33,6 +35,9 @@ public class TChat extends JavaPlugin {
     private CapListener capListener;
     private TranslateColors translateColors;
     private ChatColorManager chatColorManager;
+    private ChannelsConfigManager channelsConfigManager;
+    private ChannelsManager channelsManager;
+    private GrammarListener grammarListener;
 
     @Override
     public void onEnable() {
@@ -61,6 +66,7 @@ public class TChat extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new TabCompleteListener(this), this);
         antiAdvertising = new AntiAdvertising(this);
         capListener = new CapListener(this);
+        grammarListener = new GrammarListener(this);
     }
 
     public void registerConfigFiles() {
@@ -71,6 +77,7 @@ public class TChat extends JavaPlugin {
         replacerManager = new ReplacerManager(this);
         saveManager = new SaveManager(this);
         chatColorManager = new ChatColorManager(this);
+        channelsConfigManager = new ChannelsConfigManager(this);
     }
 
     public void initializeManagers() {
@@ -78,11 +85,13 @@ public class TChat extends JavaPlugin {
         groupManager = new GroupManager(this);
         chatColorInventoryManager = new ChatColorInventoryManager(this);
         translateColors = new TranslateColors();
+        channelsManager = new ChannelsManager();
     }
 
     public void registerCommands() {
         Objects.requireNonNull(this.getCommand("tchat")).setExecutor(new Commands(this));
         Objects.requireNonNull(this.getCommand("chatcolor")).setExecutor(new ChatColorCommand(this));
+        Objects.requireNonNull(this.getCommand("channel")).setExecutor(new ChannelCommand(this));
     }
 
     public void registerPlaceholders() {
@@ -91,6 +100,9 @@ public class TChat extends JavaPlugin {
 
     // ------------------------------------------------------------------------------
 
+    public GrammarListener getGrammarListener() { return grammarListener; }
+    public ChannelsManager getChannelsManager() { return channelsManager; }
+    public ChannelsConfigManager getChannelsConfigManager() { return channelsConfigManager; }
     public ChatColorInventoryManager getChatColorInventoryManager() { return chatColorInventoryManager; }
     public SaveManager getSaveManager() { return saveManager; }
     public AntiAdvertising getAntiAdvertising() { return antiAdvertising; }

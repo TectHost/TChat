@@ -1,5 +1,5 @@
 main: minealex.tchat.TChat
-version: 4.0.0-DEV-4
+version: 4.0.0-DEV-5
 name: TChat
 author: Mine_Alex
 api-version: 1.13
@@ -17,9 +17,51 @@ commands:
     usage: /<command>
     aliases:
       - cc
+  channel:
+    description: Join/leave a channel
+    usage: /<command> <join|leave>
 
 
 permissions:
   tchat.chatcolor.menu:
     description: Permission to open the chatcolor menu
+    default: false
+  tchat.admin:
+    description: Admin permission
+    default: false
+  tchat.reload:
+    description: Permission to reload the plugin
+    default: false
+  tchat.version:
+    description: Permission view the version of the plugin
+    default: false
+  tchat.bypass.anticap:
+    description: Permission to bypass the anti cap system
+    default: false
+  tchat.bypass.command_blocker.tab:
+    description: Permission to bypass tab command blocker
+    default: false
+  tchat.bypass.command_blocker.command:
+    description: Permission to open the chatcolor menu
+    default: false
+  tchat.bypass.banned_words:
+    description: Permission to bypass banned words system
+    default: false
+  tchat.color.all:
+    description: Permission to use all colors in chat
+    default: false
+  tchat.color.*:
+    description: Permission to use colors in chat
+    default: false
+  tchat.chatcolor.all:
+    description: Permission to use all chat colors
+    default: false
+  tchat.chatcolor.*:
+    description: Permission to use chat colors
+    default: false
+  tchat.channel.all:
+    description: Permission to use all channels
+    default: false
+  tchat.channel.*:
+    description: Permission to use channels
     default: false

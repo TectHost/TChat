@@ -21,6 +21,7 @@ public class BannedWordsManager {
     private String actionBar;
     private boolean soundEnabled;
     private String sound;
+    private String bypassPermission;
 
     public BannedWordsManager(TChat plugin) {
         this.plugin = plugin;
@@ -53,49 +54,19 @@ public class BannedWordsManager {
         if (soundEnabled) {
             sound = bannedWordsConfig.getString("sound.sound");
         }
+        bypassPermission = bannedWordsConfig.getString("bypass.permission");
     }
 
-    public String getSound() {
-        return sound;
-    }
-
-    public boolean getSoundEnabled() {
-        return soundEnabled;
-    }
-
-    public String getActionBar() {
-        return actionBar;
-    }
-
-    public boolean getActionBarEnabled() {
-        return actionBarEnabled;
-    }
-
-    public List<String> getBannedWords() {
-        return bannedWords;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public List<String> getBlockedMessages() {
-        return blockedMessages;
-    }
-
-    public boolean getTitleEnabled() {
-        return titleEnabled;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public String getSubTitle() {
-        return subTitle;
-    }
-
-    public TChat getPlugin() {
-        return plugin;
-    }
+    public String getBypassPermission() { return bypassPermission; }
+    public String getSound() { return sound; }
+    public boolean getSoundEnabled() { return soundEnabled; }
+    public String getActionBar() { return actionBar; }
+    public boolean getActionBarEnabled() { return actionBarEnabled; }
+    public List<String> getBannedWords() { return bannedWords; }
+    public String getType() { return type; }
+    public List<String> getBlockedMessages() { return blockedMessages; }
+    public boolean getTitleEnabled() { return titleEnabled; }
+    public String getTitle() { return title; }
+    public String getSubTitle() { return subTitle; }
+    public TChat getPlugin() { return plugin; }
 }

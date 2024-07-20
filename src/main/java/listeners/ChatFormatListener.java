@@ -1,5 +1,6 @@
 package listeners;
 
+import config.ChannelsConfigManager;
 import config.ConfigManager;
 import config.GroupManager;
 import me.clip.placeholderapi.PlaceholderAPI;
@@ -14,17 +15,20 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import utils.TranslateHexColorCodes;
 
 import java.util.List;
+import java.util.Objects;
 
 public class ChatFormatListener implements Listener {
 
     private final ConfigManager configManager;
     private final GroupManager groupManager;
     private final TChat plugin;
+    private final ChannelsConfigManager channelsConfigManager;
 
     public ChatFormatListener(TChat plugin, ConfigManager configManager, GroupManager groupManager, TranslateHexColorCodes translateHexColorCodes) {
         this.plugin = plugin;
         this.configManager = configManager;
         this.groupManager = groupManager;
+        this.channelsConfigManager = plugin.getChannelsConfigManager();
     }
 
     @EventHandler
@@ -33,17 +37,26 @@ public class ChatFormatListener implements Listener {
         String message = event.getMessage();
         String format;
 
-        if (configManager.getFormatGroup()) {
-            String groupName = groupManager.getGroup(player);
-            format = groupManager.getGroupFormat(groupName);
-            if (format.isEmpty()) {
-                format = "<" + player.getName() + "> " + message;
-                String errorMessage = plugin.getMessagesManager().getNoFormatGroup();
-                String prefix = plugin.getMessagesManager().getPrefix();
-                Bukkit.getConsoleSender().sendMessage(plugin.getTranslateColors().translateColors(player, prefix) + org.bukkit.ChatColor.translateAlternateColorCodes('&', errorMessage).replace("%group%", groupName));
-            }
+        String channelName = plugin.getChannelsManager().getPlayerChannel(player);
+        ChannelsConfigManager.Channel channel = channelsConfigManager.getChannel(channelName);
+
+        if (channel != null && channel.isEnabled() && (player.hasPermission(channel.getPermission()) || player.hasPermission("tchat.admin") || player.hasPermission("tchat.channel.all"))) {
+            format = channel.getFormat();
+            format = format.replace("%channel%", channelName);
+            format = format.replace("%message%", "%msg%");
         } else {
-            format = configManager.getFormat();
+            if (configManager.getFormatGroup()) {
+                String groupName = groupManager.getGroup(player);
+                format = groupManager.getGroupFormat(groupName);
+                if (format.isEmpty()) {
+                    format = "<" + player.getName() + "> " + message;
+                    String errorMessage = plugin.getMessagesManager().getNoFormatGroup();
+                    String prefix = plugin.getMessagesManager().getPrefix();
+                    Bukkit.getConsoleSender().sendMessage(plugin.getTranslateColors().translateColors(player, prefix) + org.bukkit.ChatColor.translateAlternateColorCodes('&', errorMessage).replace("%group%", groupName));
+                }
+            } else {
+                format = configManager.getFormat();
+            }
         }
 
         format = format.replace("%player%", player.getName())
@@ -92,7 +105,32 @@ public class ChatFormatListener implements Listener {
 
         event.setCancelled(true);
         for (Player p : event.getRecipients()) {
-            p.spigot().sendMessage(mainComponent);
+            if (channel == null) {
+                p.spigot().sendMessage(mainComponent);
+                break;
+            }
+
+            String recipientChannel = plugin.getChannelsManager().getPlayerChannel(p);
+            boolean hasPermissionForChannel = p.hasPermission(channel.getPermission()) || p.hasPermission("tchat.admin") || p.hasPermission("tchat.channel.all");
+            boolean isInRecipientChannel = recipientChannel != null && recipientChannel.equals(channelName);
+
+            if (channel.isEnabled()) {
+                int messageMode = channel.getMessageMode();
+
+                if (messageMode == 0) {
+                    p.spigot().sendMessage(mainComponent);
+                } else if (messageMode == 1) {
+                    if (hasPermissionForChannel) {
+                        p.spigot().sendMessage(mainComponent);
+                    }
+                } else if (messageMode == 2) {
+                    if (isInRecipientChannel) {
+                        p.spigot().sendMessage(mainComponent);
+                    }
+                }
+            } else {
+                p.spigot().sendMessage(mainComponent);
+            }
         }
 
         if (configManager.getRegisterMessagesOnConsole()) {

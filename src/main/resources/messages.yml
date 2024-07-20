@@ -1,4 +1,6 @@
-prefix: "&#c03afeT&#ac2ff9C&#9824f4h&#8319eea&#6f0ee9t &e> "
+prefix:
+  enabled: true
+  prefix: "&#c03afeT&#ac2ff9C&#9824f4h&#8319eea&#6f0ee9t &e> "
 
 messages:
   no-permission: "&cInsufficient permissions."
@@ -10,6 +12,19 @@ messages:
   format-selected: "&aFormat selected: %id%%color%"
   invalid-id: "&cInvalid item ID."
   no-item-found: "&cNo item found for display name: %item%"
+  channel-not-exist: "&cThe channel %channel% doesn't exists."
+  channel-no-permission-join: "&cYou do not have permission to join channel: %channel%"
+  already-channel: "&cYou are already in the channel %channel%"
+  left-channel: "&cYou have left the channel %channel%"
+  left-channel-announce: "&c%player% has left the channel %channel%"
+  join-channel: "&aYou have join the channel %channel%"
+  join-channel-announce: "&a%player% has joined the channel %channel%"
+  no-channel: "&cYou are not in the channel %channel%"
+  channel-no-permission-left: "&cYou do not have permission to left channel: %channel%"
+  usage:
+    channel: "&cUsage: /channel <join|leave> <channel>"
+    join-channel: "&cUsage: /channel join <channel>"
+    leave-channel: "&cUsage: /channel leave <channel>"
   # Debug messages are only seen in the console
   debug:
     no-format-group: "&cError in groups.yml - No format found for group: %group%"

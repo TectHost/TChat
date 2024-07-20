@@ -27,7 +27,7 @@ public class BannedWords implements Listener {
         if (event.isCancelled()) return;
 
         Player player = event.getPlayer();
-        if (!player.hasPermission("tchat.bypass.banned_words") || !player.hasPermission("tchat.admin")) {
+        if (!player.hasPermission(bannedWordsManager.getBypassPermission()) || !player.hasPermission("tchat.admin")) {
             String message = event.getMessage().toLowerCase();
             List<String> bannedWords = bannedWordsManager.getBannedWords();
 

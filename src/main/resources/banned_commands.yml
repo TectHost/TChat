@@ -53,3 +53,9 @@ sound:
   # Sound
   # https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Sound.html
   sound: "ENTITY_VILLAGER_NO"
+
+bypass:
+  command:
+    permission: "tchat.bypass.command_blocker.command"
+  tab:
+    permission: "tchat.bypass.command_blocker.tab"

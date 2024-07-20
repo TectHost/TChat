@@ -1,6 +1,7 @@
 package config;
 
 import minealex.tchat.TChat;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 
 public class ConfigManager {
@@ -16,6 +17,13 @@ public class ConfigManager {
     private double antiCapPercent;
     private String antiCapMode;
     private boolean antiCapMessageEnabled;
+    private boolean grammarEnabled;
+    private boolean grammarCapEnabled;
+    private int grammarCapLetters;
+    private boolean grammarDotEnabled;
+    private String grammarDotCharacter;
+    private int grammarMinCharactersCap;
+    private int grammarMinCharactersDot;
 
     public ConfigManager(TChat plugin) {
         this.configFile = new ConfigFile("config.yml", null, plugin);
@@ -40,12 +48,34 @@ public class ConfigManager {
             antiCapMode = config.getString("cap.mode");
             antiCapMessageEnabled = config.getBoolean("cap.message-enabled");
         }
+
+        grammarEnabled = config.getBoolean("grammar.enabled");
+        if (grammarEnabled) {
+            grammarCapEnabled = config.getBoolean("grammar.cap.enabled");
+            grammarDotEnabled = config.getBoolean("grammar.final-dot.enabled");
+            if (grammarDotEnabled) {
+                grammarMinCharactersDot = config.getInt("grammar.final-dot.min-characters");
+                grammarDotCharacter = config.getString("grammar.final-dot.character");
+            }
+            if (grammarCapEnabled) {
+                grammarMinCharactersCap = config.getInt("grammar.cap.min-characters");
+                grammarCapLetters = config.getInt("grammar.cap.letters");
+            }
+        }
     }
 
     public void reloadConfig() {
         configFile.reloadConfig();
         loadConfig();
     }
+
+    public int getGrammarMinCharactersCap() { return grammarMinCharactersCap; }
+    public int getGrammarMinCharactersDot() { return grammarMinCharactersDot; }
+    public String getGrammarDotCharacter() { return grammarDotCharacter; }
+    public boolean isGrammarDotEnabled() { return grammarDotEnabled; }
+    public boolean isGrammarEnabled() { return grammarEnabled; }
+    public boolean isGrammarCapEnabled() { return grammarCapEnabled; }
+    public int getGrammarCapLetters() { return grammarCapLetters; }
 
     public String getFormat() { return format; }
     public boolean getFormatGroup() { return formatGroup; }

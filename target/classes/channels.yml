@@ -1,0 +1,23 @@
+channels:
+  admin:
+    enabled: true
+    permission: "tchat.channel.admin"
+    format: "%channel% &a%player% &b> &e%msg%"
+    # Modes:
+    # 0 -> Messages visible to all
+    # 1 -> Messages visible to all users with the permission (recommended)
+    # 2 -> Messages visible to all users on the channel
+    # 3 -> Disable messages (NOT RECOMMENDED)
+    message-mode: 1
+    # Modes:
+    # 0 -> Announce visible to all
+    # 1 -> Announce visible to all users with the permission (recommended)
+    # 2 -> Announce visible to all users on the channel
+    # 3 -> Disable announces
+    announce-mode: 1
+  test:
+    enabled: true
+    permission: "tchat.test"
+    format: "%channel% &a%player% &b> &e%msg%"
+    message-mode: 1
+    announce-mode: 1

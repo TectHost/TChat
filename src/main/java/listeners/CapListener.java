@@ -44,9 +44,11 @@ public class CapListener implements Listener {
 
                         case "BLOCK":
                             event.setCancelled(true);
-                            String error = plugin.getMessagesManager().getAntiCapMessage();
-                            String prefix = plugin.getMessagesManager().getPrefix();
-                            event.getPlayer().sendMessage(plugin.getTranslateColors().translateColors(player, prefix + error));
+                            if (plugin.getConfigManager().isAntiCapMessageEnabled()) {
+                                String error = plugin.getMessagesManager().getAntiCapMessage();
+                                String prefix = plugin.getMessagesManager().getPrefix();
+                                event.getPlayer().sendMessage(plugin.getTranslateColors().translateColors(player, prefix + error));
+                            }
                             break;
 
                         case "CENSOR":

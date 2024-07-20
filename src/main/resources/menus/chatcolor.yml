@@ -14,21 +14,37 @@ menu:
       # lore:
       #   - "test lore"
       #   - "&cwith colors &#C03AFEand &APlaceholderAPI - %player_name%"
+      for:
+        add: 1
+        start-slot: 0
+        end-slot: 8
     left:
       material: "GRAY_STAINED_GLASS_PANE"
       amount: 1
       name: " "
       lore: []
+      for:
+        add: 9
+        start-slot: 9
+        end-slot: 36
     right:
       material: "GRAY_STAINED_GLASS_PANE"
       amount: 1
       name: " "
       lore: []
+      for:
+        add: 9
+        start-slot: 17
+        end-slot: 44
     bottom:
       material: "GRAY_STAINED_GLASS_PANE"
       amount: 1
       name: " "
       lore: []
+      for:
+        add: 1
+        start-slot: 45
+        end-slot: 53
     close:
       material: "BARRIER"
       slot: 49

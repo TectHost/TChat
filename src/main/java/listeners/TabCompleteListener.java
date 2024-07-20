@@ -20,7 +20,7 @@ public class TabCompleteListener implements Listener {
 
     @EventHandler
     void onPlayerCommandSend(PlayerCommandSendEvent event) {
-        if (!event.getPlayer().hasPermission("tchat.bypass.command_blocker.tab") && !event.getPlayer().hasPermission("tchat.admin")) {
+        if (!event.getPlayer().hasPermission(bannedCommandsManager.getBypassPermissionTab()) && !event.getPlayer().hasPermission("tchat.admin")) {
             if (bannedCommandsManager.getBlockAllCommands()) {
                 event.getCommands().removeIf(command -> command.contains(":"));
             }

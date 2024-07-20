@@ -1,9 +1,21 @@
+# #################################################################
+# ┌─────────────────────────────────────────────────────────────┐ #
+# │                     General chat config                     │ #
+# └─────────────────────────────────────────────────────────────┘ #
+# #################################################################
+
 chat:
   use-group-format: false
   # Global format (use only if the above option is false)
   format: "%tchat_prefix% &a%player% &e>> %message%"
   # This option is used to display on the console the messages from the players
   register-messages-on-console: true
+
+# #################################################################
+# ┌─────────────────────────────────────────────────────────────┐ #
+# │                   Anti advertising config                   │ #
+# └─────────────────────────────────────────────────────────────┘ #
+# #################################################################
 
 advertising:
   bypass: "tchat.bypass.advertising"
@@ -108,6 +120,12 @@ advertising:
         type: "VILLAGER_ANGRY"
         particles: 30
 
+# #################################################################
+# ┌─────────────────────────────────────────────────────────────┐ #
+# │                        AntiCap config                       │ #
+# └─────────────────────────────────────────────────────────────┘ #
+# #################################################################
+
 cap:
   # Enable/disable anti-cap
   enabled: true
@@ -121,3 +139,31 @@ cap:
   # Percentage of letters to detect uppercase letters
   # 0.75 = 75% | 1 = 100% (Not recommended)
   percent: 0.75
+
+# #################################################################
+# ┌─────────────────────────────────────────────────────────────┐ #
+# │                        Grammar config                       │ #
+# └─────────────────────────────────────────────────────────────┘ #
+# #################################################################
+
+grammar:
+  # Enable/disable grammar
+  enabled: true
+  cap:
+    # Enable/disable this function
+    enabled: true
+    # Number of letters to be converted to uppercase (starting from the beginning)
+    # Example:
+    # Original message: hello
+    # If the letters option is set to 1 the message will finally be: Hello
+    # If the letters option is set to 3 the message will be finally: HELlo
+    letters: 1
+    # Minimum number of characters for the auto cap to be activated
+    min-characters: 0
+  final-dot:
+    # Enable/disable this function
+    enabled: true
+    # You can customize the dot, you can use any other character/characters, but I recommend to leave it like this
+    character: "."
+    # Minimum number of characters for the final dot to be activated
+    min-characters: 0

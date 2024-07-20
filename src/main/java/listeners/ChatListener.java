@@ -1,6 +1,8 @@
 package listeners;
 
 import minealex.tchat.TChat;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
@@ -28,6 +30,13 @@ public class ChatListener implements Listener {
             if (plugin.getReplacerManager().getReplacerEnabled()) {
                 String message = event.getMessage();
                 message = plugin.getReplacerManager().replaceWords(message, event.getPlayer());
+                event.setMessage(message);
+            }
+
+            if (plugin.getConfigManager().isGrammarEnabled()) {
+                String message = event.getMessage();
+                plugin.getGrammarListener().checkGrammar(event, message);
+                message = event.getMessage();
                 event.setMessage(message);
             }
 
