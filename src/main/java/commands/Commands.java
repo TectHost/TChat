@@ -39,6 +39,9 @@ public class Commands implements CommandExecutor, TabCompleter {
                         plugin.getSaveManager().reloadConfig();
                         plugin.getChatColorManager().reloadConfig();
                         plugin.getChannelsConfigManager().reloadConfig();
+                        plugin.getAutoBroadcastManager().reloadConfig();
+                        plugin.getChatBotManager().reloadConfig();
+                        plugin.getCommandTimerManager().reloadConfig();
                         String message = plugin.getMessagesManager().getReloadMessage();
                         String prefix = plugin.getMessagesManager().getPrefix();
                         if (!(sender instanceof Player)) {
@@ -50,7 +53,7 @@ public class Commands implements CommandExecutor, TabCompleter {
                     } else {
                         String message = plugin.getMessagesManager().getNoPermission();
                         String prefix = plugin.getMessagesManager().getPrefix();
-                        sender.sendMessage(plugin.getTranslateColors().translateColors(Player, prefix) + ChatColor.translateAlternateColorCodes('&', message));
+                        sender.sendMessage(plugin.getTranslateColors().translateColors(Player, prefix + message));
                     }
                 } else if (args[0].equalsIgnoreCase("version")) {
                     if (sender.hasPermission("tchat.admin") || sender.hasPermission("tchat.admin.version")) {

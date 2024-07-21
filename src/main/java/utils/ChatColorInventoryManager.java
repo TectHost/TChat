@@ -19,13 +19,14 @@ import java.util.*;
 
 public class ChatColorInventoryManager implements Listener {
     private final TChat plugin;
+    private final Map<Player, Long> lastClickMap = new HashMap<>();
 
     public ChatColorInventoryManager(TChat plugin) {
         this.plugin = plugin;
     }
 
     public void openInventory(Player player, String title) {
-        Inventory inv = Bukkit.createInventory(null, 54, plugin.getTranslateColors().translateColors(player, title));
+        Inventory inv = Bukkit.createInventory(null, plugin.getChatColorManager().getSlots(), plugin.getTranslateColors().translateColors(player, title));
 
         setBorderItems(player, inv);
         setMenuItems(inv, player);
@@ -103,9 +104,19 @@ public class ChatColorInventoryManager implements Listener {
         String inventory = event.getView().getTitle().replace("§", "&");
         if (inventory.equals(plugin.getChatColorManager().getTitle())) {
             event.setCancelled(true);
+        } else {
+            return;
         }
 
         if (!(event.getWhoClicked() instanceof Player player)) return;
+
+        long currentTime = System.currentTimeMillis();
+        Long lastClickTime = lastClickMap.get(player);
+        long COOLDOWN = plugin.getChatColorManager().getCooldown();
+        if (lastClickTime != null && (currentTime - lastClickTime) < COOLDOWN) {
+            return;
+        }
+        lastClickMap.put(player, currentTime);
 
         ItemStack clickedItem = event.getCurrentItem();
         if (clickedItem == null || !clickedItem.hasItemMeta()) return;
@@ -116,6 +127,12 @@ public class ChatColorInventoryManager implements Listener {
         String displayName = ChatColor.stripColor(meta.getDisplayName());
 
         String itemKey = displayName.toLowerCase().replace(" ", "_");
+
+        int closeSlot = plugin.getChatColorManager().getCloseSlot();
+        if (event.getSlot() == closeSlot) {
+            player.closeInventory();
+            return;
+        }
 
         ChatColorManager.ChatColorItem item = plugin.getChatColorManager().getItem(itemKey);
 

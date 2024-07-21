@@ -40,7 +40,7 @@ public class ChatFormatListener implements Listener {
         String channelName = plugin.getChannelsManager().getPlayerChannel(player);
         ChannelsConfigManager.Channel channel = channelsConfigManager.getChannel(channelName);
 
-        if (channel != null && channel.isEnabled() && (player.hasPermission(channel.getPermission()) || player.hasPermission("tchat.admin") || player.hasPermission("tchat.channel.all"))) {
+        if (channel != null && channel.isFormatEnabled() && channel.isEnabled() && (player.hasPermission(channel.getPermission()) || player.hasPermission("tchat.admin") || player.hasPermission("tchat.channel.all"))) {
             format = channel.getFormat();
             format = format.replace("%channel%", channelName);
             format = format.replace("%message%", "%msg%");

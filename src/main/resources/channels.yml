@@ -1,8 +1,16 @@
+# #################################################################
+# ┌─────────────────────────────────────────────────────────────┐ #
+# │                           Channels                          │ #
+# └─────────────────────────────────────────────────────────────┘ #
+# #################################################################
+
 channels:
   admin:
     enabled: true
     permission: "tchat.channel.admin"
-    format: "%channel% &a%player% &b> &e%msg%"
+    format:
+      enabled: true
+      format: "%channel% &a%player% &b> &e%msg%"
     # Modes:
     # 0 -> Messages visible to all
     # 1 -> Messages visible to all users with the permission (recommended)
@@ -18,6 +26,8 @@ channels:
   test:
     enabled: true
     permission: "tchat.test"
-    format: "%channel% &a%player% &b> &e%msg%"
+    format:
+      enabled: true
+      format: "%channel% &a%player% &b> &e%msg%"
     message-mode: 1
     announce-mode: 1

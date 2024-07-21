@@ -26,10 +26,11 @@ public class ChannelsConfigManager {
             String path = "channels." + channelName + ".";
             boolean enabled = config.getBoolean(path + "enabled");
             String permission = config.getString(path + "permission");
-            String format = config.getString(path + "format");
+            boolean formatEnabled = config.getBoolean(path + "format.enabled");
+            String format = config.getString(path + "format.format");
             int messageMode = config.getInt(path + "message-mode");
             int announceMode = config.getInt(path + "announce-mode");
-            channels.put(channelName, new Channel(enabled, permission, format, messageMode, announceMode));
+            channels.put(channelName, new Channel(enabled, permission, format, formatEnabled, messageMode, announceMode));
         }
     }
 
@@ -48,17 +49,20 @@ public class ChannelsConfigManager {
         private final boolean enabled;
         private final String permission;
         private final String format;
+        private final boolean formatEnabled;
         private final int messageMode;
         private final int announceMode;
 
-        public Channel(boolean enabled, String permission, String format, int messageMode, int announceMode) {
+        public Channel(boolean enabled, String permission, String format, boolean formatEnabled, int messageMode, int announceMode) {
             this.enabled = enabled;
             this.permission = permission;
             this.format = format;
+            this.formatEnabled = formatEnabled;
             this.messageMode = messageMode;
             this.announceMode = announceMode;
         }
 
+        public boolean isFormatEnabled() { return formatEnabled; }
         public int getAnnounceMode() { return announceMode; }
         public boolean isEnabled() { return enabled; }
         public String getPermission() { return permission; }

@@ -1,18 +1,13 @@
 package minealex.tchat;
 
-import commands.ChannelCommand;
-import commands.Commands;
-import commands.ChatColorCommand;
+import commands.*;
 import config.*;
 import listeners.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 import placeholders.Placeholders;
-import utils.ChannelsManager;
-import utils.ChatColorInventoryManager;
-import utils.TranslateColors;
-import utils.TranslateHexColorCodes;
+import utils.*;
 import blocked.*;
 
 import java.util.Objects;
@@ -20,8 +15,6 @@ import java.util.Objects;
 public class TChat extends JavaPlugin {
     private ConfigManager configManager;
     private MessagesManager messagesManager;
-    private ChatFormatListener chatFormatListener;
-    private ChatListener chatListener;
     private TranslateHexColorCodes translateHexColorCodes;
     private GroupManager groupManager;
     private BannedWordsManager bannedWordsManager;
@@ -38,6 +31,10 @@ public class TChat extends JavaPlugin {
     private ChannelsConfigManager channelsConfigManager;
     private ChannelsManager channelsManager;
     private GrammarListener grammarListener;
+    private AutoBroadcastManager autoBroadcastManager;
+    private ChatBotManager chatBotManager;
+    private ChatBotListener chatBotListener;
+    private CommandTimerManager commandTimerManager;
 
     @Override
     public void onEnable() {
@@ -58,15 +55,18 @@ public class TChat extends JavaPlugin {
     }
 
     public void registerListeners() {
-        chatFormatListener = new ChatFormatListener(this, configManager, groupManager, translateHexColorCodes);
+        ChatFormatListener chatFormatListener = new ChatFormatListener(this, configManager, groupManager, translateHexColorCodes);
         bannedWords = new BannedWords(bannedWordsManager, translateHexColorCodes);
-        chatListener = new ChatListener(this, chatFormatListener);
+        ChatListener chatListener = new ChatListener(this, chatFormatListener);
         getServer().getPluginManager().registerEvents(chatListener, this);
         getServer().getPluginManager().registerEvents(bannedWords, this);
         getServer().getPluginManager().registerEvents(new TabCompleteListener(this), this);
         antiAdvertising = new AntiAdvertising(this);
         capListener = new CapListener(this);
         grammarListener = new GrammarListener(this);
+        AutoBroadcastSender autoBroadcastSender = new AutoBroadcastSender(this);
+        chatBotListener = new ChatBotListener(this);
+        CommandTimerSender commandTimerSender = new CommandTimerSender(this);
     }
 
     public void registerConfigFiles() {
@@ -78,6 +78,9 @@ public class TChat extends JavaPlugin {
         saveManager = new SaveManager(this);
         chatColorManager = new ChatColorManager(this);
         channelsConfigManager = new ChannelsConfigManager(this);
+        autoBroadcastManager = new AutoBroadcastManager(this);
+        chatBotManager = new ChatBotManager(this);
+        commandTimerManager = new CommandTimerManager(this);
     }
 
     public void initializeManagers() {
@@ -92,6 +95,13 @@ public class TChat extends JavaPlugin {
         Objects.requireNonNull(this.getCommand("tchat")).setExecutor(new Commands(this));
         Objects.requireNonNull(this.getCommand("chatcolor")).setExecutor(new ChatColorCommand(this));
         Objects.requireNonNull(this.getCommand("channel")).setExecutor(new ChannelCommand(this));
+        if (getConfigManager().isMsgEnabled()) {
+            PrivateMessageCommand privateMessageCommand = new PrivateMessageCommand(this);
+            Objects.requireNonNull(this.getCommand("msg")).setExecutor(privateMessageCommand);
+            if (getConfigManager().isReplyEnabled()) {
+                Objects.requireNonNull(this.getCommand("reply")).setExecutor(new ReplyCommand(this, privateMessageCommand));
+            }
+        }
     }
 
     public void registerPlaceholders() {
@@ -100,6 +110,10 @@ public class TChat extends JavaPlugin {
 
     // ------------------------------------------------------------------------------
 
+    public CommandTimerManager getCommandTimerManager() { return commandTimerManager; }
+    public ChatBotListener getChatBotListener() { return chatBotListener; }
+    public ChatBotManager getChatBotManager() { return chatBotManager; }
+    public AutoBroadcastManager getAutoBroadcastManager() { return autoBroadcastManager; }
     public GrammarListener getGrammarListener() { return grammarListener; }
     public ChannelsManager getChannelsManager() { return channelsManager; }
     public ChannelsConfigManager getChannelsConfigManager() { return channelsConfigManager; }
@@ -113,7 +127,6 @@ public class TChat extends JavaPlugin {
     public BannedWordsManager getBannedWordsManager() { return bannedWordsManager; }
     public BannedWords getBannedWords() { return bannedWords; }
     public BannedCommandsManager getBannedCommandsManager() { return bannedCommandsManager; }
-    public BannedCommands getBannedCommands() { return bannedCommands; }
     public TranslateColors getTranslateColors() { return translateColors; }
     public ReplacerManager getReplacerManager() { return replacerManager; }
     public ChatColorManager getChatColorManager() { return chatColorManager; }

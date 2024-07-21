@@ -32,6 +32,10 @@ public class MessagesManager {
     private String channelJoinAnnounce;
     private String noChannel;
     private String noPermissionChannelLeft;
+    private String playerNotFound;
+    private String usageMsg;
+    private String usageReply;
+    private String noReply;
 
     public MessagesManager(TChat plugin){
         this.messagesFile = new ConfigFile("messages.yml", null, plugin);
@@ -49,6 +53,10 @@ public class MessagesManager {
         }
 
         // Messages
+        noReply = config.getString("messages.no-reply");
+        usageMsg = config.getString("messages.usage.usage-msg");
+        usageReply = config.getString("messages.usage.usage-reply");
+        playerNotFound = config.getString("messages.player-not-found");
         noPermissionChannelLeft = config.getString("messages.channel-no-permission-left");
         noChannel = config.getString("messages.no-channel");
         channelLeftAnnounce = config.getString("messages.left-channel-announce");
@@ -83,6 +91,10 @@ public class MessagesManager {
     }
 
     // Messages
+    public String getNoReply() { return noReply; }
+    public String getUsageReply() { return usageReply; }
+    public String getUsageMsg() { return usageMsg; }
+    public String getPlayerNotFound() { return playerNotFound; }
     public String getNoPermissionChannelLeft() { return noPermissionChannelLeft; }
     public String getNoChannel() { return noChannel; }
     public String getChannelJoinAnnounce() { return channelJoinAnnounce; }

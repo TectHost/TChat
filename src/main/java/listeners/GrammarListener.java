@@ -1,7 +1,7 @@
 package listeners;
 
 import minealex.tchat.TChat;
-import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 public class GrammarListener {
@@ -11,13 +11,17 @@ public class GrammarListener {
         this.plugin = plugin;
     }
 
-    public void checkGrammar(AsyncPlayerChatEvent event, String message) {
-        if (plugin.getConfigManager().isGrammarCapEnabled()) {
-            message = checkCap(message);
+    public void checkGrammar(AsyncPlayerChatEvent event, Player player, String message) {
+        if (player.hasPermission(plugin.getConfigManager().getPermissionBypassCap()) || player.hasPermission("tchat.admin")) {
+            if (plugin.getConfigManager().isGrammarCapEnabled()) {
+                message = checkCap(message);
+            }
         }
 
-        if (plugin.getConfigManager().isGrammarDotEnabled()) {
-            message = checkDot(message);
+        if (player.hasPermission(plugin.getConfigManager().getPermissionBypassFinalDot()) || player.hasPermission("tchat.admin")) {
+            if (plugin.getConfigManager().isGrammarDotEnabled()) {
+                message = checkDot(message);
+            }
         }
 
         event.setMessage(message);

@@ -55,7 +55,13 @@ public class Placeholders extends PlaceholderExpansion {
             case "chatcolor" -> plugin.getSaveManager().getChatColor(player.getUniqueId()) + plugin.getSaveManager().getFormat(player.getUniqueId());
             case "chatcolor_color" -> plugin.getSaveManager().getChatColor(player.getUniqueId());
             case "chatcolor_format" -> plugin.getSaveManager().getFormat(player.getUniqueId());
+            case "channel" -> getChannel(player);
             default -> null;
         };
+    }
+
+    private @NotNull String getChannel(Player player) {
+        String channel = plugin.getChannelsManager().getPlayerChannel(player);
+        return (channel != null) ? channel : "null";
     }
 }

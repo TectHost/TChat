@@ -46,10 +46,14 @@ public class ChatColorManager {
     private int addBottom;
     private int startBottom;
     private int endBottom;
+    private int slots;
+    private long cooldown;
 
     public final Map<String, ChatColorItem> items = new HashMap<>();
 
     private static final String MENU_TITLE = "menu.title";
+    private static final String SLOTS = "menu.slots";
+    private static final String COOLDOWN = "menu.cooldown";
     private static final String MENU_BACKGROUND_TOP_MATERIAL = "menu.background.top.material";
     private static final String MENU_BACKGROUND_LEFT_MATERIAL = "menu.background.left.material";
     private static final String MENU_BACKGROUND_RIGHT_MATERIAL = "menu.background.right.material";
@@ -94,6 +98,8 @@ public class ChatColorManager {
     public void loadConfig() {
         FileConfiguration config = messagesFile.getConfig();
         title = config.getString(MENU_TITLE);
+        slots = config.getInt(SLOTS);
+        cooldown = config.getLong(COOLDOWN);
         topMaterial = Material.valueOf(config.getString(MENU_BACKGROUND_TOP_MATERIAL));
         leftMaterial = Material.valueOf(config.getString(MENU_BACKGROUND_LEFT_MATERIAL));
         rightMaterial = Material.valueOf(config.getString(MENU_BACKGROUND_RIGHT_MATERIAL));
@@ -178,6 +184,8 @@ public class ChatColorManager {
     public String getBottomName() { return bottomName; }
 
     public String getTitle() { return title; }
+    public int getSlots() { return slots; }
+    public long getCooldown() { return cooldown; }
     public Material getTopMaterial() { return topMaterial; }
     public Material getLeftMaterial() { return leftMaterial; }
     public Material getRightMaterial() { return rightMaterial; }

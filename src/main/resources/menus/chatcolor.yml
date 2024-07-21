@@ -1,9 +1,18 @@
+# #################################################################
+# ┌─────────────────────────────────────────────────────────────┐ #
+# │                       Chat Color Menu                       │ #
+# └─────────────────────────────────────────────────────────────┘ #
+# #################################################################
+
 # ! ---- { BETA } ---- !
 # Please report bugs:
 # Discord: https://dc.tect.host/
 # Mail: support@tect.host
 menu:
   title: "&cChatColor"
+  slots: 54
+  # Clicking cooldown in ms (100 ms = 0.1 second)
+  cooldown: 700
   background:
     top:
       # https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html

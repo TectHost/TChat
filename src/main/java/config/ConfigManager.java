@@ -24,6 +24,14 @@ public class ConfigManager {
     private String grammarDotCharacter;
     private int grammarMinCharactersCap;
     private int grammarMinCharactersDot;
+    private String permissionBypassCap;
+    private String permissionBypassFinalDot;
+    private boolean msgEnabled;
+    private boolean replyEnabled;
+    private String msgFormatSender;
+    private String msgFormatReceiver;
+    private String replyFormatSender;
+    private String replyFormatReceiver;
 
     public ConfigManager(TChat plugin) {
         this.configFile = new ConfigFile("config.yml", null, plugin);
@@ -54,13 +62,27 @@ public class ConfigManager {
             grammarCapEnabled = config.getBoolean("grammar.cap.enabled");
             grammarDotEnabled = config.getBoolean("grammar.final-dot.enabled");
             if (grammarDotEnabled) {
+                permissionBypassCap = config.getString("grammar.final-dot.bypass-permission");
                 grammarMinCharactersDot = config.getInt("grammar.final-dot.min-characters");
                 grammarDotCharacter = config.getString("grammar.final-dot.character");
             }
             if (grammarCapEnabled) {
+                permissionBypassFinalDot = config.getString("grammar.cap.bypass-permission");
                 grammarMinCharactersCap = config.getInt("grammar.cap.min-characters");
                 grammarCapLetters = config.getInt("grammar.cap.letters");
             }
+        }
+
+        msgEnabled = config.getBoolean("pm.msg.enabled");
+        if (msgEnabled) {
+            msgFormatSender = config.getString("pm.msg.formats.sender");
+            msgFormatReceiver = config.getString("pm.msg.formats.receiver");
+        }
+
+        replyEnabled = config.getBoolean("pm.reply.enabled");
+        if (replyEnabled) {
+            replyFormatSender = config.getString("pm.reply.formats.sender");
+            replyFormatReceiver = config.getString("pm.reply.formats.receiver");
         }
     }
 
@@ -69,6 +91,14 @@ public class ConfigManager {
         loadConfig();
     }
 
+    public String getReplyFormatReceiver() { return replyFormatReceiver; }
+    public String getReplyFormatSender() { return replyFormatSender; }
+    public String getMsgFormatReceiver() { return msgFormatReceiver; }
+    public String getMsgFormatSender() { return msgFormatSender; }
+    public boolean isReplyEnabled() { return replyEnabled; }
+    public boolean isMsgEnabled() { return msgEnabled; }
+    public String getPermissionBypassCap() { return permissionBypassCap; }
+    public String getPermissionBypassFinalDot() { return permissionBypassFinalDot; }
     public int getGrammarMinCharactersCap() { return grammarMinCharactersCap; }
     public int getGrammarMinCharactersDot() { return grammarMinCharactersDot; }
     public String getGrammarDotCharacter() { return grammarDotCharacter; }
