@@ -1,0 +1,32 @@
+# #################################################################
+# ┌─────────────────────────────────────────────────────────────┐ #
+# │                        Auto Broadcast                       │ #
+# └─────────────────────────────────────────────────────────────┘ #
+# #################################################################
+
+# General options
+options:
+  # Time between broadcast and broadcast
+  time: 300
+  # Enable/disable all broadcasts
+  enabled: true
+
+broadcasts:
+  broadcast1:
+    # Enable/disable this broadcast
+    enabled: true
+    # Broadcast message (supports colors &, HEX colors &#, and PlaceholderAPI)
+    message:
+      - "┌─────────────────┐"
+      - "│          Hi, %player_name%          │"
+      - "│          &aThe server use         &f│"
+      - "│                &#c03afeT&#a72cf8C&#8e1ff1h&#7411eba&#5b03e4t                &f│"
+      - "└─────────────────┘"
+  broadcast2:
+    enabled: true
+    message:
+      - "┌─────────────────┐"
+      - "│          Hi, %player_name%          │"
+      - "│          &aThe server use         &f│"
+      - "│                &#c03afeT&#a72cf8C&#8e1ff1h&#7411eba&#5b03e4t                &f│"
+      - "└─────────────────┘"

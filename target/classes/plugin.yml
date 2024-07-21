@@ -1,5 +1,5 @@
 main: minealex.tchat.TChat
-version: 4.0.0-DEV-5
+version: 4.0.0-DEV-6
 name: TChat
 author: Mine_Alex
 api-version: 1.13
@@ -20,6 +20,20 @@ commands:
   channel:
     description: Join/leave a channel
     usage: /<command> <join|leave>
+  msg:
+    description: Sends a private message
+    usage: /<command> <user>
+    aliases:
+      - emsg
+      - pm
+      - dm
+      - md
+      - mp
+  reply:
+    description: Reply to a private message
+    usage: /<command> <user>
+    aliases:
+      - r
 
 
 permissions:

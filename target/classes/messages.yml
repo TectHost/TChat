@@ -1,3 +1,9 @@
+# #################################################################
+# ┌─────────────────────────────────────────────────────────────┐ #
+# │                       TChat Messages                        │ #
+# └─────────────────────────────────────────────────────────────┘ #
+# #################################################################
+
 prefix:
   enabled: true
   prefix: "&#c03afeT&#ac2ff9C&#9824f4h&#8319eea&#6f0ee9t &e> "
@@ -21,10 +27,13 @@ messages:
   join-channel-announce: "&a%player% has joined the channel %channel%"
   no-channel: "&cYou are not in the channel %channel%"
   channel-no-permission-left: "&cYou do not have permission to left channel: %channel%"
+  player-not-found: "&cPlayer not found."
+  no-reply: "&cYou have no one to reply to."
   usage:
     channel: "&cUsage: /channel <join|leave> <channel>"
     join-channel: "&cUsage: /channel join <channel>"
     leave-channel: "&cUsage: /channel leave <channel>"
+    usage-msg: "&cUsage: /msg <player> <message>"
   # Debug messages are only seen in the console
   debug:
     no-format-group: "&cError in groups.yml - No format found for group: %group%"

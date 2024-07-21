@@ -152,6 +152,8 @@ grammar:
   cap:
     # Enable/disable this function
     enabled: true
+    # Permission to bypass this function
+    bypass-permission: "tchat.bypass.grammar.cap"
     # Number of letters to be converted to uppercase (starting from the beginning)
     # Example:
     # Original message: hello
@@ -163,7 +165,27 @@ grammar:
   final-dot:
     # Enable/disable this function
     enabled: true
+    # Permission to bypass this function
+    bypass-permission: "tchat.bypass.grammar.finaldot"
     # You can customize the dot, you can use any other character/characters, but I recommend to leave it like this
     character: "."
     # Minimum number of characters for the final dot to be activated
     min-characters: 0
+
+# #################################################################
+# ┌─────────────────────────────────────────────────────────────┐ #
+# │                       Private Messages                      │ #
+# └─────────────────────────────────────────────────────────────┘ #
+# #################################################################
+
+pm:
+  msg:
+    enabled: true
+    formats:
+      sender: "&5&l! &a%sender% &e&l> &a%recipient%&7: &f%message%"
+      receiver: "&5&l! &a%sender% &e&l> &a%recipient%&7: &f%message%"
+  reply:
+    enabled: true
+    formats:
+      sender: "&5&l! &a%sender% &e&l> &a%recipient%&7: &f%message%"
+      receiver: "&5&l! &a%sender% &e&l> &a%recipient%&7: &f%message%"
