@@ -171,6 +171,14 @@ grammar:
     character: "."
     # Minimum number of characters for the final dot to be activated
     min-characters: 0
+  repeat-messages:
+    # Enable/disable this function
+    enabled: true
+    # Permission to bypass this function
+    bypass-permission: "tchat.bypass.grammar.repeat"
+    # Percentage to block the message
+    # 0.75 = 75% | 1.00 = 100%
+    percent: 0.75
 
 # #################################################################
 # ┌─────────────────────────────────────────────────────────────┐ #
@@ -180,12 +188,89 @@ grammar:
 
 pm:
   msg:
+    # Enables the private messaging system
     enabled: true
+    # Permission required to send private messages
+    permission: "tchat.msg"
     formats:
+      # Format of the message for the sender
       sender: "&5&l! &a%sender% &e&l> &a%recipient%&7: &f%message%"
+      # Format of the message for the receiver
       receiver: "&5&l! &a%sender% &e&l> &a%recipient%&7: &f%message%"
+
   reply:
+    # Enables the reply function for private messages
     enabled: true
+    # Permission required to reply to private messages
+    permission: "tchat.reply"
     formats:
+      # Format of the reply message for the sender
       sender: "&5&l! &a%sender% &e&l> &a%recipient%&7: &f%message%"
+      # Format of the reply message for the receiver
       receiver: "&5&l! &a%sender% &e&l> &a%recipient%&7: &f%message%"
+
+# #################################################################
+# ┌─────────────────────────────────────────────────────────────┐ #
+# │                          Chat Clear                         │ #
+# └─────────────────────────────────────────────────────────────┘ #
+# #################################################################
+
+chat-clear:
+  # Enable/disable chat clear
+  enabled: true
+  # Loop
+  for:
+    # Number of empty messages
+    messages: 100
+
+# #################################################################
+# ┌─────────────────────────────────────────────────────────────┐ #
+# │                          Mute Chat                          │ #
+# └─────────────────────────────────────────────────────────────┘ #
+# #################################################################
+
+mute-chat:
+  # Enable/disable mute chat
+  enabled: true
+  # Permission to bypass mute chat
+  bypass-permission: "tchat.bypass.mutechat"
+  # Permission to mute/unmute chat
+  execute-command-permission: "tchat.admin.mutechat"
+
+# #################################################################
+# ┌─────────────────────────────────────────────────────────────┐ #
+# │                           Anti bot                          │ #
+# └─────────────────────────────────────────────────────────────┘ #
+# #################################################################
+
+antibot:
+  # Enable/disable anti bot
+  enabled: true
+  # Permission to bypass anti bot
+  bypass-permission: "tchat.bypass.antibot"
+  # Enable/disable messages
+  messages:
+    # Enable/disable on chat message
+    antibot-chat: true
+    # Enable/disable on command message
+    antibot-command: true
+    # Enable/disable on join message
+    antibot-join: true
+    # Enable/disable on move message
+    antibot-moved: true
+
+# #################################################################
+# ┌─────────────────────────────────────────────────────────────┐ #
+# │                             Logs                            │ #
+# └─────────────────────────────────────────────────────────────┘ #
+# #################################################################
+
+logs:
+  # Chat log
+  chat:
+    # Enable/disable logging chat messages
+    enabled: true
+  # Command log
+  command:
+    # Enable/disable logging commands
+    enabled: true

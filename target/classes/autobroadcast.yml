@@ -27,6 +27,6 @@ broadcasts:
     message:
       - "┌─────────────────┐"
       - "│          Hi, %player_name%          │"
-      - "│          &aThe server use         &f│"
+      - "│          &aThis server use        &f│"
       - "│                &#c03afeT&#a72cf8C&#8e1ff1h&#7411eba&#5b03e4t                &f│"
       - "└─────────────────┘"
