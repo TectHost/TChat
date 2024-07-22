@@ -1,7 +1,6 @@
 package config;
 
 import minealex.tchat.TChat;
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 
 public class ConfigManager {
@@ -32,6 +31,24 @@ public class ConfigManager {
     private String msgFormatReceiver;
     private String replyFormatSender;
     private String replyFormatReceiver;
+    private String msgPermission;
+    private String replyPermission;
+    private boolean chatClearEnabled;
+    private int messagesChatClear;
+    private boolean muteChatEnabled;
+    private String bypassMuteChatPermission;
+    private String muteChatPermission;
+    private boolean repeatMessagesEnabled;
+    private double repeatMessagesPercent;
+    private String bypassRepeatMessages;
+    private boolean antibotEnabled;
+    private String antibotBypass;
+    private boolean antibotChat;
+    private boolean antibotCommand;
+    private boolean antibotJoin;
+    private boolean antibotMoved;
+    private boolean logsChatEnabled;
+    private boolean logsCommandEnabled;
 
     public ConfigManager(TChat plugin) {
         this.configFile = new ConfigFile("config.yml", null, plugin);
@@ -77,13 +94,44 @@ public class ConfigManager {
         if (msgEnabled) {
             msgFormatSender = config.getString("pm.msg.formats.sender");
             msgFormatReceiver = config.getString("pm.msg.formats.receiver");
+            msgPermission = config.getString("pm.msg.permission");
         }
 
         replyEnabled = config.getBoolean("pm.reply.enabled");
         if (replyEnabled) {
+            replyPermission = config.getString("pm.reply.permission");
             replyFormatSender = config.getString("pm.reply.formats.sender");
             replyFormatReceiver = config.getString("pm.reply.formats.receiver");
         }
+
+        chatClearEnabled = config.getBoolean("chat-clear.enabled");
+        if (chatClearEnabled) {
+            messagesChatClear = config.getInt("chat-clear.for.messages");
+        }
+
+        muteChatEnabled = config.getBoolean("mute-chat.enabled");
+        if (muteChatEnabled) {
+            bypassMuteChatPermission = config.getString("mute-chat.bypass-permission");
+            muteChatPermission = config.getString("mute-chat.execute-command-permission");
+        }
+
+        repeatMessagesEnabled = config.getBoolean("grammar.repeat-messages.enabled");
+        if (repeatMessagesEnabled) {
+            repeatMessagesPercent = config.getDouble("grammar.repeat-messages.percent");
+            bypassRepeatMessages = config.getString("grammar.repeat-messages.bypass-permission");
+        }
+
+        antibotEnabled = config.getBoolean("antibot.enabled");
+        if (antibotEnabled) {
+            antibotBypass = config.getString("antibot.bypass-permission");
+            antibotChat = config.getBoolean("antibot.messages.antibot-chat");
+            antibotCommand = config.getBoolean("antibot.messages.antibot-command");
+            antibotJoin = config.getBoolean("antibot.messages.antibot-join");
+            antibotMoved = config.getBoolean("antibot.messages.antibot-moved");
+        }
+
+        logsChatEnabled = config.getBoolean("logs.chat.enabled");
+        logsCommandEnabled = config.getBoolean("logs.command.enabled");
     }
 
     public void reloadConfig() {
@@ -91,6 +139,24 @@ public class ConfigManager {
         loadConfig();
     }
 
+    public boolean isLogsCommandEnabled() { return logsCommandEnabled; }
+    public boolean isLogsChatEnabled() { return logsChatEnabled; }
+    public boolean isAntibotMoved() { return antibotMoved; }
+    public boolean isAntibotJoin() { return antibotJoin; }
+    public boolean isAntibotCommand() { return antibotCommand; }
+    public boolean isAntibotChat() { return antibotChat; }
+    public String getAntibotBypass() { return antibotBypass; }
+    public boolean isAntibotEnabled() { return antibotEnabled; }
+    public String getBypassRepeatMessages() { return bypassRepeatMessages; }
+    public double getRepeatMessagesPercent() { return repeatMessagesPercent; }
+    public boolean isRepeatMessagesEnabled() { return repeatMessagesEnabled; }
+    public String getMuteChatPermission() { return muteChatPermission; }
+    public String getBypassMuteChatPermission() { return bypassMuteChatPermission; }
+    public boolean isMuteChatEnabled() { return muteChatEnabled; }
+    public int getMessagesChatClear() { return messagesChatClear; }
+    public boolean isChatClearEnabled() { return chatClearEnabled; }
+    public String getMsgPermission() { return msgPermission; }
+    public String getReplyPermission() { return replyPermission; }
     public String getReplyFormatReceiver() { return replyFormatReceiver; }
     public String getReplyFormatSender() { return replyFormatSender; }
     public String getMsgFormatReceiver() { return msgFormatReceiver; }

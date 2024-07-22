@@ -34,33 +34,38 @@ public class PrivateMessageCommand implements CommandExecutor {
         Player senderPlayer = (Player) sender;
         String prefix = plugin.getMessagesManager().getPrefix();
 
-        if (args.length < 2) {
-            String message = plugin.getMessagesManager().getUsageMsg();
-            sender.sendMessage(plugin.getTranslateColors().translateColors(senderPlayer, prefix + message));
-            return true;
+        if (senderPlayer.hasPermission(plugin.getConfigManager().getMsgPermission()) || senderPlayer.hasPermission("tchat.admin")) {
+            if (args.length < 2) {
+                String message = plugin.getMessagesManager().getUsageMsg();
+                sender.sendMessage(plugin.getTranslateColors().translateColors(senderPlayer, prefix + message));
+                return true;
+            }
+
+            Player targetPlayer = Bukkit.getPlayer(args[0]);
+
+            if (targetPlayer == null) {
+                String message = plugin.getMessagesManager().getPlayerNotFound();
+                sender.sendMessage(plugin.getTranslateColors().translateColors(senderPlayer, prefix + message));
+                return true;
+            }
+
+            StringBuilder message = new StringBuilder();
+            for (int i = 1; i < args.length; i++) {
+                message.append(args[i]).append(" ");
+            }
+
+            String senderMessage = plugin.getConfigManager().getMsgFormatSender();
+            senderMessage = senderMessage.replace("%sender%", sender.getName()).replace("%recipient%", targetPlayer.getName()).replace("%message%", message.toString().trim());
+            senderPlayer.sendMessage(plugin.getTranslateColors().translateColors(senderPlayer, senderMessage));
+            String formattedMessage = plugin.getConfigManager().getMsgFormatReceiver();
+            formattedMessage = formattedMessage.replace("%sender%", sender.getName()).replace("%recipient%", targetPlayer.getName()).replace("%message%", message.toString().trim());
+            targetPlayer.sendMessage(plugin.getTranslateColors().translateColors(targetPlayer, formattedMessage));
+
+            setLastMessaged(senderPlayer.getUniqueId(), targetPlayer.getUniqueId());
+        } else {
+            String message = plugin.getMessagesManager().getNoPermission();
+            senderPlayer.sendMessage(plugin.getTranslateColors().translateColors(senderPlayer, prefix + message));
         }
-
-        Player targetPlayer = Bukkit.getPlayer(args[0]);
-
-        if (targetPlayer == null) {
-            String message = plugin.getMessagesManager().getPlayerNotFound();
-            sender.sendMessage(plugin.getTranslateColors().translateColors(senderPlayer, prefix + message));
-            return true;
-        }
-
-        StringBuilder message = new StringBuilder();
-        for (int i = 1; i < args.length; i++) {
-            message.append(args[i]).append(" ");
-        }
-
-        String senderMessage = plugin.getConfigManager().getMsgFormatSender();
-        senderMessage = senderMessage.replace("%sender%", sender.getName()).replace("%recipient%", targetPlayer.getName()).replace("%message%", message.toString().trim());
-        senderPlayer.sendMessage(plugin.getTranslateColors().translateColors(senderPlayer, senderMessage));
-        String formattedMessage = plugin.getConfigManager().getMsgFormatReceiver();
-        formattedMessage = formattedMessage.replace("%sender%", sender.getName()).replace("%recipient%", targetPlayer.getName()).replace("%message%", message.toString().trim());
-        targetPlayer.sendMessage(plugin.getTranslateColors().translateColors(targetPlayer, formattedMessage));
-
-        setLastMessaged(senderPlayer.getUniqueId(), targetPlayer.getUniqueId());
 
         return true;
     }

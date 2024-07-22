@@ -59,18 +59,12 @@ public class ChatFormatListener implements Listener {
             }
         }
 
-        format = format.replace("%player%", player.getName())
-                .replace("%message%", "%msg%");
-
+        format = format.replace("%player%", player.getName()).replace("%message%", "%msg%");
         format = PlaceholderAPI.setPlaceholders(player, format);
-
         format = TranslateHexColorCodes.translateHexColorCodes("&#", "", format);
-
         format = ChatColor.translateAlternateColorCodes('&', format);
 
-
         String[] parts = format.split("%msg%", 2);
-
         TextComponent mainComponent = new TextComponent(TextComponent.fromLegacyText(parts[0]));
 
         String groupName = groupManager.getGroup(player);
@@ -84,7 +78,6 @@ public class ChatFormatListener implements Listener {
 
         String chatColor = plugin.getSaveManager().getChatColor(player.getUniqueId());
         String playerFormat = plugin.getSaveManager().getFormat(player.getUniqueId());
-
         message = chatColor + playerFormat + message;
         message = plugin.getTranslateColors().translateColors(player, message);
 
@@ -104,32 +97,19 @@ public class ChatFormatListener implements Listener {
         }
 
         event.setCancelled(true);
+
         for (Player p : event.getRecipients()) {
-            if (channel == null) {
+            if (channel == null || !channel.isEnabled()) {
                 p.spigot().sendMessage(mainComponent);
-                break;
-            }
-
-            String recipientChannel = plugin.getChannelsManager().getPlayerChannel(p);
-            boolean hasPermissionForChannel = p.hasPermission(channel.getPermission()) || p.hasPermission("tchat.admin") || p.hasPermission("tchat.channel.all");
-            boolean isInRecipientChannel = recipientChannel != null && recipientChannel.equals(channelName);
-
-            if (channel.isEnabled()) {
-                int messageMode = channel.getMessageMode();
-
-                if (messageMode == 0) {
-                    p.spigot().sendMessage(mainComponent);
-                } else if (messageMode == 1) {
-                    if (hasPermissionForChannel) {
-                        p.spigot().sendMessage(mainComponent);
-                    }
-                } else if (messageMode == 2) {
-                    if (isInRecipientChannel) {
-                        p.spigot().sendMessage(mainComponent);
-                    }
-                }
             } else {
-                p.spigot().sendMessage(mainComponent);
+                String recipientChannel = plugin.getChannelsManager().getPlayerChannel(p);
+                boolean hasPermissionForChannel = p.hasPermission(channel.getPermission()) || p.hasPermission("tchat.admin") || p.hasPermission("tchat.channel.all");
+                boolean isInRecipientChannel = recipientChannel != null && recipientChannel.equals(channelName);
+
+                int messageMode = channel.getMessageMode();
+                if (messageMode == 0 || (messageMode == 1 && hasPermissionForChannel) || (messageMode == 2 && isInRecipientChannel)) {
+                    p.spigot().sendMessage(mainComponent);
+                }
             }
         }
 
@@ -139,6 +119,7 @@ public class ChatFormatListener implements Listener {
             Bukkit.getConsoleSender().sendMessage(consoleMessage);
         }
     }
+
 
     private String chatColor(Player player, String message) {
         if (player.hasPermission("tchat.color.all") || player.hasPermission("tchat.admin")) {

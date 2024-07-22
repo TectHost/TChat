@@ -1,0 +1,29 @@
+games:
+  game1:
+    enabled: true
+    messages:
+      - "&#c03afe┌&#b232fa─&#a32af7─&#9522f3─&#861bef─&#7813eb─&#690be8─&#5b03e4┐"
+      - "&#c03afe│ &#af31fa2 &#9e28f5+ &#8e1ff12 &#7d15ed= &#6c0ce8?  &#5b03e4│"
+      - "&#c03afe└&#b232fa─&#a32af7─&#9522f3─&#861bef─&#7813eb─&#690be8─&#5b03e4┘"
+    keywords:
+      - "4"
+      - "four"
+    rewards:
+      - "give %winner% diamond 1"
+    options:
+      endTime: 30
+      time: 300
+  game2:
+    enabled: true
+    messages:
+      - "&#c03afe┌&#b232fa─&#a32af7─&#9522f3─&#861bef─&#7813eb─&#690be8─&#5b03e4┐"
+      - "&#c03afe│ &#af31fa4 &#9e28f5+ &#8e1ff14 &#7d15ed= &#6c0ce8?  &#5b03e4│"
+      - "&#c03afe└&#b232fa─&#a32af7─&#9522f3─&#861bef─&#7813eb─&#690be8─&#5b03e4┘"
+    keywords:
+      - "8"
+      - "eight"
+    rewards:
+      - "give %winner% dirt 10"
+    options:
+      endTime: 30
+      time: 300

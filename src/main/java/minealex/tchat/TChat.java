@@ -3,6 +3,7 @@ package minealex.tchat;
 import commands.*;
 import config.*;
 import listeners.*;
+import net.kyori.adventure.platform.facet.Facet;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -35,6 +36,13 @@ public class TChat extends JavaPlugin {
     private ChatBotManager chatBotManager;
     private ChatBotListener chatBotListener;
     private CommandTimerManager commandTimerManager;
+    private RepeatMessagesListener repeatMessagesListener;
+    private AntiBotListener antiBotListener;
+    private PlayerJoinListener playerJoinListener;
+    private ChatGamesManager chatGamesManager;
+    private ChatGamesSender chatGamesSender;
+    private AutoBroadcastSender autoBroadcastSender;
+    private LogsManager logsManager;
 
     @Override
     public void onEnable() {
@@ -58,15 +66,21 @@ public class TChat extends JavaPlugin {
         ChatFormatListener chatFormatListener = new ChatFormatListener(this, configManager, groupManager, translateHexColorCodes);
         bannedWords = new BannedWords(bannedWordsManager, translateHexColorCodes);
         ChatListener chatListener = new ChatListener(this, chatFormatListener);
-        getServer().getPluginManager().registerEvents(chatListener, this);
-        getServer().getPluginManager().registerEvents(bannedWords, this);
-        getServer().getPluginManager().registerEvents(new TabCompleteListener(this), this);
         antiAdvertising = new AntiAdvertising(this);
         capListener = new CapListener(this);
         grammarListener = new GrammarListener(this);
-        AutoBroadcastSender autoBroadcastSender = new AutoBroadcastSender(this);
         chatBotListener = new ChatBotListener(this);
-        CommandTimerSender commandTimerSender = new CommandTimerSender(this);
+        repeatMessagesListener = new RepeatMessagesListener(this);
+        playerJoinListener = new PlayerJoinListener(this);
+        PlayerMoveListener playerMoveListener = new PlayerMoveListener(this);
+        antiBotListener = new AntiBotListener(this);
+        AutoBroadcastSender autoBroadcastSender = new AutoBroadcastSender(this);
+
+        getServer().getPluginManager().registerEvents(chatListener, this);
+        getServer().getPluginManager().registerEvents(bannedWords, this);
+        getServer().getPluginManager().registerEvents(new TabCompleteListener(this), this);
+        getServer().getPluginManager().registerEvents(playerJoinListener, this);
+        getServer().getPluginManager().registerEvents(playerMoveListener, this);
     }
 
     public void registerConfigFiles() {
@@ -81,6 +95,9 @@ public class TChat extends JavaPlugin {
         autoBroadcastManager = new AutoBroadcastManager(this);
         chatBotManager = new ChatBotManager(this);
         commandTimerManager = new CommandTimerManager(this);
+        chatGamesManager = new ChatGamesManager(this);
+        chatGamesSender = new ChatGamesSender(this);
+        logsManager = new LogsManager(this);
     }
 
     public void initializeManagers() {
@@ -102,6 +119,12 @@ public class TChat extends JavaPlugin {
                 Objects.requireNonNull(this.getCommand("reply")).setExecutor(new ReplyCommand(this, privateMessageCommand));
             }
         }
+        if (getConfigManager().isChatClearEnabled()) {
+            Objects.requireNonNull(this.getCommand("chatclear")).setExecutor(new ChatClearCommand(this));
+        }
+        if (getConfigManager().isMuteChatEnabled()) {
+            Objects.requireNonNull(this.getCommand("mutechat")).setExecutor(new MuteChatCommand(this));
+        }
     }
 
     public void registerPlaceholders() {
@@ -110,6 +133,12 @@ public class TChat extends JavaPlugin {
 
     // ------------------------------------------------------------------------------
 
+    public LogsManager getLogsManager() { return logsManager; }
+    public ChatGamesSender getChatGamesSender() { return chatGamesSender; }
+    public ChatGamesManager getChatGamesManager() { return chatGamesManager; }
+    public PlayerJoinListener getPlayerJoinListener() { return playerJoinListener; }
+    public AntiBotListener getAntiBotListener() { return antiBotListener; }
+    public RepeatMessagesListener getRepeatMessagesListener() { return repeatMessagesListener; }
     public CommandTimerManager getCommandTimerManager() { return commandTimerManager; }
     public ChatBotListener getChatBotListener() { return chatBotListener; }
     public ChatBotManager getChatBotManager() { return chatBotManager; }

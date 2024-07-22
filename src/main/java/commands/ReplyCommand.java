@@ -25,39 +25,44 @@ public class ReplyCommand implements CommandExecutor {
         Player senderPlayer = (Player) sender;
         String prefix = plugin.getMessagesManager().getPrefix();
 
-        if (args.length < 1) {
-            String message = plugin.getMessagesManager().getUsageReply();
-            sender.sendMessage(plugin.getTranslateColors().translateColors(senderPlayer, prefix + message));
-            return true;
+        if (senderPlayer.hasPermission(plugin.getConfigManager().getReplyPermission()) || senderPlayer.hasPermission("tchat.admin")) {
+            if (args.length < 1) {
+                String message = plugin.getMessagesManager().getUsageReply();
+                sender.sendMessage(plugin.getTranslateColors().translateColors(senderPlayer, prefix + message));
+                return true;
+            }
+
+            UUID lastMessagedUUID = privateMessageCommand.getLastMessaged().get(senderPlayer.getUniqueId());
+
+            if (lastMessagedUUID == null) {
+                String message = plugin.getMessagesManager().getNoReply();
+                sender.sendMessage(plugin.getTranslateColors().translateColors(senderPlayer, prefix + message));
+                return true;
+            }
+
+            Player targetPlayer = Bukkit.getPlayer(lastMessagedUUID);
+
+            if (targetPlayer == null) {
+                String message = plugin.getMessagesManager().getPlayerNotFound();
+                sender.sendMessage(plugin.getTranslateColors().translateColors(senderPlayer, prefix + message));
+                return true;
+            }
+
+            StringBuilder message = new StringBuilder();
+            for (String arg : args) {
+                message.append(arg).append(" ");
+            }
+
+            String senderMessage = plugin.getConfigManager().getReplyFormatSender();
+            senderMessage = senderMessage.replace("%sender%", sender.getName()).replace("%recipient%", targetPlayer.getName()).replace("%message%", message.toString().trim());
+            senderPlayer.sendMessage(plugin.getTranslateColors().translateColors(senderPlayer, senderMessage));
+            String formattedMessage = plugin.getConfigManager().getReplyFormatReceiver();
+            formattedMessage = formattedMessage.replace("%sender%", sender.getName()).replace("%recipient%", targetPlayer.getName()).replace("%message%", message.toString().trim());
+            targetPlayer.sendMessage(plugin.getTranslateColors().translateColors(targetPlayer, formattedMessage));
+        } else {
+            String message = plugin.getMessagesManager().getNoPermission();
+            senderPlayer.sendMessage(plugin.getTranslateColors().translateColors(senderPlayer, prefix + message));
         }
-
-        UUID lastMessagedUUID = privateMessageCommand.getLastMessaged().get(senderPlayer.getUniqueId());
-
-        if (lastMessagedUUID == null) {
-            String message = plugin.getMessagesManager().getNoReply();
-            sender.sendMessage(plugin.getTranslateColors().translateColors(senderPlayer, prefix + message));
-            return true;
-        }
-
-        Player targetPlayer = Bukkit.getPlayer(lastMessagedUUID);
-
-        if (targetPlayer == null) {
-            String message = plugin.getMessagesManager().getPlayerNotFound();
-            sender.sendMessage(plugin.getTranslateColors().translateColors(senderPlayer, prefix + message));
-            return true;
-        }
-
-        StringBuilder message = new StringBuilder();
-        for (String arg : args) {
-            message.append(arg).append(" ");
-        }
-
-        String senderMessage = plugin.getConfigManager().getReplyFormatSender();
-        senderMessage = senderMessage.replace("%sender%", sender.getName()).replace("%recipient%", targetPlayer.getName()).replace("%message%", message.toString().trim());
-        senderPlayer.sendMessage(plugin.getTranslateColors().translateColors(senderPlayer, senderMessage));
-        String formattedMessage = plugin.getConfigManager().getReplyFormatReceiver();
-        formattedMessage = formattedMessage.replace("%sender%", sender.getName()).replace("%recipient%", targetPlayer.getName()).replace("%message%", message.toString().trim());
-        targetPlayer.sendMessage(plugin.getTranslateColors().translateColors(targetPlayer, formattedMessage));
 
         return true;
     }

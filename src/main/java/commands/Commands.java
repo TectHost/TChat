@@ -42,6 +42,7 @@ public class Commands implements CommandExecutor, TabCompleter {
                         plugin.getAutoBroadcastManager().reloadConfig();
                         plugin.getChatBotManager().reloadConfig();
                         plugin.getCommandTimerManager().reloadConfig();
+                        plugin.getChatGamesManager().reloadConfig();
                         String message = plugin.getMessagesManager().getReloadMessage();
                         String prefix = plugin.getMessagesManager().getPrefix();
                         if (!(sender instanceof Player)) {

@@ -1,5 +1,5 @@
 main: minealex.tchat.TChat
-version: 4.0.0-DEV-6
+version: 4.0.0-DEV-7
 name: TChat
 author: Mine_Alex
 api-version: 1.13
@@ -15,8 +15,6 @@ commands:
   chatcolor:
     description: Open's the chatcolor menu
     usage: /<command>
-    aliases:
-      - cc
   channel:
     description: Join/leave a channel
     usage: /<command> <join|leave>
@@ -29,11 +27,23 @@ commands:
       - dm
       - md
       - mp
+      - message
   reply:
     description: Reply to a private message
     usage: /<command> <user>
     aliases:
       - r
+  chatclear:
+    description: Clear's the chat
+    usage: /<command>
+    aliases:
+      - cc
+  mutechat:
+    description: Mute the chat
+    usage: /<command>
+    aliases:
+      - mc
+      - chatmute
 
 
 permissions:

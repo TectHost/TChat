@@ -12,19 +12,23 @@ public class GrammarListener {
     }
 
     public void checkGrammar(AsyncPlayerChatEvent event, Player player, String message) {
-        if (player.hasPermission(plugin.getConfigManager().getPermissionBypassCap()) || player.hasPermission("tchat.admin")) {
+        if (!player.hasPermission(plugin.getConfigManager().getPermissionBypassCap()) || !player.hasPermission("tchat.admin")) {
             if (plugin.getConfigManager().isGrammarCapEnabled()) {
                 message = checkCap(message);
             }
         }
 
-        if (player.hasPermission(plugin.getConfigManager().getPermissionBypassFinalDot()) || player.hasPermission("tchat.admin")) {
+        if (!player.hasPermission(plugin.getConfigManager().getPermissionBypassFinalDot()) || !player.hasPermission("tchat.admin")) {
             if (plugin.getConfigManager().isGrammarDotEnabled()) {
                 message = checkDot(message);
             }
         }
 
         event.setMessage(message);
+
+        if (plugin.getConfigManager().isRepeatMessagesEnabled() && !player.hasPermission(plugin.getConfigManager().getBypassRepeatMessages()) && !player.hasPermission("tchat.admin")) {
+            plugin.getRepeatMessagesListener().checkRepeatMessages(event, player, message);
+        }
     }
 
     public String checkCap(String message) {
