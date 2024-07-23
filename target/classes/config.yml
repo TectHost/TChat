@@ -274,3 +274,53 @@ logs:
   command:
     # Enable/disable logging commands
     enabled: true
+
+# #################################################################
+# ┌─────────────────────────────────────────────────────────────┐ #
+# │                        Chat Cooldowns                       │ #
+# └─────────────────────────────────────────────────────────────┘ #
+# #################################################################
+
+cooldowns:
+  chat:
+    # Enable/disable chat cooldown
+    enabled: true
+    # Time in ms (1000 = 1 second)
+    time: 3000
+  commands:
+    # Enable/disable command cooldown
+    enabled: true
+    # Time in ms (1000 = 1 second)
+    time: 3000
+
+# #################################################################
+# ┌─────────────────────────────────────────────────────────────┐ #
+# │                          Anti Flood                         │ #
+# └─────────────────────────────────────────────────────────────┘ #
+# #################################################################
+
+flood:
+  repeat:
+    # Enable/disable this function
+    enabled: true
+    # Equal letters in a row to be blocked
+    characters: 3
+  percent:
+    # Enable/disable this function
+    enabled: true
+    # Percentage of matching letters to be blocked
+    percentage: 0.75
+
+# #################################################################
+# ┌─────────────────────────────────────────────────────────────┐ #
+# │                         Anti Unicode                        │ #
+# └─────────────────────────────────────────────────────────────┘ #
+# #################################################################
+
+unicode:
+  # Enable/disable anti unicode
+  enabled: true
+  match: '^[A-Za-z0-9\-~!@#\$%^&*()<>_+=\-{}|'';:.,\[\]"/]+$'
+  # true -> Block all no latin characters
+  # false -> Block only match characters (unicode.match)
+  blockAllNonLatin: false
