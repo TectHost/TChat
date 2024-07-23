@@ -56,6 +56,10 @@ public class BannedWords implements Listener {
                             playSound(event.getPlayer(), bannedWordsManager.getSound());
                         }
 
+                        if (bannedWordsManager.isParticlesEnabled()) {
+                            showParticles(event.getPlayer());
+                        }
+
                         return;
                     } else if ("CENSOR".equalsIgnoreCase(bannedWordsManager.getType())) {
                         String censoredMessage = censorWord(word, message);
@@ -74,6 +78,10 @@ public class BannedWords implements Listener {
 
                         if (bannedWordsManager.getSoundEnabled()) {
                             playSound(event.getPlayer(), bannedWordsManager.getSound());
+                        }
+
+                        if (bannedWordsManager.isParticlesEnabled()) {
+                            showParticles(event.getPlayer());
                         }
 
                         return;
@@ -107,6 +115,15 @@ public class BannedWords implements Listener {
             @Override
             public void run() {
                 player.spigot().sendMessage(net.md_5.bungee.api.ChatMessageType.ACTION_BAR, net.md_5.bungee.api.chat.TextComponent.fromLegacyText(message));
+            }
+        }.runTask(bannedWordsManager.getPlugin());
+    }
+
+    private void showParticles(Player player) {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                player.getWorld().spawnParticle(bannedWordsManager.getParticle(), player.getLocation(), bannedWordsManager.getParticles());
             }
         }.runTask(bannedWordsManager.getPlugin());
     }

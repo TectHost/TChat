@@ -22,6 +22,8 @@ public class ChatBotListener implements Listener {
 
     @EventHandler
     public void chatBot(AsyncPlayerChatEvent event) {
+        if (event.isCancelled()) { return; }
+
         Player player = event.getPlayer();
         String message = event.getMessage();
 

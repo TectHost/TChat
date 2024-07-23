@@ -31,7 +31,7 @@ public class AntiAdvertising {
     }
 
     private void checkAndHandle(AsyncPlayerChatEvent event, Player player, String message, AdvertisingConfig config) {
-        if (player.hasPermission(plugin.getConfigManager().getAdvertisingBypass()) || player.hasPermission("tchat.admin")) {
+        if (!player.hasPermission(plugin.getConfigManager().getAdvertisingBypass()) || !player.hasPermission("tchat.admin")) {
             if (config.isEnabled() && message.matches(config.getMatch())) {
                 event.setCancelled(true);
                 if (config.isMessageEnabled()) {

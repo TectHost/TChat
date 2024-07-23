@@ -33,6 +33,8 @@ public class ChatFormatListener implements Listener {
 
     @EventHandler
     public void playerFormat(AsyncPlayerChatEvent event) {
+        if (event.isCancelled()) { return; }
+
         Player player = event.getPlayer();
         String message = event.getMessage();
         String format;

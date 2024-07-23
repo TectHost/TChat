@@ -24,6 +24,8 @@ public class ChatListener implements Listener {
         String message = event.getMessage();
 
         chatMuted(event, player);
+        plugin.getChatCooldownListener().chatCooldown(event, player);
+        plugin.getAntiUnicodeListener().checkUnicode(event, player, message);
         plugin.getChatBotListener().chatBot(event);
         plugin.getBannedWords().playerBannedWords(event);
         plugin.getAntiAdvertising().checkAdvertising(event);
@@ -31,12 +33,11 @@ public class ChatListener implements Listener {
         replacer(event, message);
         grammar(event, player, message);
         antiBot(event, player, null);
+        plugin.getAntiFloodListener().checkFlood(event, message);
 
-        if (!event.isCancelled()) {
-            chatFormatListener.playerFormat(event);
-            plugin.getChatGamesSender().checkPlayerResponse(player, message);
-            logs(player, message, 1);
-        }
+        chatFormatListener.playerFormat(event);
+        plugin.getChatGamesSender().checkPlayerResponse(player, message);
+        logs(player, message, 1);
     }
 
     @EventHandler
@@ -44,8 +45,9 @@ public class ChatListener implements Listener {
         Player player = event.getPlayer();
         String command = event.getMessage();
 
-        antiBot(null, player, event);
         logs(player, command, 0);
+        plugin.getChatCooldownListener().commandCooldown(event, player);
+        antiBot(null, player, event);
         new BannedCommands(plugin).onPlayerCommandPreprocess(event);
     }
 
@@ -60,11 +62,16 @@ public class ChatListener implements Listener {
     }
 
     public void antiBot(AsyncPlayerChatEvent chatEvent, Player player, PlayerCommandPreprocessEvent commandEvent) {
+        if (chatEvent != null) {
+            if (chatEvent.isCancelled()) { return; }
+        } else if (commandEvent != null) {
+            if (commandEvent.isCancelled()) { return; }
+        }
+
         if (plugin.getPlayerJoinListener().isUnverified(player) && plugin.getConfigManager().isAntibotEnabled() && !player.hasPermission(plugin.getConfigManager().getAntibotBypass()) && !player.hasPermission("tchat.admin")) {
             if (chatEvent != null) {
                 plugin.getAntiBotListener().playerChat(chatEvent, player);
-            }
-            if (commandEvent != null) {
+            } else if (commandEvent != null) {
                 plugin.getAntiBotListener().playerCommand(commandEvent, player);
             }
         }
@@ -77,7 +84,7 @@ public class ChatListener implements Listener {
         }
     }
 
-    public void grammar (AsyncPlayerChatEvent event, Player player, String message) {
+    public void grammar(AsyncPlayerChatEvent event, Player player, String message) {
         if (plugin.getConfigManager().isGrammarEnabled()) {
             plugin.getGrammarListener().checkGrammar(event, player, message);
             message = event.getMessage();

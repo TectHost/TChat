@@ -12,6 +12,8 @@ public class GrammarListener {
     }
 
     public void checkGrammar(AsyncPlayerChatEvent event, Player player, String message) {
+        if (event.isCancelled()) { return; }
+
         if (!player.hasPermission(plugin.getConfigManager().getPermissionBypassCap()) || !player.hasPermission("tchat.admin")) {
             if (plugin.getConfigManager().isGrammarCapEnabled()) {
                 message = checkCap(message);

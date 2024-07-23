@@ -25,6 +25,10 @@ messages:
   chat-mute: "&cChat has been muted."
   chat-unmute: "&aChat has been unmuted."
   repeat-message: "&cYour message is too similar to your last one."
+  anti-flood: "&cYour message contains too many of the same letters or an excessive percentage of the same letters and has been blocked."
+  cooldown:
+    chat: "&cPlease wait %cooldown% seconds before sending another message."
+    command: "&cPlease wait %cooldown% seconds before executing another command."
   chatgames:
     no-games: "&cThere are no games configured."
     no-enabled-games: "&cThere are no games enabled."

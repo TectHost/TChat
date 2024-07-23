@@ -43,6 +43,7 @@ public class Commands implements CommandExecutor, TabCompleter {
                         plugin.getChatBotManager().reloadConfig();
                         plugin.getCommandTimerManager().reloadConfig();
                         plugin.getChatGamesManager().reloadConfig();
+                        plugin.getCommandProgrammerManager().reloadConfig();
                         String message = plugin.getMessagesManager().getReloadMessage();
                         String prefix = plugin.getMessagesManager().getPrefix();
                         if (!(sender instanceof Player)) {
@@ -77,6 +78,10 @@ public class Commands implements CommandExecutor, TabCompleter {
                             sender.sendMessage(plugin.getTranslateColors().translateColors(Player, prefix + message));
                         }
                     }
+                } else if (args[0].equalsIgnoreCase("clear")) {
+                    plugin.getChatClearCommand().onCommand(sender, command, alias, args);
+                } else if (args[0].equalsIgnoreCase("mute")) {
+                    plugin.getMuteChatCommand().onCommand(sender, command, alias, args);
                 } else {
                     String message = plugin.getMessagesManager().getUnknownMessage();
                     String prefix = plugin.getMessagesManager().getPrefix();
@@ -89,7 +94,7 @@ public class Commands implements CommandExecutor, TabCompleter {
                 }
             } else {
                 // Mensaje de ayuda
-                String helpMessage = "Usage: /tchat <reload|version>";
+                String helpMessage = "Usage: /tchat <reload|version|clear|mute>";
                 sender.sendMessage(ChatColor.translateAlternateColorCodes('&', helpMessage));
             }
         } else {
@@ -112,6 +117,8 @@ public class Commands implements CommandExecutor, TabCompleter {
         if (args.length == 1) {
             completions.add("reload");
             completions.add("version");
+            completions.add("clear");
+            completions.add("mute");
         }
 
         return completions;

@@ -19,24 +19,24 @@ public class MuteChatCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
+        String prefix = plugin.getMessagesManager().getPrefix();
         if (sender.hasPermission(plugin.getConfigManager().getMuteChatPermission())) {
             chatMuted = !chatMuted;
 
             String message;
             if (sender instanceof Player player) {
                 message = chatMuted
-                        ? plugin.getTranslateColors().translateColors(player, plugin.getMessagesManager().getChatMute())
-                        : plugin.getTranslateColors().translateColors(player, plugin.getMessagesManager().getChatUnmute());
+                        ? plugin.getTranslateColors().translateColors(player, prefix + plugin.getMessagesManager().getChatMute())
+                        : plugin.getTranslateColors().translateColors(player, prefix + plugin.getMessagesManager().getChatUnmute());
             } else {
                 message = chatMuted
-                        ? plugin.getTranslateColors().translateColors(null, plugin.getMessagesManager().getChatMute())
-                        : plugin.getTranslateColors().translateColors(null, plugin.getMessagesManager().getChatUnmute());
+                        ? plugin.getTranslateColors().translateColors(null, prefix + plugin.getMessagesManager().getChatMute())
+                        : plugin.getTranslateColors().translateColors(null, prefix + plugin.getMessagesManager().getChatUnmute());
             }
 
             sender.getServer().broadcastMessage(message);
 
         } else {
-            String prefix = plugin.getMessagesManager().getPrefix();
             String message = plugin.getMessagesManager().getNoPermission();
             sender.sendMessage(plugin.getTranslateColors().translateColors(null, prefix + message));
         }

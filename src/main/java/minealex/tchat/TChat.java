@@ -3,7 +3,6 @@ package minealex.tchat;
 import commands.*;
 import config.*;
 import listeners.*;
-import net.kyori.adventure.platform.facet.Facet;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -43,6 +42,12 @@ public class TChat extends JavaPlugin {
     private ChatGamesSender chatGamesSender;
     private AutoBroadcastSender autoBroadcastSender;
     private LogsManager logsManager;
+    private ChatCooldownListener chatCooldownListener;
+    private AntiFloodListener antiFloodListener;
+    private AntiUnicodeListener antiUnicodeListener;
+    private ChatClearCommand chatClearCommand;
+    private MuteChatCommand muteChatCommand;
+    private CommandProgrammerManager commandProgrammerManager;
 
     @Override
     public void onEnable() {
@@ -75,6 +80,10 @@ public class TChat extends JavaPlugin {
         PlayerMoveListener playerMoveListener = new PlayerMoveListener(this);
         antiBotListener = new AntiBotListener(this);
         AutoBroadcastSender autoBroadcastSender = new AutoBroadcastSender(this);
+        chatCooldownListener = new ChatCooldownListener(this);
+        antiFloodListener = new AntiFloodListener(this);
+        antiUnicodeListener = new AntiUnicodeListener(this);
+        new CommandProgrammerSender(this, commandProgrammerManager);
 
         getServer().getPluginManager().registerEvents(chatListener, this);
         getServer().getPluginManager().registerEvents(bannedWords, this);
@@ -98,6 +107,7 @@ public class TChat extends JavaPlugin {
         chatGamesManager = new ChatGamesManager(this);
         chatGamesSender = new ChatGamesSender(this);
         logsManager = new LogsManager(this);
+        commandProgrammerManager = new CommandProgrammerManager(this);
     }
 
     public void initializeManagers() {
@@ -120,9 +130,11 @@ public class TChat extends JavaPlugin {
             }
         }
         if (getConfigManager().isChatClearEnabled()) {
+            chatClearCommand = new ChatClearCommand(this);
             Objects.requireNonNull(this.getCommand("chatclear")).setExecutor(new ChatClearCommand(this));
         }
         if (getConfigManager().isMuteChatEnabled()) {
+            muteChatCommand = new MuteChatCommand(this);
             Objects.requireNonNull(this.getCommand("mutechat")).setExecutor(new MuteChatCommand(this));
         }
     }
@@ -133,6 +145,12 @@ public class TChat extends JavaPlugin {
 
     // ------------------------------------------------------------------------------
 
+    public CommandProgrammerManager getCommandProgrammerManager() { return commandProgrammerManager; }
+    public MuteChatCommand getMuteChatCommand() { return muteChatCommand; }
+    public ChatClearCommand getChatClearCommand() { return chatClearCommand; }
+    public AntiUnicodeListener getAntiUnicodeListener() { return antiUnicodeListener; }
+    public AntiFloodListener getAntiFloodListener() { return antiFloodListener; }
+    public ChatCooldownListener getChatCooldownListener() { return chatCooldownListener; }
     public LogsManager getLogsManager() { return logsManager; }
     public ChatGamesSender getChatGamesSender() { return chatGamesSender; }
     public ChatGamesManager getChatGamesManager() { return chatGamesManager; }

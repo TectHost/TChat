@@ -12,6 +12,7 @@ bannedCommands:
   - about
   - "?"
   - ver
+  - help
   - bukkit:ver
   - bukkit:about
   - bukkit:pl
@@ -65,3 +66,11 @@ bypass:
     permission: "tchat.bypass.command_blocker.command"
   tab:
     permission: "tchat.bypass.command_blocker.tab"
+
+particles:
+  # Enable/disable particles
+  enabled: true
+  # https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Particle.html
+  particle: ANGRY_VILLAGER
+  # Number of particles
+  particles: 4

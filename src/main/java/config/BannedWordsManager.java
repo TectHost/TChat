@@ -1,6 +1,7 @@
 package config;
 
 import minealex.tchat.TChat;
+import org.bukkit.Particle;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -22,6 +23,9 @@ public class BannedWordsManager {
     private boolean soundEnabled;
     private String sound;
     private String bypassPermission;
+    private boolean particlesEnabled;
+    private Particle particle;
+    private int particles;
 
     public BannedWordsManager(TChat plugin) {
         this.plugin = plugin;
@@ -55,8 +59,16 @@ public class BannedWordsManager {
             sound = bannedWordsConfig.getString("sound.sound");
         }
         bypassPermission = bannedWordsConfig.getString("bypass.permission");
+        particlesEnabled = bannedWordsConfig.getBoolean("particles.enabled");
+        if (particlesEnabled) {
+            particle = Particle.valueOf(bannedWordsConfig.getString("particles.particle"));
+            particles = bannedWordsConfig.getInt("particles.particles");
+        }
     }
 
+    public int getParticles() { return particles; }
+    public Particle getParticle() { return particle; }
+    public boolean isParticlesEnabled() { return particlesEnabled; }
     public String getBypassPermission() { return bypassPermission; }
     public String getSound() { return sound; }
     public boolean getSoundEnabled() { return soundEnabled; }

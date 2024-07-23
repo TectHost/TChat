@@ -16,6 +16,8 @@ public class CapListener implements Listener {
 
     @EventHandler
     public void playerAntiCap(AsyncPlayerChatEvent event) {
+        if (event.isCancelled()) { return; }
+
         if (plugin.getConfigManager().isAntiCapEnabled()) {
             Player player = event.getPlayer();
             if (!(player.hasPermission("tchat.bypass.anticap") || !(player.hasPermission("tchat.admin")))) {

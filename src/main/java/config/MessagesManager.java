@@ -50,6 +50,9 @@ public class MessagesManager {
     private String noMessages;
     private String timeFinished;
     private String gameWin;
+    private String cooldownChat;
+    private String cooldownCommand;
+    private String antiFlood;
 
     public MessagesManager(TChat plugin){
         this.messagesFile = new ConfigFile("messages.yml", null, plugin);
@@ -67,6 +70,13 @@ public class MessagesManager {
             prefix = "";
         }
 
+        if (plugin.getConfigManager().isCooldownChat()) {
+            cooldownChat = config.getString("messages.cooldown.chat");
+        }
+        if (plugin.getConfigManager().isCooldownCommand()) {
+            cooldownCommand = config.getString("messages.cooldown.command");
+        }
+
         if (plugin.getConfigManager().isAntibotEnabled()) {
             if (plugin.getConfigManager().isAntibotChat()) {
                 antibotChat = config.getString("messages.antibot.antibot-chat");
@@ -80,6 +90,10 @@ public class MessagesManager {
             if (plugin.getConfigManager().isAntibotMoved()) {
                 antibotMoved = config.getString("messages.antibot.antibot-moved");
             }
+        }
+
+        if (plugin.getConfigManager().isFloodPercentEnabled() || plugin.getConfigManager().isFloodRepeatEnabled()) {
+            antiFlood = config.getString("messages.anti-flood");
         }
 
         // Messages
@@ -131,6 +145,9 @@ public class MessagesManager {
     }
 
     // Messages
+    public String getAntiFlood() { return antiFlood; }
+    public String getCooldownCommand() { return cooldownCommand; }
+    public String getCooldownChat() { return cooldownChat; }
     public String getGameWin() { return gameWin; }
     public String getTimeFinished() { return timeFinished; }
     public String getNoEnabledGames() { return noEnabledGames; }

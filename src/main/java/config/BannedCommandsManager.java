@@ -1,6 +1,7 @@
 package config;
 
 import minealex.tchat.TChat;
+import org.bukkit.Particle;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.List;
@@ -22,6 +23,9 @@ public class BannedCommandsManager {
     private String sound;
     private String bypassPermissionCommand;
     private String bypassPermissionTab;
+    private boolean particlesEnabled;
+    private Particle particle;
+    private int particles;
 
     public BannedCommandsManager(TChat plugin) {
         this.plugin = plugin;
@@ -38,13 +42,25 @@ public class BannedCommandsManager {
         blockedMessage = config.getStringList("blockedMessage");
         noTabCompleteCommands = config.getStringList("tab.noTabCompleteCommands");
         blockAllCommands = config.getBoolean("tab.block-all-additional-commands");
+
         titleEnabled = config.getBoolean("title.enabled");
-        title = config.getString("title.title");
-        subTitle = config.getString("title.subtitle");
+        if (titleEnabled) {
+            title = config.getString("title.title");
+            subTitle = config.getString("title.subtitle");
+        }
         actionBarEnabled = config.getBoolean("actionbar.enabled");
-        actionBar = config.getString("actionbar.bar");
+        if (actionBarEnabled) {
+            actionBar = config.getString("actionbar.bar");
+        }
         soundEnabled = config.getBoolean("sound.enabled");
-        sound = config.getString("sound.sound");
+        if (soundEnabled) {
+            sound = config.getString("sound.sound");
+        }
+        particlesEnabled = config.getBoolean("particles.enabled");
+        if (particlesEnabled) {
+            particle = Particle.valueOf(config.getString("particles.particle"));
+            particles = config.getInt("particles.particles");
+        }
     }
 
     public void reloadConfig() {
@@ -52,6 +68,9 @@ public class BannedCommandsManager {
         loadConfig();
     }
 
+    public int getParticles() { return particles;}
+    public Particle getParticle() { return particle; }
+    public boolean isParticlesEnabled() { return particlesEnabled; }
     public String getBypassPermissionCommand() { return bypassPermissionCommand; }
     public String getBypassPermissionTab() { return bypassPermissionTab; }
     public String getSound() { return sound; }

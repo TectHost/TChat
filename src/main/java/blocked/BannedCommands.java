@@ -3,6 +3,7 @@ package blocked;
 import config.BannedCommandsManager;
 import minealex.tchat.TChat;
 import org.bukkit.ChatColor;
+import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -24,6 +25,8 @@ public class BannedCommands implements Listener {
 
     @EventHandler
     public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
+        if (event.isCancelled()) { return; }
+
         if (!event.getPlayer().hasPermission(bannedCommandsManager.getBypassPermissionCommand()) && !event.getPlayer().hasPermission("tchat.admin")) {
             String command = event.getMessage().split(" ")[0].substring(1).toLowerCase();
             List<String> bannedCommands = bannedCommandsManager.getBannedCommands();
@@ -47,6 +50,10 @@ public class BannedCommands implements Listener {
 
                 if (bannedCommandsManager.getSoundEnabled()) {
                     playSound(event.getPlayer(), bannedCommandsManager.getSound());
+                }
+
+                if (bannedCommandsManager.isParticlesEnabled()) {
+                    showParticles(event.getPlayer());
                 }
 
                 event.setCancelled(true);
@@ -80,5 +87,14 @@ public class BannedCommands implements Listener {
     private void playSound(Player player, String soundName) {
         Sound sound = Sound.valueOf(soundName.toUpperCase());
         player.playSound(player.getLocation(), sound, 1.0F, 1.0F);
+    }
+
+    private void showParticles(Player player) {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                player.getWorld().spawnParticle(bannedCommandsManager.getParticle(), player.getLocation(), bannedCommandsManager.getParticles());
+            }
+        }.runTask(bannedCommandsManager.getPlugin());
     }
 }

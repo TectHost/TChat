@@ -49,6 +49,17 @@ public class ConfigManager {
     private boolean antibotMoved;
     private boolean logsChatEnabled;
     private boolean logsCommandEnabled;
+    private boolean cooldownChat;
+    private boolean cooldownCommand;
+    private long cooldownChatTime;
+    private long cooldownCommandTime;
+    private boolean floodRepeatEnabled;
+    private boolean floodPercentEnabled;
+    private int charactersFlood;
+    private double percentageFlood;
+    private boolean unicodeEnabled;
+    private boolean unicodeBlockAll;
+    private String unicodeMatch;
 
     public ConfigManager(TChat plugin) {
         this.configFile = new ConfigFile("config.yml", null, plugin);
@@ -66,6 +77,30 @@ public class ConfigManager {
         domainConfig = new AdvertisingConfig(config, "advertising.domain");
         linksConfig = new AdvertisingConfig(config, "advertising.links");
         advertisingBypass = config.getString("advertising.bypass");
+
+        unicodeEnabled = config.getBoolean("unicode.enabled");
+        if (unicodeEnabled) {
+            unicodeBlockAll = config.getBoolean("unicode.blockAllNonLatin");
+            unicodeMatch = config.getString("unicode.match");
+        }
+
+        floodPercentEnabled = config.getBoolean("flood.percent.enabled");
+        floodRepeatEnabled = config.getBoolean("flood.repeat.enabled");
+        if (floodRepeatEnabled) {
+            charactersFlood = config.getInt("flood.repeat.characters");
+        }
+        if (floodPercentEnabled) {
+            percentageFlood = config.getDouble("flood.percent.percentage");
+        }
+
+        cooldownChat = config.getBoolean("cooldowns.chat.enabled");
+        cooldownCommand = config.getBoolean("cooldowns.commands.enabled");
+        if (cooldownChat) {
+            cooldownChatTime = config.getLong("cooldowns.chat.time");
+        }
+        if (cooldownCommand) {
+            cooldownCommandTime = config.getLong("cooldowns.commands.time");
+        }
 
         antiCapEnabled = config.getBoolean("cap.enabled");
         if (antiCapEnabled) {
@@ -139,6 +174,17 @@ public class ConfigManager {
         loadConfig();
     }
 
+    public boolean getUnicodeBlockAll() { return unicodeBlockAll; }
+    public String getUnicodeMatch() { return unicodeMatch; }
+    public boolean isUnicodeEnabled() {return unicodeEnabled; }
+    public double getPercentageFlood() { return percentageFlood; }
+    public int getCharactersFlood() { return charactersFlood; }
+    public boolean isFloodPercentEnabled() { return floodPercentEnabled; }
+    public boolean isFloodRepeatEnabled() { return floodRepeatEnabled; }
+    public long getCooldownCommandTime() { return cooldownCommandTime; }
+    public long getCooldownChatTime() { return cooldownChatTime; }
+    public boolean isCooldownCommand() { return cooldownCommand; }
+    public boolean isCooldownChat() { return cooldownChat; }
     public boolean isLogsCommandEnabled() { return logsCommandEnabled; }
     public boolean isLogsChatEnabled() { return logsChatEnabled; }
     public boolean isAntibotMoved() { return antibotMoved; }

@@ -583,3 +583,11 @@ sound:
 bypass:
   # Permission for bypass banned words system
   permission: "tchat.bypass.banned_words"
+
+particles:
+  # Enable/disable particles
+  enabled: true
+  # https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Particle.html
+  particle: ANGRY_VILLAGER
+  # Number of particles
+  particles: 4

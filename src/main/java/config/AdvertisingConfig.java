@@ -5,7 +5,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import java.util.List;
 
 public class AdvertisingConfig {
-    private boolean enabled;
+    private final boolean enabled;
     private String match;
     private boolean messageEnabled;
     private List<String> message;
