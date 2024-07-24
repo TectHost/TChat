@@ -45,6 +45,7 @@ public class ChatListener implements Listener {
         Player player = event.getPlayer();
         String command = event.getMessage();
 
+        socialSpy(event, player, command);
         logs(player, command, 0);
         plugin.getChatCooldownListener().commandCooldown(event, player);
         antiBot(null, player, event);
@@ -52,6 +53,12 @@ public class ChatListener implements Listener {
     }
 
     // Other ------------------------------------------------------------------------------
+
+    public void socialSpy(PlayerCommandPreprocessEvent e, Player sender, String command) {
+        if (plugin.getConfigManager().isSpyEnabled() && !sender.hasPermission("tchat.admin")) {
+            plugin.getSocialSpyListener().spy(e, sender, command);
+        }
+    }
 
     public void logs(Player player, String message, int action) {
         if (plugin.getConfigManager().isLogsCommandEnabled() && action == 0) {

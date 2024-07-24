@@ -60,6 +60,11 @@ public class ConfigManager {
     private boolean unicodeEnabled;
     private boolean unicodeBlockAll;
     private String unicodeMatch;
+    private boolean broadcastEnabled;
+    private String broadcastFormat;
+    private boolean spyEnabled;
+    private String spyFormat;
+    private boolean ignoreEnabled;
 
     public ConfigManager(TChat plugin) {
         this.configFile = new ConfigFile("config.yml", null, plugin);
@@ -77,6 +82,18 @@ public class ConfigManager {
         domainConfig = new AdvertisingConfig(config, "advertising.domain");
         linksConfig = new AdvertisingConfig(config, "advertising.links");
         advertisingBypass = config.getString("advertising.bypass");
+
+        ignoreEnabled = config.getBoolean("ignore.enabled");
+
+        broadcastEnabled = config.getBoolean("broadcast.broadcast.enabled");
+        if (broadcastEnabled) {
+            broadcastFormat = config.getString("broadcast.broadcast.format");
+        }
+
+        spyEnabled = config.getBoolean("spy.commands.enabled");
+        if (spyEnabled) {
+            spyFormat = config.getString("spy.commands.format");
+        }
 
         unicodeEnabled = config.getBoolean("unicode.enabled");
         if (unicodeEnabled) {
@@ -174,6 +191,11 @@ public class ConfigManager {
         loadConfig();
     }
 
+    public boolean isIgnoreEnabled() { return ignoreEnabled; }
+    public String getSpyFormat() { return spyFormat; }
+    public boolean isSpyEnabled() { return spyEnabled; }
+    public String getBroadcastFormat() { return broadcastFormat; }
+    public boolean isBroadcastEnabled() { return broadcastEnabled; }
     public boolean getUnicodeBlockAll() { return unicodeBlockAll; }
     public String getUnicodeMatch() { return unicodeMatch; }
     public boolean isUnicodeEnabled() {return unicodeEnabled; }

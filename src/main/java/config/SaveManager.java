@@ -3,6 +3,7 @@ package config;
 import minealex.tchat.TChat;
 import org.bukkit.configuration.file.FileConfiguration;
 
+import java.util.List;
 import java.util.UUID;
 
 public class SaveManager {
@@ -10,39 +11,60 @@ public class SaveManager {
     private final ConfigFile savesFile;
     private FileConfiguration config;
 
-    public SaveManager(TChat plugin){
+    public SaveManager(TChat plugin) {
         this.savesFile = new ConfigFile("saves.yml", null, plugin);
         this.savesFile.registerConfig();
         this.config = savesFile.getConfig();
         loadConfig();
     }
 
-    public void loadConfig(){
+    public void loadConfig() {
         config = savesFile.getConfig();
     }
 
-    public void reloadConfig(){
+    public void reloadConfig() {
         savesFile.reloadConfig();
         loadConfig();
     }
 
-    public String getChatColor(UUID playerId){
+    public String getChatColor(UUID playerId) {
         String path = "players." + playerId.toString() + ".chatcolor";
         return config.getString(path, "&7");
     }
 
-    public void setChatColor(UUID playerId, String chatColor){
+    public void setChatColor(UUID playerId, String chatColor) {
         String path = "players." + playerId.toString() + ".chatcolor";
         config.set(path, chatColor);
         savesFile.saveConfig();
     }
 
-    public String getFormat(UUID playerId){
+    public List<String> getIgnoreList(UUID playerId) {
+        String path = "players." + playerId.toString() + ".ignore";
+        return config.getStringList(path);
+    }
+
+    public void setIgnore(UUID playerId, List<String> ignoreList) {
+        String path = "players." + playerId.toString() + ".ignore";
+        config.set(path, ignoreList);
+        savesFile.saveConfig();
+    }
+
+    public void removeIgnore(UUID playerId, UUID targetId) {
+        String path = "players." + playerId.toString() + ".ignore";
+        List<String> ignoreList = config.getStringList(path);
+
+        if (ignoreList.remove(targetId.toString())) {
+            config.set(path, ignoreList);
+            savesFile.saveConfig();
+        }
+    }
+
+    public String getFormat(UUID playerId) {
         String path = "players." + playerId.toString() + ".format";
         return config.getString(path, "");
     }
 
-    public void setFormat(UUID playerId, String format){
+    public void setFormat(UUID playerId, String format) {
         String path = "players." + playerId.toString() + ".format";
         config.set(path, format);
         savesFile.saveConfig();

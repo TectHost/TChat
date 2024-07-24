@@ -8,7 +8,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import utils.TranslateHexColorCodes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +43,8 @@ public class Commands implements CommandExecutor, TabCompleter {
                         plugin.getCommandTimerManager().reloadConfig();
                         plugin.getChatGamesManager().reloadConfig();
                         plugin.getCommandProgrammerManager().reloadConfig();
+                        plugin.getCommandsManager().reloadConfig();
+                        plugin.getDiscordManager().reloadConfig();
                         String message = plugin.getMessagesManager().getReloadMessage();
                         String prefix = plugin.getMessagesManager().getPrefix();
                         if (!(sender instanceof Player)) {
@@ -115,10 +116,18 @@ public class Commands implements CommandExecutor, TabCompleter {
         List<String> completions = new ArrayList<>();
 
         if (args.length == 1) {
-            completions.add("reload");
-            completions.add("version");
-            completions.add("clear");
-            completions.add("mute");
+            if (sender.hasPermission("tchat.admin.reload") || sender.hasPermission("tchat.admin")) {
+                completions.add("reload");
+            }
+            if (sender.hasPermission("tchat.admin.version") || sender.hasPermission("tchat.admin")) {
+                completions.add("version");
+            }
+            if (sender.hasPermission("tchat.admin.chatclear") || sender.hasPermission("tchat.admin")) {
+                completions.add("clear");
+            }
+            if (sender.hasPermission("tchat.admin.mutechat") || sender.hasPermission("tchat.admin")) {
+                completions.add("mute");
+            }
         }
 
         return completions;

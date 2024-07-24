@@ -16,6 +16,7 @@ import utils.TranslateHexColorCodes;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 public class ChatFormatListener implements Listener {
 
@@ -98,6 +99,15 @@ public class ChatFormatListener implements Listener {
             mainComponent.addExtra(new TextComponent(TextComponent.fromLegacyText(parts[1])));
         }
 
+        if (plugin.getConfigManager().isIgnoreEnabled()) {
+            List<Player> recipients = event.getRecipients().stream()
+                    .filter(recipient -> !isIgnored(player, recipient))
+                    .toList();
+
+            event.getRecipients().clear();
+            event.getRecipients().addAll(recipients);
+        }
+
         event.setCancelled(true);
 
         for (Player p : event.getRecipients()) {
@@ -120,8 +130,16 @@ public class ChatFormatListener implements Listener {
             consoleMessage = plugin.getTranslateColors().translateColors(player, consoleMessage);
             Bukkit.getConsoleSender().sendMessage(consoleMessage);
         }
+
+        if (plugin.getDiscordManager().isDiscordEnabled()) {
+            String discordMessage = removeMinecraftColorCodes(mainComponent.toLegacyText());
+            plugin.getDiscordHook().sendMessage(discordMessage);
+        }
     }
 
+    private String removeMinecraftColorCodes(String message) {
+        return message.replaceAll("(?i)§[0-9a-fk-or]", "");
+    }
 
     private String chatColor(Player player, String message) {
         if (player.hasPermission("tchat.color.all") || player.hasPermission("tchat.admin")) {
@@ -187,6 +205,13 @@ public class ChatFormatListener implements Listener {
         }
 
         return new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(hoverComponent).create());
+    }
+
+    private boolean isIgnored(Player sender, Player recipient) {
+        UUID senderId = sender.getUniqueId();
+        UUID recipientId = recipient.getUniqueId();
+        List<String> ignoreList = plugin.getSaveManager().getIgnoreList(recipientId);
+        return ignoreList.contains(senderId.toString());
     }
 
     private void applyClickAction(TextComponent component, String clickAction, String playerName) {

@@ -2,9 +2,11 @@ package minealex.tchat;
 
 import commands.*;
 import config.*;
+import hook.DiscordHook;
 import listeners.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import placeholders.Placeholders;
 import utils.*;
@@ -48,6 +50,10 @@ public class TChat extends JavaPlugin {
     private ChatClearCommand chatClearCommand;
     private MuteChatCommand muteChatCommand;
     private CommandProgrammerManager commandProgrammerManager;
+    private CommandsManager commandsManager;
+    private DiscordHook discordHook;
+    private DiscordManager discordManager;
+    private SocialSpyListener socialSpyListener;
 
     @Override
     public void onEnable() {
@@ -84,6 +90,8 @@ public class TChat extends JavaPlugin {
         antiFloodListener = new AntiFloodListener(this);
         antiUnicodeListener = new AntiUnicodeListener(this);
         new CommandProgrammerSender(this, commandProgrammerManager);
+        discordHook = new DiscordHook(this);
+        socialSpyListener = new SocialSpyListener(this);
 
         getServer().getPluginManager().registerEvents(chatListener, this);
         getServer().getPluginManager().registerEvents(bannedWords, this);
@@ -108,6 +116,8 @@ public class TChat extends JavaPlugin {
         chatGamesSender = new ChatGamesSender(this);
         logsManager = new LogsManager(this);
         commandProgrammerManager = new CommandProgrammerManager(this);
+        commandsManager = new CommandsManager(this);
+        discordManager = new DiscordManager(this);
     }
 
     public void initializeManagers() {
@@ -122,6 +132,7 @@ public class TChat extends JavaPlugin {
         Objects.requireNonNull(this.getCommand("tchat")).setExecutor(new Commands(this));
         Objects.requireNonNull(this.getCommand("chatcolor")).setExecutor(new ChatColorCommand(this));
         Objects.requireNonNull(this.getCommand("channel")).setExecutor(new ChannelCommand(this));
+        Objects.requireNonNull(getCommand("channel")).setTabCompleter(new ChannelsCompleter(this));
         if (getConfigManager().isMsgEnabled()) {
             PrivateMessageCommand privateMessageCommand = new PrivateMessageCommand(this);
             Objects.requireNonNull(this.getCommand("msg")).setExecutor(privateMessageCommand);
@@ -137,6 +148,12 @@ public class TChat extends JavaPlugin {
             muteChatCommand = new MuteChatCommand(this);
             Objects.requireNonNull(this.getCommand("mutechat")).setExecutor(new MuteChatCommand(this));
         }
+        new CustomCommands(this);
+        Objects.requireNonNull(this.getCommand("ping")).setExecutor(new PingCommand(this));
+        if (getConfigManager().isBroadcastEnabled()) {
+            Objects.requireNonNull(this.getCommand("broadcast")).setExecutor(new BroadcastCommand(this));
+        }
+        Objects.requireNonNull(this.getCommand("ignore")).setExecutor(new IgnoreCommand(this));
     }
 
     public void registerPlaceholders() {
@@ -145,6 +162,10 @@ public class TChat extends JavaPlugin {
 
     // ------------------------------------------------------------------------------
 
+    public SocialSpyListener getSocialSpyListener() { return socialSpyListener; }
+    public DiscordManager getDiscordManager() { return discordManager; }
+    public DiscordHook getDiscordHook() { return discordHook; }
+    public CommandsManager getCommandsManager() { return commandsManager; }
     public CommandProgrammerManager getCommandProgrammerManager() { return commandProgrammerManager; }
     public MuteChatCommand getMuteChatCommand() { return muteChatCommand; }
     public ChatClearCommand getChatClearCommand() { return chatClearCommand; }

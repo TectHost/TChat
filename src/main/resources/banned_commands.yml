@@ -6,8 +6,6 @@
 
 # List of banned commands
 bannedCommands:
-  - pl
-  - plugins
   - icanhasbukkit
   - about
   - "?"
@@ -24,8 +22,6 @@ tab:
   # Blocks all commands that contain ":"
   block-all-additional-commands: true
   noTabCompleteCommands:
-    - pl
-    - plugins
     - icanhasbukkit
     - about
     - "?"
@@ -55,7 +51,7 @@ actionbar:
 
 # Sound executed to players when they type a blocked word
 sound:
-  # Enable/disable the title
+  # Enable/disable the sound
   enabled: true
   # Sound
   # https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Sound.html
@@ -69,7 +65,7 @@ bypass:
 
 particles:
   # Enable/disable particles
-  enabled: true
+  enabled: false
   # https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Particle.html
   particle: ANGRY_VILLAGER
   # Number of particles

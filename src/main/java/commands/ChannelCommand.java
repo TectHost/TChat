@@ -10,6 +10,11 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import utils.ChannelsManager;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 public class ChannelCommand implements CommandExecutor {
 
     private final TChat plugin;

@@ -1,0 +1,183 @@
+# Also try LogicalChat! https://www.spigotmc.org/resources/logicalchat-1-20x-best-chat-plugin.114302/
+# Tags:
+# [MESSAGE] - Sends a message | - "[MESSAGE] &7Test message"
+# [TITLE] - Sends a title | - "[TITLE] &aTitle;&bSubtitle"
+# [PLAYER_COMMAND] - The player will automatically execute a command | - "[PLAYER_COMMAND] spawn {player}"
+# [CONSOLE_COMMAND] - The console will automatically execute a command | - "[CONSOLE_COMMAND] give {player} diamond 1"
+# [SOUND] - Executes a sound | - "[SOUND] AMBIENT_CRIMSON_FOREST_MOOD"
+# https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Sound.html
+# [PARTICLE] - Executes a particle | - "[PARTICLE] CHERRY_LEAVES"
+# https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Particle.html
+# [TELEPORT] - Teleports the player to concrete coordinate | - "[TELEPORT] world;0;70;0"
+# [ACTION_BAR] - Executes an action bar | - "[ACTION_BAR] &eWelcome! Have a great time!"
+# [INVENTORY] - Adds/removes/changes the inventory of the player | - "[INVENTORY] ADD DIAMOND_SWORD 1" | - "[INVENTORY] REMOVE STONE_SWORD 1" | - "[INVENTORY] CHANGE DIAMOND_SWORD 1 APPLE 1"
+# [POTION_EFFECT] - Adds/removes potion effects to the player | - "[POTION_EFFECT] ADD SPEED:120:1" | - "[POTION_EFFECT] REMOVE SPEED"
+# https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/potion/PotionEffectType.html
+# [BUNGEECORD] - Moves the player to another server | - "[BUNGEECORD] survival"
+
+commands:
+  test:
+    permission-required: false # tchat.customcommands.test
+    args: false
+    cooldown: 0
+    actions:
+      - "[MESSAGE] Test message"
+  bc:
+    permission-required: false
+    args: true
+    cooldown: 0
+    actions:
+      - "[PLAYER_COMMAND] broadcast %args%"
+  pl:
+    permission-required: false
+    cooldown: 0
+    actions:
+      - "[MESSAGE] &fServer Plugins (3):"
+      - "[MESSAGE] &6Bukkit Plugins:"
+      - "[MESSAGE]   &8- &aTChat&f, &aTect.host API&f, &aPlaceholderAPI"
+  plugins:
+    permission-required: false
+    cooldown: 0
+    actions:
+      - "[MESSAGE] &fServer Plugins (3):"
+      - "[MESSAGE] &6Bukkit Plugins:"
+      - "[MESSAGE]   &8- &aTChat&f, &aTect.host API&f, &aPlaceholderAPI"
+  ts3:
+    permission-required: false
+    cooldown: 0
+    actions:
+      - "[MESSAGE] %prefix% &fTeamSpeak link"
+  teamspeak:
+    permission-required: false
+    cooldown: 0
+    actions:
+      - "[MESSAGE] %prefix% &fTeamSpeak link"
+  tw:
+    permission-required: false
+    cooldown: 0
+    actions:
+      - "[MESSAGE] %prefix% &fhttps://tw.tect.host/"
+  twitter:
+    permission-required: false
+    cooldown: 0
+    actions:
+      - "[MESSAGE] %prefix% &fhttps://tw.tect.host/"
+  web:
+    permission-required: false
+    cooldown: 0
+    actions:
+      - "[MESSAGE] %prefix% &fhttps://web.tect.host/"
+  website:
+    permission-required: false
+    cooldown: 0
+    actions:
+      - "[MESSAGE] %prefix% &fhttps://web.tect.host/"
+  fb:
+    permission-required: false
+    cooldown: 0
+    actions:
+      - "[MESSAGE] %prefix% &fhttps://fb.tect.host/"
+  facebook:
+    permission-required: false
+    cooldown: 0
+    actions:
+      - "[MESSAGE] %prefix% &fhttps://fb.tect.host/"
+  tt:
+    permission-required: false
+    cooldown: 0
+    actions:
+      - "[MESSAGE] %prefix% &fhttps://tk.tect.host/"
+  tiktok:
+    permission-required: false
+    cooldown: 0
+    actions:
+      - "[MESSAGE] %prefix% &fhttps://tk.tect.host/"
+  yt:
+    permission-required: false
+    cooldown: 0
+    actions:
+      - "[MESSAGE] %prefix% &fhttps://yt.tect.host/"
+  youtube:
+    permission-required: false
+    cooldown: 0
+    actions:
+      - "[MESSAGE] %prefix% &fhttps://yt.tect.host/"
+  instagram:
+    permission-required: false
+    cooldown: 0
+    actions:
+      - "[MESSAGE] %prefix% &fhttps://ig.tect.host/"
+  ig:
+    permission-required: false
+    cooldown: 0
+    actions:
+      - "[MESSAGE] %prefix% &fhttps://ig.tect.host/"
+  dc:
+    permission-required: false
+    cooldown: 0
+    actions:
+      - "[MESSAGE] %prefix% &fhttps://dc.tect.host/"
+  discord:
+    permission-required: false
+    cooldown: 0
+    actions:
+      - "[MESSAGE] %prefix% &fhttps://dc.tect.host/"
+  r:
+    permission-required: false
+    args: true
+    cooldown: 0
+    actions:
+      - "[PLAYER_COMMAND] reply %args%"
+  tell:
+    permission-required: false
+    args: true
+    cooldown: 0
+    actions:
+      - "[PLAYER_COMMAND] msg %args%"
+  whisper:
+    permission-required: false
+    args: true
+    cooldown: 0
+    actions:
+      - "[PLAYER_COMMAND] msg %args%"
+  ewhisper:
+    permission-required: false
+    args: true
+    cooldown: 0
+    actions:
+      - "[PLAYER_COMMAND] msg %args%"
+  pm:
+    permission-required: false
+    args: true
+    cooldown: 0
+    actions:
+      - "[PLAYER_COMMAND] msg %args%"
+  emsg:
+    permission-required: false
+    args: true
+    cooldown: 0
+    actions:
+      - "[PLAYER_COMMAND] msg %args%"
+  chat:
+    permission-required: false
+    args: true
+    cooldown: 0
+    actions:
+      - "[PLAYER_COMMAND] tchat %args%"
+  mc:
+    permission-required: false
+    args: false
+    cooldown: 0
+    actions:
+      - "[PLAYER_COMMAND] mutechat"
+  chatmute:
+    permission-required: false
+    args: false
+    cooldown: 0
+    actions:
+      - "[PLAYER_COMMAND] mutechat"
+  cc:
+    permission-required: false
+    cooldown: 0
+    actions:
+      - "[PLAYER_COMMAND] clearchat"

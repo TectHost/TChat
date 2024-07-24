@@ -3,6 +3,8 @@ package config;
 import minealex.tchat.TChat;
 import org.bukkit.configuration.file.FileConfiguration;
 
+import java.util.List;
+
 public class MessagesManager {
 
     private final ConfigFile messagesFile;
@@ -53,6 +55,13 @@ public class MessagesManager {
     private String cooldownChat;
     private String cooldownCommand;
     private String antiFlood;
+    private String customCommandsCooldown;
+    private String ping;
+    private String broadcastUsage;
+    private String ignoreUsage;
+    private String ignoreSelf;
+    private String ignoreAlready;
+    private String ignoreMessage;
 
     public MessagesManager(TChat plugin){
         this.messagesFile = new ConfigFile("messages.yml", null, plugin);
@@ -96,7 +105,20 @@ public class MessagesManager {
             antiFlood = config.getString("messages.anti-flood");
         }
 
+        if (plugin.getConfigManager().isBroadcastEnabled()) {
+            broadcastUsage = config.getString("messages.usage.usage-broadcast");
+        }
+
+        if (plugin.getConfigManager().isIgnoreEnabled()) {
+            ignoreSelf = config.getString("messages.ignore.ignore-self");
+            ignoreAlready = config.getString("messages.ignore.already-ignored");
+            ignoreMessage = config.getString("messages.ignore.ignore");
+            ignoreUsage = config.getString("messages.usage.usage-ignore");
+        }
+
         // Messages
+        ping = config.getString("messages.ping");
+        customCommandsCooldown = config.getString("messages.custom-commands-cooldown");
         noGames = config.getString("messages.chatgames.no-games");
         noEnabledGames = config.getString("messages.chatgames.no-enabled-games");
         noMessages = config.getString("messages.chatgames.no-messages");
@@ -145,6 +167,13 @@ public class MessagesManager {
     }
 
     // Messages
+    public String getIgnoreMessage() { return ignoreMessage; }
+    public String getIgnoreAlready() { return ignoreAlready; }
+    public String getIgnoreSelf() { return ignoreSelf; }
+    public String getIgnoreUsage() { return ignoreUsage; }
+    public String getBroadcastUsage() { return broadcastUsage; }
+    public String getPing() { return ping; }
+    public String getCustomCommandsCooldown() { return customCommandsCooldown; }
     public String getAntiFlood() { return antiFlood; }
     public String getCooldownCommand() { return cooldownCommand; }
     public String getCooldownChat() { return cooldownChat; }
