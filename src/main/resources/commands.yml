@@ -1,4 +1,11 @@
+# #################################################################
+# ┌─────────────────────────────────────────────────────────────┐ #
+# │                       Custom Commands                       │ #
+# └─────────────────────────────────────────────────────────────┘ #
+# #################################################################
+
 # Also try LogicalChat! https://www.spigotmc.org/resources/logicalchat-1-20x-best-chat-plugin.114302/
+
 # Tags:
 # [MESSAGE] - Sends a message | - "[MESSAGE] &7Test message"
 # [TITLE] - Sends a title | - "[TITLE] &aTitle;&bSubtitle"
@@ -14,6 +21,8 @@
 # [POTION_EFFECT] - Adds/removes potion effects to the player | - "[POTION_EFFECT] ADD SPEED:120:1" | - "[POTION_EFFECT] REMOVE SPEED"
 # https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/potion/PotionEffectType.html
 # [BUNGEECORD] - Moves the player to another server | - "[BUNGEECORD] survival"
+# [CLICK_ACTION] (action) (executor) | (message) - Message with Text Component | - "[CLICK_ACTION] OPEN https://tect.host/ | Click here to go to tect.host"
+# [CLICK_ACTION] OPEN/SUGGEST/EXECUTE
 
 commands:
   test:
@@ -22,6 +31,9 @@ commands:
     cooldown: 0
     actions:
       - "[MESSAGE] Test message"
+      - "[CLICK_ACTION] OPEN https://tect.host/ | Click here to open the link"
+      - "[CLICK_ACTION] SUGGEST /warp %player% | Click here to suggest a warp command"
+      - "[CLICK_ACTION] EXECUTE /home %player% | Click here to execute the home command"
   bc:
     permission-required: false
     args: true

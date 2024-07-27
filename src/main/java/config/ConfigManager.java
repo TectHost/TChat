@@ -65,6 +65,14 @@ public class ConfigManager {
     private boolean spyEnabled;
     private String spyFormat;
     private boolean ignoreEnabled;
+    private String pollFill;
+    private String pollEmpty;
+    private int pollBar;
+    private boolean warningEnabled;
+    private String warningFormat;
+    private boolean mentionsEnabled;
+    private String mentionColor;
+    private String mentionCharacter;
 
     public ConfigManager(TChat plugin) {
         this.configFile = new ConfigFile("config.yml", null, plugin);
@@ -84,6 +92,11 @@ public class ConfigManager {
         advertisingBypass = config.getString("advertising.bypass");
 
         ignoreEnabled = config.getBoolean("ignore.enabled");
+
+        warningEnabled = config.getBoolean("broadcast.warning.enabled");
+        if (warningEnabled) {
+            warningFormat = config.getString("broadcast.warning.format");
+        }
 
         broadcastEnabled = config.getBoolean("broadcast.broadcast.enabled");
         if (broadcastEnabled) {
@@ -130,15 +143,20 @@ public class ConfigManager {
         if (grammarEnabled) {
             grammarCapEnabled = config.getBoolean("grammar.cap.enabled");
             grammarDotEnabled = config.getBoolean("grammar.final-dot.enabled");
+            repeatMessagesEnabled = config.getBoolean("grammar.repeat-messages.enabled");
             if (grammarDotEnabled) {
-                permissionBypassCap = config.getString("grammar.final-dot.bypass-permission");
+                permissionBypassFinalDot = config.getString("grammar.final-dot.bypass-permission");
                 grammarMinCharactersDot = config.getInt("grammar.final-dot.min-characters");
                 grammarDotCharacter = config.getString("grammar.final-dot.character");
             }
             if (grammarCapEnabled) {
-                permissionBypassFinalDot = config.getString("grammar.cap.bypass-permission");
+                permissionBypassCap = config.getString("grammar.cap.bypass-permission");
                 grammarMinCharactersCap = config.getInt("grammar.cap.min-characters");
                 grammarCapLetters = config.getInt("grammar.cap.letters");
+            }
+            if (repeatMessagesEnabled) {
+                repeatMessagesPercent = config.getDouble("grammar.repeat-messages.percent");
+                bypassRepeatMessages = config.getString("grammar.repeat-messages.bypass-permission");
             }
         }
 
@@ -167,12 +185,6 @@ public class ConfigManager {
             muteChatPermission = config.getString("mute-chat.execute-command-permission");
         }
 
-        repeatMessagesEnabled = config.getBoolean("grammar.repeat-messages.enabled");
-        if (repeatMessagesEnabled) {
-            repeatMessagesPercent = config.getDouble("grammar.repeat-messages.percent");
-            bypassRepeatMessages = config.getString("grammar.repeat-messages.bypass-permission");
-        }
-
         antibotEnabled = config.getBoolean("antibot.enabled");
         if (antibotEnabled) {
             antibotBypass = config.getString("antibot.bypass-permission");
@@ -182,8 +194,18 @@ public class ConfigManager {
             antibotMoved = config.getBoolean("antibot.messages.antibot-moved");
         }
 
+        mentionsEnabled = config.getBoolean("mentions.enabled");
+        if (mentionsEnabled) {
+            mentionColor = config.getString("mentions.color");
+            mentionCharacter = config.getString("mentions.character");
+        }
+
         logsChatEnabled = config.getBoolean("logs.chat.enabled");
         logsCommandEnabled = config.getBoolean("logs.command.enabled");
+
+        pollBar = config.getInt("poll.options.bar.length");
+        pollFill = config.getString("poll.options.bar.filled");
+        pollEmpty = config.getString("poll.options.bar.empty");
     }
 
     public void reloadConfig() {
@@ -191,6 +213,14 @@ public class ConfigManager {
         loadConfig();
     }
 
+    public String getMentionCharacter() { return mentionCharacter; }
+    public String getMentionColor() { return mentionColor; }
+    public boolean isMentionsEnabled() { return mentionsEnabled; }
+    public boolean isWarningEnabled() { return warningEnabled; }
+    public String getWarningFormat() { return warningFormat; }
+    public int getPollBar() { return pollBar; }
+    public String getPollEmpty() { return pollEmpty; }
+    public String getPollFill () { return pollFill; }
     public boolean isIgnoreEnabled() { return ignoreEnabled; }
     public String getSpyFormat() { return spyFormat; }
     public boolean isSpyEnabled() { return spyEnabled; }

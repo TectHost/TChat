@@ -45,6 +45,7 @@ public class Commands implements CommandExecutor, TabCompleter {
                         plugin.getCommandProgrammerManager().reloadConfig();
                         plugin.getCommandsManager().reloadConfig();
                         plugin.getDiscordManager().reloadConfig();
+                        plugin.getLevelsManager().reloadConfig();
                         String message = plugin.getMessagesManager().getReloadMessage();
                         String prefix = plugin.getMessagesManager().getPrefix();
                         if (!(sender instanceof Player)) {

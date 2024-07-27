@@ -197,7 +197,6 @@ pm:
       sender: "&5&l! &a%sender% &e&l> &a%recipient%&7: &f%message%"
       # Format of the message for the receiver
       receiver: "&5&l! &a%sender% &e&l> &a%recipient%&7: &f%message%"
-
   reply:
     # Enables the reply function for private messages
     enabled: true
@@ -332,9 +331,18 @@ unicode:
 # #################################################################
 
 broadcast:
+  # /broadcast (message)
   broadcast:
+    # Enable/disable this command
     enabled: true
+    # Broadcast format
     format: "&4[Broadcast] &a%message%"
+  # /warning (message)
+  warning:
+    # Enable/disable this command
+    enabled: true
+    # Warning format
+    format: "&4[Warning] &a%message%"
 
 # #################################################################
 # ┌─────────────────────────────────────────────────────────────┐ #
@@ -342,7 +350,9 @@ broadcast:
 # └─────────────────────────────────────────────────────────────┘ #
 # #################################################################
 
+# /ignore (player)
 ignore:
+  # Enable/disable this command
   enabled: true
 
 # #################################################################
@@ -353,5 +363,39 @@ ignore:
 
 spy:
   commands:
+    # Enable/disable this function
     enabled: true
+    # Format of social spy
     format: "&7&o[Social-Spy] %player% -> %command%"
+
+# #################################################################
+# ┌─────────────────────────────────────────────────────────────┐ #
+# │                            Polls                            │ #
+# └─────────────────────────────────────────────────────────────┘ #
+# #################################################################
+
+poll:
+  options:
+    # Progress bar
+    bar:
+      filled: '█'
+      empty: '░'
+      # Total characters
+      length: 20
+
+# #################################################################
+# ┌─────────────────────────────────────────────────────────────┐ #
+# │                           Mentions                          │ #
+# └─────────────────────────────────────────────────────────────┘ #
+# #################################################################
+
+# @(player)
+mentions:
+  # Enable/disable this function
+  enabled: true
+  # Mention color
+  color: "&9"
+  # Mention character | Example:
+  # character: "!"
+  # !(player)
+  character: "@"

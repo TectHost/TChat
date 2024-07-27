@@ -7,6 +7,7 @@ import java.util.*;
 
 import config.CommandsManager;
 import minealex.tchat.TChat;
+import net.md_5.bungee.api.ChatMessageType;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -49,7 +50,7 @@ public class CustomCommands implements Listener {
 
                 if (command.isPermissionRequired()) {
                     String permission = "tchat.customcommand." + commandName;
-                    if (!player.hasPermission(permission)) {
+                    if (!player.hasPermission(permission) && !player.hasPermission("tchat.admin")) {
                         String message1 = plugin.getMessagesManager().getNoPermission();
                         player.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + message1));
                         e.setCancelled(true);
@@ -232,11 +233,45 @@ public class CustomCommands implements Listener {
                     plugin.getLogger().warning("Invalid inventory action format: " + data);
                 }
                 break;
+            case "[CLICK_ACTION]":
+                handleClickAction(player, data);
+                break;
         }
     }
 
     private int getCooldown(String commandName) {
         return commandsManager.getCommands().get(commandName).getCooldown();
+    }
+
+    private void handleClickAction(Player player, String data) {
+        String[] parts = data.split("\\|", 2);
+        if (parts.length < 2) {
+            plugin.getLogger().warning("Invalid [CLICK_ACTION] format: " + data);
+            return;
+        }
+
+        String actionType = parts[0].trim();
+        String message = parts[1].trim();
+
+        String translatedMessage = plugin.getTranslateColors().translateColors(player, message);
+
+        net.md_5.bungee.api.chat.TextComponent textComponent = new net.md_5.bungee.api.chat.TextComponent(translatedMessage);
+
+        if (actionType.startsWith("OPEN")) {
+            String url = actionType.substring("OPEN".length()).trim();
+            textComponent.setClickEvent(new net.md_5.bungee.api.chat.ClickEvent(net.md_5.bungee.api.chat.ClickEvent.Action.OPEN_URL, url));
+        } else if (actionType.startsWith("SUGGEST")) {
+            String command = actionType.substring("SUGGEST".length()).trim();
+            textComponent.setClickEvent(new net.md_5.bungee.api.chat.ClickEvent(net.md_5.bungee.api.chat.ClickEvent.Action.SUGGEST_COMMAND, command));
+        } else if (actionType.startsWith("EXECUTE")) {
+            String command = actionType.substring("EXECUTE".length()).trim();
+            textComponent.setClickEvent(new net.md_5.bungee.api.chat.ClickEvent(net.md_5.bungee.api.chat.ClickEvent.Action.RUN_COMMAND, command));
+        } else {
+            plugin.getLogger().warning("Unknown [CLICK_ACTION] type: " + actionType);
+            return;
+        }
+
+        player.spigot().sendMessage(textComponent);
     }
 
     private boolean isOnCooldown(Player player, String commandName, int cooldownSeconds) {

@@ -67,6 +67,14 @@ public class ChatFormatListener implements Listener {
         format = TranslateHexColorCodes.translateHexColorCodes("&#", "", format);
         format = ChatColor.translateAlternateColorCodes('&', format);
 
+        if (plugin.getConfigManager().isMentionsEnabled()) {
+            for (Player recipient : event.getRecipients()) {
+                if (message.contains(plugin.getConfigManager().getMentionCharacter() + recipient.getName())) {
+                    message = message.replace(plugin.getConfigManager().getMentionCharacter() + recipient.getName(), ChatColor.translateAlternateColorCodes('&', plugin.getConfigManager().getMentionColor() + plugin.getConfigManager().getMentionCharacter() + recipient.getName() + "&f"));
+                }
+            }
+        }
+
         String[] parts = format.split("%msg%", 2);
         TextComponent mainComponent = new TextComponent(TextComponent.fromLegacyText(parts[0]));
 
@@ -139,55 +147,6 @@ public class ChatFormatListener implements Listener {
 
     private String removeMinecraftColorCodes(String message) {
         return message.replaceAll("(?i)§[0-9a-fk-or]", "");
-    }
-
-    private String chatColor(Player player, String message) {
-        if (player.hasPermission("tchat.color.all") || player.hasPermission("tchat.admin")) {
-            return ChatColor.translateAlternateColorCodes('&', message);
-        } else {
-            StringBuilder coloredMessage = new StringBuilder();
-            char[] chars = message.toCharArray();
-            for (int i = 0; i < chars.length; i++) {
-                if (chars[i] == '&' && i + 1 < chars.length) {
-                    char colorCode = chars[i + 1];
-                    if (isColorCodeAllowed(player, colorCode)) {
-                        coloredMessage.append('&').append(colorCode);
-                        i++;
-                    } else {
-                        i++;
-                    }
-                } else {
-                    coloredMessage.append(chars[i]);
-                }
-            }
-            return ChatColor.translateAlternateColorCodes('&', coloredMessage.toString());
-        }
-    }
-
-    private boolean isColorCodeAllowed(Player player, char colorCode) {
-        return switch (colorCode) {
-            case '0' -> player.hasPermission("tchat.color.black");
-            case '1' -> player.hasPermission("tchat.color.dark_blue");
-            case '2' -> player.hasPermission("tchat.color.dark_green");
-            case '3' -> player.hasPermission("tchat.color.dark_aqua");
-            case '4' -> player.hasPermission("tchat.color.dark_red");
-            case '5' -> player.hasPermission("tchat.color.dark_purple");
-            case '6' -> player.hasPermission("tchat.color.gold");
-            case '7' -> player.hasPermission("tchat.color.gray");
-            case '8' -> player.hasPermission("tchat.color.dark_gray");
-            case '9' -> player.hasPermission("tchat.color.blue");
-            case 'a' -> player.hasPermission("tchat.color.green");
-            case 'b' -> player.hasPermission("tchat.color.aqua");
-            case 'c' -> player.hasPermission("tchat.color.red");
-            case 'd' -> player.hasPermission("tchat.color.light_purple");
-            case 'e' -> player.hasPermission("tchat.color.yellow");
-            case 'f' -> player.hasPermission("tchat.color.white");
-            case 'l' -> player.hasPermission("tchat.color.bold");
-            case 'm' -> player.hasPermission("tchat.color.strikethrough");
-            case 'n' -> player.hasPermission("tchat.color.underline");
-            case 'o' -> player.hasPermission("tchat.color.italic");
-            default -> false;
-        };
     }
 
     private HoverEvent createHoverEvent(Player player, List<String> hoverText) {

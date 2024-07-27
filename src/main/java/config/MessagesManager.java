@@ -62,6 +62,31 @@ public class MessagesManager {
     private String ignoreSelf;
     private String ignoreAlready;
     private String ignoreMessage;
+    private String pollMessage;
+    private String pollOptionsMessage;
+    private String endTitle;
+    private String endTextTitle;
+    private String optionLine;
+    private String progressBar;
+    private String usagePoll;
+    private String usagePollCreate;
+    private String durationNumber;
+    private String oneOption;
+    private String usagePollVote;
+    private String noPoll;
+    private String invalidOptionPoll;
+    private String votePoll;
+    private String pollCreate;
+    private String startTitle;
+    private String startText;
+    private String startOptionLine;
+    private String startProgressBar;
+    private String updateTitle;
+    private String updateText;
+    private String updateOptionLine;
+    private String updateProgressBar;
+    private String antiUnicode;
+    private String levelUp;
 
     public MessagesManager(TChat plugin){
         this.messagesFile = new ConfigFile("messages.yml", null, plugin);
@@ -101,6 +126,10 @@ public class MessagesManager {
             }
         }
 
+        if (plugin.getConfigManager().isUnicodeEnabled()) {
+            antiUnicode = config.getString("messages.unicode");
+        }
+
         if (plugin.getConfigManager().isFloodPercentEnabled() || plugin.getConfigManager().isFloodRepeatEnabled()) {
             antiFlood = config.getString("messages.anti-flood");
         }
@@ -117,6 +146,30 @@ public class MessagesManager {
         }
 
         // Messages
+        levelUp = config.getString("messages.level-up");
+        updateProgressBar = config.getString("messages.poll.message.update.progress-bar");
+        updateTitle = config.getString("messages.poll.message.update.title");
+        updateText = config.getString("messages.poll.message.update.text");
+        updateOptionLine = config.getString("messages.poll.message.update.option-line");
+        startProgressBar = config.getString("messages.poll.message.start.progress-bar");
+        startOptionLine = config.getString("messages.poll.message.start.option-line");
+        startTitle = config.getString("messages.poll.message.start.title");
+        startText = config.getString("messages.poll.message.start.text");
+        pollCreate = config.getString("messages.poll-create");
+        votePoll = config.getString("messages.vote");
+        invalidOptionPoll = config.getString("messages.invalid-option-poll");
+        noPoll = config.getString("messages.no-poll");
+        usagePollVote = config.getString("messages.usage.usage-poll-vote");
+        oneOption = config.getString("messages.one-option");
+        durationNumber = config.getString("messages.duration-number");
+        usagePollCreate = config.getString("messages.usage.usage-poll-create");
+        usagePoll = config.getString("messages.usage.usage-poll");
+        optionLine = config.getString("messages.poll.message.end.option-line");
+        progressBar = config.getString("messages.poll.message.end.progress-bar");
+        endTextTitle = config.getString("messages.poll.message.end.text");
+        endTitle = config.getString("messages.poll.message.end.title");
+        pollOptionsMessage = config.getString("messages.poll.join.message-options");
+        pollMessage = config.getString("messages.poll.join.message");
         ping = config.getString("messages.ping");
         customCommandsCooldown = config.getString("messages.custom-commands-cooldown");
         noGames = config.getString("messages.chatgames.no-games");
@@ -167,6 +220,31 @@ public class MessagesManager {
     }
 
     // Messages
+    public String getLevelUp() { return levelUp; }
+    public String getAntiUnicode() { return antiUnicode; }
+    public String getUpdateProgressBar() { return updateProgressBar; }
+    public String getUpdateOptionLine() { return updateOptionLine; }
+    public String getUpdateText() { return updateText; }
+    public String getUpdateTitle() { return updateTitle; }
+    public String getStartProgressBar() { return startProgressBar; }
+    public String getStartOptionLine() { return startOptionLine; }
+    public String getStartText() { return startText; }
+    public String getStartTitle() { return startTitle; }
+    public String getPollCreate() { return pollCreate; }
+    public String getVotePoll() { return votePoll; }
+    public String getInvalidOptionPoll() { return invalidOptionPoll; }
+    public String getNoPoll() { return noPoll; }
+    public String getUsagePollVote() { return usagePollVote; }
+    public String getOneOption() { return oneOption; }
+    public String getDurationNumber() { return durationNumber; }
+    public String getUsagePollCreate() { return usagePollCreate; }
+    public String getUsagePoll() { return usagePoll; }
+    public String getProgressBar() { return progressBar; }
+    public String getOptionLine() { return optionLine; }
+    public String getEndTextTitle() { return endTextTitle; }
+    public String getEndTitle() { return endTitle; }
+    public String getPollOptionsMessage() { return pollOptionsMessage; }
+    public String getPollMessage() { return pollMessage; }
     public String getIgnoreMessage() { return ignoreMessage; }
     public String getIgnoreAlready() { return ignoreAlready; }
     public String getIgnoreSelf() { return ignoreSelf; }

@@ -2,8 +2,7 @@ package blocked;
 
 import config.BannedCommandsManager;
 import minealex.tchat.TChat;
-import org.bukkit.ChatColor;
-import org.bukkit.Particle;
+
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -13,19 +12,22 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.List;
 
-import static utils.TranslateHexColorCodes.translateHexColorCodes;
 
 public class BannedCommands implements Listener {
 
     private final BannedCommandsManager bannedCommandsManager;
+    private final TChat plugin;
 
     public BannedCommands(TChat plugin) {
         this.bannedCommandsManager = plugin.getBannedCommandsManager();
+        this.plugin = plugin;
     }
 
     @EventHandler
     public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
         if (event.isCancelled()) { return; }
+
+        Player player = event.getPlayer();
 
         if (!event.getPlayer().hasPermission(bannedCommandsManager.getBypassPermissionCommand()) && !event.getPlayer().hasPermission("tchat.admin")) {
             String command = event.getMessage().split(" ")[0].substring(1).toLowerCase();
@@ -34,17 +36,17 @@ public class BannedCommands implements Listener {
             if (bannedCommands.contains(command)) {
                 List<String> blockedMessages = bannedCommandsManager.getBlockedMessage();
                 for (String message : blockedMessages) {
-                    event.getPlayer().sendMessage(translateAndReplace(message));
+                    event.getPlayer().sendMessage(plugin.getTranslateColors().translateColors(player, message));
                 }
 
                 if (bannedCommandsManager.getTitleEnabled()) {
-                    String title = translateAndReplace(bannedCommandsManager.getTitle());
-                    String subtitle = translateAndReplace(bannedCommandsManager.getSubTitle());
+                    String title = plugin.getTranslateColors().translateColors(player, bannedCommandsManager.getTitle());
+                    String subtitle = plugin.getTranslateColors().translateColors(player, bannedCommandsManager.getSubTitle());
                     sendTitle(event.getPlayer(), title, subtitle);
                 }
 
                 if (bannedCommandsManager.getActionBarEnabled()) {
-                    String actionBar = translateAndReplace(bannedCommandsManager.getActionBar());
+                    String actionBar = plugin.getTranslateColors().translateColors(player, bannedCommandsManager.getActionBar());
                     sendActionBar(event.getPlayer(), actionBar);
                 }
 
@@ -68,11 +70,6 @@ public class BannedCommands implements Listener {
                 player.sendTitle(title, subtitle, 10, 70, 20);
             }
         }.runTask(bannedCommandsManager.getPlugin());
-    }
-
-    private String translateAndReplace(String text) {
-        String translatedText = translateHexColorCodes("&#", "", text);
-        return ChatColor.translateAlternateColorCodes('&', translatedText);
     }
 
     private void sendActionBar(Player player, String message) {

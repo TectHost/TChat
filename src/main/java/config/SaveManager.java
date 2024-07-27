@@ -64,6 +64,36 @@ public class SaveManager {
         return config.getString(path, "");
     }
 
+    public int getLevel(UUID playerId) {
+        String path = "players." + playerId.toString() + ".level";
+        try {
+            return config.getInt(path, 0);
+        } catch (Exception e) {
+            return 0;
+        }
+    }
+
+    public int getXp(UUID playerId) {
+        String path = "players." + playerId.toString() + ".xp";
+        try {
+            return config.getInt(path, 0);
+        } catch (Exception e) {
+            return 0;
+        }
+    }
+
+    public void setLevel(UUID playerId, int level) {
+        String path = "players." + playerId.toString() + ".level";
+        config.set(path, level);
+        savesFile.saveConfig();
+    }
+
+    public void setXp(UUID playerId, int xp) {
+        String path = "players." + playerId.toString() + ".xp";
+        config.set(path, xp);
+        savesFile.saveConfig();
+    }
+
     public void setFormat(UUID playerId, String format) {
         String path = "players." + playerId.toString() + ".format";
         config.set(path, format);

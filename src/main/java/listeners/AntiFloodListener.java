@@ -18,15 +18,16 @@ public class AntiFloodListener implements Listener {
     }
 
     @EventHandler
-    public void checkFlood(AsyncPlayerChatEvent event, String message) {
+    public void checkFlood(AsyncPlayerChatEvent event, String message, Player player) {
         if (event.isCancelled()) { return; }
 
-        if (plugin.getConfigManager().isFloodRepeatEnabled() && containsFlood(message) || plugin.getConfigManager().isFloodPercentEnabled() && containsHighPercentageOfSameChar(message)) {
-            Player player = event.getPlayer();
-            String message1 = plugin.getMessagesManager().getAntiFlood();
-            String prefix = plugin.getMessagesManager().getPrefix();
-            player.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + message1));
-            event.setCancelled(true);
+        if (!player.hasPermission("tchat.bypass.antiflood") && !player.hasPermission("tchat.admin")) {
+            if (plugin.getConfigManager().isFloodRepeatEnabled() && containsFlood(message) || plugin.getConfigManager().isFloodPercentEnabled() && containsHighPercentageOfSameChar(message)) {
+                String message1 = plugin.getMessagesManager().getAntiFlood();
+                String prefix = plugin.getMessagesManager().getPrefix();
+                player.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + message1));
+                event.setCancelled(true);
+            }
         }
     }
 

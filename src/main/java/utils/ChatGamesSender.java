@@ -6,16 +6,21 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import config.ChatGamesManager;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class ChatGamesSender {
 
     private final TChat plugin;
     private int currentGameIndex = 0;
     private ChatGamesManager.Game currentGame;
     private BukkitRunnable countdownTask;
-    private BukkitRunnable endGameTask;
+    private final Set<String> winners;
+    private boolean gameActive;
 
     public ChatGamesSender(TChat plugin) {
         this.plugin = plugin;
+        this.winners = new HashSet<>();
         startNextGame();
     }
 
@@ -40,6 +45,10 @@ public class ChatGamesSender {
             return;
         }
 
+        assert winners != null;
+        winners.clear();
+        gameActive = true;
+
         if (currentGame.getMessages() != null && !currentGame.getMessages().isEmpty()) {
             for (String message : currentGame.getMessages()) {
                 sendToAllPlayers(message);
@@ -61,11 +70,11 @@ public class ChatGamesSender {
     }
 
     private void endGame() {
-        if (countdownTask != null) {
-            countdownTask.cancel();
-        }
+        if (countdownTask != null) { countdownTask.cancel(); }
 
-        endGameTask = new BukkitRunnable() {
+        gameActive = false;
+
+        BukkitRunnable endGameTask = new BukkitRunnable() {
             @Override
             public void run() {
                 startNextGame();
@@ -75,15 +84,15 @@ public class ChatGamesSender {
     }
 
     public void checkPlayerResponse(Player player, String message) {
-        if (currentGame == null) {
-            return;
-        }
+        if (currentGame == null || !gameActive) { return; }
+        if (winners.contains(player.getName())) { return; }
 
         if (currentGame.getKeywords() != null && currentGame.getKeywords().contains(message.toLowerCase())) {
             String message1 = plugin.getMessagesManager().getGameWin();
             message1 = message1.replace("%player%", player.getName());
             String prefix = plugin.getMessagesManager().getPrefix();
             sendToAllPlayers(prefix + message1);
+            winners.add(player.getName());
             executeRewards(player);
             endGame();
         }

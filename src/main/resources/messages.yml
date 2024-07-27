@@ -28,6 +28,34 @@ messages:
   anti-flood: "&cYour message contains too many of the same letters or an excessive percentage of the same letters and has been blocked."
   custom-commands-cooldown: "&cWait %cooldown% seconds before using this command again."
   ping: "&fPing: &a%ping%"
+  duration-number: "&cDuration must be a number."
+  one-option: "&cYou must provide at least one option."
+  no-poll: "&cNo active poll to vote on."
+  invalid-option-poll: "&cInvalid option. Please choose from: &e%options%"
+  vote: "&aYour vote for &e%option% &ahas been recorded."
+  poll-create: "&aPoll created! Title: %title%. Duration: %seconds% seconds."
+  unicode: "&cYour message contains invalid characters and was blocked."
+  level-up: "&aCongratulations! You have risen to the level %level%"
+  poll:
+    message:
+      start:
+        title: "&6[New Poll] "
+        text: "&aTitle: "
+        option-line: "&6• %option%: &c%votes% votes (&a%.2f%%&c)"
+        progress-bar: "&7[&c%filled%&7]"
+      update:
+        title: "&6[Poll] "
+        text: "&aTitle: "
+        option-line: "&6• %option%: &c%votes% votes (&a%.2f%%&c)"
+        progress-bar: "&7[&c%filled%&7]"
+      end:
+        title: "&6[Poll Results] "
+        text: "&aTitle: "
+        option-line: "&6• %option%: &c%votes% votes (&a%.2f%%&c)"
+        progress-bar: "&7[&a%filled%&c%empty%&7]"
+    join:
+      message: "&6[Poll] &fThere is an ongoing poll: &a%poll%"
+      message-options: "&6[Poll Options] &f%options%"
   ignore:
     ignore-self: "&cYou can't ignore yourself."
     already-ignored: "&aYou are no longer ignoring a: %player%"
@@ -63,6 +91,9 @@ messages:
     usage-msg: "&cUsage: /msg <player> <message>"
     usage-broadcast: "&cUsage: /broadcast <message>"
     usage-ignore: "&cUsage: /ignore <player>"
+    usage-poll: "&cUsage: /poll <create|vote> [arguments]"
+    usage-poll-create: "&cUsage: /poll create <duration> <title | options...>"
+    usage-poll-vote: "&cUsage: /poll vote <option>"
   # Debug messages are only seen in the console
   debug:
     no-format-group: "&cError in groups.yml - No format found for group: %group%"

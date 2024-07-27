@@ -30,14 +30,15 @@ public class ChatListener implements Listener {
         plugin.getBannedWords().playerBannedWords(event);
         plugin.getAntiAdvertising().checkAdvertising(event);
         plugin.getCapListener().playerAntiCap(event);
-        replacer(event, message);
         grammar(event, player, message);
         antiBot(event, player, null);
-        plugin.getAntiFloodListener().checkFlood(event, message);
+        plugin.getAntiFloodListener().checkFlood(event, message, player);
+        replacer(event, message);
 
         chatFormatListener.playerFormat(event);
         plugin.getChatGamesSender().checkPlayerResponse(player, message);
         logs(player, message, 1);
+        plugin.getLevelListener().addXp(event);
     }
 
     @EventHandler
@@ -47,6 +48,7 @@ public class ChatListener implements Listener {
 
         socialSpy(event, player, command);
         logs(player, command, 0);
+        plugin.getAntiAdvertising().checkAdvertisingCommand(event, player, command);
         plugin.getChatCooldownListener().commandCooldown(event, player);
         antiBot(null, player, event);
         new BannedCommands(plugin).onPlayerCommandPreprocess(event);
@@ -85,6 +87,8 @@ public class ChatListener implements Listener {
     }
 
     public void replacer(AsyncPlayerChatEvent event, String message) {
+        if (event.isCancelled()) { return; }
+
         if (plugin.getReplacerManager().getReplacerEnabled()) {
             message = plugin.getReplacerManager().replaceWords(message, event.getPlayer());
             event.setMessage(message);

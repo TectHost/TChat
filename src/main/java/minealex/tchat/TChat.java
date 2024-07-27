@@ -54,6 +54,9 @@ public class TChat extends JavaPlugin {
     private DiscordHook discordHook;
     private DiscordManager discordManager;
     private SocialSpyListener socialSpyListener;
+    private LevelListener levelListener;
+    private LevelsManager levelsManager;
+    private DeathManager deathManager;
 
     @Override
     public void onEnable() {
@@ -92,12 +95,19 @@ public class TChat extends JavaPlugin {
         new CommandProgrammerSender(this, commandProgrammerManager);
         discordHook = new DiscordHook(this);
         socialSpyListener = new SocialSpyListener(this);
+        SignListener signListener = new SignListener(this);
+        levelListener = new LevelListener(this);
 
+        getServer().getPluginManager().registerEvents(new PollListener(this), this);
+        getServer().getPluginManager().registerEvents(signListener, this);
         getServer().getPluginManager().registerEvents(chatListener, this);
         getServer().getPluginManager().registerEvents(bannedWords, this);
         getServer().getPluginManager().registerEvents(new TabCompleteListener(this), this);
         getServer().getPluginManager().registerEvents(playerJoinListener, this);
         getServer().getPluginManager().registerEvents(playerMoveListener, this);
+        getServer().getPluginManager().registerEvents(new DeathsListener(deathManager), this);
+
+        PollScheduler.startPollChecker(this);
     }
 
     public void registerConfigFiles() {
@@ -118,6 +128,8 @@ public class TChat extends JavaPlugin {
         commandProgrammerManager = new CommandProgrammerManager(this);
         commandsManager = new CommandsManager(this);
         discordManager = new DiscordManager(this);
+        levelsManager = new LevelsManager(this);
+        deathManager = new DeathManager(this);
     }
 
     public void initializeManagers() {
@@ -153,7 +165,11 @@ public class TChat extends JavaPlugin {
         if (getConfigManager().isBroadcastEnabled()) {
             Objects.requireNonNull(this.getCommand("broadcast")).setExecutor(new BroadcastCommand(this));
         }
+        if (getConfigManager().isWarningEnabled()) {
+            Objects.requireNonNull(getCommand("warning")).setExecutor(new WarningCommand(this));
+        }
         Objects.requireNonNull(this.getCommand("ignore")).setExecutor(new IgnoreCommand(this));
+        Objects.requireNonNull(getCommand("poll")).setExecutor(new PollCommand(this));
     }
 
     public void registerPlaceholders() {
@@ -162,6 +178,9 @@ public class TChat extends JavaPlugin {
 
     // ------------------------------------------------------------------------------
 
+    public DeathManager getDeathManager() { return deathManager; }
+    public LevelsManager getLevelsManager() { return levelsManager; }
+    public LevelListener getLevelListener() { return levelListener; }
     public SocialSpyListener getSocialSpyListener() { return socialSpyListener; }
     public DiscordManager getDiscordManager() { return discordManager; }
     public DiscordHook getDiscordHook() { return discordHook; }

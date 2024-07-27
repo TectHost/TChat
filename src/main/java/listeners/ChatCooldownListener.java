@@ -28,22 +28,24 @@ public class ChatCooldownListener implements Listener {
     public void chatCooldown(AsyncPlayerChatEvent event, Player player) {
         if (event.isCancelled()) { return; }
 
-        if (plugin.getConfigManager().isCooldownChat()) {
-            long currentTime = System.currentTimeMillis();
+        if (!player.hasPermission("tchat.admin") && !player.hasPermission("tchat.bypass.chatcooldown")) {
+            if (plugin.getConfigManager().isCooldownChat()) {
+                long currentTime = System.currentTimeMillis();
 
-            if (isCooldownActive(player, lastChatTimes, currentTime, chatCooldownTime)) {
-                long timeRemainingMillis = chatCooldownTime - (currentTime - lastChatTimes.get(player));
-                long timeRemaining = timeRemainingMillis / 1000;
-                String prefix = plugin.getMessagesManager().getPrefix();
-                String message = plugin.getMessagesManager().getCooldownChat();
-                String timeRemainingStr = String.valueOf(timeRemaining);
-                message = message.replace("%cooldown%", timeRemainingStr);
-                player.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + message));
-                event.setCancelled(true);
-                return;
+                if (isCooldownActive(player, lastChatTimes, currentTime, chatCooldownTime)) {
+                    long timeRemainingMillis = chatCooldownTime - (currentTime - lastChatTimes.get(player));
+                    long timeRemaining = timeRemainingMillis / 1000;
+                    String prefix = plugin.getMessagesManager().getPrefix();
+                    String message = plugin.getMessagesManager().getCooldownChat();
+                    String timeRemainingStr = String.valueOf(timeRemaining);
+                    message = message.replace("%cooldown%", timeRemainingStr);
+                    player.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + message));
+                    event.setCancelled(true);
+                    return;
+                }
+
+                lastChatTimes.put(player, currentTime);
             }
-
-            lastChatTimes.put(player, currentTime);
         }
     }
 
@@ -51,22 +53,24 @@ public class ChatCooldownListener implements Listener {
     public void commandCooldown(PlayerCommandPreprocessEvent event, Player player) {
         if (event.isCancelled()) { return; }
 
-        if (plugin.getConfigManager().isCooldownCommand()) {
-            long currentTime = System.currentTimeMillis();
+        if (!player.hasPermission("tchat.admin") && !player.hasPermission("tchat.bypass.commandcooldown")) {
+            if (plugin.getConfigManager().isCooldownCommand()) {
+                long currentTime = System.currentTimeMillis();
 
-            if (isCooldownActive(player, lastCommandTimes, currentTime, commandCooldownTime)) {
-                long timeRemainingMillis = commandCooldownTime - (currentTime - lastCommandTimes.get(player));
-                long timeRemaining = timeRemainingMillis / 1000;
-                String prefix = plugin.getMessagesManager().getPrefix();
-                String message = plugin.getMessagesManager().getCooldownCommand();
-                String timeRemainingStr = String.valueOf(timeRemaining);
-                message = message.replace("%cooldown%", timeRemainingStr);
-                player.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + message));
-                event.setCancelled(true);
-                return;
+                if (isCooldownActive(player, lastCommandTimes, currentTime, commandCooldownTime)) {
+                    long timeRemainingMillis = commandCooldownTime - (currentTime - lastCommandTimes.get(player));
+                    long timeRemaining = timeRemainingMillis / 1000;
+                    String prefix = plugin.getMessagesManager().getPrefix();
+                    String message = plugin.getMessagesManager().getCooldownCommand();
+                    String timeRemainingStr = String.valueOf(timeRemaining);
+                    message = message.replace("%cooldown%", timeRemainingStr);
+                    player.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + message));
+                    event.setCancelled(true);
+                    return;
+                }
+
+                lastCommandTimes.put(player, currentTime);
             }
-
-            lastCommandTimes.put(player, currentTime);
         }
     }
 

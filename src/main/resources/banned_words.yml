@@ -586,7 +586,7 @@ bypass:
 
 particles:
   # Enable/disable particles
-  enabled: true
+  enabled: false
   # https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Particle.html
   particle: ANGRY_VILLAGER
   # Number of particles

@@ -20,12 +20,12 @@ public class AntiUnicodeListener implements Listener {
 
     @EventHandler
     public void checkUnicode(AsyncPlayerChatEvent event, Player player, String message) {
-        if (plugin.getConfigManager().isUnicodeEnabled()) {
+        if (plugin.getConfigManager().isUnicodeEnabled() && !player.hasPermission("tchat.bypass.unicode") && !player.hasPermission("tchat.admin")) {
             if (event.isCancelled()) { return; }
 
             if (containsInvalidCharacters(message)) {
                 event.setCancelled(true);
-                player.sendMessage(plugin.getTranslateColors().translateColors(player, plugin.getMessagesManager().getPrefix() + "Tu mensaje contiene caracteres inválidos y fue bloqueado."));
+                player.sendMessage(plugin.getTranslateColors().translateColors(player, plugin.getMessagesManager().getPrefix() + plugin.getMessagesManager().getAntiUnicode()));
             }
         }
     }

@@ -2,52 +2,50 @@ package config;
 
 import minealex.tchat.TChat;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
 public class ReplacerManager {
 
-    private final TChat plugin;
-    private FileConfiguration replacerConfig;
+    private final ConfigFile replacerConfig;
     private Map<String, Replacement> replacements;
     private static boolean replacerEnabled;
 
     public ReplacerManager(TChat plugin) {
-        this.plugin = plugin;
+        this.replacerConfig = new ConfigFile("replacer.yml", null, plugin);
+        this.replacerConfig.registerConfig();
         loadConfig();
     }
 
     public void loadConfig() {
-        File replacerFile = new File(plugin.getDataFolder(), "replacer.yml");
-        if (!replacerFile.exists()) {
-            plugin.saveResource("replacer.yml", false);
-        }
-        replacerConfig = YamlConfiguration.loadConfiguration(replacerFile);
-        loadReplacements();
+        FileConfiguration config = replacerConfig.getConfig();
+        loadReplacements(config);
     }
 
     public void reloadConfig() {
+        replacerConfig.reloadConfig();
         loadConfig();
     }
 
-    private void loadReplacements() {
+    private void loadReplacements(FileConfiguration config) {
         replacements = new HashMap<>();
-        replacerEnabled = replacerConfig.getBoolean("replacer_enabled");
-        for (String key : Objects.requireNonNull(replacerConfig.getConfigurationSection("words")).getKeys(false)) {
-            String original = replacerConfig.getString("words." + key + ".original");
-            String replace = replacerConfig.getString("words." + key + ".replace");
-            String permission = replacerConfig.getString("words." + key + ".permission");
+        replacerEnabled = config.getBoolean("replacer_enabled", false);
+
+        if (config.getConfigurationSection("words") == null) {
+            return;
+        }
+
+        for (String key : Objects.requireNonNull(config.getConfigurationSection("words")).getKeys(false)) {
+            String path = "words." + key;
+            String original = config.getString(path + ".original");
+            String replace = config.getString(path + ".replace");
+            String permission = config.getString(path + ".permission");
+
             replacements.put(original, new Replacement(original, replace, permission));
         }
-    }
-
-    public Map<String, Replacement> getReplacements() {
-        return replacements;
     }
 
     public String replaceWords(String message, Player player) {
