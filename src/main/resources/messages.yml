@@ -36,6 +36,34 @@ messages:
   poll-create: "&aPoll created! Title: %title%. Duration: %seconds% seconds."
   unicode: "&cYour message contains invalid characters and was blocked."
   level-up: "&aCongratulations! You have risen to the level %level%"
+  chat-disabled-world: "&cChat is disabled in this world."
+  chat-help:
+    message:
+      - "&8--------- { &#c03afeT&#a72cf8C&#8e1ff1h&#7411eba&#5b03e4t &8} ---------"
+      - "&5/announcement &6- &bMake an announcement"
+      - "&5/broadcast &6- &bMake a broadcast"
+      - "&5/chatcolor &6- &bChange your color in the chat"
+      - "&5/clearchat &6- &bClears the chat"
+      - "&5/chat [reload|mute|clear|version] &6- &bDisplays this message, reload the config files, displays the version of TChat..."
+      - "&5/discord &6- &bDisplays the server's discord"
+      - "&5/facebook &6- &bDisplays the server's facebook"
+      - "&5/help &6- &bDisplays some help"
+      - "&5/ignore &6- &bIgnore other users"
+      - "&5/instagram &6- &bDisplays the server's instagram"
+      - "&5/mention &6- &bMention other players (plays a sound) (coming soon)"
+      - "&5/msg &6- &bTalk with other users in private"
+      - "&5/ping &6- &bDisplays your ping"
+      - "&5/plugin &6- &bDisplays some info of the plugin"
+      - "&5/print &6- &bDisplays a clean message"
+      - "&5/reply &6- &bReply a private message from a user"
+      - "&5/rules &6- &bDisplays the server's rules"
+      - "&5/seen &6- &bDisplays some info of the player"
+      - "&5/teamspeak &6- &bDisplays the server's teamspeak"
+      - "&5/tiktok &6- &bDisplays the server's tiktok"
+      - "&5/twitter &6- &bDisplays the server's twitter"
+      - "&5/warning &6- &bMakes an announcement"
+      - "&5/website &6- &bDisplays the server's website"
+      - "&5/youtube &6- &bDisplays the server's YouTube channel"
   poll:
     message:
       start:
@@ -60,6 +88,8 @@ messages:
     ignore-self: "&cYou can't ignore yourself."
     already-ignored: "&aYou are no longer ignoring a: %player%"
     ignore: "&aNow you are ignoring: &e%player%"
+    ignore-list-message: "&7You are currently ignoring the following players: &a%players%"
+    ignore-list-empty: "&cYou are not ignoring any players."
   cooldown:
     chat: "&cPlease wait %cooldown% seconds before sending another message."
     command: "&cPlease wait %cooldown% seconds before executing another command."
@@ -94,6 +124,9 @@ messages:
     usage-poll: "&cUsage: /poll <create|vote> [arguments]"
     usage-poll-create: "&cUsage: /poll create <duration> <title | options...>"
     usage-poll-vote: "&cUsage: /poll vote <option>"
+    usage-print: "&cUsage: /print <message>"
+    usage-warning: "&cUsage: /warning <message>"
+    usage-announcement: "&cUsage: /announcement <message>"
   # Debug messages are only seen in the console
   debug:
     no-format-group: "&cError in groups.yml - No format found for group: %group%"

@@ -10,7 +10,6 @@ bannedCommands:
   - about
   - "?"
   - ver
-  - help
   - bukkit:ver
   - bukkit:about
   - bukkit:pl

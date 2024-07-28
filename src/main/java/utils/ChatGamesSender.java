@@ -2,6 +2,7 @@ package utils;
 
 import minealex.tchat.TChat;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import config.ChatGamesManager;
@@ -51,6 +52,10 @@ public class ChatGamesSender {
 
         if (currentGame.getMessages() != null && !currentGame.getMessages().isEmpty()) {
             for (String message : currentGame.getMessages()) {
+                if (message.contains("%center%")) {
+                    message = message.replace("%center%", "");
+                    message = centerText(message);
+                }
                 sendToAllPlayers(message);
             }
         } else {
@@ -96,6 +101,29 @@ public class ChatGamesSender {
             executeRewards(player);
             endGame();
         }
+    }
+
+    private String centerText(String message) {
+        final int maxLength = 56;
+        String strippedMessage = ChatColor.stripColor(message);
+        int length = strippedMessage.length();
+
+        if (length >= maxLength) {
+            return message;
+        }
+
+        int spaces = (maxLength - length) / 2;
+        StringBuilder centeredMessage = new StringBuilder();
+
+        centeredMessage.append(" ".repeat(spaces));
+
+        centeredMessage.append(message);
+
+        while (centeredMessage.length() < maxLength) {
+            centeredMessage.append(" ");
+        }
+
+        return centeredMessage.toString();
     }
 
     private void executeRewards(Player player) {

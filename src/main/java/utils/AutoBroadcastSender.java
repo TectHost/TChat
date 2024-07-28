@@ -36,6 +36,10 @@ public class AutoBroadcastSender {
                         for (Player player : Bukkit.getOnlinePlayers()) {
                             for (String line : currentBroadcast.getMessage()) {
                                 String translatedMessage = plugin.getTranslateColors().translateColors(player, line);
+                                if (translatedMessage.contains("%center%")) {
+                                    translatedMessage = translatedMessage.replace("%center%", "");
+                                    translatedMessage = centerText(translatedMessage);
+                                }
                                 player.sendMessage(translatedMessage);
                             }
                         }
@@ -45,5 +49,28 @@ public class AutoBroadcastSender {
                 }
             }
         }.runTaskTimer(plugin, 0, autoBroadcastManager.getTime() * 20L);
+    }
+
+    private String centerText(String message) {
+        final int maxLength = 56;
+        String strippedMessage = ChatColor.stripColor(message);
+        int length = strippedMessage.length();
+
+        if (length >= maxLength) {
+            return message;
+        }
+
+        int spaces = (maxLength - length) / 2;
+        StringBuilder centeredMessage = new StringBuilder();
+
+        centeredMessage.append(" ".repeat(spaces));
+
+        centeredMessage.append(message);
+
+        while (centeredMessage.length() < maxLength) {
+            centeredMessage.append(" ");
+        }
+
+        return centeredMessage.toString();
     }
 }

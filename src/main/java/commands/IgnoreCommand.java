@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class IgnoreCommand implements CommandExecutor {
     private final TChat plugin;
@@ -30,6 +31,27 @@ public class IgnoreCommand implements CommandExecutor {
             if (args.length == 0) {
                 String message = plugin.getMessagesManager().getIgnoreUsage();
                 sender.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + message));
+                return true;
+            }
+
+            if (args[0].equalsIgnoreCase("list")) {
+                if (sender.hasPermission("tchat.ignore.list")) {
+                    List<String> ignoreList = plugin.getSaveManager().getIgnoreList(player.getUniqueId());
+                    if (ignoreList.isEmpty()) {
+                        String message = plugin.getMessagesManager().getIgnoreListEmpty();
+                        sender.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + message));
+                    } else {
+                        String ignoredPlayers = ignoreList.stream()
+                                .map(UUID::fromString)
+                                .map(uuid -> plugin.getServer().getOfflinePlayer(uuid).getName())
+                                .collect(Collectors.joining(", "));
+                        String message = plugin.getMessagesManager().getIgnoreListMessage().replace("%players%", ignoredPlayers);
+                        sender.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + message));
+                    }
+                } else {
+                    String message = plugin.getMessagesManager().getNoPermission();
+                    sender.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + message));
+                }
                 return true;
             }
 

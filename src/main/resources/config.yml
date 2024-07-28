@@ -5,7 +5,10 @@
 # #################################################################
 
 chat:
+  # Use per group format (groups.yml)
   use-group-format: false
+  # Enable/disable chat format
+  format-enabled: true
   # Global format (use only if the above option is false)
   format: "%tchat_prefix% &a%player% &e>> %message%"
   # This option is used to display on the console the messages from the players
@@ -342,7 +345,12 @@ broadcast:
     # Enable/disable this command
     enabled: true
     # Warning format
-    format: "&4[Warning] &a%message%"
+    format: "&c[Warning] &2%message%"
+  announcement:
+    # Enable/disable this command
+    enabled: true
+    # Warning format
+    format: "&9[Announcement] &f%message%"
 
 # #################################################################
 # ┌─────────────────────────────────────────────────────────────┐ #
@@ -399,3 +407,51 @@ mentions:
   # character: "!"
   # !(player)
   character: "@"
+
+# #################################################################
+# ┌─────────────────────────────────────────────────────────────┐ #
+# │                            Rules                            │ #
+# └─────────────────────────────────────────────────────────────┘ #
+# #################################################################
+
+rules:
+  # Enable/disable the command
+  enabled: true
+  # Use the prefix (messages.yml) at the beginning of each line
+  use-prefix: false
+  # Rules message
+  message:
+    - "&8--------- { &#c03afeT&#a72cf8C&#8e1ff1h&#7411eba&#5b03e4t &8} ---------"
+    - "&71. Don't use hacks"
+    - "&72. Don't use XRay"
+    - "&8---------------------------"
+
+# #################################################################
+# ┌─────────────────────────────────────────────────────────────┐ #
+# │                            Print                            │ #
+# └─────────────────────────────────────────────────────────────┘ #
+# #################################################################
+
+print:
+  # Enable/disable the command
+  enabled: true
+
+# #################################################################
+# ┌─────────────────────────────────────────────────────────────┐ #
+# │                             Ping                            │ #
+# └─────────────────────────────────────────────────────────────┘ #
+# #################################################################
+
+ping:
+  # Enable/disable this command
+  enabled: true
+
+# #################################################################
+# ┌─────────────────────────────────────────────────────────────┐ #
+# │                          Chat Color                         │ #
+# └─────────────────────────────────────────────────────────────┘ #
+# #################################################################
+
+chat-color:
+  # Enable/disable this command
+  enabled: true

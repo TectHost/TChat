@@ -87,6 +87,13 @@ public class MessagesManager {
     private String updateProgressBar;
     private String antiUnicode;
     private String levelUp;
+    private String printUsage;
+    private List<String> chatMessage;
+    private String chatDisabledWorld;
+    private String ignoreListEmpty;
+    private String ignoreListMessage;
+    private String usageWarning;
+    private String usageAnnouncement;
 
     public MessagesManager(TChat plugin){
         this.messagesFile = new ConfigFile("messages.yml", null, plugin);
@@ -138,14 +145,30 @@ public class MessagesManager {
             broadcastUsage = config.getString("messages.usage.usage-broadcast");
         }
 
+        if (plugin.getConfigManager().isWarningEnabled()) {
+            usageWarning = config.getString("messages.usage.usage-warning");
+        }
+
+        if (plugin.getConfigManager().isAnnouncementEnabled()) {
+            usageAnnouncement = config.getString("messages.usage.usage-announcement");
+        }
+
+        if (plugin.getConfigManager().isPrintEnabled()) {
+            printUsage = config.getString("messages.usage.usage-print");
+        }
+
         if (plugin.getConfigManager().isIgnoreEnabled()) {
             ignoreSelf = config.getString("messages.ignore.ignore-self");
             ignoreAlready = config.getString("messages.ignore.already-ignored");
             ignoreMessage = config.getString("messages.ignore.ignore");
             ignoreUsage = config.getString("messages.usage.usage-ignore");
+            ignoreListMessage = config.getString("messages.ignore.ignore-list-message");
+            ignoreListEmpty = config.getString("messages.ignore.ignore-list-empty");
         }
 
         // Messages
+        chatDisabledWorld = config.getString("messages.chat-disabled-world");
+        chatMessage = config.getStringList("messages.chat-help.message");
         levelUp = config.getString("messages.level-up");
         updateProgressBar = config.getString("messages.poll.message.update.progress-bar");
         updateTitle = config.getString("messages.poll.message.update.title");
@@ -220,6 +243,13 @@ public class MessagesManager {
     }
 
     // Messages
+    public String getUsageAnnouncement() { return usageAnnouncement; }
+    public String getUsageWarning() { return usageWarning; }
+    public String getIgnoreListMessage() { return ignoreListMessage; }
+    public String getIgnoreListEmpty() { return ignoreListEmpty; }
+    public String getChatDisabledWorld() { return chatDisabledWorld; }
+    public List<String> getChatMessage() { return chatMessage; }
+    public String getPrintUsage() { return printUsage; }
     public String getLevelUp() { return levelUp; }
     public String getAntiUnicode() { return antiUnicode; }
     public String getUpdateProgressBar() { return updateProgressBar; }

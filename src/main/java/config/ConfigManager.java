@@ -3,6 +3,8 @@ package config;
 import minealex.tchat.TChat;
 import org.bukkit.configuration.file.FileConfiguration;
 
+import java.util.List;
+
 public class ConfigManager {
     private final ConfigFile configFile;
     private String format;
@@ -73,6 +75,15 @@ public class ConfigManager {
     private boolean mentionsEnabled;
     private String mentionColor;
     private String mentionCharacter;
+    private boolean rulesEnabled;
+    private boolean rulesPrefixEnabled;
+    private List<String> rulesMessage;
+    private boolean printEnabled;
+    private boolean pingEnabled;
+    private boolean formatEnabled;
+    private boolean chatColorEnabled;
+    private boolean announcementEnabled;
+    private String announcementFormat;
 
     public ConfigManager(TChat plugin) {
         this.configFile = new ConfigFile("config.yml", null, plugin);
@@ -82,8 +93,11 @@ public class ConfigManager {
 
     public void loadConfig() {
         FileConfiguration config = configFile.getConfig();
-        format = config.getString("chat.format");
-        formatGroup = config.getBoolean("chat.use-group-format");
+        formatEnabled = config.getBoolean("chat.format-enabled");
+        if (formatEnabled) {
+            format = config.getString("chat.format");
+            formatGroup = config.getBoolean("chat.use-group-format");
+        }
         registerMessagesOnConsole = config.getBoolean("chat.register-messages-on-console");
 
         ipv4Config = new AdvertisingConfig(config, "advertising.ipv4");
@@ -92,6 +106,10 @@ public class ConfigManager {
         advertisingBypass = config.getString("advertising.bypass");
 
         ignoreEnabled = config.getBoolean("ignore.enabled");
+
+        chatColorEnabled = config.getBoolean("chat-color.enabled");
+
+        printEnabled = config.getBoolean("print.enabled");
 
         warningEnabled = config.getBoolean("broadcast.warning.enabled");
         if (warningEnabled) {
@@ -102,6 +120,13 @@ public class ConfigManager {
         if (broadcastEnabled) {
             broadcastFormat = config.getString("broadcast.broadcast.format");
         }
+
+        announcementEnabled = config.getBoolean("broadcast.announcement.enabled");
+        if (announcementEnabled) {
+            announcementFormat = config.getString("broadcast.announcement.format");
+        }
+
+        pingEnabled = config.getBoolean("ping.enabled");
 
         spyEnabled = config.getBoolean("spy.commands.enabled");
         if (spyEnabled) {
@@ -200,6 +225,12 @@ public class ConfigManager {
             mentionCharacter = config.getString("mentions.character");
         }
 
+        rulesEnabled = config.getBoolean("rules.enabled");
+        if (rulesEnabled) {
+            rulesMessage = config.getStringList("rules.message");
+            rulesPrefixEnabled = config.getBoolean("rules.use-prefix");
+        }
+
         logsChatEnabled = config.getBoolean("logs.chat.enabled");
         logsCommandEnabled = config.getBoolean("logs.command.enabled");
 
@@ -213,6 +244,15 @@ public class ConfigManager {
         loadConfig();
     }
 
+    public String getAnnouncementFormat() { return announcementFormat; }
+    public boolean isAnnouncementEnabled() { return announcementEnabled; }
+    public boolean isChatColorEnabled() { return chatColorEnabled; }
+    public boolean isFormatEnabled() { return formatEnabled; }
+    public boolean isPingEnabled() { return pingEnabled; }
+    public boolean isPrintEnabled() { return printEnabled; }
+    public List<String> getRulesMessage() { return rulesMessage; }
+    public boolean isRulesPrefixEnabled() { return rulesPrefixEnabled; }
+    public boolean isRulesEnabled() { return rulesEnabled; }
     public String getMentionCharacter() { return mentionCharacter; }
     public String getMentionColor() { return mentionColor; }
     public boolean isMentionsEnabled() { return mentionsEnabled; }
@@ -226,7 +266,7 @@ public class ConfigManager {
     public boolean isSpyEnabled() { return spyEnabled; }
     public String getBroadcastFormat() { return broadcastFormat; }
     public boolean isBroadcastEnabled() { return broadcastEnabled; }
-    public boolean getUnicodeBlockAll() { return unicodeBlockAll; }
+    public boolean isUnicodeBlockAll() { return unicodeBlockAll; }
     public String getUnicodeMatch() { return unicodeMatch; }
     public boolean isUnicodeEnabled() {return unicodeEnabled; }
     public double getPercentageFlood() { return percentageFlood; }
@@ -272,9 +312,9 @@ public class ConfigManager {
     public int getGrammarCapLetters() { return grammarCapLetters; }
 
     public String getFormat() { return format; }
-    public boolean getFormatGroup() { return formatGroup; }
+    public boolean isFormatGroup() { return formatGroup; }
 
-    public boolean getRegisterMessagesOnConsole() { return registerMessagesOnConsole; }
+    public boolean isRegisterMessagesOnConsole() { return registerMessagesOnConsole; }
 
     public AdvertisingConfig getIpv4Config() { return ipv4Config; }
     public AdvertisingConfig getDomainConfig() { return domainConfig; }

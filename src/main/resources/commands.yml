@@ -40,6 +40,16 @@ commands:
     cooldown: 0
     actions:
       - "[PLAYER_COMMAND] broadcast %args%"
+  help:
+    permission-required: false
+    args: false
+    cooldown: 0
+    actions:
+      - "[MESSAGE] &aHi %player_name%!"
+      - "[MESSAGE] &7This is the custom help"
+      - "[MESSAGE] &7from &#c03afeT&#a72cf8C&#8e1ff1h&#7411eba&#5b03e4t"
+      - "[MESSAGE]"
+      - "[MESSAGE] &8Modify this in commands.yml file"
   pl:
     permission-required: false
     cooldown: 0
@@ -170,12 +180,6 @@ commands:
     cooldown: 0
     actions:
       - "[PLAYER_COMMAND] msg %args%"
-  chat:
-    permission-required: false
-    args: true
-    cooldown: 0
-    actions:
-      - "[PLAYER_COMMAND] tchat %args%"
   mc:
     permission-required: false
     args: false

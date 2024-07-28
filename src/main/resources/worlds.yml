@@ -1,0 +1,18 @@
+# #################################################################
+# ┌─────────────────────────────────────────────────────────────┐ #
+# │                       Custom Commands                       │ #
+# └─────────────────────────────────────────────────────────────┘ #
+# #################################################################
+
+worlds:
+  # World name
+  world:
+    # Enable/disable chat
+    chat-enabled: true
+  world_nether:
+    chat-enabled: true
+  world_the_end:
+    chat-enabled: true
+  # Add more worlds'
+  #survival:
+    #chat-enabled: false

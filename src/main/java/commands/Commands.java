@@ -46,6 +46,7 @@ public class Commands implements CommandExecutor, TabCompleter {
                         plugin.getCommandsManager().reloadConfig();
                         plugin.getDiscordManager().reloadConfig();
                         plugin.getLevelsManager().reloadConfig();
+                        plugin.getWorldsManager().reloadConfig();
                         String message = plugin.getMessagesManager().getReloadMessage();
                         String prefix = plugin.getMessagesManager().getPrefix();
                         if (!(sender instanceof Player)) {
@@ -95,9 +96,10 @@ public class Commands implements CommandExecutor, TabCompleter {
                     }
                 }
             } else {
-                // Mensaje de ayuda
-                String helpMessage = "Usage: /tchat <reload|version|clear|mute>";
-                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', helpMessage));
+                List<String> helpMessage = plugin.getMessagesManager().getChatMessage();
+                for (String message : helpMessage) {
+                    sender.sendMessage(plugin.getTranslateColors().translateColors(null, message));
+                }
             }
         } else {
             String message = plugin.getMessagesManager().getNoPermission();

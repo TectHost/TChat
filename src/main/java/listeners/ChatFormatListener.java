@@ -43,22 +43,26 @@ public class ChatFormatListener implements Listener {
         String channelName = plugin.getChannelsManager().getPlayerChannel(player);
         ChannelsConfigManager.Channel channel = channelsConfigManager.getChannel(channelName);
 
-        if (channel != null && channel.isFormatEnabled() && channel.isEnabled() && (player.hasPermission(channel.getPermission()) || player.hasPermission("tchat.admin") || player.hasPermission("tchat.channel.all"))) {
-            format = channel.getFormat();
-            format = format.replace("%channel%", channelName);
-            format = format.replace("%message%", "%msg%");
+        if (!plugin.getConfigManager().isFormatEnabled()) {
+            format = "<" + player.getName() + "> %msg%";
         } else {
-            if (configManager.getFormatGroup()) {
-                String groupName = groupManager.getGroup(player);
-                format = groupManager.getGroupFormat(groupName);
-                if (format.isEmpty()) {
-                    format = "<" + player.getName() + "> " + message;
-                    String errorMessage = plugin.getMessagesManager().getNoFormatGroup();
-                    String prefix = plugin.getMessagesManager().getPrefix();
-                    Bukkit.getConsoleSender().sendMessage(plugin.getTranslateColors().translateColors(player, prefix) + org.bukkit.ChatColor.translateAlternateColorCodes('&', errorMessage).replace("%group%", groupName));
-                }
+            if (channel != null && channel.isFormatEnabled() && channel.isEnabled() && (player.hasPermission(channel.getPermission()) || player.hasPermission("tchat.admin") || player.hasPermission("tchat.channel.all"))) {
+                format = channel.getFormat();
+                format = format.replace("%channel%", channelName);
+                format = format.replace("%message%", "%msg%");
             } else {
-                format = configManager.getFormat();
+                if (configManager.isFormatGroup()) {
+                    String groupName = groupManager.getGroup(player);
+                    format = groupManager.getGroupFormat(groupName);
+                    if (format.isEmpty()) {
+                        format = "<" + player.getName() + "> " + message;
+                        String errorMessage = plugin.getMessagesManager().getNoFormatGroup();
+                        String prefix = plugin.getMessagesManager().getPrefix();
+                        Bukkit.getConsoleSender().sendMessage(plugin.getTranslateColors().translateColors(player, prefix) + org.bukkit.ChatColor.translateAlternateColorCodes('&', errorMessage).replace("%group%", groupName));
+                    }
+                } else {
+                    format = configManager.getFormat();
+                }
             }
         }
 
@@ -87,10 +91,12 @@ public class ChatFormatListener implements Listener {
             }
         }
 
-        String chatColor = plugin.getSaveManager().getChatColor(player.getUniqueId());
-        String playerFormat = plugin.getSaveManager().getFormat(player.getUniqueId());
-        message = chatColor + playerFormat + message;
-        message = plugin.getTranslateColors().translateColors(player, message);
+        if (plugin.getConfigManager().isChatColorEnabled()) {
+            String playerFormat = plugin.getSaveManager().getFormat(player.getUniqueId());
+            String chatColor = plugin.getSaveManager().getChatColor(player.getUniqueId());
+            message = chatColor + playerFormat + message;
+            message = plugin.getTranslateColors().translateColors(player, message);
+        }
 
         TextComponent messageComponent = new TextComponent(TextComponent.fromLegacyText(message));
 
@@ -133,7 +139,7 @@ public class ChatFormatListener implements Listener {
             }
         }
 
-        if (configManager.getRegisterMessagesOnConsole()) {
+        if (configManager.isRegisterMessagesOnConsole()) {
             String consoleMessage = mainComponent.toLegacyText();
             consoleMessage = plugin.getTranslateColors().translateColors(player, consoleMessage);
             Bukkit.getConsoleSender().sendMessage(consoleMessage);

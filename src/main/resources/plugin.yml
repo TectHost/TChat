@@ -1,5 +1,5 @@
 main: minealex.tchat.TChat
-version: 4.0.0
+version: 4.0.1
 name: TChat
 author: Mine_Alex
 api-version: 1.13
@@ -43,9 +43,21 @@ commands:
     description: Create or vote for a poll
   warning:
     description: Send a message to all players
+  rules:
+    description: View the server rules
+  print:
+    description: Send a raw message
+  announcement:
+    description: Send a message to all players
 
 
 permissions:
+  tchat.admin.announcement:
+    description: Permission to use announcement command
+  tchat.rules:
+    description: Permission to use rules command
+  tchat.admin.print:
+    description: Permission to use print command
   tchat.ignore:
     description: Permission to use ignore command
   tchat.admin.broadcast:

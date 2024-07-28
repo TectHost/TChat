@@ -4,8 +4,10 @@ import commands.*;
 import config.*;
 import hook.DiscordHook;
 import listeners.*;
+import net.kyori.adventure.platform.facet.Facet;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.World;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import placeholders.Placeholders;
@@ -57,6 +59,8 @@ public class TChat extends JavaPlugin {
     private LevelListener levelListener;
     private LevelsManager levelsManager;
     private DeathManager deathManager;
+    private WorldsManager worldsManager;
+    private ChatEnabledListener chatEnabledListener;
 
     @Override
     public void onEnable() {
@@ -97,6 +101,7 @@ public class TChat extends JavaPlugin {
         socialSpyListener = new SocialSpyListener(this);
         SignListener signListener = new SignListener(this);
         levelListener = new LevelListener(this);
+        chatEnabledListener = new ChatEnabledListener(this);
 
         getServer().getPluginManager().registerEvents(new PollListener(this), this);
         getServer().getPluginManager().registerEvents(signListener, this);
@@ -130,6 +135,7 @@ public class TChat extends JavaPlugin {
         discordManager = new DiscordManager(this);
         levelsManager = new LevelsManager(this);
         deathManager = new DeathManager(this);
+        worldsManager = new WorldsManager(this);
     }
 
     public void initializeManagers() {
@@ -142,7 +148,9 @@ public class TChat extends JavaPlugin {
 
     public void registerCommands() {
         Objects.requireNonNull(this.getCommand("tchat")).setExecutor(new Commands(this));
-        Objects.requireNonNull(this.getCommand("chatcolor")).setExecutor(new ChatColorCommand(this));
+        if (getConfigManager().isChatColorEnabled()) {
+            Objects.requireNonNull(this.getCommand("chatcolor")).setExecutor(new ChatColorCommand(this));
+        }
         Objects.requireNonNull(this.getCommand("channel")).setExecutor(new ChannelCommand(this));
         Objects.requireNonNull(getCommand("channel")).setTabCompleter(new ChannelsCompleter(this));
         if (getConfigManager().isMsgEnabled()) {
@@ -161,15 +169,26 @@ public class TChat extends JavaPlugin {
             Objects.requireNonNull(this.getCommand("mutechat")).setExecutor(new MuteChatCommand(this));
         }
         new CustomCommands(this);
-        Objects.requireNonNull(this.getCommand("ping")).setExecutor(new PingCommand(this));
+        if (getConfigManager().isPingEnabled()) {
+            Objects.requireNonNull(this.getCommand("ping")).setExecutor(new PingCommand(this));
+        }
         if (getConfigManager().isBroadcastEnabled()) {
             Objects.requireNonNull(this.getCommand("broadcast")).setExecutor(new BroadcastCommand(this));
         }
         if (getConfigManager().isWarningEnabled()) {
             Objects.requireNonNull(getCommand("warning")).setExecutor(new WarningCommand(this));
         }
+        if (getConfigManager().isAnnouncementEnabled()) {
+            Objects.requireNonNull(getCommand("announcement")).setExecutor(new AnnouncementCommand(this));
+        }
         Objects.requireNonNull(this.getCommand("ignore")).setExecutor(new IgnoreCommand(this));
         Objects.requireNonNull(getCommand("poll")).setExecutor(new PollCommand(this));
+        if (getConfigManager().isRulesEnabled()) {
+            Objects.requireNonNull(getCommand("rules")).setExecutor(new RulesCommand(this));
+        }
+        if (getConfigManager().isPrintEnabled()) {
+            Objects.requireNonNull(getCommand("print")).setExecutor(new PrintCommand(this));
+        }
     }
 
     public void registerPlaceholders() {
@@ -178,6 +197,8 @@ public class TChat extends JavaPlugin {
 
     // ------------------------------------------------------------------------------
 
+    public ChatEnabledListener getChatEnabledListener() { return chatEnabledListener; }
+    public WorldsManager getWorldsManager() { return worldsManager; }
     public DeathManager getDeathManager() { return deathManager; }
     public LevelsManager getLevelsManager() { return levelsManager; }
     public LevelListener getLevelListener() { return levelListener; }

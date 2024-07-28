@@ -23,6 +23,7 @@ public class ChatListener implements Listener {
         Player player = event.getPlayer();
         String message = event.getMessage();
 
+        plugin.getChatEnabledListener().checkChatEnabled(event, player);
         chatMuted(event, player);
         plugin.getChatCooldownListener().chatCooldown(event, player);
         plugin.getAntiUnicodeListener().checkUnicode(event, player, message);

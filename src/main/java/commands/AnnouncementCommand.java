@@ -8,26 +8,26 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-public class WarningCommand implements CommandExecutor {
+public class AnnouncementCommand implements CommandExecutor {
     private final TChat plugin;
 
-    public WarningCommand(TChat plugin) {
+    public AnnouncementCommand(TChat plugin) {
         this.plugin = plugin;
     }
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         String prefix = plugin.getMessagesManager().getPrefix();
-        if (sender.hasPermission("tchat.admin.warning") || sender.hasPermission("tchat.admin")) {
+        if (sender.hasPermission("tchat.admin.announcement") || sender.hasPermission("tchat.admin")) {
             if (args.length == 0) {
-                String message = plugin.getMessagesManager().getUsageWarning();
+                String message = plugin.getMessagesManager().getUsageAnnouncement();
                 sender.sendMessage(plugin.getTranslateColors().translateColors(null, prefix + message));
                 return true;
             }
 
             String message = String.join(" ", args);
 
-            String format = plugin.getConfigManager().getWarningFormat();
+            String format = plugin.getConfigManager().getAnnouncementFormat();
 
             format = format.replace("%message%", message);
 

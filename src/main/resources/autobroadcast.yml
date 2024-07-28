@@ -4,6 +4,9 @@
 # └─────────────────────────────────────────────────────────────┘ #
 # #################################################################
 
+# Placeholders:
+# - %center% - Center line text
+
 # General options
 options:
   # Time between broadcast and broadcast
@@ -25,8 +28,5 @@ broadcasts:
   broadcast2:
     enabled: true
     message:
-      - "┌─────────────────┐"
-      - "│          Hi, %player_name%          │"
-      - "│          &aThis server use        &f│"
-      - "│                &#c03afeT&#a72cf8C&#8e1ff1h&#7411eba&#5b03e4t                &f│"
-      - "└─────────────────┘"
+      - "%center%&#ec4141&lANNOUNCE"
+      - "%center%&7Try Tect.host, the best hosting!"

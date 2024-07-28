@@ -31,7 +31,7 @@ public class AntiUnicodeListener implements Listener {
     }
 
     private boolean containsInvalidCharacters(String message) {
-        if (!plugin.getConfigManager().getUnicodeBlockAll()) {
+        if (!plugin.getConfigManager().isUnicodeBlockAll()) {
             return !allowedPattern.matcher(message).matches();
         } else {
             for (char c : message.toCharArray()) {
