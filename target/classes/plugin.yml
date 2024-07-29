@@ -49,6 +49,8 @@ commands:
     description: Send a raw message
   announcement:
     description: Send a message to all players
+  autobroadcast:
+    description: Start or stop autobroadcast system
 
 
 permissions:

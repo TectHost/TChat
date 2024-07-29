@@ -21,6 +21,7 @@ public class PlayerJoinListener implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
+        String username = event.getPlayer().getName();
         if (!unverifiedPlayers.contains(player) && plugin.getConfigManager().isAntibotEnabled() && !player.hasPermission(plugin.getConfigManager().getAntibotBypass()) && !player.hasPermission("tchat.admin")) {
             unverifiedPlayers.add(player);
             if (plugin.getConfigManager().isAntibotJoin()) {
@@ -29,6 +30,8 @@ public class PlayerJoinListener implements Listener {
                 player.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + message));
             }
         }
+
+        plugin.getDiscordHook().sendJoinMessage(username);
     }
 
     public boolean isUnverified(Player player) {

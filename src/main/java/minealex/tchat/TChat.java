@@ -4,11 +4,8 @@ import commands.*;
 import config.*;
 import hook.DiscordHook;
 import listeners.*;
-import net.kyori.adventure.platform.facet.Facet;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.World;
-import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import placeholders.Placeholders;
 import utils.*;
@@ -61,6 +58,8 @@ public class TChat extends JavaPlugin {
     private DeathManager deathManager;
     private WorldsManager worldsManager;
     private ChatEnabledListener chatEnabledListener;
+    private PlayerLeftListener playerLeftListener;
+    private AutoBroadcastCommand autoBroadcastCommand;
 
     @Override
     public void onEnable() {
@@ -90,9 +89,10 @@ public class TChat extends JavaPlugin {
         chatBotListener = new ChatBotListener(this);
         repeatMessagesListener = new RepeatMessagesListener(this);
         playerJoinListener = new PlayerJoinListener(this);
+        playerLeftListener = new PlayerLeftListener(this);
         PlayerMoveListener playerMoveListener = new PlayerMoveListener(this);
         antiBotListener = new AntiBotListener(this);
-        AutoBroadcastSender autoBroadcastSender = new AutoBroadcastSender(this);
+        autoBroadcastSender = new AutoBroadcastSender(this);
         chatCooldownListener = new ChatCooldownListener(this);
         antiFloodListener = new AntiFloodListener(this);
         antiUnicodeListener = new AntiUnicodeListener(this);
@@ -109,8 +109,9 @@ public class TChat extends JavaPlugin {
         getServer().getPluginManager().registerEvents(bannedWords, this);
         getServer().getPluginManager().registerEvents(new TabCompleteListener(this), this);
         getServer().getPluginManager().registerEvents(playerJoinListener, this);
+        getServer().getPluginManager().registerEvents(playerLeftListener, this);
         getServer().getPluginManager().registerEvents(playerMoveListener, this);
-        getServer().getPluginManager().registerEvents(new DeathsListener(deathManager), this);
+        getServer().getPluginManager().registerEvents(new DeathsListener(deathManager, this), this);
 
         PollScheduler.startPollChecker(this);
     }
@@ -189,6 +190,8 @@ public class TChat extends JavaPlugin {
         if (getConfigManager().isPrintEnabled()) {
             Objects.requireNonNull(getCommand("print")).setExecutor(new PrintCommand(this));
         }
+        autoBroadcastCommand = new AutoBroadcastCommand(this);
+        Objects.requireNonNull(getCommand("autobroadcast")).setExecutor(autoBroadcastCommand);
     }
 
     public void registerPlaceholders() {
@@ -197,9 +200,10 @@ public class TChat extends JavaPlugin {
 
     // ------------------------------------------------------------------------------
 
+    public AutoBroadcastSender getAutoBroadcastSender() { return autoBroadcastSender; }
+    public PlayerLeftListener getPlayerLeftListener() { return playerLeftListener; }
     public ChatEnabledListener getChatEnabledListener() { return chatEnabledListener; }
     public WorldsManager getWorldsManager() { return worldsManager; }
-    public DeathManager getDeathManager() { return deathManager; }
     public LevelsManager getLevelsManager() { return levelsManager; }
     public LevelListener getLevelListener() { return levelListener; }
     public SocialSpyListener getSocialSpyListener() { return socialSpyListener; }

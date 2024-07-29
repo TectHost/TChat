@@ -25,8 +25,38 @@ broadcasts:
       - "│          &aThe server use         &f│"
       - "│                &#c03afeT&#a72cf8C&#8e1ff1h&#7411eba&#5b03e4t                &f│"
       - "└─────────────────┘"
+    actions:
+      title:
+        enabled: true
+        title: "&#c03afeT&#a72cf8C&#8e1ff1h&#7411eba&#5b03e4t"
+        subtitle: "&7The server is using &#c03afeT&#a72cf8C&#8e1ff1h&#7411eba&#5b03e4t"
+      sound:
+        enabled: true
+        sound: "ENTITY_VILLAGER_NO"
+      particles:
+        enabled: true
+        particle: ANGRY_VILLAGER
+        particles: 4
+      actionbar:
+        enabled: true
+        bar: "&#c03afeT&#b333fbe&#a72cf8c&#9a25f4t&#8e1ff1.&#8118eeh&#7411ebo&#680ae7s&#5b03e4t"
   broadcast2:
     enabled: true
     message:
       - "%center%&#ec4141&lANNOUNCE"
       - "%center%&7Try Tect.host, the best hosting!"
+    actions:
+      title:
+        enabled: true
+        title: "&#c03afeT&#a72cf8C&#8e1ff1h&#7411eba&#5b03e4t"
+        subtitle: "&7The server is using &#c03afeT&#a72cf8C&#8e1ff1h&#7411eba&#5b03e4t"
+      sound:
+        enabled: true
+        sound: "ENTITY_VILLAGER_NO"
+      particles:
+        enabled: true
+        particle: ANGRY_VILLAGER
+        particles: 4
+      actionbar:
+        enabled: true
+        bar: "&#c03afeT&#b333fbe&#a72cf8c&#9a25f4t&#8e1ff1.&#8118eeh&#7411ebo&#680ae7s&#5b03e4t"

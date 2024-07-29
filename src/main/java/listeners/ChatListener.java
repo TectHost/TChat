@@ -1,6 +1,8 @@
 package listeners;
 
+import commands.AutoBroadcastCommand;
 import commands.MuteChatCommand;
+import config.AutoBroadcastManager;
 import minealex.tchat.TChat;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -9,9 +11,27 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import blocked.BannedCommands;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class ChatListener implements Listener {
     private final TChat plugin;
     private final ChatFormatListener chatFormatListener;
+    private final Map<Player, String> broadcastNames = new HashMap<>();
+    private final Map<Player, Boolean> broadcastEnabled = new HashMap<>();
+    private final Map<Player, List<String>> broadcastMessages = new HashMap<>();
+    private final Map<Player, Boolean> titleEnabled = new HashMap<>();
+    private final Map<Player, String> title = new HashMap<>();
+    private final Map<Player, String> subtitle = new HashMap<>();
+    private final Map<Player, Boolean> soundEnabled = new HashMap<>();
+    private final Map<Player, String> sound = new HashMap<>();
+    private final Map<Player, Boolean> particlesEnabled = new HashMap<>();
+    private final Map<Player, String> particle = new HashMap<>();
+    private final Map<Player, Integer> particleCount = new HashMap<>();
+    private final Map<Player, Boolean> actionbarEnabled = new HashMap<>();
+    private final Map<Player, String> actionbar = new HashMap<>();
+
 
     public ChatListener(TChat plugin, ChatFormatListener chatFormatListener) {
         this.plugin = plugin;
@@ -31,15 +51,16 @@ public class ChatListener implements Listener {
         plugin.getBannedWords().playerBannedWords(event);
         plugin.getAntiAdvertising().checkAdvertising(event);
         plugin.getCapListener().playerAntiCap(event);
-        grammar(event, player, message);
         antiBot(event, player, null);
         plugin.getAntiFloodListener().checkFlood(event, message, player);
         replacer(event, message);
+        grammar(event, player, message);
 
         chatFormatListener.playerFormat(event);
         plugin.getChatGamesSender().checkPlayerResponse(player, message);
         logs(player, message, 1);
         plugin.getLevelListener().addXp(event);
+        handleBroadcastAddition(player, message);
     }
 
     @EventHandler
@@ -55,7 +76,74 @@ public class ChatListener implements Listener {
         new BannedCommands(plugin).onPlayerCommandPreprocess(event);
     }
 
-    // Other ------------------------------------------------------------------------------
+    private void handleBroadcastAddition(Player player, String message) {
+        if (broadcastNames.containsKey(player)) {
+            String prefix = plugin.getMessagesManager().getPrefix();
+
+            if (broadcastEnabled.containsKey(player)) {
+                boolean enabled = message.equalsIgnoreCase("yes");
+                broadcastEnabled.put(player, enabled);
+                broadcastNames.remove(player);
+            } else if (broadcastMessages.containsKey(player)) {
+                List<String> messages = broadcastMessages.get(player);
+                if (message.equalsIgnoreCase("done")) {
+                    if (messages.isEmpty()) {
+                        String message1 = plugin.getMessagesManager().getAutoBroadcastAddOneLine();
+                        player.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + message1));
+                        return;
+                    }
+
+                    AutoBroadcastManager.Broadcast broadcast = new AutoBroadcastManager.Broadcast(
+                            broadcastEnabled.get(player),
+                            messages,
+                            titleEnabled.getOrDefault(player, false),
+                            title.getOrDefault(player, null),
+                            subtitle.getOrDefault(player, null),
+                            soundEnabled.getOrDefault(player, false),
+                            sound.getOrDefault(player, null),
+                            particlesEnabled.getOrDefault(player, false),
+                            particle.getOrDefault(player, null),
+                            particleCount.getOrDefault(player, 0),
+                            actionbarEnabled.getOrDefault(player, false),
+                            actionbar.getOrDefault(player, null)
+                    );
+
+                    plugin.getAutoBroadcastManager().addBroadcast(
+                            broadcastNames.get(player),
+                            broadcastEnabled.get(player),
+                            messages,
+                            broadcast.isTitleEnabled(),
+                            broadcast.getTitle(),
+                            broadcast.getSubtitle(),
+                            broadcast.isSoundEnabled(),
+                            broadcast.getSound(),
+                            broadcast.isParticlesEnabled(),
+                            broadcast.getParticle(),
+                            broadcast.getParticleCount(),
+                            broadcast.isActionbarEnabled(),
+                            broadcast.getActionbar()
+                    );
+                    plugin.getAutoBroadcastManager().reloadConfig();
+
+                    broadcastNames.remove(player);
+                    broadcastEnabled.remove(player);
+                    broadcastMessages.remove(player);
+                    titleEnabled.remove(player);
+                    title.remove(player);
+                    subtitle.remove(player);
+                    soundEnabled.remove(player);
+                    sound.remove(player);
+                    particlesEnabled.remove(player);
+                    particle.remove(player);
+                    particleCount.remove(player);
+                    actionbarEnabled.remove(player);
+                    actionbar.remove(player);
+                } else {
+                    messages.add(message);
+                }
+            }
+        }
+    }
 
     public void socialSpy(PlayerCommandPreprocessEvent e, Player sender, String command) {
         if (plugin.getConfigManager().isSpyEnabled() && !sender.hasPermission("tchat.admin")) {

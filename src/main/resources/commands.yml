@@ -23,6 +23,10 @@
 # [BUNGEECORD] - Moves the player to another server | - "[BUNGEECORD] survival"
 # [CLICK_ACTION] (action) (executor) | (message) - Message with Text Component | - "[CLICK_ACTION] OPEN https://tect.host/ | Click here to go to tect.host"
 # [CLICK_ACTION] OPEN/SUGGEST/EXECUTE
+# [IF] - Initiates a conditional within the actions | - "[IF] %player_is_op% == true"
+# [ELSE IF] - If the [IF] condition is not met, it will test this condition | - "[ELSE IF] %player_ping% <= 100"
+# [ELSE] - If none of the conditions ([IF] and all the [ELSE IF] if any) are not met, this will be executed | - "[ELSE]"
+# [FI] - The condition ends, from this tag, the rest is out of this condition | - "[FI]
 
 commands:
   test:
@@ -30,10 +34,17 @@ commands:
     args: false
     cooldown: 0
     actions:
+      - "[IF] %statistic_hours_played% >= 10"
       - "[MESSAGE] Test message"
       - "[CLICK_ACTION] OPEN https://tect.host/ | Click here to open the link"
       - "[CLICK_ACTION] SUGGEST /warp %player% | Click here to suggest a warp command"
       - "[CLICK_ACTION] EXECUTE /home %player% | Click here to execute the home command"
+      - "[ELSE IF] %statistic_hours_played% >= 5"
+      - "[MESSAGE] Action with 5 hours played."
+      - "[ELSE]"
+      - "[MESSAGE] You need at least 5 hours of playtime to use this command"
+      - "[FI]"
+      - "[MESSAGE] Actions outside the conditional"
   bc:
     permission-required: false
     args: true

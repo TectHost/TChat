@@ -165,8 +165,13 @@ public class ChatFormatListener implements Listener {
             } else {
                 first = false;
             }
-            String translatedLine = plugin.getTranslateColors().translateColors(player, line);
-            hoverComponent.addExtra(new TextComponent(TextComponent.fromLegacyText(translatedLine)));
+
+            String replacedLine = PlaceholderAPI.setPlaceholders(player, line);
+
+            replacedLine = TranslateHexColorCodes.translateHexColorCodes("&#", "", replacedLine);
+            replacedLine = ChatColor.translateAlternateColorCodes('&', replacedLine);
+
+            hoverComponent.addExtra(new TextComponent(TextComponent.fromLegacyText(replacedLine)));
         }
 
         return new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(hoverComponent).create());

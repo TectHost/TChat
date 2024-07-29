@@ -114,6 +114,27 @@ messages:
     join-channel-announce: "&a%player% has joined the channel %channel%"
     no-channel: "&cYou are not in the channel %channel%"
     channel-no-permission-left: "&cYou do not have permission to left channel: %channel%"
+  autobroadcast:
+    start: "&aAutoBroadcast has been started."
+    stop: "&cAutoBroadcast has been stopped."
+    restart: "&eAutoBroadcast has been restarted."
+    usage-remove: "&cUsage: /autobroadcast remove <broadcast name>"
+    removed: "&aBroadcast &e%broadcast% &ahas been removed."
+    usage-add: "&cUsage: /autobroadcast add <broadcast name>"
+    create:
+      enabled: "&fIs the broadcast enabled? (&ayes&f/&cno&f)"
+      new-line: "&fEnter a line of message (or type '&adone&f' to finish):"
+      one-line: "&cYou need to enter at least one message."
+      added: "&aBroadcast &e%broadcast% &ahas been added."
+      actions-prompt: |
+        &6Please configure the auto-broadcast actions using the following commands:
+        &e- Title: Type 'title [your title]' to set the title.
+        &e- Subtitle: Type 'subtitle [your subtitle]' to set the subtitle.
+        &e- Sound: Type 'sound [sound name]' to set the sound effect.
+        &e- Particles: Type 'particle [particle type]' to set the particle effect.
+        &e- Particle Count: Type 'particles [number]' to set the number of particles.
+        &e- Actionbar: Type 'actionbar [your actionbar text]' to set the actionbar text.
+        &eType 'done' when you have finished configuring all actions.
   usage:
     channel: "&cUsage: /channel <join|leave> <channel>"
     join-channel: "&cUsage: /channel join <channel>"
@@ -127,6 +148,7 @@ messages:
     usage-print: "&cUsage: /print <message>"
     usage-warning: "&cUsage: /warning <message>"
     usage-announcement: "&cUsage: /announcement <message>"
+    usage-autobroadcast: "&cUsage: /autobroadcast <start|stop|restart|remove|add>"
   # Debug messages are only seen in the console
   debug:
     no-format-group: "&cError in groups.yml - No format found for group: %group%"

@@ -4,10 +4,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import config.CommandsManager;
 import minealex.tchat.TChat;
-import net.md_5.bungee.api.ChatMessageType;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -21,6 +22,7 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import me.clip.placeholderapi.PlaceholderAPI;
 
 public class CustomCommands implements Listener {
     private final TChat plugin;
@@ -68,18 +70,8 @@ public class CustomCommands implements Listener {
                     return;
                 }
 
-                if (allowArgs) {
-                    String args = message.substring(commandArgs[0].length() + 1);
-                    List<String> actions = command.getActions();
-                    for (String action : actions) {
-                        this.executeAction(player, action, args);
-                    }
-                } else {
-                    List<String> actions = command.getActions();
-                    for (String action : actions) {
-                        this.executeAction(player, action, null);
-                    }
-                }
+                List<String> actions = command.getActions();
+                processActions(player, actions, allowArgs ? message.substring(commandArgs[0].length() + 1) : null);
 
                 if (cooldownSeconds > 0) {
                     this.setCooldown(player, commandName, cooldownSeconds);
@@ -88,6 +80,97 @@ public class CustomCommands implements Listener {
                 e.setCancelled(true);
             }
         }
+    }
+
+    private void processActions(Player player, List<String> actions, String args) {
+        boolean isIfBlock = false;
+        boolean isElseIfBlock = false;
+        boolean skipActions = false;
+
+        for (String action : actions) {
+            action = processPlaceholders(player, action);
+
+            if (action.startsWith("[IF]")) {
+                isIfBlock = evaluateCondition(action.substring(4).trim(), player);
+                isElseIfBlock = false;
+                skipActions = !isIfBlock;
+            } else if (action.startsWith("[ELSE IF]")) {
+                if (!isIfBlock) {
+                    isElseIfBlock = evaluateCondition(action.substring(9).trim(), player);
+                    skipActions = !isElseIfBlock;
+                }
+            } else if (action.startsWith("[ELSE]")) {
+                if (!isIfBlock && !isElseIfBlock) {
+                    isIfBlock = true;
+                    skipActions = false;
+                }
+            } else if (action.startsWith("[FI]")) {
+                isIfBlock = false;
+                isElseIfBlock = false;
+                skipActions = false;
+            } else if (!skipActions) {
+                executeAction(player, action, args);
+            }
+        }
+    }
+
+    private boolean evaluateCondition(String condition, Player player) {
+        Pattern pattern = Pattern.compile("%(\\w+)%|([0-9]+)\\s*(>=|<=|>|<|==|!=)\\s*(\\d+)");
+        Matcher matcher = pattern.matcher(condition);
+
+        if (matcher.find()) {
+            String placeholder = matcher.group(1);
+            String literalValue = matcher.group(2);
+            String operator = matcher.group(3);
+            int value = Integer.parseInt(matcher.group(4));
+
+            int placeholderNumber;
+            if (placeholder != null) {
+                String placeholderValue = PlaceholderAPI.setPlaceholders(player, "%" + placeholder + "%");
+                try {
+                    placeholderNumber = Integer.parseInt(placeholderValue);
+                } catch (NumberFormatException e) {
+                    plugin.getLogger().warning("Invalid placeholder value for " + placeholder + ": " + placeholderValue);
+                    return false;
+                }
+            } else {
+                placeholderNumber = Integer.parseInt(literalValue);
+            }
+
+            boolean result;
+            switch (operator) {
+                case ">=":
+                    result = placeholderNumber >= value;
+                    break;
+                case "<=":
+                    result = placeholderNumber <= value;
+                    break;
+                case ">":
+                    result = placeholderNumber > value;
+                    break;
+                case "<":
+                    result = placeholderNumber < value;
+                    break;
+                case "==":
+                    result = placeholderNumber == value;
+                    break;
+                case "!=":
+                    result = placeholderNumber != value;
+                    break;
+                default:
+                    plugin.getLogger().warning("Unsupported operator: " + operator);
+                    return false;
+            }
+
+            return result;
+        } else {
+            plugin.getLogger().warning("No match found for condition: " + condition);
+            return false;
+        }
+    }
+
+    private String processPlaceholders(Player player, String text) {
+        return PlaceholderAPI.setPlaceholders(player, text);
     }
 
     private void executeAction(Player player, String action, String args) {

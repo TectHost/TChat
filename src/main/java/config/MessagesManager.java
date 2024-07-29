@@ -94,6 +94,18 @@ public class MessagesManager {
     private String ignoreListMessage;
     private String usageWarning;
     private String usageAnnouncement;
+    private String autoBroadcastUsage;
+    private String autoBroadcastStart;
+    private String autoBroadcastStop;
+    private String autoBroadcastRestart;
+    private String autoBroadcastUsageRemove;
+    private String autoBroadcastRemove;
+    private String autoBroadcastUsageAdd;
+    private String autoBroadcastAddEnabled;
+    private String autoBroadcastAddNewLine;
+    private String autoBroadcastAddOneLine;
+    private String autoBroadcastAddAdded;
+    private String autoBroadcastActionsPrompt;
 
     public MessagesManager(TChat plugin){
         this.messagesFile = new ConfigFile("messages.yml", null, plugin);
@@ -167,6 +179,18 @@ public class MessagesManager {
         }
 
         // Messages
+        autoBroadcastActionsPrompt = config.getString("messages.autobroadcast.create.actions-prompt");
+        autoBroadcastAddOneLine = config.getString("messages.autobroadcast.create.one-line");
+        autoBroadcastAddNewLine = config.getString("messages.autobroadcast.create.new-line");
+        autoBroadcastAddAdded = config.getString("messages.autobroadcast.create.added");
+        autoBroadcastAddEnabled = config.getString("messages.autobroadcast.create.enabled");
+        autoBroadcastUsageRemove = config.getString("messages.autobroadcast.usage-remove");
+        autoBroadcastUsageAdd = config.getString("messages.autobroadcast.usage-add");
+        autoBroadcastStop = config.getString("messages.autobroadcast.stop");
+        autoBroadcastStart = config.getString("messages.autobroadcast.start");
+        autoBroadcastRestart = config.getString("messages.autobroadcast.restart");
+        autoBroadcastRemove = config.getString("messages.autobroadcast.removed");
+        autoBroadcastUsage = config.getString("messages.usage.usage-autobroadcast");
         chatDisabledWorld = config.getString("messages.chat-disabled-world");
         chatMessage = config.getStringList("messages.chat-help.message");
         levelUp = config.getString("messages.level-up");
@@ -243,6 +267,18 @@ public class MessagesManager {
     }
 
     // Messages
+    public String getAutoBroadcastActionsPrompt() { return autoBroadcastActionsPrompt; }
+    public String getAutoBroadcastAddAdded() { return autoBroadcastAddAdded; }
+    public String getAutoBroadcastAddOneLine() { return autoBroadcastAddOneLine; }
+    public String getAutoBroadcastAddNewLine() { return autoBroadcastAddNewLine; }
+    public String getAutoBroadcastAddEnabled() { return autoBroadcastAddEnabled; }
+    public String getAutoBroadcastUsageAdd() { return autoBroadcastUsageAdd; }
+    public String getAutoBroadcastRemove() { return autoBroadcastRemove; }
+    public String getAutoBroadcastUsageRemove() { return autoBroadcastUsageRemove; }
+    public String getAutoBroadcastRestart() { return autoBroadcastRestart; }
+    public String getAutoBroadcastStop() { return autoBroadcastStop; }
+    public String getAutoBroadcastStart() {return autoBroadcastStart; }
+    public String getAutoBroadcastUsage() { return autoBroadcastUsage; }
     public String getUsageAnnouncement() { return usageAnnouncement; }
     public String getUsageWarning() { return usageWarning; }
     public String getIgnoreListMessage() { return ignoreListMessage; }

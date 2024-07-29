@@ -1,5 +1,6 @@
 package commands;
 
+import me.clip.placeholderapi.PlaceholderAPI;
 import minealex.tchat.TChat;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -18,21 +19,23 @@ public class PrintCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, @NotNull Command command, @NotNull String alias, String[] args) {
         String prefix = plugin.getMessagesManager().getPrefix();
+
         if (sender.hasPermission("tchat.admin.print") || sender.hasPermission("tchat.admin")) {
             if (args.length == 0) {
-                String message = plugin.getMessagesManager().getPrintUsage();
-                sender.sendMessage(plugin.getTranslateColors().translateColors(null, prefix + message));
+                String usageMessage = plugin.getMessagesManager().getPrintUsage();
+                sender.sendMessage(plugin.getTranslateColors().translateColors(null, prefix + usageMessage));
                 return true;
             }
 
             String message = String.join(" ", args);
 
             for (Player player : Bukkit.getOnlinePlayers()) {
-                player.sendMessage(plugin.getTranslateColors().translateColors(player, message));
+                String playerMessage = PlaceholderAPI.setPlaceholders(player, message);
+                player.sendMessage(plugin.getTranslateColors().translateColors(player, playerMessage));
             }
         } else {
-            String message = plugin.getMessagesManager().getNoPermission();
-            sender.sendMessage(plugin.getTranslateColors().translateColors(null, prefix + message));
+            String noPermissionMessage = plugin.getMessagesManager().getNoPermission();
+            sender.sendMessage(plugin.getTranslateColors().translateColors(null, prefix + noPermissionMessage));
         }
 
         return true;

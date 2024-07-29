@@ -1,6 +1,9 @@
 package listeners;
 
 import config.DeathManager;
+import minealex.tchat.TChat;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -9,9 +12,11 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 public class DeathsListener implements Listener {
 
     private final DeathManager deathManager;
+    private final TChat plugin;
 
-    public DeathsListener(DeathManager deathManager) {
+    public DeathsListener(DeathManager deathManager, TChat plugin) {
         this.deathManager = deathManager;
+        this.plugin = plugin;
     }
 
     @EventHandler
@@ -80,6 +85,28 @@ public class DeathsListener implements Listener {
             deathMessage = String.format(deathMessage, playerName, "desconocido");
         }
 
-        event.setDeathMessage(deathMessage);
+        event.setDeathMessage(plugin.getTranslateColors().translateColors(player, deathMessage));
+
+        if (deathManager.isTitleEnabled()) {
+            player.sendTitle(plugin.getTranslateColors().translateColors(player, deathManager.getTitle()), plugin.getTranslateColors().translateColors(player, deathManager.getSubtitle()),
+                    10,
+                    70,
+                    20
+            );
+        }
+
+        if (deathManager.isActionBarEnabled()) {
+            player.spigot().sendMessage(net.md_5.bungee.api.ChatMessageType.ACTION_BAR, net.md_5.bungee.api.chat.TextComponent.fromLegacyText(plugin.getTranslateColors().translateColors(player, deathManager.getActionBarText())));
+        }
+
+        if (deathManager.isSoundEnabled()) {
+            Sound sound = Sound.valueOf(deathManager.getSound());
+            player.playSound(player.getLocation(), sound, 1.0f, 1.0f);
+        }
+
+        if (deathManager.isParticlesEnabled()) {
+            Particle particle = Particle.valueOf(deathManager.getParticle());
+            player.getWorld().spawnParticle(particle, player.getLocation(), deathManager.getNumberOfParticles());
+        }
     }
 }

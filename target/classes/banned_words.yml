@@ -547,7 +547,7 @@ bannedWords:
 # Types:
 # - BLOCK - Blocks the message
 # - CENSOR - Censors the message
-type: "BLOCK"
+type: "CENSOR"
 
 # Message displayed to players when they type a blocked word
 blockedMessage:

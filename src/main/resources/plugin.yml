@@ -1,5 +1,5 @@
 main: minealex.tchat.TChat
-version: 4.0.1
+version: 4.0.2
 name: TChat
 author: Mine_Alex
 api-version: 1.13
@@ -49,6 +49,8 @@ commands:
     description: Send a raw message
   announcement:
     description: Send a message to all players
+  autobroadcast:
+    description: Start or stop autobroadcast system
 
 
 permissions:
