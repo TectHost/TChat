@@ -1,0 +1,94 @@
+main: minealex.tchat.TChat
+version: 4.0.2
+name: TChat
+author: Mine_Alex
+api-version: 1.13
+
+depend: [PlaceholderAPI]
+
+commands:
+  tchat:
+    description: Reload the plugin
+    usage: /<command> <reload|version>
+    aliases:
+      - chat
+  chatcolor:
+    description: Open's the chatcolor menu
+    usage: /<command>
+  channel:
+    description: Join/leave a channel
+    usage: /<command> <join|leave>
+  msg:
+    description: Sends a private message
+    usage: /<command> <user>
+  reply:
+    description: Reply to a private message
+    usage: /<command> <user>
+  chatclear:
+    description: Clear's the chat
+    usage: /<command>
+  mutechat:
+    description: Mute the chat
+    usage: /<command>
+  ping:
+    description: View player ping
+    usage: /<command>
+  broadcast:
+    description: Send a message to all players
+    usage: /<command> <message>
+  ignore:
+    description: Ignore a player
+    usage: /<command> <player>
+  poll:
+    description: Create or vote for a poll
+  warning:
+    description: Send a message to all players
+  rules:
+    description: View the server rules
+  print:
+    description: Send a raw message
+  announcement:
+    description: Send a message to all players
+
+
+permissions:
+  tchat.admin.announcement:
+    description: Permission to use announcement command
+  tchat.rules:
+    description: Permission to use rules command
+  tchat.admin.print:
+    description: Permission to use print command
+  tchat.ignore:
+    description: Permission to use ignore command
+  tchat.admin.broadcast:
+    description: Permission to use broadcast command
+  tchat.ping:
+    description: Permission to use ping command
+  tchat.chatcolor.menu:
+    description: Permission to open the chatcolor menu
+  tchat.admin:
+    description: Admin permission
+  tchat.reload:
+    description: Permission to reload the plugin
+  tchat.version:
+    description: Permission view the version of the plugin
+  tchat.bypass.anticap:
+    description: Permission to bypass the anti cap system
+  tchat.bypass.command_blocker.tab:
+    description: Permission to bypass tab command blocker
+  tchat.bypass.command_blocker.command:
+    description: Permission to open the chatcolor menu
+  tchat.bypass.banned_words:
+    description: Permission to bypass banned words system
+  tchat.color.all:
+    description: Permission to use all colors in chat
+  tchat.color.*:
+    description: Permission to use colors in chat
+  tchat.chatcolor.all:
+    description: Permission to use all chat colors
+  tchat.chatcolor.*:
+    description: Permission to use chat colors
+  tchat.channel.all:
+    description: Permission to use all channels
+  tchat.channel.*:
+    description: Permission to use channels

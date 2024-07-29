@@ -1,0 +1,457 @@
+# #################################################################
+# ┌─────────────────────────────────────────────────────────────┐ #
+# │                     General chat config                     │ #
+# └─────────────────────────────────────────────────────────────┘ #
+# #################################################################
+
+chat:
+  # Use per group format (groups.yml)
+  use-group-format: false
+  # Enable/disable chat format
+  format-enabled: true
+  # Global format (use only if the above option is false)
+  format: "%tchat_prefix% &a%player% &e>> %message%"
+  # This option is used to display on the console the messages from the players
+  register-messages-on-console: true
+
+# #################################################################
+# ┌─────────────────────────────────────────────────────────────┐ #
+# │                   Anti advertising config                   │ #
+# └─────────────────────────────────────────────────────────────┘ #
+# #################################################################
+
+advertising:
+  bypass: "tchat.bypass.advertising"
+  ipv4:
+    # Enable/disable anti advertising IPv4
+    enabled: true
+    # Text to check for IPv4
+    match: ".*\\b\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b.*"
+    actions:
+      message:
+        # Enable/disable message
+        enabled: true
+        # Message (list)
+        message:
+        - "&8--------- { &#c03afeT&#a72cf8C&#8e1ff1h&#7411eba&#5b03e4t &8} ---------"
+        - "  &cYou can't send IPs in the chat!"
+        - "&8---------------------------"
+      title:
+        # Enable/disable title
+        enabled: true
+        # Title
+        title: "✶ &#fe0000Y&#f50101o&#ec0202u &#e20202c&#d90303a&#d00404n&#c70505'&#bd0606t &#b40707w&#ab0707r&#a20808i&#980909t&#8f0a0ae &#860b0bt&#7d0b0bh&#730c0ca&#6a0d0dt &f✶"
+        # Subtitle (small title)
+        subtitle: "&#A5A5A5Detected IPv4 in your message."
+      actionbar:
+        # Enable/disable actionbar
+        enabled: true
+        # Actionbar
+        bar: "&7[&#c03afeT&#a72cf8C&#8e1ff1h&#7411eba&#5b03e4t&7] &#fe0000Y&#f50101o&#ec0202u &#e20202c&#d90303a&#d00404n&#c70505'&#bd0606t &#b40707w&#ab0707r&#a20808i&#980909t&#8f0a0ae &#860b0bt&#7d0b0bh&#730c0ca&#6a0d0dt"
+      sound:
+        # Enable/disable the title
+        enabled: true
+        # Sound
+        # https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Sound.html
+        sound: "ENTITY_VILLAGER_NO"
+        # Volume of the sound
+        volume: 1.0
+        # Pitch of the sound
+        pitch: 1.0
+      particles:
+        # Enable/disable particles
+        enabled: true
+        # Particle type
+        type: "VILLAGER_ANGRY"
+        # Number of particles
+        particles: 30
+  domain:
+    enabled: true
+    match: ".*\\b[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}\\b.*"
+    actions:
+      message:
+        enabled: true
+        message:
+        - "&8--------- { &#c03afeT&#a72cf8C&#8e1ff1h&#7411eba&#5b03e4t &8} ---------"
+        - "&cYou can't send domains in the chat!"
+        - "&8---------------------------"
+      title:
+        enabled: true
+        title: "✶ &#fe0000Y&#f50101o&#ec0202u &#e20202c&#d90303a&#d00404n&#c70505'&#bd0606t &#b40707w&#ab0707r&#a20808i&#980909t&#8f0a0ae &#860b0bt&#7d0b0bh&#730c0ca&#6a0d0dt &f✶"
+        subtitle: "&#A5A5A5Detected domain in your message."
+      actionbar:
+        enabled: true
+        bar: "&7[&#c03afeT&#a72cf8C&#8e1ff1h&#7411eba&#5b03e4t&7] &#fe0000Y&#f50101o&#ec0202u &#e20202c&#d90303a&#d00404n&#c70505'&#bd0606t &#b40707w&#ab0707r&#a20808i&#980909t&#8f0a0ae &#860b0bt&#7d0b0bh&#730c0ca&#6a0d0dt"
+      sound:
+        enabled: true
+        # https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Sound.html
+        sound: "ENTITY_VILLAGER_NO"
+        volume: 1.0
+        pitch: 1.0
+      particles:
+        enabled: true
+        type: "VILLAGER_ANGRY"
+        particles: 30
+  links:
+    enabled: true
+    match: ".*\\bhttps?://[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}/?.*"
+    actions:
+      message:
+        enabled: true
+        message:
+        - "&8--------- { &#c03afeT&#a72cf8C&#8e1ff1h&#7411eba&#5b03e4t &8} ---------"
+        - "&cYou can't send links in the chat!"
+        - "&8---------------------------"
+      title:
+        enabled: true
+        title: "✶ &#fe0000Y&#f50101o&#ec0202u &#e20202c&#d90303a&#d00404n&#c70505'&#bd0606t &#b40707w&#ab0707r&#a20808i&#980909t&#8f0a0ae &#860b0bt&#7d0b0bh&#730c0ca&#6a0d0dt &f✶"
+        subtitle: "&#A5A5A5Detected link in your message."
+        fade-in: 10
+        stay: 70
+        fade-out: 20
+      actionbar:
+        enabled: true
+        bar: "&7[&#c03afeT&#a72cf8C&#8e1ff1h&#7411eba&#5b03e4t&7] &#fe0000Y&#f50101o&#ec0202u &#e20202c&#d90303a&#d00404n&#c70505'&#bd0606t &#b40707w&#ab0707r&#a20808i&#980909t&#8f0a0ae &#860b0bt&#7d0b0bh&#730c0ca&#6a0d0dt"
+      sound:
+        enabled: true
+        # https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Sound.html
+        sound: "ENTITY_VILLAGER_NO"
+        volume: 1.0
+        pitch: 1.0
+      particles:
+        enabled: true
+        type: "VILLAGER_ANGRY"
+        particles: 30
+
+# #################################################################
+# ┌─────────────────────────────────────────────────────────────┐ #
+# │                        AntiCap config                       │ #
+# └─────────────────────────────────────────────────────────────┘ #
+# #################################################################
+
+cap:
+  # Enable/disable anti-cap
+  enabled: true
+  # Enable/disable the message
+  message-enabled: true
+  # Modes:
+  # - ToLowerCase | Converts all uppercase letters to lowercase letters (recommended)
+  # - BLOCK | Block's the message
+  # - CENSOR | Converts all uppercase letters to asterisks
+  mode: "ToLowerCase"
+  # Percentage of letters to detect uppercase letters
+  # 0.75 = 75% | 1 = 100% (Not recommended)
+  percent: 0.75
+
+# #################################################################
+# ┌─────────────────────────────────────────────────────────────┐ #
+# │                        Grammar config                       │ #
+# └─────────────────────────────────────────────────────────────┘ #
+# #################################################################
+
+grammar:
+  # Enable/disable grammar
+  enabled: true
+  cap:
+    # Enable/disable this function
+    enabled: true
+    # Permission to bypass this function
+    bypass-permission: "tchat.bypass.grammar.cap"
+    # Number of letters to be converted to uppercase (starting from the beginning)
+    # Example:
+    # Original message: hello
+    # If the letters option is set to 1 the message will finally be: Hello
+    # If the letters option is set to 3 the message will be finally: HELlo
+    letters: 1
+    # Minimum number of characters for the auto cap to be activated
+    min-characters: 0
+  final-dot:
+    # Enable/disable this function
+    enabled: true
+    # Permission to bypass this function
+    bypass-permission: "tchat.bypass.grammar.finaldot"
+    # You can customize the dot, you can use any other character/characters, but I recommend to leave it like this
+    character: "."
+    # Minimum number of characters for the final dot to be activated
+    min-characters: 0
+  repeat-messages:
+    # Enable/disable this function
+    enabled: true
+    # Permission to bypass this function
+    bypass-permission: "tchat.bypass.grammar.repeat"
+    # Percentage to block the message
+    # 0.75 = 75% | 1.00 = 100%
+    percent: 0.75
+
+# #################################################################
+# ┌─────────────────────────────────────────────────────────────┐ #
+# │                       Private Messages                      │ #
+# └─────────────────────────────────────────────────────────────┘ #
+# #################################################################
+
+pm:
+  msg:
+    # Enables the private messaging system
+    enabled: true
+    # Permission required to send private messages
+    permission: "tchat.msg"
+    formats:
+      # Format of the message for the sender
+      sender: "&5&l! &a%sender% &e&l> &a%recipient%&7: &f%message%"
+      # Format of the message for the receiver
+      receiver: "&5&l! &a%sender% &e&l> &a%recipient%&7: &f%message%"
+  reply:
+    # Enables the reply function for private messages
+    enabled: true
+    # Permission required to reply to private messages
+    permission: "tchat.reply"
+    formats:
+      # Format of the reply message for the sender
+      sender: "&5&l! &a%sender% &e&l> &a%recipient%&7: &f%message%"
+      # Format of the reply message for the receiver
+      receiver: "&5&l! &a%sender% &e&l> &a%recipient%&7: &f%message%"
+
+# #################################################################
+# ┌─────────────────────────────────────────────────────────────┐ #
+# │                          Chat Clear                         │ #
+# └─────────────────────────────────────────────────────────────┘ #
+# #################################################################
+
+chat-clear:
+  # Enable/disable chat clear
+  enabled: true
+  # Loop
+  for:
+    # Number of empty messages
+    messages: 100
+
+# #################################################################
+# ┌─────────────────────────────────────────────────────────────┐ #
+# │                          Mute Chat                          │ #
+# └─────────────────────────────────────────────────────────────┘ #
+# #################################################################
+
+mute-chat:
+  # Enable/disable mute chat
+  enabled: true
+  # Permission to bypass mute chat
+  bypass-permission: "tchat.bypass.mutechat"
+  # Permission to mute/unmute chat
+  execute-command-permission: "tchat.admin.mutechat"
+
+# #################################################################
+# ┌─────────────────────────────────────────────────────────────┐ #
+# │                           Anti bot                          │ #
+# └─────────────────────────────────────────────────────────────┘ #
+# #################################################################
+
+antibot:
+  # Enable/disable anti bot
+  enabled: true
+  # Permission to bypass anti bot
+  bypass-permission: "tchat.bypass.antibot"
+  # Enable/disable messages
+  messages:
+    # Enable/disable on chat message
+    antibot-chat: true
+    # Enable/disable on command message
+    antibot-command: true
+    # Enable/disable on join message
+    antibot-join: true
+    # Enable/disable on move message
+    antibot-moved: true
+
+# #################################################################
+# ┌─────────────────────────────────────────────────────────────┐ #
+# │                             Logs                            │ #
+# └─────────────────────────────────────────────────────────────┘ #
+# #################################################################
+
+logs:
+  # Chat log
+  chat:
+    # Enable/disable logging chat messages
+    enabled: true
+  # Command log
+  command:
+    # Enable/disable logging commands
+    enabled: true
+
+# #################################################################
+# ┌─────────────────────────────────────────────────────────────┐ #
+# │                        Chat Cooldowns                       │ #
+# └─────────────────────────────────────────────────────────────┘ #
+# #################################################################
+
+cooldowns:
+  chat:
+    # Enable/disable chat cooldown
+    enabled: true
+    # Time in ms (1000 = 1 second)
+    time: 3000
+  commands:
+    # Enable/disable command cooldown
+    enabled: true
+    # Time in ms (1000 = 1 second)
+    time: 3000
+
+# #################################################################
+# ┌─────────────────────────────────────────────────────────────┐ #
+# │                          Anti Flood                         │ #
+# └─────────────────────────────────────────────────────────────┘ #
+# #################################################################
+
+flood:
+  repeat:
+    # Enable/disable this function
+    enabled: true
+    # Equal letters in a row to be blocked
+    characters: 3
+  percent:
+    # Enable/disable this function
+    enabled: true
+    # Percentage of matching letters to be blocked
+    percentage: 0.75
+
+# #################################################################
+# ┌─────────────────────────────────────────────────────────────┐ #
+# │                         Anti Unicode                        │ #
+# └─────────────────────────────────────────────────────────────┘ #
+# #################################################################
+
+unicode:
+  # Enable/disable anti unicode
+  enabled: true
+  match: '^[A-Za-z0-9\-~!@#\$%^&*()<>_+=\-{}|'';:.,\[\]"/]+$'
+  # true -> Block all no latin characters
+  # false -> Block only match characters (unicode.match)
+  blockAllNonLatin: false
+
+# #################################################################
+# ┌─────────────────────────────────────────────────────────────┐ #
+# │                          Broadcast                          │ #
+# └─────────────────────────────────────────────────────────────┘ #
+# #################################################################
+
+broadcast:
+  # /broadcast (message)
+  broadcast:
+    # Enable/disable this command
+    enabled: true
+    # Broadcast format
+    format: "&4[Broadcast] &a%message%"
+  # /warning (message)
+  warning:
+    # Enable/disable this command
+    enabled: true
+    # Warning format
+    format: "&c[Warning] &2%message%"
+  announcement:
+    # Enable/disable this command
+    enabled: true
+    # Warning format
+    format: "&9[Announcement] &f%message%"
+
+# #################################################################
+# ┌─────────────────────────────────────────────────────────────┐ #
+# │                            Ignore                           │ #
+# └─────────────────────────────────────────────────────────────┘ #
+# #################################################################
+
+# /ignore (player)
+ignore:
+  # Enable/disable this command
+  enabled: true
+
+# #################################################################
+# ┌─────────────────────────────────────────────────────────────┐ #
+# │                          Social Spy                         │ #
+# └─────────────────────────────────────────────────────────────┘ #
+# #################################################################
+
+spy:
+  commands:
+    # Enable/disable this function
+    enabled: true
+    # Format of social spy
+    format: "&7&o[Social-Spy] %player% -> %command%"
+
+# #################################################################
+# ┌─────────────────────────────────────────────────────────────┐ #
+# │                            Polls                            │ #
+# └─────────────────────────────────────────────────────────────┘ #
+# #################################################################
+
+poll:
+  options:
+    # Progress bar
+    bar:
+      filled: '█'
+      empty: '░'
+      # Total characters
+      length: 20
+
+# #################################################################
+# ┌─────────────────────────────────────────────────────────────┐ #
+# │                           Mentions                          │ #
+# └─────────────────────────────────────────────────────────────┘ #
+# #################################################################
+
+# @(player)
+mentions:
+  # Enable/disable this function
+  enabled: true
+  # Mention color
+  color: "&9"
+  # Mention character | Example:
+  # character: "!"
+  # !(player)
+  character: "@"
+
+# #################################################################
+# ┌─────────────────────────────────────────────────────────────┐ #
+# │                            Rules                            │ #
+# └─────────────────────────────────────────────────────────────┘ #
+# #################################################################
+
+rules:
+  # Enable/disable the command
+  enabled: true
+  # Use the prefix (messages.yml) at the beginning of each line
+  use-prefix: false
+  # Rules message
+  message:
+    - "&8--------- { &#c03afeT&#a72cf8C&#8e1ff1h&#7411eba&#5b03e4t &8} ---------"
+    - "&71. Don't use hacks"
+    - "&72. Don't use XRay"
+    - "&8---------------------------"
+
+# #################################################################
+# ┌─────────────────────────────────────────────────────────────┐ #
+# │                            Print                            │ #
+# └─────────────────────────────────────────────────────────────┘ #
+# #################################################################
+
+print:
+  # Enable/disable the command
+  enabled: true
+
+# #################################################################
+# ┌─────────────────────────────────────────────────────────────┐ #
+# │                             Ping                            │ #
+# └─────────────────────────────────────────────────────────────┘ #
+# #################################################################
+
+ping:
+  # Enable/disable this command
+  enabled: true
+
+# #################################################################
+# ┌─────────────────────────────────────────────────────────────┐ #
+# │                          Chat Color                         │ #
+# └─────────────────────────────────────────────────────────────┘ #
+# #################################################################
+
+chat-color:
+  # Enable/disable this command
+  enabled: true

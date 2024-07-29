@@ -1,0 +1,23 @@
+# #################################################################
+# ┌─────────────────────────────────────────────────────────────┐ #
+# │                           Replacer                          │ #
+# └─────────────────────────────────────────────────────────────┘ #
+# #################################################################
+
+# Original is the word detected by Replacer, when detected, it replaces it with replace
+replacer_enabled: true
+words:
+  example1:
+    original: "hello"
+    replace: "hi"
+    permission: none
+
+  example2:
+    original: "world"
+    replace: "universe"
+    permission: tchat.replace.example2
+
+  example3:
+    original: "apple"
+    replace: "orange"
+    permission: tchat.replace.example3

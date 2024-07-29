@@ -1,0 +1,47 @@
+# #################################################################
+# ┌─────────────────────────────────────────────────────────────┐ #
+# │                        Death Actions                        │ #
+# └─────────────────────────────────────────────────────────────┘ #
+# #################################################################
+
+death-messages:
+  "player-killed-by-player": "&c%s was killed by %s"
+  "player-killed-by-explosion": "&c%s was killed by an explosion"
+  "player-killed-by-falling": "&c%s fell from a high place"
+  "player-killed-by-drowning": "&c%s drowned"
+  "player-killed-by-lava": "&c%s was killed by lava"
+  "player-killed-by-fire": "&c%s was killed by fire"
+  "player-killed-by-poison": "&c%s was killed by poison"
+  "player-killed-by-magic": "&c%s was killed by magic"
+  "player-killed-by-suffocation": "&c%s was killed by suffocation"
+  "player-killed-by-void": "&c%s fell into the void"
+  "player-killed-by-starvation": "&c%s died of starvation"
+  "player-killed-by-environment": "&c%s died from %s"
+
+# On death actions
+actions:
+  title:
+    # Enable/disable the title
+    enabled: true
+    # Title
+    title: "✶ &#c03afeY&#af31fao&#9e28f5u &#8e1ff1d&#7d15edi&#6c0ce8e&#5b03e4d &f✶"
+    # Subtitle
+    subtitle: "&#A5A5A5Respawning..."
+  actionBar:
+    # Enable/disable the title
+    enabled: true
+    # Action bar text
+    bar: "&#dd0000Y&#de0c0co&#df1717u &#e02323d&#e12e2ei&#e23a3ae&#e34545d&#e45151!"
+  sound:
+    # Enable/disable the title
+    enabled: true
+    # Sound
+    # https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Sound.html
+    sound: "ENTITY_VILLAGER_NO"
+  particles:
+    # Enable/disable particles
+    enabled: false
+    # https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Particle.html
+    particle: ANGRY_VILLAGER
+    # Number of particles
+    particles: 4
