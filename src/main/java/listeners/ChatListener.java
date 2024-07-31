@@ -48,13 +48,13 @@ public class ChatListener implements Listener {
         plugin.getChatCooldownListener().chatCooldown(event, player);
         plugin.getAntiUnicodeListener().checkUnicode(event, player, message);
         plugin.getChatBotListener().chatBot(event);
-        plugin.getBannedWords().playerBannedWords(event);
         plugin.getAntiAdvertising().checkAdvertising(event);
         plugin.getCapListener().playerAntiCap(event);
         antiBot(event, player, null);
         plugin.getAntiFloodListener().checkFlood(event, message, player);
         replacer(event, message);
         grammar(event, player, message);
+        plugin.getBannedWords().playerBannedWords(event);
 
         chatFormatListener.playerFormat(event);
         plugin.getChatGamesSender().checkPlayerResponse(player, message);

@@ -24,6 +24,10 @@ public class DeathsListener implements Listener {
         Player player = event.getEntity();
         String playerName = player.getName();
 
+        if (plugin.getDiscordManager().isDiscordEnabled() && plugin.getDiscordManager().isDeathEnabled()) {
+            plugin.getDiscordHook().sendDeathMessage(playerName);
+        }
+
         String killerName = (player.getKiller() != null)
                 ? player.getKiller().getName()
                 : "desconocido";

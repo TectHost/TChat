@@ -4,6 +4,7 @@ import minealex.tchat.TChat;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 public class SaveManager {
@@ -29,12 +30,23 @@ public class SaveManager {
 
     public String getChatColor(UUID playerId) {
         String path = "players." + playerId.toString() + ".chatcolor";
-        return config.getString(path, "&7");
+        return config.getString(path, "none");
     }
 
     public void setChatColor(UUID playerId, String chatColor) {
         String path = "players." + playerId.toString() + ".chatcolor";
         config.set(path, chatColor);
+        savesFile.saveConfig();
+    }
+
+    public int getChatGamesWins(UUID playerId) {
+        String path = "players." + playerId.toString() + ".chatgames-wins";
+        return config.getInt(path, 0);
+    }
+
+    public void setChatGamesWins(UUID playerId, int chatGamesWins) {
+        String path = "players." + playerId.toString() + ".chatgames-wins";
+        config.set(path, chatGamesWins);
         savesFile.saveConfig();
     }
 

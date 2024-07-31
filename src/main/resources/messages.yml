@@ -37,6 +37,7 @@ messages:
   unicode: "&cYour message contains invalid characters and was blocked."
   level-up: "&aCongratulations! You have risen to the level %level%"
   chat-disabled-world: "&cChat is disabled in this world."
+  plugin-not-found: "&cPlugin not found."
   chat-help:
     message:
       - "&8--------- { &#c03afeT&#a72cf8C&#8e1ff1h&#7411eba&#5b03e4t &8} ---------"
@@ -149,8 +150,14 @@ messages:
     usage-warning: "&cUsage: /warning <message>"
     usage-announcement: "&cUsage: /announcement <message>"
     usage-autobroadcast: "&cUsage: /autobroadcast <start|stop|restart|remove|add>"
+    usage-plugin: "&cUsage: /plugin <plugin_name>"
   # Debug messages are only seen in the console
   debug:
     no-format-group: "&cError in groups.yml - No format found for group: %group%"
     no-player: "&cOnly players can execute this command."
     material-not-found: "&cMaterial not found: %material%"
+
+plugin:
+  - "&cPlugin: &f%plugin%"
+  - "&cVersion: &f%version%"
+  - "&cAuthor: &f%author%"

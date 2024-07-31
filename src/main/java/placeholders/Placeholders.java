@@ -29,7 +29,7 @@ public class Placeholders extends PlaceholderExpansion {
 
     @Override
     public @NotNull String getVersion() {
-        return "4.0.0";
+        return plugin.getDescription().getVersion();
     }
 
     @Override
@@ -44,9 +44,7 @@ public class Placeholders extends PlaceholderExpansion {
 
     @Override
     public @Nullable String onPlaceholderRequest(Player player, @NotNull String identifier) {
-        if (player == null) {
-            return "";
-        }
+        if (player == null) { return ""; }
 
         return switch (identifier) {
             case "prefix" -> groupManager.getGroupPrefix(player);
@@ -56,6 +54,9 @@ public class Placeholders extends PlaceholderExpansion {
             case "chatcolor_color" -> plugin.getSaveManager().getChatColor(player.getUniqueId());
             case "chatcolor_format" -> plugin.getSaveManager().getFormat(player.getUniqueId());
             case "channel" -> getChannel(player);
+            case "xp" -> String.valueOf(plugin.getSaveManager().getXp(player.getUniqueId()));
+            case "level" -> String.valueOf(plugin.getSaveManager().getLevel(player.getUniqueId()));
+            case "chatgames_wins" -> String.valueOf(plugin.getSaveManager().getChatGamesWins(player.getUniqueId()));
             default -> null;
         };
     }

@@ -321,7 +321,7 @@ flood:
 
 unicode:
   # Enable/disable anti unicode
-  enabled: true
+  enabled: false
   match: '^[A-Za-z0-9\-~!@#\$%^&*()<>_+=\-{}|'';:.,\[\]"/]+$'
   # true -> Block all no latin characters
   # false -> Block only match characters (unicode.match)

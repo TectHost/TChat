@@ -13,7 +13,7 @@ discord:
   # Player join
   join:
     # Enable/disable this function
-    enabled: true
+    enabled: false
     # Embed title
     title: "User join"
     # Embed description
@@ -21,13 +21,20 @@ discord:
     # Decimal format (NO SUPPORT WITH HEX)
     # https://www.colorhexa.com/
     # (The decimal number is shown just below the Color Conversion section)
-    color: 8388736
+    color: 2090501
     # Enable/disable embed avatar
     avatar-enabled: true
   quit:
-    enabled: true
+    enabled: false
     title: "User left"
     description: "%player% has left the server!"
     # https://www.colorhexa.com/
-    color: 10511680
+    color: 15074565
+    avatar-enabled: true
+  death:
+    enabled: false
+    title: "User death"
+    description: "%player% has died"
+    # https://www.colorhexa.com/
+    color: 0
     avatar-enabled: true

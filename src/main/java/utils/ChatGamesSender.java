@@ -9,6 +9,7 @@ import config.ChatGamesManager;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 public class ChatGamesSender {
 
@@ -98,6 +99,10 @@ public class ChatGamesSender {
             String prefix = plugin.getMessagesManager().getPrefix();
             sendToAllPlayers(prefix + message1);
             winners.add(player.getName());
+            UUID playerId = player.getUniqueId();
+            int wins = plugin.getSaveManager().getChatGamesWins(playerId);
+            wins++;
+            plugin.getSaveManager().setChatGamesWins(playerId, wins);
             executeRewards(player);
             endGame();
         }

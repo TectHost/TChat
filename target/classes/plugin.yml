@@ -1,5 +1,5 @@
 main: minealex.tchat.TChat
-version: 4.0.2
+version: 4.0.3
 name: TChat
 author: Mine_Alex
 api-version: 1.13
@@ -51,9 +51,13 @@ commands:
     description: Send a message to all players
   autobroadcast:
     description: Start or stop autobroadcast system
+  plugin:
+    description: View information from concrete plugin
 
 
 permissions:
+  tchat.admin.plugin:
+    description: Permission to use plugin command
   tchat.admin.announcement:
     description: Permission to use announcement command
   tchat.rules:

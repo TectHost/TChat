@@ -192,6 +192,8 @@ public class TChat extends JavaPlugin {
         }
         autoBroadcastCommand = new AutoBroadcastCommand(this);
         Objects.requireNonNull(getCommand("autobroadcast")).setExecutor(autoBroadcastCommand);
+        Objects.requireNonNull(getCommand("autobroadcast")).setTabCompleter(new AutoBroadcastTabCompleter(autoBroadcastManager));
+        Objects.requireNonNull(getCommand("plugin")).setExecutor(new PluginCommand(this));
     }
 
     public void registerPlaceholders() {

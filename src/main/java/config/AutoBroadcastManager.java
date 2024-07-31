@@ -1,7 +1,6 @@
 package config;
 
 import minealex.tchat.TChat;
-import org.bukkit.Particle;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.List;

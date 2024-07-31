@@ -106,6 +106,9 @@ public class MessagesManager {
     private String autoBroadcastAddOneLine;
     private String autoBroadcastAddAdded;
     private String autoBroadcastActionsPrompt;
+    private List<String> pluginMessage;
+    private String pluginUsage;
+    private String pluginNotFound;
 
     public MessagesManager(TChat plugin){
         this.messagesFile = new ConfigFile("messages.yml", null, plugin);
@@ -179,6 +182,9 @@ public class MessagesManager {
         }
 
         // Messages
+        pluginNotFound = config.getString("messages.plugin-not-found");
+        pluginUsage = config.getString("messages.usage.usage-plugin");
+        pluginMessage = config.getStringList("plugin");
         autoBroadcastActionsPrompt = config.getString("messages.autobroadcast.create.actions-prompt");
         autoBroadcastAddOneLine = config.getString("messages.autobroadcast.create.one-line");
         autoBroadcastAddNewLine = config.getString("messages.autobroadcast.create.new-line");
@@ -267,6 +273,9 @@ public class MessagesManager {
     }
 
     // Messages
+    public String getPluginNotFound() { return pluginNotFound; }
+    public String getPluginUsage() { return pluginUsage; }
+    public List<String> getPluginMessage() { return pluginMessage; }
     public String getAutoBroadcastActionsPrompt() { return autoBroadcastActionsPrompt; }
     public String getAutoBroadcastAddAdded() { return autoBroadcastAddAdded; }
     public String getAutoBroadcastAddOneLine() { return autoBroadcastAddOneLine; }

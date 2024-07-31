@@ -20,6 +20,12 @@ public class DiscordManager {
     private int quitColor;
     private boolean quitAvatarEnabled;
 
+    private boolean deathEnabled;
+    private String deathTitle;
+    private String deathDescription;
+    private int deathColor;
+    private boolean deathAvatarEnabled;
+
     public DiscordManager(TChat plugin) {
         this.configFile = new ConfigFile("discord.yml", "hooks", plugin);
         this.configFile.registerConfig();
@@ -33,17 +39,49 @@ public class DiscordManager {
             discordHook = config.getString("discord.webhook");
 
             joinEnabled = config.getBoolean("discord.join.enabled");
+            if (joinEnabled) {
             joinTitle = config.getString("discord.join.title");
             joinDescription = config.getString("discord.join.description");
             joinColor = config.getInt("discord.join.color");
             joinAvatarEnabled = config.getBoolean("discord.join.avatar-enabled");
+            }
 
             quitEnabled = config.getBoolean("discord.quit.enabled");
-            quitTitle = config.getString("discord.quit.title");
-            quitDescription = config.getString("discord.quit.description");
-            quitColor = config.getInt("discord.quit.color");
-            quitAvatarEnabled = config.getBoolean("discord.quit.avatar-enabled");
+            if (quitEnabled) {
+                quitTitle = config.getString("discord.quit.title");
+                quitDescription = config.getString("discord.quit.description");
+                quitColor = config.getInt("discord.quit.color");
+                quitAvatarEnabled = config.getBoolean("discord.quit.avatar-enabled");
+            }
+
+            deathEnabled = config.getBoolean("discord.death.enabled");
+            if (deathEnabled) {
+                deathTitle = config.getString("discord.death.title");
+                deathDescription = config.getString("discord.death.description");
+                deathColor = config.getInt("discord.death.color");
+                deathAvatarEnabled = config.getBoolean("discord.death.avatar-enabled");
+            }
         }
+    }
+
+    public boolean isDeathEnabled() {
+        return deathEnabled;
+    }
+
+    public boolean isDeathAvatarEnabled() {
+        return deathAvatarEnabled;
+    }
+
+    public int getDeathColor() {
+        return deathColor;
+    }
+
+    public String getDeathDescription() {
+        return deathDescription;
+    }
+
+    public String getDeathTitle() {
+        return deathTitle;
     }
 
     public void reloadConfig() {

@@ -86,25 +86,35 @@ public class CustomCommands implements Listener {
         boolean isIfBlock = false;
         boolean isElseIfBlock = false;
         boolean skipActions = false;
+        boolean inConditional = false;
 
         for (String action : actions) {
             action = processPlaceholders(player, action);
 
             if (action.startsWith("[IF]")) {
-                isIfBlock = evaluateCondition(action.substring(4).trim(), player);
-                isElseIfBlock = false;
-                skipActions = !isIfBlock;
+                if (inConditional) {
+                    skipActions = true;
+                } else {
+                    isIfBlock = evaluateCondition(action.substring(4).trim(), player);
+                    skipActions = !isIfBlock;
+                    inConditional = true;
+                }
             } else if (action.startsWith("[ELSE IF]")) {
-                if (!isIfBlock) {
+                if (inConditional && !isIfBlock) {
                     isElseIfBlock = evaluateCondition(action.substring(9).trim(), player);
                     skipActions = !isElseIfBlock;
+                } else {
+                    skipActions = true;
                 }
             } else if (action.startsWith("[ELSE]")) {
-                if (!isIfBlock && !isElseIfBlock) {
+                if (inConditional && !isIfBlock && !isElseIfBlock) {
                     isIfBlock = true;
                     skipActions = false;
+                } else {
+                    skipActions = true;
                 }
             } else if (action.startsWith("[FI]")) {
+                inConditional = false;
                 isIfBlock = false;
                 isElseIfBlock = false;
                 skipActions = false;
@@ -115,6 +125,25 @@ public class CustomCommands implements Listener {
     }
 
     private boolean evaluateCondition(String condition, Player player) {
+        String[] orConditions = condition.split("\\|\\|");
+        boolean finalResult = false;
+
+        for (String orCondition : orConditions) {
+            String[] andConditions = orCondition.split("&&");
+            boolean orResult = true;
+
+            for (String andCondition : andConditions) {
+                boolean result = evaluateSingleCondition(andCondition.trim(), player);
+                orResult = orResult && result;
+            }
+
+            finalResult = finalResult || orResult;
+        }
+
+        return finalResult;
+    }
+
+    private boolean evaluateSingleCondition(String condition, Player player) {
         Pattern pattern = Pattern.compile("%(\\w+)%|([0-9]+)\\s*(>=|<=|>|<|==|!=)\\s*(\\d+)");
         Matcher matcher = pattern.matcher(condition);
 
@@ -164,7 +193,6 @@ public class CustomCommands implements Listener {
 
             return result;
         } else {
-            plugin.getLogger().warning("No match found for condition: " + condition);
             return false;
         }
     }

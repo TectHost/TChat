@@ -94,8 +94,10 @@ public class ChatFormatListener implements Listener {
         if (plugin.getConfigManager().isChatColorEnabled()) {
             String playerFormat = plugin.getSaveManager().getFormat(player.getUniqueId());
             String chatColor = plugin.getSaveManager().getChatColor(player.getUniqueId());
-            message = chatColor + playerFormat + message;
-            message = plugin.getTranslateColors().translateColors(player, message);
+            if (!chatColor.equalsIgnoreCase("none")) {
+                message = chatColor + playerFormat + message;
+                message = plugin.getTranslateColors().translateColors(player, message);
+            }
         }
 
         TextComponent messageComponent = new TextComponent(TextComponent.fromLegacyText(message));

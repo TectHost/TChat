@@ -3,6 +3,7 @@ package listeners;
 import blocked.AntiAdvertising;
 import config.AdvertisingConfig;
 import minealex.tchat.TChat;
+import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -20,7 +21,7 @@ public class SignListener implements Listener {
 
     public SignListener(TChat plugin) {
         this.plugin = plugin;
-        this.antiAdvertising = plugin.getAntiAdvertising(); // Use the existing AntiAdvertising instance
+        this.antiAdvertising = plugin.getAntiAdvertising();
     }
 
     @EventHandler
@@ -29,17 +30,27 @@ public class SignListener implements Listener {
 
         Player player = event.getPlayer();
         String[] lines = event.getLines();
-        for (String line : lines) {
-            for (AdvertisingConfig config : getAllAdvertisingConfigs()) {
-                if (config.isEnabled() && line.matches(config.getMatch())) {
-                    event.setCancelled(true);
 
+        for (int i = 0; i < lines.length; i++) {
+            String line = lines[i];
+            if (player.hasPermission("tchat.admin") || player.hasPermission("tchat.signcolor")) {
+                lines[i] = plugin.getTranslateColors().translateColors(player, line);
+            } else {
+                lines[i] = ChatColor.stripColor(line);
+            }
+
+            for (AdvertisingConfig config : getAllAdvertisingConfigs()) {
+                if (config.isEnabled() && lines[i].matches(config.getMatch())) {
                     if (!player.hasPermission(plugin.getConfigManager().getAdvertisingBypass()) || !player.hasPermission("tchat.admin")) {
-                        handleSignAdvertising(player, line, config);
+                        event.setCancelled(true);
+                        handleSignAdvertising(player, lines[i], config);
                     }
                     return;
                 }
             }
+        }
+        for (int i = 0; i < lines.length; i++) {
+            event.setLine(i, lines[i]);
         }
     }
 
@@ -51,7 +62,15 @@ public class SignListener implements Listener {
 
         Player player = event.getPlayer();
         String[] lines = sign.getLines();
-        for (String line : lines) {
+
+        for (String s : lines) {
+            String line = s;
+            if (!player.hasPermission("tchat.admin") && !player.hasPermission("tchat.signcolor")) {
+                line = ChatColor.stripColor(line);
+            } else {
+                line = plugin.getTranslateColors().translateColors(player, line);
+            }
+
             for (AdvertisingConfig config : getAllAdvertisingConfigs()) {
                 if (config.isEnabled() && line.matches(config.getMatch())) {
                     if (!player.hasPermission(plugin.getConfigManager().getAdvertisingBypass()) || !player.hasPermission("tchat.admin")) {
