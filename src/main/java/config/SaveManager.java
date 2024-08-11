@@ -4,7 +4,6 @@ import minealex.tchat.TChat;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
 public class SaveManager {

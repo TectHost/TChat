@@ -35,6 +35,9 @@ public class ChannelsCompleter implements TabCompleter {
             if (player.hasPermission("tchat.channel.command.leave") || player.hasPermission("tchat.admin") || player.hasPermission("tchat.channel.all")) {
                 commands.add("leave");
             }
+            if (player.hasPermission("tchat.channel.command.send") || player.hasPermission("tchat.admin") || player.hasPermission("tchat.channel.all")) {
+                commands.add("send");
+            }
             return commands.stream().filter(cmd -> cmd.startsWith(args[0])).collect(Collectors.toList());
         } else if (args.length == 2) {
             String action = args[0];
@@ -53,7 +56,16 @@ public class ChannelsCompleter implements TabCompleter {
                         .toList();
 
                 return filteredChannels.stream().filter(channelName -> channelName.startsWith(args[1])).collect(Collectors.toList());
+            } else if ("send".equalsIgnoreCase(action)) {
+                Map<String, ChannelsConfigManager.Channel> channels = plugin.getChannelsConfigManager().getChannels();
+                List<String> filteredChannels = channels.keySet().stream()
+                        .filter(channelName -> player.hasPermission(channels.get(channelName).getPermission()) || player.hasPermission("tchat.admin") || player.hasPermission("tchat.channel.all"))
+                        .toList();
+
+                return filteredChannels.stream().filter(channelName -> channelName.startsWith(args[1])).collect(Collectors.toList());
             }
+        } else if (args.length > 2 && "send".equalsIgnoreCase(args[0])) {
+            return new ArrayList<>();
         }
 
         return new ArrayList<>();

@@ -31,12 +31,12 @@
     # (ADD) You can use && to add conditions to the if: - "[IF] %statistic_hours_played% >= 10 && %player_is_op% == yes"
     # (OR) You can use || to compare another condition if one of them is not met: - "[IF] %statistic_hours_played% >= 10 && %player_is_op% == yes"
   # [ELSE] - If none of the conditions ([IF] and all the [ELSE IF] if any) are not met, this will be executed | - "[ELSE]"
-  # [FI] - The condition ends, from this tag, the rest is out of this condition | - "[FI]
+  # [FI] - The condition ends, from this tag, the rest is out of this condition | - "[FI]"
 
 commands:
   test:
     permission-required: false # tchat.customcommands.test
-    args: false
+    args: false # May only work in 1.21
     cooldown: 0
     actions:
       - "[IF] %statistic_hours_played% >= 10 || %player_is_op% == yes"
@@ -64,22 +64,23 @@ commands:
       - "[MESSAGE] &aHi %player_name%!"
       - "[MESSAGE] &7This is the custom help"
       - "[MESSAGE] &7from &#c03afeT&#a72cf8C&#8e1ff1h&#7411eba&#5b03e4t"
-      - "[MESSAGE]"
+      - "[MESSAGE] &7"
       - "[MESSAGE] &8Modify this in commands.yml file"
   pl:
     permission-required: false
     cooldown: 0
+    # If there is no args section, it will be taken as false
     actions:
       - "[MESSAGE] &fServer Plugins (3):"
       - "[MESSAGE] &6Bukkit Plugins:"
-      - "[MESSAGE]   &8- &aTChat&f, &aTect.host API&f, &aPlaceholderAPI"
+      - "[MESSAGE] '  &8- &aTChat&f, &aTect.host API&f, &aPlaceholderAPI'"
   plugins:
     permission-required: false
     cooldown: 0
     actions:
       - "[MESSAGE] &fServer Plugins (3):"
       - "[MESSAGE] &6Bukkit Plugins:"
-      - "[MESSAGE]   &8- &aTChat&f, &aTect.host API&f, &aPlaceholderAPI"
+      - "[MESSAGE] '  &8- &aTChat&f, &aTect.host API&f, &aPlaceholderAPI'"
   ts3:
     permission-required: false
     cooldown: 0

@@ -10,7 +10,7 @@ chat:
   # Enable/disable chat format
   format-enabled: true
   # Global format (use only if the above option is false)
-  format: "%tchat_prefix% &a%player% &e>> %message%"
+  format: "%tchat_prefix% &a%player% &e>> &7%message%"
   # This option is used to display on the console the messages from the players
   register-messages-on-console: true
 
@@ -276,6 +276,10 @@ logs:
   command:
     # Enable/disable logging commands
     enabled: true
+  # Banned commands log (when someone use a banned command)
+  banned-commands:
+    # Enable/disable logging banned commands usage
+    enabled: true
 
 # #################################################################
 # ┌─────────────────────────────────────────────────────────────┐ #
@@ -289,11 +293,15 @@ cooldowns:
     enabled: true
     # Time in ms (1000 = 1 second)
     time: 3000
+    # Send a message on the console
+    depuration-enabled: true
   commands:
     # Enable/disable command cooldown
     enabled: true
     # Time in ms (1000 = 1 second)
     time: 3000
+    # Send a message on the console
+    depuration-enabled: true
 
 # #################################################################
 # ┌─────────────────────────────────────────────────────────────┐ #
@@ -302,6 +310,8 @@ cooldowns:
 # #################################################################
 
 flood:
+  # Send a message on the console
+  depuration: true
   repeat:
     # Enable/disable this function
     enabled: true
@@ -402,6 +412,7 @@ mentions:
   # Enable/disable this function
   enabled: true
   # Mention color
+  # (HEX colors may not be supported)
   color: "&9"
   # Mention character | Example:
   # character: "!"
@@ -455,3 +466,13 @@ ping:
 chat-color:
   # Enable/disable this command
   enabled: true
+
+# #################################################################
+# ┌─────────────────────────────────────────────────────────────┐ #
+# │                            HelpOp                           │ #
+# └─────────────────────────────────────────────────────────────┘ #
+# #################################################################
+
+helpop:
+  # Format of the helpop command
+  format: "&c[HelpOp] &f%player%&7: &f%message%"

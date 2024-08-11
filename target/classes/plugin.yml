@@ -1,5 +1,5 @@
 main: minealex.tchat.TChat
-version: 4.0.3
+version: 4.0.4
 name: TChat
 author: Mine_Alex
 api-version: 1.13
@@ -9,36 +9,26 @@ depend: [PlaceholderAPI]
 commands:
   tchat:
     description: Reload the plugin
-    usage: /<command> <reload|version>
     aliases:
       - chat
   chatcolor:
     description: Open's the chatcolor menu
-    usage: /<command>
   channel:
     description: Join/leave a channel
-    usage: /<command> <join|leave>
   msg:
     description: Sends a private message
-    usage: /<command> <user>
   reply:
     description: Reply to a private message
-    usage: /<command> <user>
   chatclear:
     description: Clear's the chat
-    usage: /<command>
   mutechat:
     description: Mute the chat
-    usage: /<command>
   ping:
     description: View player ping
-    usage: /<command>
   broadcast:
     description: Send a message to all players
-    usage: /<command> <message>
   ignore:
     description: Ignore a player
-    usage: /<command> <player>
   poll:
     description: Create or vote for a poll
   warning:
@@ -53,9 +43,20 @@ commands:
     description: Start or stop autobroadcast system
   plugin:
     description: View information from concrete plugin
-
+  bannedcommands:
+    description: Add/remove banned commands
+  helpop:
+    description: Get help from the staff
+  showitem:
+    description: Show the item in your hand
 
 permissions:
+  tchat.admin.helpop:
+    description: Permission to receive helpop messages
+  tchat.helpop:
+    description: Permission to use helpop command
+  tchat.admin.bannedcommands:
+    description: Permission to use bannedcommands command
   tchat.admin.plugin:
     description: Permission to use plugin command
   tchat.admin.announcement:

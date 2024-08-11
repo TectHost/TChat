@@ -58,6 +58,10 @@ public class BannedCommands implements Listener {
                     showParticles(event.getPlayer());
                 }
 
+                if (plugin.getConfigManager().isLogBannedCommandsEnabled()) {
+                    plugin.getLogsManager().logBannedCommand(event.getPlayer().getName(), command);
+                }
+
                 event.setCancelled(true);
             }
         }

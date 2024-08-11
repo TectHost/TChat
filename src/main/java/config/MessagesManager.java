@@ -109,6 +109,29 @@ public class MessagesManager {
     private List<String> pluginMessage;
     private String pluginUsage;
     private String pluginNotFound;
+    private String depurationChatCooldown;
+    private String depurationCommandCooldown;
+    private String usageBannedCommands;
+    private String usageSendChannel;
+    private String customCommandsArguments;
+    private String usageBannedCommandsList;
+    private String bannedCommandsNoCommandsBlocked;
+    private String bannedCommandsBlockedList;
+    private String bannedCommandsNoTabBlocked;
+    private String bannedCommandsBlockedTabList;
+    private String usageBannedCommandsAdd;
+    private String bannedCommandsAlready;
+    private String bannedCommandsAlreadyTab;
+    private String bannedCommandsAdded;
+    private String bannedCommandsAddedTab;
+    private String usageBannedCommandsRemove;
+    private String bannedCommandsNotBlocked;
+    private String bannedCommandsNotBlockedTab;
+    private String bannedCommandsRemoved;
+    private String bannedCommandsRemovedTab;
+    private String depurationAntiFlood;
+    private String helpOp;
+    private String usageHelpOp;
 
     public MessagesManager(TChat plugin){
         this.messagesFile = new ConfigFile("messages.yml", null, plugin);
@@ -128,9 +151,11 @@ public class MessagesManager {
 
         if (plugin.getConfigManager().isCooldownChat()) {
             cooldownChat = config.getString("messages.cooldown.chat");
+            depurationChatCooldown = config.getString("messages.debug.chat-cooldown");
         }
         if (plugin.getConfigManager().isCooldownCommand()) {
             cooldownCommand = config.getString("messages.cooldown.command");
+            depurationCommandCooldown = config.getString("messages.debug.command-cooldown");
         }
 
         if (plugin.getConfigManager().isAntibotEnabled()) {
@@ -154,6 +179,9 @@ public class MessagesManager {
 
         if (plugin.getConfigManager().isFloodPercentEnabled() || plugin.getConfigManager().isFloodRepeatEnabled()) {
             antiFlood = config.getString("messages.anti-flood");
+            if (plugin.getConfigManager().isDepurationAntiFloodEnabled()) {
+                depurationAntiFlood = config.getString("messages.debug.anti-flood");
+            }
         }
 
         if (plugin.getConfigManager().isBroadcastEnabled()) {
@@ -182,6 +210,26 @@ public class MessagesManager {
         }
 
         // Messages
+        usageHelpOp = config.getString("messages.usage.usage-helpop");
+        helpOp = config.getString("messages.helpop");
+        bannedCommandsRemoved = config.getString("messages.bannedcommands.removed");
+        bannedCommandsRemovedTab = config.getString("messages.bannedcommands.removed-tab");
+        bannedCommandsNotBlocked = config.getString("messages.bannedcommands.not-blocked");
+        bannedCommandsNotBlockedTab = config.getString("messages.bannedcommands.not-blocked-tab");
+        usageBannedCommandsRemove = config.getString("messages.usage.usage-remove-bc");
+        bannedCommandsAdded = config.getString("messages.bannedcommands.added");
+        bannedCommandsAddedTab = config.getString("messages.bannedcommands.added-tab");
+        bannedCommandsAlready = config.getString("messages.bannedcommands.already");
+        bannedCommandsAlreadyTab = config.getString("messages.bannedcommands.already-tab");
+        usageBannedCommandsAdd = config.getString("messages.usage.usage-add-bc");
+        bannedCommandsBlockedList = config.getString("messages.bannedcommands.blocked-list");
+        bannedCommandsBlockedTabList = config.getString("messages.bannedcommands.no-tab-blocked");
+        bannedCommandsNoCommandsBlocked = config.getString("messages.bannedcommands.no-commands-blocked");
+        bannedCommandsNoTabBlocked = config.getString("messages.bannedcommands.blocked-tab-list");
+        usageBannedCommandsList = config.getString("messages.usage.usage-list-bannedcommands");
+        customCommandsArguments = config.getString("messages.cc-arguments");
+        usageSendChannel = config.getString("messages.usage.usage-send-channel");
+        usageBannedCommands = config.getString("messages.usage.usage-bannedcommands");
         pluginNotFound = config.getString("messages.plugin-not-found");
         pluginUsage = config.getString("messages.usage.usage-plugin");
         pluginMessage = config.getStringList("plugin");
@@ -273,6 +321,27 @@ public class MessagesManager {
     }
 
     // Messages
+    public String getUsageHelpOp() { return usageHelpOp; }
+    public String getHelpOp() { return helpOp; }
+    public String getDepurationAntiFlood() { return depurationAntiFlood; }
+    public String getBannedCommandsNotBlocked() { return bannedCommandsNotBlocked; }
+    public String getBannedCommandsNotBlockedTab() { return bannedCommandsNotBlockedTab; }
+    public String getBannedCommandsRemoved() { return bannedCommandsRemoved; }
+    public String getBannedCommandsRemovedTab() { return bannedCommandsRemovedTab; }
+    public String getUsageBannedCommandsRemove() { return usageBannedCommandsRemove; }
+    public String getBannedCommandsAddedTab() { return bannedCommandsAddedTab; }
+    public String getBannedCommandsAdded() { return bannedCommandsAdded; }
+    public String getBannedCommandsAlreadyTab() { return bannedCommandsAlreadyTab; }
+    public String getBannedCommandsAlready() { return bannedCommandsAlready; }
+    public String getUsageBannedCommandsAdd() { return usageBannedCommandsAdd; }
+    public String getBannedCommandsNoCommandsBlocked() { return bannedCommandsNoCommandsBlocked; }
+    public String getBannedCommandsBlockedList() { return bannedCommandsBlockedList; }
+    public String getBannedCommandsNoTabBlocked() { return bannedCommandsNoTabBlocked; }
+    public String getBannedCommandsBlockedTabList() { return bannedCommandsBlockedTabList; }
+    public String getUsageBannedCommandsList() { return usageBannedCommandsList; }
+    public String getCustomCommandsArguments() { return customCommandsArguments; }
+    public String getUsageSendChannel() { return usageSendChannel; }
+    public String getUsageBannedCommands() { return usageBannedCommands; }
     public String getPluginNotFound() { return pluginNotFound; }
     public String getPluginUsage() { return pluginUsage; }
     public List<String> getPluginMessage() { return pluginMessage; }
@@ -372,8 +441,9 @@ public class MessagesManager {
     public String getAntiCapMessage() { return antiCapMessage; }
 
     // Depuration
+    public String getDepurationCommandCooldown() { return depurationCommandCooldown; }
+    public String getDepurationChatCooldown() { return depurationChatCooldown; }
     public String getMaterialNotFound() { return materialNotFound; }
     public String getNoPlayer() { return noPlayer; }
     public String getNoFormatGroup() { return noFormatGroup; }
 }
-

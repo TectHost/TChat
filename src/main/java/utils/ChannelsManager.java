@@ -3,7 +3,9 @@ package utils;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public class ChannelsManager {
 
@@ -23,5 +25,15 @@ public class ChannelsManager {
 
     public void removePlayerFromChannel(Player player) {
         playerChannels.remove(player);
+    }
+
+    public Set<Player> getPlayersInChannel(String channelName) {
+        Set<Player> playersInChannel = new HashSet<>();
+        for (Map.Entry<Player, String> entry : playerChannels.entrySet()) {
+            if (entry.getValue().equalsIgnoreCase(channelName)) {
+                playersInChannel.add(entry.getKey());
+            }
+        }
+        return playersInChannel;
     }
 }

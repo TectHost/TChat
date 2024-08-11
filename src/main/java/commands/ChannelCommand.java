@@ -10,10 +10,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import utils.ChannelsManager;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.Arrays;
 
 public class ChannelCommand implements CommandExecutor {
 
@@ -21,7 +18,7 @@ public class ChannelCommand implements CommandExecutor {
     private final ChannelsManager channelsManager;
     private final ChannelsConfigManager channelsConfigManager;
 
-    public ChannelCommand(TChat plugin) {
+    public ChannelCommand(@NotNull TChat plugin) {
         this.plugin = plugin;
         this.channelsManager = plugin.getChannelsManager();
         this.channelsConfigManager = plugin.getChannelsConfigManager();
@@ -30,170 +27,193 @@ public class ChannelCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         String prefix = plugin.getMessagesManager().getPrefix();
+
         if (!(sender instanceof Player player)) {
-            String message = plugin.getMessagesManager().getNoPlayer();
-            sender.sendMessage(plugin.getTranslateColors().translateColors(null, prefix + message));
+            sendMessage(sender, plugin.getMessagesManager().getNoPlayer(), prefix);
             return true;
         }
 
         if (args.length == 0) {
-            String message = plugin.getMessagesManager().getUsageChannel();
-            sender.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + message));
+            sendMessage(sender, plugin.getMessagesManager().getUsageChannel(), prefix);
             return true;
         }
 
         String action = args[0];
-
-        if ("join".equalsIgnoreCase(action)) {
-            if (player.hasPermission("tchat.channel.command.join") || player.hasPermission("tchat.admin") || player.hasPermission("tchat.channel.all")) {
-                if (args.length < 2) {
-                    String message = plugin.getMessagesManager().getUsageJoinChannel();
-                    sender.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + message));
-                    return true;
-                }
-                String channelName = args[1];
-                joinChannel(player, channelName);
-            } else {
-                String message = plugin.getMessagesManager().getNoPermission();
-                sender.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + message));
-            }
-        } else if ("leave".equalsIgnoreCase(action)) {
-            if (player.hasPermission("tchat.channel.command.leave") || player.hasPermission("tchat.admin") || player.hasPermission("tchat.channel.all")) {
-                if (args.length < 2) {
-                    String message = plugin.getMessagesManager().getUsageLeaveChannel();
-                    sender.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + message));
-                    return true;
-                }
-                String channelName = args[1];
-                leaveChannel(player, channelName);
-            } else {
-                String message = plugin.getMessagesManager().getNoPermission();
-                sender.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + message));
-            }
-        } else {
-            String message = plugin.getMessagesManager().getUsageChannel();
-            sender.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + message));
+        switch (action.toLowerCase()) {
+            case "join":
+                handleJoin(player, args, prefix);
+                break;
+            case "leave":
+                handleLeave(player, args, prefix);
+                break;
+            case "send":
+                handleSend(player, args, prefix);
+                break;
+            default:
+                sendMessage(sender, plugin.getMessagesManager().getUsageChannel(), prefix);
         }
 
         return true;
     }
 
-    private void joinChannel(Player player, String channelName) {
-        ChannelsConfigManager.Channel channel = channelsConfigManager.getChannel(channelName);
-        String prefix = plugin.getMessagesManager().getPrefix();
-
-        if (channel == null) {
-            String message = plugin.getMessagesManager().getChannelNotExist();
-            message = message.replace("%channel%", channelName);
-            player.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + message));
+    private void handleJoin(Player player, String[] args, String prefix) {
+        if (hasPermission(player, "tchat.channel.command.join")) {
+            sendMessage(player, plugin.getMessagesManager().getNoPermission(), prefix);
             return;
         }
 
-        if (!player.hasPermission(channel.getPermission()) && !player.hasPermission("tchat.admin") && !player.hasPermission("tchat.channel.all")) {
-            String message = plugin.getMessagesManager().getChannelNoPermissionJoin();
-            message = message.replace("%channel%", channelName);
-            player.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + message));
+        if (args.length < 2) {
+            sendMessage(player, plugin.getMessagesManager().getUsageJoinChannel(), prefix);
+            return;
+        }
+
+        String channelName = args[1];
+        joinChannel(player, channelName, prefix);
+    }
+
+    private void handleLeave(Player player, String[] args, String prefix) {
+        if (hasPermission(player, "tchat.channel.command.leave")) {
+            sendMessage(player, plugin.getMessagesManager().getNoPermission(), prefix);
+            return;
+        }
+
+        if (args.length < 2) {
+            sendMessage(player, plugin.getMessagesManager().getUsageLeaveChannel(), prefix);
+            return;
+        }
+
+        String channelName = args[1];
+        leaveChannel(player, channelName, prefix);
+    }
+
+    private void handleSend(Player player, String[] args, String prefix) {
+        if (hasPermission(player, "tchat.channel.command.send")) {
+            sendMessage(player, plugin.getMessagesManager().getNoPermission(), prefix);
+            return;
+        }
+
+        if (args.length < 3) {
+            sendMessage(player, plugin.getMessagesManager().getUsageSendChannel(), prefix);
+            return;
+        }
+
+        String channelName = args[1];
+        String message = String.join(" ", Arrays.copyOfRange(args, 2, args.length));
+        sendMessageToChannel(player, channelName, message, prefix);
+    }
+
+    private void joinChannel(Player player, String channelName, String prefix) {
+        ChannelsConfigManager.Channel channel = channelsConfigManager.getChannel(channelName);
+
+        if (channel == null) {
+            sendMessage(player, plugin.getMessagesManager().getChannelNotExist().replace("%channel%", channelName), prefix);
+            return;
+        }
+
+        if (hasPermission(player, channel.getPermission())) {
+            sendMessage(player, plugin.getMessagesManager().getChannelNoPermissionJoin().replace("%channel%", channelName), prefix);
             return;
         }
 
         String currentChannel = channelsManager.getPlayerChannel(player);
 
         if (channelName.equalsIgnoreCase(currentChannel)) {
-            String message = plugin.getMessagesManager().getChannelAlready();
-            message = message.replace("%channel%", channelName);
-            player.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + message));
+            sendMessage(player, plugin.getMessagesManager().getChannelAlready().replace("%channel%", channelName), prefix);
             return;
         }
 
         if (currentChannel != null) {
             channelsManager.removePlayerFromChannel(player);
-            String message = plugin.getMessagesManager().getChannelLeft();
-            message = message.replace("%channel%", currentChannel);
-            player.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + message));
+            sendMessage(player, plugin.getMessagesManager().getChannelLeft().replace("%channel%", currentChannel), prefix);
         }
 
         channelsManager.setPlayerChannel(player, channelName);
-        String message1 = plugin.getMessagesManager().getChannelJoin();
-        message1 = message1.replace("%channel%", channelName);
-        player.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + message1));
+        sendMessage(player, plugin.getMessagesManager().getChannelJoin().replace("%channel%", channelName), prefix);
 
-        for (Player p : Bukkit.getOnlinePlayers()) {
-            String recipientChannel = plugin.getChannelsManager().getPlayerChannel(p);
-            boolean hasPermissionForChannel = p.hasPermission(channel.getPermission()) || p.hasPermission("tchat.admin") || p.hasPermission("tchat.channel.all");
-            boolean isInRecipientChannel = recipientChannel != null && recipientChannel.equals(channelName);
-
-            if (!p.equals(player)) {
-                int announceMode = channel.getAnnounceMode();
-
-                String message = plugin.getMessagesManager().getChannelJoinAnnounce();
-                message = message.replace("%player%", player.getName());
-                message = message.replace("%channel%", channelName);
-
-                if (announceMode == 0) {
-                    p.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + message));
-                } else if (announceMode == 1) {
-                    if (hasPermissionForChannel) {
-                        p.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + message));
-                    }
-                } else if (announceMode == 2) {
-                    if (isInRecipientChannel) {
-                        p.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + message));
-                    }
-                }
-            }
-        }
+        announceChannelChange(player, channelName, plugin.getMessagesManager().getChannelJoinAnnounce(), prefix);
     }
 
-    private void leaveChannel(Player player, String channelName) {
+    private void leaveChannel(Player player, @NotNull String channelName, String prefix) {
         String currentChannel = channelsManager.getPlayerChannel(player);
-        String prefix = plugin.getMessagesManager().getPrefix();
 
         if (!channelName.equalsIgnoreCase(currentChannel)) {
-            String message = plugin.getMessagesManager().getNoChannel();
-            message = message.replace("%channel%", channelName);
-            player.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + message));
+            sendMessage(player, plugin.getMessagesManager().getNoChannel().replace("%channel%", channelName), prefix);
             return;
         }
 
         ChannelsConfigManager.Channel channel = channelsConfigManager.getChannel(channelName);
 
-        if (channel != null && !player.hasPermission("tchat.channel.command.leave") && !player.hasPermission("tchat.admin") && !player.hasPermission("tchat.channel.all")) {
-            String message = plugin.getMessagesManager().getNoPermissionChannelLeft();
-            message = message.replace("%channel%", channelName);
-            player.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + message));
+        if (channel != null && hasPermission(player, "tchat.channel.command.leave")) {
+            sendMessage(player, plugin.getMessagesManager().getNoPermissionChannelLeft().replace("%channel%", channelName), prefix);
             return;
         }
 
         channelsManager.removePlayerFromChannel(player);
-        String message1 = plugin.getMessagesManager().getChannelLeft();
-        message1 = message1.replace("%channel%", currentChannel);
-        player.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + message1));
+        sendMessage(player, plugin.getMessagesManager().getChannelLeft().replace("%channel%", currentChannel), prefix);
+
+        if (channel != null) {
+            announceChannelChange(player, channelName, plugin.getMessagesManager().getChannelLeftAnnounce(), prefix);
+        }
+    }
+
+    private void sendMessageToChannel(Player player, String channelName, String message, String prefix) {
+        ChannelsConfigManager.Channel channel = channelsConfigManager.getChannel(channelName);
+
+        if (channel == null) {
+            sendMessage(player, plugin.getMessagesManager().getChannelNotExist().replace("%channel%", channelName), prefix);
+            return;
+        }
+
+        String format = channel.isFormatEnabled() ? channel.getFormat() : "%player%";
+
+        String formattedMessage = format
+                .replace("%player%", player.getName())
+                .replace("%channel%", channelName);
 
         for (Player p : Bukkit.getOnlinePlayers()) {
-            String recipientChannel = plugin.getChannelsManager().getPlayerChannel(p);
-            assert channel != null;
-            boolean hasPermissionForChannel = p.hasPermission(channel.getPermission()) || p.hasPermission("tchat.admin") || p.hasPermission("tchat.channel.all");
-            boolean isInRecipientChannel = recipientChannel != null && recipientChannel.equals(channelName);
+            if (channel.isEnabled()) {
+                String recipientChannel = plugin.getChannelsManager().getPlayerChannel(p);
+                boolean hasPermissionForChannel = p.hasPermission(channel.getPermission()) || p.hasPermission("tchat.admin") || p.hasPermission("tchat.channel.all");
+                boolean isInRecipientChannel = recipientChannel != null && recipientChannel.equals(channelName);
 
-            if (!p.equals(player)) {
-                int announceMode = channel.getAnnounceMode();
-
-                String message = plugin.getMessagesManager().getChannelLeftAnnounce();
-                message = message.replace("%player%", player.getName());
-                message = message.replace("%channel%", channelName);
-
-                if (announceMode == 0) {
-                    p.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + message));
-                } else if (announceMode == 1) {
-                    if (hasPermissionForChannel) {
-                        p.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + message));
-                    }
-                } else if (announceMode == 2) {
-                    if (isInRecipientChannel) {
-                        p.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + message));
-                    }
+                int messageMode = channel.getMessageMode();
+                if (messageMode == 0 || (messageMode == 1 && hasPermissionForChannel) || (messageMode == 2 && isInRecipientChannel)) {
+                    p.sendMessage(plugin.getTranslateColors().translateColors(player, formattedMessage + message));
                 }
             }
         }
+    }
+
+    private void announceChannelChange(Player player, String channelName, String messageTemplate, String prefix) {
+        ChannelsConfigManager.Channel channel = channelsConfigManager.getChannel(channelName);
+
+        if (channel == null) return;
+
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            if (p.equals(player)) continue;
+
+            String recipientChannel = channelsManager.getPlayerChannel(p);
+            boolean hasPermissionForChannel = p.hasPermission(channel.getPermission()) ||
+                    p.hasPermission("tchat.admin") ||
+                    p.hasPermission("tchat.channel.all");
+            boolean isInRecipientChannel = recipientChannel != null && recipientChannel.equals(channelName);
+
+            int announceMode = channel.getAnnounceMode();
+            if (shouldAnnounce(announceMode, hasPermissionForChannel, isInRecipientChannel)) {
+                sendMessage(p, messageTemplate.replace("%player%", player.getName()).replace("%channel%", channelName), prefix);
+            }
+        }
+    }
+
+    private boolean shouldAnnounce(int announceMode, boolean hasPermissionForChannel, boolean isInRecipientChannel) {
+        return announceMode == 0 || (announceMode == 1 && hasPermissionForChannel) || (announceMode == 2 && isInRecipientChannel);
+    }
+
+    private boolean hasPermission(@NotNull Player player, String permission) {
+        return !player.hasPermission(permission) && !player.hasPermission("tchat.admin") && !player.hasPermission("tchat.channel.all");
+    }
+
+    private void sendMessage(@NotNull CommandSender sender, String message, String prefix) {
+        sender.sendMessage(plugin.getTranslateColors().translateColors(null, prefix + message));
     }
 }

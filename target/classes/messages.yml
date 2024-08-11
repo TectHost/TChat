@@ -6,7 +6,7 @@
 
 prefix:
   enabled: true
-  prefix: "&#c03afeT&#ac2ff9C&#9824f4h&#8319eea&#6f0ee9t &e> "
+  prefix: "&#c03afeT&#ac2ff9C&#9824f4h&#8319eea&#6f0ee9t &#FEAD10> "
 
 messages:
   no-permission: "&cInsufficient permissions."
@@ -38,6 +38,8 @@ messages:
   level-up: "&aCongratulations! You have risen to the level %level%"
   chat-disabled-world: "&cChat is disabled in this world."
   plugin-not-found: "&cPlugin not found."
+  cc-arguments: "&cThis command requires arguments."
+  helpop: "&aYour help request has been sent to server operators."
   chat-help:
     message:
       - "&8--------- { &#c03afeT&#a72cf8C&#8e1ff1h&#7411eba&#5b03e4t &8} ---------"
@@ -115,6 +117,19 @@ messages:
     join-channel-announce: "&a%player% has joined the channel %channel%"
     no-channel: "&cYou are not in the channel %channel%"
     channel-no-permission-left: "&cYou do not have permission to left channel: %channel%"
+  bannedcommands:
+    no-commands-blocked: "&cNo commands are currently blocked."
+    blocked-list: "&eBlocked commands:"
+    no-tab-blocked: "&cNo tab completion is blocked."
+    blocked-tab-list: "&eBlocked tab completions:"
+    already: "&cCommand is already blocked."
+    added: "&aCommand added to blocked list."
+    already-tab: "&cCommand is already blocked from tab completion."
+    added-tab: "&aCommand added to no tab completion list."
+    not-blocked: "&cCommand is not blocked."
+    removed: "&cCommand removed from blocked list."
+    not-blocked-tab: "&cCommand is not blocked from tab completion."
+    removed-tab: "&cCommand removed from no tab completion list."
   autobroadcast:
     start: "&aAutoBroadcast has been started."
     stop: "&cAutoBroadcast has been stopped."
@@ -151,11 +166,21 @@ messages:
     usage-announcement: "&cUsage: /announcement <message>"
     usage-autobroadcast: "&cUsage: /autobroadcast <start|stop|restart|remove|add>"
     usage-plugin: "&cUsage: /plugin <plugin_name>"
+    usage-bannedcommands: "&cUsage: /bannedcommands <list|add|remove>"
+    usage-list-bannedcommands: "&cUsage: /bannedcommands list <command|tab>"
+    usage-reply: "&cUsage: /reply <message>"
+    usage-send-channel: "&cUsage: /channel send <channel> <message>"
+    usage-add-bc: "&cUsage: /bannedcommands add <command|tab> <command>"
+    usage-remove-bc: "&cUsage: /bannedcommands remove <command|tab> <command>"
+    usage-helpop: "&cUsage: /helpop <message>"
   # Debug messages are only seen in the console
   debug:
     no-format-group: "&cError in groups.yml - No format found for group: %group%"
     no-player: "&cOnly players can execute this command."
     material-not-found: "&cMaterial not found: %material%"
+    chat-cooldown: "Player %player% was in chat cooldown. Time remaining: %time% seconds."
+    command-cooldown: "Player %player% was in command cooldown. Time remaining: %time% seconds."
+    anti-flood: "Player %player% wrote a message with flood: %message%"
 
 plugin:
   - "&cPlugin: &f%plugin%"

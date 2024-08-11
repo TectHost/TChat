@@ -23,20 +23,21 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import me.clip.placeholderapi.PlaceholderAPI;
+import org.jetbrains.annotations.NotNull;
 
 public class CustomCommands implements Listener {
     private final TChat plugin;
     private final CommandsManager commandsManager;
     private final Map<UUID, Long> commandCooldowns = new HashMap<>();
 
-    public CustomCommands(TChat plugin) {
+    public CustomCommands(@NotNull TChat plugin) {
         this.plugin = plugin;
         this.commandsManager = plugin.getCommandsManager();
         Bukkit.getPluginManager().registerEvents(this, plugin);
     }
 
     @EventHandler
-    public void onPlayerCommand(PlayerCommandPreprocessEvent e) {
+    public void onPlayerCommand(@NotNull PlayerCommandPreprocessEvent e) {
         if (e.isCancelled()) { return; }
 
         Player player = e.getPlayer();
@@ -49,6 +50,13 @@ public class CustomCommands implements Listener {
                 String prefix = plugin.getMessagesManager().getPrefix();
                 CommandsManager.Command command = commandsManager.getCommands().get(commandName);
                 boolean allowArgs = command.isArgs();
+
+                if (allowArgs && commandArgs.length < 2) {
+                    String message1 = plugin.getMessagesManager().getCustomCommandsArguments();
+                    player.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + message1));
+                    e.setCancelled(true);
+                    return;
+                }
 
                 if (command.isPermissionRequired()) {
                     String permission = "tchat.customcommand." + commandName;
@@ -82,7 +90,7 @@ public class CustomCommands implements Listener {
         }
     }
 
-    private void processActions(Player player, List<String> actions, String args) {
+    private void processActions(Player player, @NotNull List<String> actions, String args) {
         boolean isIfBlock = false;
         boolean isElseIfBlock = false;
         boolean skipActions = false;
@@ -124,7 +132,7 @@ public class CustomCommands implements Listener {
         }
     }
 
-    private boolean evaluateCondition(String condition, Player player) {
+    private boolean evaluateCondition(@NotNull String condition, Player player) {
         String[] orConditions = condition.split("\\|\\|");
         boolean finalResult = false;
 
@@ -186,6 +194,11 @@ public class CustomCommands implements Listener {
                 case "!=":
                     result = placeholderNumber != value;
                     break;
+                case "=~":
+                    Pattern regexPattern = Pattern.compile(String.valueOf(value));
+                    Matcher regexMatcher = regexPattern.matcher(String.valueOf(placeholderNumber));
+                    result = regexMatcher.matches();
+                    break;
                 default:
                     plugin.getLogger().warning("Unsupported operator: " + operator);
                     return false;
@@ -197,11 +210,11 @@ public class CustomCommands implements Listener {
         }
     }
 
-    private String processPlaceholders(Player player, String text) {
+    private @NotNull String processPlaceholders(Player player, String text) {
         return PlaceholderAPI.setPlaceholders(player, text);
     }
 
-    private void executeAction(Player player, String action, String args) {
+    private void executeAction(Player player, @NotNull String action, String args) {
         String prefix = plugin.getMessagesManager().getPrefix();
         String[] parts = action.split(" ", 2);
         if (parts.length < 2) {
@@ -211,6 +224,10 @@ public class CustomCommands implements Listener {
 
         String type = parts[0].trim();
         String data = parts[1].trim();
+
+        if (data.startsWith("'") && data.endsWith("'")) {
+            data = data.substring(1, data.length() - 1);
+        }
 
         data = data.replace("%prefix%", prefix);
 
@@ -354,7 +371,7 @@ public class CustomCommands implements Listener {
         return commandsManager.getCommands().get(commandName).getCooldown();
     }
 
-    private void handleClickAction(Player player, String data) {
+    private void handleClickAction(Player player, @NotNull String data) {
         String[] parts = data.split("\\|", 2);
         if (parts.length < 2) {
             plugin.getLogger().warning("Invalid [CLICK_ACTION] format: " + data);
@@ -385,13 +402,13 @@ public class CustomCommands implements Listener {
         player.spigot().sendMessage(textComponent);
     }
 
-    private boolean isOnCooldown(Player player, String commandName, int cooldownSeconds) {
+    private boolean isOnCooldown(@NotNull Player player, String commandName, int cooldownSeconds) {
         long currentTime = System.currentTimeMillis() / 1000L;
         long lastExecution = commandCooldowns.getOrDefault(player.getUniqueId(), 0L);
         return currentTime < (lastExecution + cooldownSeconds);
     }
 
-    private int getRemainingCooldown(Player player, String commandName) {
+    private int getRemainingCooldown(@NotNull Player player, String commandName) {
         long currentTime = System.currentTimeMillis() / 1000L;
         long lastExecution = commandCooldowns.getOrDefault(player.getUniqueId(), 0L);
         return (int) ((lastExecution + getCooldown(commandName)) - currentTime);
@@ -409,7 +426,7 @@ public class CustomCommands implements Listener {
         player.sendPluginMessage(plugin, "BungeeCord", b.toByteArray());
     }
 
-    private void setCooldown(Player player, String commandName, int cooldownSeconds) {
+    private void setCooldown(@NotNull Player player, String commandName, int cooldownSeconds) {
         long currentTime = System.currentTimeMillis() / 1000L;
         commandCooldowns.put(player.getUniqueId(), currentTime);
     }

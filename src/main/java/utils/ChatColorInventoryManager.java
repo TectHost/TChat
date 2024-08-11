@@ -113,9 +113,9 @@ public class ChatColorInventoryManager implements Listener {
         long currentTime = System.currentTimeMillis();
         Long lastClickTime = lastClickMap.get(player);
         long COOLDOWN = plugin.getChatColorManager().getCooldown();
-        if (lastClickTime != null && (currentTime - lastClickTime) < COOLDOWN) {
-            return;
-        }
+
+        if (lastClickTime != null && (currentTime - lastClickTime) < COOLDOWN) { return; }
+
         lastClickMap.put(player, currentTime);
 
         ItemStack clickedItem = event.getCurrentItem();

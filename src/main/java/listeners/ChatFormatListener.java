@@ -12,10 +12,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 import utils.TranslateHexColorCodes;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
 public class ChatFormatListener implements Listener {
@@ -25,7 +26,7 @@ public class ChatFormatListener implements Listener {
     private final TChat plugin;
     private final ChannelsConfigManager channelsConfigManager;
 
-    public ChatFormatListener(TChat plugin, ConfigManager configManager, GroupManager groupManager, TranslateHexColorCodes translateHexColorCodes) {
+    public ChatFormatListener(@NotNull TChat plugin, ConfigManager configManager, GroupManager groupManager) {
         this.plugin = plugin;
         this.configManager = configManager;
         this.groupManager = groupManager;
@@ -33,8 +34,10 @@ public class ChatFormatListener implements Listener {
     }
 
     @EventHandler
-    public void playerFormat(AsyncPlayerChatEvent event) {
-        if (event.isCancelled()) { return; }
+    public void playerFormat(@NotNull AsyncPlayerChatEvent event) {
+        if (event.isCancelled()) {
+            return;
+        }
 
         Player player = event.getPlayer();
         String message = event.getMessage();
@@ -43,9 +46,7 @@ public class ChatFormatListener implements Listener {
         String channelName = plugin.getChannelsManager().getPlayerChannel(player);
         ChannelsConfigManager.Channel channel = channelsConfigManager.getChannel(channelName);
 
-        if (!plugin.getConfigManager().isFormatEnabled()) {
-            format = "<" + player.getName() + "> %msg%";
-        } else {
+        if (plugin.getConfigManager().isFormatEnabled()) {
             if (channel != null && channel.isFormatEnabled() && channel.isEnabled() && (player.hasPermission(channel.getPermission()) || player.hasPermission("tchat.admin") || player.hasPermission("tchat.channel.all"))) {
                 format = channel.getFormat();
                 format = format.replace("%channel%", channelName);
@@ -64,100 +65,107 @@ public class ChatFormatListener implements Listener {
                     format = configManager.getFormat();
                 }
             }
-        }
 
-        format = format.replace("%player%", player.getName()).replace("%message%", "%msg%");
-        format = PlaceholderAPI.setPlaceholders(player, format);
-        format = TranslateHexColorCodes.translateHexColorCodes("&#", "", format);
-        format = ChatColor.translateAlternateColorCodes('&', format);
+            format = format.replace("%player%", player.getName()).replace("%message%", "%msg%");
+            format = PlaceholderAPI.setPlaceholders(player, format);
+            format = TranslateHexColorCodes.translateHexColorCodes("&#", "", format);
+            format = ChatColor.translateAlternateColorCodes('&', format);
 
-        if (plugin.getConfigManager().isMentionsEnabled()) {
-            for (Player recipient : event.getRecipients()) {
-                if (message.contains(plugin.getConfigManager().getMentionCharacter() + recipient.getName())) {
-                    message = message.replace(plugin.getConfigManager().getMentionCharacter() + recipient.getName(), ChatColor.translateAlternateColorCodes('&', plugin.getConfigManager().getMentionColor() + plugin.getConfigManager().getMentionCharacter() + recipient.getName() + "&f"));
+            if (plugin.getConfigManager().isMentionsEnabled()) {
+                String mentionCharacter = plugin.getConfigManager().getMentionCharacter();
+                String mentionColor = plugin.getConfigManager().getMentionColor();
+
+                for (Player recipient : event.getRecipients()) {
+                    String mention = mentionCharacter + recipient.getName();
+                    if (message.contains(mention)) {
+                        String coloredMention = TranslateHexColorCodes.translateHexColorCodes("&#", "", mentionColor + mention + "&f");
+                        message = message.replace(mention, coloredMention);
+                    }
                 }
             }
-        }
 
-        String[] parts = format.split("%msg%", 2);
-        TextComponent mainComponent = new TextComponent(TextComponent.fromLegacyText(parts[0]));
+            String[] parts = format.split("%msg%", 2);
+            TextComponent mainComponent = new TextComponent(TextComponent.fromLegacyText(parts[0]));
 
-        String groupName = groupManager.getGroup(player);
-        GroupManager.HoverClickAction playerHoverClick = groupManager.getPlayerHoverClickAction(groupName);
-        if (playerHoverClick.isEnabled()) {
-            mainComponent.setHoverEvent(createHoverEvent(player, playerHoverClick.getHoverText()));
-            if (playerHoverClick.isClickEnabled()) {
-                applyClickAction(mainComponent, playerHoverClick.getClickAction(), player.getName());
+            String groupName = groupManager.getGroup(player);
+            GroupManager.HoverClickAction playerHoverClick = groupManager.getPlayerHoverClickAction(groupName);
+            if (playerHoverClick.isEnabled()) {
+                mainComponent.setHoverEvent(createHoverEvent(player, playerHoverClick.getHoverText()));
+                if (playerHoverClick.isClickEnabled()) {
+                    applyClickAction(mainComponent, playerHoverClick.getClickAction(), player.getName());
+                }
             }
-        }
 
-        if (plugin.getConfigManager().isChatColorEnabled()) {
-            String playerFormat = plugin.getSaveManager().getFormat(player.getUniqueId());
-            String chatColor = plugin.getSaveManager().getChatColor(player.getUniqueId());
-            if (!chatColor.equalsIgnoreCase("none")) {
-                message = chatColor + playerFormat + message;
-                message = plugin.getTranslateColors().translateColors(player, message);
+            if (plugin.getConfigManager().isChatColorEnabled()) {
+                String playerFormat = plugin.getSaveManager().getFormat(player.getUniqueId());
+                String chatColor = plugin.getSaveManager().getChatColor(player.getUniqueId());
+                if (!chatColor.equalsIgnoreCase("none")) {
+                    message = chatColor + playerFormat + message;
+                    message = plugin.getTranslateColors().translateColors(player, message);
+                }
             }
-        }
 
-        TextComponent messageComponent = new TextComponent(TextComponent.fromLegacyText(message));
+            TextComponent messageComponent = new TextComponent(TextComponent.fromLegacyText(message));
 
-        GroupManager.HoverClickAction messageHoverClick = groupManager.getMessageHoverClickAction(groupName);
-        if (messageHoverClick.isEnabled()) {
-            messageComponent.setHoverEvent(createHoverEvent(player, messageHoverClick.getHoverText()));
-            if (messageHoverClick.isClickEnabled()) {
-                applyClickAction(messageComponent, messageHoverClick.getClickAction(), player.getName());
+            GroupManager.HoverClickAction messageHoverClick = groupManager.getMessageHoverClickAction(groupName);
+            if (messageHoverClick.isEnabled()) {
+                messageComponent.setHoverEvent(createHoverEvent(player, messageHoverClick.getHoverText()));
+                if (messageHoverClick.isClickEnabled()) {
+                    applyClickAction(messageComponent, messageHoverClick.getClickAction(), player.getName());
+                }
             }
-        }
 
-        mainComponent.addExtra(messageComponent);
-        if (parts.length > 1) {
-            mainComponent.addExtra(new TextComponent(TextComponent.fromLegacyText(parts[1])));
-        }
+            mainComponent.addExtra(messageComponent);
+            if (parts.length > 1) {
+                mainComponent.addExtra(new TextComponent(TextComponent.fromLegacyText(parts[1])));
+            }
 
-        if (plugin.getConfigManager().isIgnoreEnabled()) {
-            List<Player> recipients = event.getRecipients().stream()
-                    .filter(recipient -> !isIgnored(player, recipient))
-                    .toList();
+            if (plugin.getConfigManager().isIgnoreEnabled()) {
+                List<Player> recipients = event.getRecipients().stream()
+                        .filter(recipient -> !isIgnored(player, recipient))
+                        .toList();
 
-            event.getRecipients().clear();
-            event.getRecipients().addAll(recipients);
-        }
+                event.getRecipients().clear();
+                event.getRecipients().addAll(recipients);
+            }
 
-        event.setCancelled(true);
+            event.setCancelled(true);
 
-        for (Player p : event.getRecipients()) {
-            if (channel == null || !channel.isEnabled()) {
-                p.spigot().sendMessage(mainComponent);
-            } else {
-                String recipientChannel = plugin.getChannelsManager().getPlayerChannel(p);
-                boolean hasPermissionForChannel = p.hasPermission(channel.getPermission()) || p.hasPermission("tchat.admin") || p.hasPermission("tchat.channel.all");
-                boolean isInRecipientChannel = recipientChannel != null && recipientChannel.equals(channelName);
-
-                int messageMode = channel.getMessageMode();
-                if (messageMode == 0 || (messageMode == 1 && hasPermissionForChannel) || (messageMode == 2 && isInRecipientChannel)) {
+            for (Player p : event.getRecipients()) {
+                if (channel == null || !channel.isEnabled()) {
                     p.spigot().sendMessage(mainComponent);
+                } else {
+                    String recipientChannel = plugin.getChannelsManager().getPlayerChannel(p);
+                    boolean hasPermissionForChannel = p.hasPermission(channel.getPermission()) || p.hasPermission("tchat.admin") || p.hasPermission("tchat.channel.all");
+                    boolean isInRecipientChannel = recipientChannel != null && recipientChannel.equals(channelName);
+
+                    int messageMode = channel.getMessageMode();
+                    if (messageMode == 0 || (messageMode == 1 && hasPermissionForChannel) || (messageMode == 2 && isInRecipientChannel)) {
+                        p.spigot().sendMessage(mainComponent);
+                    }
                 }
             }
-        }
 
-        if (configManager.isRegisterMessagesOnConsole()) {
-            String consoleMessage = mainComponent.toLegacyText();
-            consoleMessage = plugin.getTranslateColors().translateColors(player, consoleMessage);
-            Bukkit.getConsoleSender().sendMessage(consoleMessage);
-        }
+            if (configManager.isRegisterMessagesOnConsole()) {
+                String consoleMessage = mainComponent.toLegacyText();
+                consoleMessage = plugin.getTranslateColors().translateColors(player, consoleMessage);
+                Bukkit.getConsoleSender().sendMessage(consoleMessage);
+            }
 
-        if (plugin.getDiscordManager().isDiscordEnabled()) {
-            String discordMessage = removeMinecraftColorCodes(mainComponent.toLegacyText());
-            plugin.getDiscordHook().sendMessage(discordMessage);
+            if (plugin.getDiscordManager().isDiscordEnabled()) {
+                String discordMessage = removeMinecraftColorCodes(mainComponent.toLegacyText());
+                plugin.getDiscordHook().sendMessage(discordMessage);
+            }
         }
     }
 
-    private String removeMinecraftColorCodes(String message) {
+    @Contract(pure = true)
+    private @NotNull String removeMinecraftColorCodes(@NotNull String message) {
         return message.replaceAll("(?i)§[0-9a-fk-or]", "");
     }
 
-    private HoverEvent createHoverEvent(Player player, List<String> hoverText) {
+    @Contract("_, _ -> new")
+    private @NotNull HoverEvent createHoverEvent(Player player, @NotNull List<String> hoverText) {
         TextComponent hoverComponent = new TextComponent("");
         boolean first = true;
 
@@ -179,14 +187,14 @@ public class ChatFormatListener implements Listener {
         return new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(hoverComponent).create());
     }
 
-    private boolean isIgnored(Player sender, Player recipient) {
+    private boolean isIgnored(@NotNull Player sender, @NotNull Player recipient) {
         UUID senderId = sender.getUniqueId();
         UUID recipientId = recipient.getUniqueId();
         List<String> ignoreList = plugin.getSaveManager().getIgnoreList(recipientId);
         return ignoreList.contains(senderId.toString());
     }
 
-    private void applyClickAction(TextComponent component, String clickAction, String playerName) {
+    private void applyClickAction(TextComponent component, @NotNull String clickAction, String playerName) {
         String replacedAction = clickAction.replace("%player%", playerName);
 
         if (replacedAction.startsWith("[EXECUTE]")) {

@@ -15,22 +15,24 @@ public class GrammarListener {
     public void checkGrammar(AsyncPlayerChatEvent event, Player player, String message) {
         if (event.isCancelled()) { return; }
 
-        if (!player.hasPermission(plugin.getConfigManager().getPermissionBypassCap()) || !player.hasPermission("tchat.admin")) {
-            if (plugin.getConfigManager().isGrammarCapEnabled()) {
+        if (plugin.getConfigManager().isGrammarCapEnabled()) {
+            if (!player.hasPermission(plugin.getConfigManager().getPermissionBypassCap()) || !player.hasPermission("tchat.admin")) {
                 message = checkCap(message);
             }
         }
 
-        if (!player.hasPermission(plugin.getConfigManager().getPermissionBypassFinalDot()) || !player.hasPermission("tchat.admin")) {
-            if (plugin.getConfigManager().isGrammarDotEnabled()) {
+        if (plugin.getConfigManager().isGrammarDotEnabled()) {
+            if (!player.hasPermission(plugin.getConfigManager().getPermissionBypassFinalDot()) || !player.hasPermission("tchat.admin")) {
                 message = checkDot(message);
             }
         }
 
         event.setMessage(message);
 
-        if (plugin.getConfigManager().isRepeatMessagesEnabled() && !player.hasPermission(plugin.getConfigManager().getBypassRepeatMessages()) && !player.hasPermission("tchat.admin")) {
-            plugin.getRepeatMessagesListener().checkRepeatMessages(event, player, message);
+        if (plugin.getConfigManager().isRepeatMessagesEnabled()) {
+            if (!player.hasPermission(plugin.getConfigManager().getBypassRepeatMessages()) && !player.hasPermission("tchat.admin")) {
+                plugin.getRepeatMessagesListener().checkRepeatMessages(event, player, message);
+            }
         }
     }
 
@@ -43,7 +45,7 @@ public class GrammarListener {
 
     public String checkDot(String message) {
         String dot = plugin.getConfigManager().getGrammarDotCharacter();
-        if (message.length() > plugin.getConfigManager().getGrammarMinCharactersDot()) {
+        if (message.length() > plugin.getConfigManager().getGrammarMinCharactersDot() && !message.endsWith(dot)) {
             return message + dot;
         }
         return message;

@@ -14,12 +14,10 @@ public class LogsManager {
 
     private final File chatLogFile;
     private final File commandLogFile;
+    private final File bannedCommandsFile;
 
     public LogsManager(TChat plugin) {
         File pluginDataFolder = plugin.getDataFolder();
-        if (!pluginDataFolder.exists()) {
-            pluginDataFolder.mkdirs();
-        }
 
         File logsFolder = new File(pluginDataFolder, "logs");
         if (!logsFolder.exists()) {
@@ -28,6 +26,7 @@ public class LogsManager {
 
         this.chatLogFile = new File(logsFolder, "chat.log");
         this.commandLogFile = new File(logsFolder, "commands.log");
+        this.bannedCommandsFile = new File(logsFolder, "banned_commands.log");
 
         regenerateFiles();
     }
@@ -39,6 +38,10 @@ public class LogsManager {
 
         if (commandLogFile.exists()) {
             clearFile(commandLogFile);
+        }
+
+        if (bannedCommandsFile.exists()) {
+            clearFile(bannedCommandsFile);
         }
     }
 
@@ -56,7 +59,7 @@ public class LogsManager {
             writer.write("[" + timestamp + "] " + playerName + ": " + message);
             writer.newLine();
         } catch (IOException e) {
-            Bukkit.getLogger().severe("Failed to log chat message: " + e.getMessage() + "(#c7dhd - LogsManager.java)");
+            Bukkit.getLogger().severe("Failed to log chat message: " + e.getMessage() + " (#c7dhd - LogsManager.java)");
         }
     }
 
@@ -66,7 +69,17 @@ public class LogsManager {
             writer.write("[" + timestamp + "] " + playerName + ": " + command);
             writer.newLine();
         } catch (IOException e) {
-            Bukkit.getLogger().severe("[TChat] Failed to log command: " + e.getMessage() + "(#c7dhd - LogsManager.java)");
+            Bukkit.getLogger().severe("Failed to log command: " + e.getMessage() + " (#8dns3 - LogsManager.java)");
+        }
+    }
+
+    public void logBannedCommand(String playerName, String command) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(bannedCommandsFile, true))) {
+            String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+            writer.write("[" + timestamp + "] Banned Command executed by: " + playerName + ": /" + command);
+            writer.newLine();
+        } catch (IOException e) {
+            Bukkit.getLogger().severe("Failed to log banned command: " + e.getMessage() + " (#xc8m2 - LogsManager.java)");
         }
     }
 }

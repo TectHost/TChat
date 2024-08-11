@@ -5,6 +5,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,7 +19,7 @@ public class AntiFloodListener implements Listener {
     }
 
     @EventHandler
-    public void checkFlood(AsyncPlayerChatEvent event, String message, Player player) {
+    public void checkFlood(@NotNull AsyncPlayerChatEvent event, String message, Player player) {
         if (event.isCancelled()) { return; }
 
         if (!player.hasPermission("tchat.bypass.antiflood") && !player.hasPermission("tchat.admin")) {
@@ -27,6 +28,13 @@ public class AntiFloodListener implements Listener {
                 String prefix = plugin.getMessagesManager().getPrefix();
                 player.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + message1));
                 event.setCancelled(true);
+
+                if (plugin.getConfigManager().isDepurationAntiFloodEnabled()) {
+                    String message2 = plugin.getMessagesManager().getDepurationAntiFlood();
+                    message2 = message2.replace("%player%", player.getName());
+                    message2 = message2.replace("%message%", message);
+                    plugin.getLogger().warning(message2);
+                }
             }
         }
     }

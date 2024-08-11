@@ -59,7 +59,6 @@ public class TChat extends JavaPlugin {
     private WorldsManager worldsManager;
     private ChatEnabledListener chatEnabledListener;
     private PlayerLeftListener playerLeftListener;
-    private AutoBroadcastCommand autoBroadcastCommand;
 
     @Override
     public void onEnable() {
@@ -80,7 +79,7 @@ public class TChat extends JavaPlugin {
     }
 
     public void registerListeners() {
-        ChatFormatListener chatFormatListener = new ChatFormatListener(this, configManager, groupManager, translateHexColorCodes);
+        ChatFormatListener chatFormatListener = new ChatFormatListener(this, configManager, groupManager);
         bannedWords = new BannedWords(bannedWordsManager, translateHexColorCodes);
         ChatListener chatListener = new ChatListener(this, chatFormatListener);
         antiAdvertising = new AntiAdvertising(this);
@@ -190,10 +189,13 @@ public class TChat extends JavaPlugin {
         if (getConfigManager().isPrintEnabled()) {
             Objects.requireNonNull(getCommand("print")).setExecutor(new PrintCommand(this));
         }
-        autoBroadcastCommand = new AutoBroadcastCommand(this);
+        AutoBroadcastCommand autoBroadcastCommand = new AutoBroadcastCommand(this);
         Objects.requireNonNull(getCommand("autobroadcast")).setExecutor(autoBroadcastCommand);
         Objects.requireNonNull(getCommand("autobroadcast")).setTabCompleter(new AutoBroadcastTabCompleter(autoBroadcastManager));
         Objects.requireNonNull(getCommand("plugin")).setExecutor(new PluginCommand(this));
+        Objects.requireNonNull(getCommand("bannedcommands")).setExecutor(new BannedCommandsCommand(bannedCommandsManager, this));
+        Objects.requireNonNull(getCommand("helpop")).setExecutor(new HelpOpCommand(this));
+        Objects.requireNonNull(getCommand("showitem")).setExecutor(new ShowItemCommand(this));
     }
 
     public void registerPlaceholders() {

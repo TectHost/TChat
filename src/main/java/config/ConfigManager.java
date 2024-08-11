@@ -84,6 +84,11 @@ public class ConfigManager {
     private boolean chatColorEnabled;
     private boolean announcementEnabled;
     private String announcementFormat;
+    private boolean depurationChatEnabled;
+    private boolean depurationCommandEnabled;
+    private boolean depurationAntiFloodEnabled;
+    private String helpOpFormat;
+    private boolean logBannedCommandsEnabled;
 
     public ConfigManager(TChat plugin) {
         this.configFile = new ConfigFile("config.yml", null, plugin);
@@ -141,6 +146,7 @@ public class ConfigManager {
 
         floodPercentEnabled = config.getBoolean("flood.percent.enabled");
         floodRepeatEnabled = config.getBoolean("flood.repeat.enabled");
+        depurationAntiFloodEnabled = config.getBoolean("flood.depuration");
         if (floodRepeatEnabled) {
             charactersFlood = config.getInt("flood.repeat.characters");
         }
@@ -152,9 +158,11 @@ public class ConfigManager {
         cooldownCommand = config.getBoolean("cooldowns.commands.enabled");
         if (cooldownChat) {
             cooldownChatTime = config.getLong("cooldowns.chat.time");
+            depurationChatEnabled = config.getBoolean("cooldowns.chat.depuration-enabled");
         }
         if (cooldownCommand) {
             cooldownCommandTime = config.getLong("cooldowns.commands.time");
+            depurationCommandEnabled = config.getBoolean("cooldowns.commands.depuration-enabled");
         }
 
         antiCapEnabled = config.getBoolean("cap.enabled");
@@ -233,10 +241,13 @@ public class ConfigManager {
 
         logsChatEnabled = config.getBoolean("logs.chat.enabled");
         logsCommandEnabled = config.getBoolean("logs.command.enabled");
+        logBannedCommandsEnabled = config.getBoolean("logs.banned-commands.enabled");
 
         pollBar = config.getInt("poll.options.bar.length");
         pollFill = config.getString("poll.options.bar.filled");
         pollEmpty = config.getString("poll.options.bar.empty");
+
+        helpOpFormat = config.getString("helpop.format");
     }
 
     public void reloadConfig() {
@@ -244,6 +255,11 @@ public class ConfigManager {
         loadConfig();
     }
 
+    public boolean isLogBannedCommandsEnabled() { return logBannedCommandsEnabled; }
+    public String getHelpOpFormat() { return helpOpFormat; }
+    public boolean isDepurationAntiFloodEnabled() { return depurationAntiFloodEnabled; }
+    public boolean isDepurationCommandEnabled() { return depurationCommandEnabled; }
+    public boolean isDepurationChatEnabled() { return depurationChatEnabled; }
     public String getAnnouncementFormat() { return announcementFormat; }
     public boolean isAnnouncementEnabled() { return announcementEnabled; }
     public boolean isChatColorEnabled() { return chatColorEnabled; }

@@ -68,6 +68,14 @@ public class BannedCommandsManager {
         loadConfig();
     }
 
+    public void saveConfig() {
+        configFile.saveConfig();
+    }
+
+    public ConfigFile getConfigFile() {
+        return configFile;
+    }
+
     public int getParticles() { return particles;}
     public Particle getParticle() { return particle; }
     public boolean isParticlesEnabled() { return particlesEnabled; }

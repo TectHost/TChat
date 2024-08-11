@@ -40,6 +40,14 @@ public class ChatCooldownListener implements Listener {
                     String timeRemainingStr = String.valueOf(timeRemaining);
                     message = message.replace("%cooldown%", timeRemainingStr);
                     player.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + message));
+
+                    if (plugin.getConfigManager().isDepurationChatEnabled()) {
+                        String message1 = plugin.getMessagesManager().getDepurationChatCooldown();
+                        message1 = message1.replace("%player%", player.getName());
+                        message1 = message1.replace("%time%", String.valueOf(timeRemaining));
+                        plugin.getLogger().warning(message1);
+                    }
+
                     event.setCancelled(true);
                     return;
                 }
@@ -65,6 +73,14 @@ public class ChatCooldownListener implements Listener {
                     String timeRemainingStr = String.valueOf(timeRemaining);
                     message = message.replace("%cooldown%", timeRemainingStr);
                     player.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + message));
+
+                    if (plugin.getConfigManager().isDepurationCommandEnabled()) {
+                        String message1 = plugin.getMessagesManager().getDepurationCommandCooldown();
+                        message1 = message1.replace("%player%", player.getName());
+                        message1 = message1.replace("%time%", String.valueOf(timeRemaining));
+                        plugin.getLogger().warning(message1);
+                    }
+
                     event.setCancelled(true);
                     return;
                 }
