@@ -5,12 +5,13 @@
 # #################################################################
 
 chat:
-  # Use per group format (groups.yml)
-  use-group-format: false
   # Enable/disable chat format
   format-enabled: true
-  # Global format (use only if the above option is false)
-  format: "%tchat_prefix% &a%player% &e>> &7%message%"
+  # Use per group format (groups.yml)
+  use-group-format: false
+  # Global format (use only if the use-group-format option is false)
+  # Use the "¡" character to split the format in the player and message part
+  format: "%tchat_prefix% &a%player% &e>> ¡&7"
   # This option is used to display on the console the messages from the players
   register-messages-on-console: true
 

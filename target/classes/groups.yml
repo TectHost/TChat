@@ -17,7 +17,8 @@ groups:
     # Suffix of the group (%tchat_suffix%)
     suffix: ""
     # Format of the group (read config.yml)
-    format: "%tchat_prefix% &f%player% &e> &f%message%"
+    # Use the "¡" character to split the format in the player and message part
+    format: "%tchat_prefix% &f%player% &e> ¡&f"
     # Per group hover text
     hover:
       player:
@@ -58,7 +59,7 @@ groups:
     permission: tchat.group.admin
     prefix: "&c&lADMIN"
     suffix: ""
-    format: "%tchat_prefix% &f%player% &e> &f%message%"
+    format: "%tchat_prefix% &f%player% &e> ¡&f"
     hover:
       player:
         enabled: true
@@ -88,7 +89,7 @@ groups:
     permission: tchat.group.mod
     prefix: "&a&lMOD"
     suffix: ""
-    format: "%tchat_prefix% &f%player% &e> &f%message%"
+    format: "%tchat_prefix% &f%player% &e> ¡&f"
     hover:
       player:
         enabled: true
@@ -117,7 +118,7 @@ groups:
   default:
     prefix: "&7User"
     suffix: ""
-    format: "%tchat_prefix% &f%player% &e> &f%message%"
+    format: "%tchat_prefix% &f%player% &e> ¡&f"
     hover:
       player:
         enabled: true

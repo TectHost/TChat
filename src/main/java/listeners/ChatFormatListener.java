@@ -47,29 +47,35 @@ public class ChatFormatListener implements Listener {
         ChannelsConfigManager.Channel channel = channelsConfigManager.getChannel(channelName);
 
         if (plugin.getConfigManager().isFormatEnabled()) {
-            if (channel != null && channel.isFormatEnabled() && channel.isEnabled() && (player.hasPermission(channel.getPermission()) || player.hasPermission("tchat.admin") || player.hasPermission("tchat.channel.all"))) {
+            if (channel != null && channel.isFormatEnabled() && channel.isEnabled() &&
+                    (player.hasPermission(channel.getPermission()) || player.hasPermission("tchat.admin") || player.hasPermission("tchat.channel.all"))) {
                 format = channel.getFormat();
                 format = format.replace("%channel%", channelName);
-                format = format.replace("%message%", "%msg%");
             } else {
+                String groupName = groupManager.getGroup(player);
                 if (configManager.isFormatGroup()) {
-                    String groupName = groupManager.getGroup(player);
                     format = groupManager.getGroupFormat(groupName);
-                    if (format.isEmpty()) {
-                        format = "<" + player.getName() + "> " + message;
-                        String errorMessage = plugin.getMessagesManager().getNoFormatGroup();
-                        String prefix = plugin.getMessagesManager().getPrefix();
-                        Bukkit.getConsoleSender().sendMessage(plugin.getTranslateColors().translateColors(player, prefix) + org.bukkit.ChatColor.translateAlternateColorCodes('&', errorMessage).replace("%group%", groupName));
-                    }
                 } else {
                     format = configManager.getFormat();
                 }
+
+                if (format.isEmpty()) {
+                    format = "<" + player.getName() + "> " + message;
+                    String errorMessage = plugin.getMessagesManager().getNoFormatGroup();
+                    String prefix = plugin.getMessagesManager().getPrefix();
+                    Bukkit.getConsoleSender().sendMessage(plugin.getTranslateColors().translateColors(player, prefix) +
+                            org.bukkit.ChatColor.translateAlternateColorCodes('&', errorMessage).replace("%group%", groupName));
+                }
             }
 
-            format = format.replace("%player%", player.getName()).replace("%message%", "%msg%");
+            format = format.replace("%player%", player.getName());
             format = PlaceholderAPI.setPlaceholders(player, format);
             format = TranslateHexColorCodes.translateHexColorCodes("&#", "", format);
             format = ChatColor.translateAlternateColorCodes('&', format);
+
+            String[] parts = format.split("¡", 2);
+            String mainFormat = parts[0];
+            String extraFormat = parts.length > 1 ? parts[1] : "";
 
             if (plugin.getConfigManager().isMentionsEnabled()) {
                 String mentionCharacter = plugin.getConfigManager().getMentionCharacter();
@@ -84,8 +90,8 @@ public class ChatFormatListener implements Listener {
                 }
             }
 
-            String[] parts = format.split("%msg%", 2);
-            TextComponent mainComponent = new TextComponent(TextComponent.fromLegacyText(parts[0]));
+            TextComponent mainComponent = new TextComponent(TextComponent.fromLegacyText(mainFormat));
+            TextComponent messageComponent = new TextComponent(TextComponent.fromLegacyText(extraFormat + message));
 
             String groupName = groupManager.getGroup(player);
             GroupManager.HoverClickAction playerHoverClick = groupManager.getPlayerHoverClickAction(groupName);
@@ -100,13 +106,13 @@ public class ChatFormatListener implements Listener {
                 String playerFormat = plugin.getSaveManager().getFormat(player.getUniqueId());
                 String chatColor = plugin.getSaveManager().getChatColor(player.getUniqueId());
                 if (!chatColor.equalsIgnoreCase("none")) {
+                    messageComponent.setColor(ChatColor.of(chatColor));
                     message = chatColor + playerFormat + message;
                     message = plugin.getTranslateColors().translateColors(player, message);
                 }
             }
 
-            TextComponent messageComponent = new TextComponent(TextComponent.fromLegacyText(message));
-
+            // Apply hover and click actions to message component
             GroupManager.HoverClickAction messageHoverClick = groupManager.getMessageHoverClickAction(groupName);
             if (messageHoverClick.isEnabled()) {
                 messageComponent.setHoverEvent(createHoverEvent(player, messageHoverClick.getHoverText()));
@@ -116,9 +122,6 @@ public class ChatFormatListener implements Listener {
             }
 
             mainComponent.addExtra(messageComponent);
-            if (parts.length > 1) {
-                mainComponent.addExtra(new TextComponent(TextComponent.fromLegacyText(parts[1])));
-            }
 
             if (plugin.getConfigManager().isIgnoreEnabled()) {
                 List<Player> recipients = event.getRecipients().stream()
