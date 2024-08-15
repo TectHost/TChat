@@ -9,7 +9,9 @@
 # Discord: https://dc.tect.host/
 # Mail: support@tect.host
 menu:
-  title: "&cChatColor"
+  # Use legacy hex format, not compatible with &#rrggbb (only on the title)
+  # https://hex.tect.host/
+  title: "&x&f&f&0&0&0&0C&x&f&f&5&f&0&0h&x&f&f&b&f&0&0a&x&b&f&f&f&0&0t&x&0&0&f&f&0&0C&x&0&0&4&0&b&fo&x&2&6&0&0&c&0l&x&5&d&0&0&9&6o&x&9&4&0&0&d&3r"
   slots: 54
   # Clicking cooldown in ms (100 ms = 0.1 second)
   cooldown: 700
@@ -221,6 +223,16 @@ menu:
       amount: 1
       slot: 33
       name: "&fWHITE"
+      lore-perm:
+        - "&aYou have permission to use this format"
+      lore-no-perm:
+        - "&cYou do not have permission to use this format"
+    reset:
+      id: "reset"
+      material: "WHITE_CONCRETE"
+      amount: 1
+      slot: 40
+      name: "&f&lRESET"
       lore-perm:
         - "&aYou have permission to use this format"
       lore-no-perm:

@@ -1,36 +1,32 @@
 # #################################################################
 # ┌─────────────────────────────────────────────────────────────┐ #
-# │                            Worlds                           │ #
+# │                      Chat Placeholders                      │ #
 # └─────────────────────────────────────────────────────────────┘ #
 # #################################################################
 
-worlds:
-  # World name
-  world:
-    # Enable/disable chat
-    chat-enabled: true
-    # Per World Chat
-    pwc: false
-  world_nether:
-    chat-enabled: true
-    pwc: false
-  world_the_end:
-    chat-enabled: true
-    pwc: false
-  # Add more worlds
-  #survival:
-    #chat-enabled: false
+# Chat placeholders
+chat:
+  # [coords] placeholder
+  coords:
+    # Enable/disable this placeholder
+    enabled: true
+    # The name of the placeholder to be detected and replaced in chat
+    name: "[coords]"
+    # Replace format
+    format: "&7X: %x%, Y: %y%, Z: %z%"
+  # [item] placeholder
+  item:
+    # Enable/disable this placeholder
+    enabled: true
+    # The name of the placeholder to be detected and replaced in chat
+    name: "[item]"
+    # Replace format
+    format: "&7[&9%item%&7]"
 
 # #################################################################
 # ┌─────────────────────────────────────────────────────────────┐ #
-# │                         Chat Bridges                        │ #
+# │                      TChat Placeholders                     │ #
 # └─────────────────────────────────────────────────────────────┘ #
 # #################################################################
 
-bridges:
-  bridge1:
-    enabled: true
-    worlds:
-      - "world"
-      - "world_nether"
-  # Add more bridges
+# Coming soon...

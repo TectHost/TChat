@@ -1,6 +1,7 @@
 package blocked;
 
 import config.BannedWordsManager;
+import minealex.tchat.TChat;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -8,17 +9,16 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.scheduler.BukkitRunnable;
-import utils.TranslateHexColorCodes;
 
 import java.util.List;
 
-import static utils.TranslateHexColorCodes.translateHexColorCodes;
-
 public class BannedWords implements Listener {
 
+    private final TChat plugin;
     private final BannedWordsManager bannedWordsManager;
 
-    public BannedWords(BannedWordsManager bannedWordsManager, TranslateHexColorCodes translateHexColorCodes) {
+    public BannedWords(TChat plugin, BannedWordsManager bannedWordsManager) {
+        this.plugin = plugin;
         this.bannedWordsManager = bannedWordsManager;
     }
 
@@ -33,22 +33,27 @@ public class BannedWords implements Listener {
 
             for (String word : bannedWords) {
                 if (message.contains(word.toLowerCase())) {
+
+                    if (plugin.getConfigManager().isLogBannedWordsEnabled()) {
+                        plugin.getLogsManager().logBannedWords(player.getName(), word);
+                    }
+
                     if ("BLOCK".equalsIgnoreCase(bannedWordsManager.getType())) {
                         List<String> blockedMessages = bannedWordsManager.getBlockedMessages();
                         for (String blockedMessage : blockedMessages) {
-                            blockedMessage = translateAndReplace(blockedMessage, word);
+                            blockedMessage = translateAndReplace(player, blockedMessage, word);
                             event.getPlayer().sendMessage(blockedMessage);
                         }
                         event.setCancelled(true);
 
                         if (bannedWordsManager.getTitleEnabled()) {
-                            String title = translateAndReplace(bannedWordsManager.getTitle(), word);
-                            String subtitle = translateAndReplace(bannedWordsManager.getSubTitle(), word);
+                            String title = translateAndReplace(player, bannedWordsManager.getTitle(), word);
+                            String subtitle = translateAndReplace(player, bannedWordsManager.getSubTitle(), word);
                             sendTitle(event.getPlayer(), title, subtitle);
                         }
 
                         if (bannedWordsManager.getActionBarEnabled()) {
-                            String actionBar = translateAndReplace(bannedWordsManager.getActionBar(), word);
+                            String actionBar = translateAndReplace(player, bannedWordsManager.getActionBar(), word);
                             sendActionBar(event.getPlayer(), actionBar);
                         }
 
@@ -66,13 +71,13 @@ public class BannedWords implements Listener {
                         event.setMessage(censoredMessage);
 
                         if (bannedWordsManager.getTitleEnabled()) {
-                            String title = translateAndReplace(bannedWordsManager.getTitle(), word);
-                            String subtitle = translateAndReplace(bannedWordsManager.getSubTitle(), word);
+                            String title = translateAndReplace(player, bannedWordsManager.getTitle(), word);
+                            String subtitle = translateAndReplace(player, bannedWordsManager.getSubTitle(), word);
                             sendTitle(event.getPlayer(), title, subtitle);
                         }
 
                         if (bannedWordsManager.getActionBarEnabled()) {
-                            String actionBar = translateAndReplace(bannedWordsManager.getActionBar(), word);
+                            String actionBar = translateAndReplace(player, bannedWordsManager.getActionBar(), word);
                             sendActionBar(event.getPlayer(), actionBar);
                         }
 
@@ -96,8 +101,8 @@ public class BannedWords implements Listener {
         return message.replaceAll("(?i)\\b" + word + "\\b", censoredWord);
     }
 
-    private String translateAndReplace(String text, String word) {
-        String translatedText = translateHexColorCodes("&#", "", text);
+    private String translateAndReplace(Player player, String text, String word) {
+        String translatedText = plugin.getTranslateColors().translateColors(player, text);
         return ChatColor.translateAlternateColorCodes('&', translatedText.replace("{word}", word));
     }
 

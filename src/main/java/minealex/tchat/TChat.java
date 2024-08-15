@@ -16,12 +16,10 @@ import java.util.Objects;
 public class TChat extends JavaPlugin {
     private ConfigManager configManager;
     private MessagesManager messagesManager;
-    private TranslateHexColorCodes translateHexColorCodes;
     private GroupManager groupManager;
     private BannedWordsManager bannedWordsManager;
     private BannedWords bannedWords;
     private BannedCommandsManager bannedCommandsManager;
-    private BannedCommands bannedCommands;
     private ReplacerManager replacerManager;
     private AntiAdvertising antiAdvertising;
     private ChatColorInventoryManager chatColorInventoryManager;
@@ -59,6 +57,7 @@ public class TChat extends JavaPlugin {
     private WorldsManager worldsManager;
     private ChatEnabledListener chatEnabledListener;
     private PlayerLeftListener playerLeftListener;
+    private PlaceholdersConfig placeholdersConfig;
 
     @Override
     public void onEnable() {
@@ -80,7 +79,7 @@ public class TChat extends JavaPlugin {
 
     public void registerListeners() {
         ChatFormatListener chatFormatListener = new ChatFormatListener(this, configManager, groupManager);
-        bannedWords = new BannedWords(bannedWordsManager, translateHexColorCodes);
+        bannedWords = new BannedWords(this, bannedWordsManager);
         ChatListener chatListener = new ChatListener(this, chatFormatListener);
         antiAdvertising = new AntiAdvertising(this);
         capListener = new CapListener(this);
@@ -102,6 +101,7 @@ public class TChat extends JavaPlugin {
         levelListener = new LevelListener(this);
         chatEnabledListener = new ChatEnabledListener(this);
 
+        getServer().getPluginManager().registerEvents(new ChatPlaceholdersListener(this), this);
         getServer().getPluginManager().registerEvents(new PollListener(this), this);
         getServer().getPluginManager().registerEvents(signListener, this);
         getServer().getPluginManager().registerEvents(chatListener, this);
@@ -136,10 +136,10 @@ public class TChat extends JavaPlugin {
         levelsManager = new LevelsManager(this);
         deathManager = new DeathManager(this);
         worldsManager = new WorldsManager(this);
+        placeholdersConfig = new PlaceholdersConfig(this);
     }
 
     public void initializeManagers() {
-        translateHexColorCodes = new TranslateHexColorCodes();
         groupManager = new GroupManager(this);
         chatColorInventoryManager = new ChatColorInventoryManager(this);
         translateColors = new TranslateColors();
@@ -196,6 +196,10 @@ public class TChat extends JavaPlugin {
         Objects.requireNonNull(getCommand("bannedcommands")).setExecutor(new BannedCommandsCommand(bannedCommandsManager, this));
         Objects.requireNonNull(getCommand("helpop")).setExecutor(new HelpOpCommand(this));
         Objects.requireNonNull(getCommand("showitem")).setExecutor(new ShowItemCommand(this));
+        Objects.requireNonNull(getCommand("list")).setExecutor(new ListCommand(this));
+        Objects.requireNonNull(getCommand("calculator")).setExecutor(new CalculatorCommand(this));
+        Objects.requireNonNull(getCommand("player")).setExecutor(new PlayerCommand(this));
+        Objects.requireNonNull(getCommand("server")).setExecutor(new ServerCommand(this));
     }
 
     public void registerPlaceholders() {
@@ -204,6 +208,7 @@ public class TChat extends JavaPlugin {
 
     // ------------------------------------------------------------------------------
 
+    public PlaceholdersConfig getPlaceholdersConfig() { return placeholdersConfig; }
     public AutoBroadcastSender getAutoBroadcastSender() { return autoBroadcastSender; }
     public PlayerLeftListener getPlayerLeftListener() { return playerLeftListener; }
     public ChatEnabledListener getChatEnabledListener() { return chatEnabledListener; }

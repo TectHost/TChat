@@ -15,6 +15,7 @@ public class LogsManager {
     private final File chatLogFile;
     private final File commandLogFile;
     private final File bannedCommandsFile;
+    private final File bannedWordsFile;
 
     public LogsManager(TChat plugin) {
         File pluginDataFolder = plugin.getDataFolder();
@@ -27,6 +28,7 @@ public class LogsManager {
         this.chatLogFile = new File(logsFolder, "chat.log");
         this.commandLogFile = new File(logsFolder, "commands.log");
         this.bannedCommandsFile = new File(logsFolder, "banned_commands.log");
+        this.bannedWordsFile = new File(logsFolder, "banned_words.log");
 
         regenerateFiles();
     }
@@ -42,6 +44,10 @@ public class LogsManager {
 
         if (bannedCommandsFile.exists()) {
             clearFile(bannedCommandsFile);
+        }
+
+        if (bannedWordsFile.exists()) {
+            clearFile(bannedWordsFile);
         }
     }
 
@@ -77,6 +83,16 @@ public class LogsManager {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(bannedCommandsFile, true))) {
             String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
             writer.write("[" + timestamp + "] Banned Command executed by: " + playerName + ": /" + command);
+            writer.newLine();
+        } catch (IOException e) {
+            Bukkit.getLogger().severe("Failed to log banned command: " + e.getMessage() + " (#xc8m2 - LogsManager.java)");
+        }
+    }
+
+    public void logBannedWords(String playerName, String word) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(bannedCommandsFile, true))) {
+            String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+            writer.write("[" + timestamp + "] Banned Word executed by: " + playerName + ": " + word);
             writer.newLine();
         } catch (IOException e) {
             Bukkit.getLogger().severe("Failed to log banned command: " + e.getMessage() + " (#xc8m2 - LogsManager.java)");

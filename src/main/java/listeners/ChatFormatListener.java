@@ -3,6 +3,7 @@ package listeners;
 import config.ChannelsConfigManager;
 import config.ConfigManager;
 import config.GroupManager;
+import config.WorldsManager;
 import me.clip.placeholderapi.PlaceholderAPI;
 import minealex.tchat.TChat;
 import net.md_5.bungee.api.ChatColor;
@@ -16,8 +17,11 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import utils.TranslateHexColorCodes;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class ChatFormatListener implements Listener {
 
@@ -34,6 +38,7 @@ public class ChatFormatListener implements Listener {
     }
 
     @EventHandler
+    @SuppressWarnings("deprecation")
     public void playerFormat(@NotNull AsyncPlayerChatEvent event) {
         if (event.isCancelled()) {
             return;
@@ -42,6 +47,38 @@ public class ChatFormatListener implements Listener {
         Player player = event.getPlayer();
         String message = event.getMessage();
         String format;
+
+        String worldName = player.getWorld().getName();
+        WorldsManager.WorldConfigData worldConfigData = plugin.getWorldsManager().getWorldsConfig().get(worldName);
+        boolean perWorldChat = worldConfigData != null && worldConfigData.pwc();
+
+        Set<Player> recipients = new HashSet<>(event.getRecipients());
+
+        if (perWorldChat) {
+            recipients = recipients.stream()
+                    .filter(recipient -> recipient.hasPermission("tchat.admin") ||
+                            recipient.hasPermission("tchat.bypass.pwc") ||
+                            recipient.getWorld().getName().equals(worldName))
+                    .collect(Collectors.toSet());
+        } else {
+            Set<String> worldsToInclude = new HashSet<>();
+            worldsToInclude.add(worldName);
+
+            for (WorldsManager.BridgeConfigData bridge : plugin.getWorldsManager().getBridgesConfig().values()) {
+                if (bridge.enabled() && bridge.worlds().contains(worldName)) {
+                    worldsToInclude.addAll(bridge.worlds());
+                }
+            }
+
+            recipients = Bukkit.getOnlinePlayers().stream()
+                    .filter(recipient -> recipient.hasPermission("tchat.admin") ||
+                            recipient.hasPermission("tchat.bypass.bridge") ||
+                            worldsToInclude.contains(recipient.getWorld().getName()))
+                    .collect(Collectors.toSet());
+        }
+
+        event.getRecipients().clear();
+        event.getRecipients().addAll(recipients);
 
         String channelName = plugin.getChannelsManager().getPlayerChannel(player);
         ChannelsConfigManager.Channel channel = channelsConfigManager.getChannel(channelName);
@@ -84,8 +121,24 @@ public class ChatFormatListener implements Listener {
                 for (Player recipient : event.getRecipients()) {
                     String mention = mentionCharacter + recipient.getName();
                     if (message.contains(mention)) {
-                        String coloredMention = TranslateHexColorCodes.translateHexColorCodes("&#", "", mentionColor + mention + "&f");
+                        String coloredMention = plugin.getTranslateColors().translateColors(player,mentionColor + mention);
                         message = message.replace(mention, coloredMention);
+                    }
+                }
+            }
+
+            if (plugin.getConfigManager().isChatColorEnabled()) {
+                String chatColor = plugin.getSaveManager().getChatColor(player.getUniqueId()) + plugin.getSaveManager().getFormat(player.getUniqueId());
+                if (!chatColor.equalsIgnoreCase("")) {
+                    ChatColor color;
+                    if (chatColor.startsWith("&")) {
+                        color = ChatColor.getByChar(chatColor.charAt(1));
+                    } else {
+                        color = ChatColor.of(chatColor);
+                    }
+                    if (color != null) {
+                        message = chatColor + message;
+                        message = plugin.getTranslateColors().translateColors(player, message);
                     }
                 }
             }
@@ -102,17 +155,6 @@ public class ChatFormatListener implements Listener {
                 }
             }
 
-            if (plugin.getConfigManager().isChatColorEnabled()) {
-                String playerFormat = plugin.getSaveManager().getFormat(player.getUniqueId());
-                String chatColor = plugin.getSaveManager().getChatColor(player.getUniqueId());
-                if (!chatColor.equalsIgnoreCase("none")) {
-                    messageComponent.setColor(ChatColor.of(chatColor));
-                    message = chatColor + playerFormat + message;
-                    message = plugin.getTranslateColors().translateColors(player, message);
-                }
-            }
-
-            // Apply hover and click actions to message component
             GroupManager.HoverClickAction messageHoverClick = groupManager.getMessageHoverClickAction(groupName);
             if (messageHoverClick.isEnabled()) {
                 messageComponent.setHoverEvent(createHoverEvent(player, messageHoverClick.getHoverText()));
@@ -124,12 +166,12 @@ public class ChatFormatListener implements Listener {
             mainComponent.addExtra(messageComponent);
 
             if (plugin.getConfigManager().isIgnoreEnabled()) {
-                List<Player> recipients = event.getRecipients().stream()
+                List<Player> finalRecipients = event.getRecipients().stream()
                         .filter(recipient -> !isIgnored(player, recipient))
                         .toList();
 
                 event.getRecipients().clear();
-                event.getRecipients().addAll(recipients);
+                event.getRecipients().addAll(finalRecipients);
             }
 
             event.setCancelled(true);
@@ -168,6 +210,7 @@ public class ChatFormatListener implements Listener {
     }
 
     @Contract("_, _ -> new")
+    @SuppressWarnings("deprecation")
     private @NotNull HoverEvent createHoverEvent(Player player, @NotNull List<String> hoverText) {
         TextComponent hoverComponent = new TextComponent("");
         boolean first = true;

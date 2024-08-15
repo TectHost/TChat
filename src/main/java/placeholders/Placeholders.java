@@ -24,7 +24,7 @@ public class Placeholders extends PlaceholderExpansion {
 
     @Override
     public @NotNull String getAuthor() {
-        return "Mine_Alex";
+        return plugin.getDescription().getAuthors().toString();
     }
 
     @Override
@@ -57,6 +57,8 @@ public class Placeholders extends PlaceholderExpansion {
             case "xp" -> String.valueOf(plugin.getSaveManager().getXp(player.getUniqueId()));
             case "level" -> String.valueOf(plugin.getSaveManager().getLevel(player.getUniqueId()));
             case "chatgames_wins" -> String.valueOf(plugin.getSaveManager().getChatGamesWins(player.getUniqueId()));
+            case "ping" -> plugin.getConfigManager().getColorForPing(player.getPing()) + player.getPing();
+            case "ping_color" -> plugin.getConfigManager().getColorForPing(player.getPing());
             default -> null;
         };
     }

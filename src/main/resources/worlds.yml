@@ -1,6 +1,6 @@
 # #################################################################
 # ┌─────────────────────────────────────────────────────────────┐ #
-# │                       Custom Commands                       │ #
+# │                            Worlds                           │ #
 # └─────────────────────────────────────────────────────────────┘ #
 # #################################################################
 
@@ -9,10 +9,28 @@ worlds:
   world:
     # Enable/disable chat
     chat-enabled: true
+    # Per World Chat
+    pwc: false
   world_nether:
     chat-enabled: true
+    pwc: false
   world_the_end:
     chat-enabled: true
-  # Add more worlds'
+    pwc: false
+  # Add more worlds
   #survival:
     #chat-enabled: false
+
+# #################################################################
+# ┌─────────────────────────────────────────────────────────────┐ #
+# │                         Chat Bridges                        │ #
+# └─────────────────────────────────────────────────────────────┘ #
+# #################################################################
+
+bridges:
+  bridge1:
+    enabled: true
+    worlds:
+      - "world"
+      - "world_nether"
+  # Add more bridges

@@ -27,9 +27,21 @@ public class SaveManager {
         loadConfig();
     }
 
+    public void removeChatColor(UUID playerId) {
+        String path = "players." + playerId.toString() + ".chatcolor";
+        config.set(path, null);
+        savesFile.saveConfig();
+    }
+
+    public void removeFormat(UUID playerId) {
+        String path = "players." + playerId.toString() + ".format";
+        config.set(path, null);
+        savesFile.saveConfig();
+    }
+
     public String getChatColor(UUID playerId) {
         String path = "players." + playerId.toString() + ".chatcolor";
-        return config.getString(path, "none");
+        return config.getString(path, "");
     }
 
     public void setChatColor(UUID playerId, String chatColor) {

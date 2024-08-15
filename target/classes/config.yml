@@ -281,6 +281,10 @@ logs:
   banned-commands:
     # Enable/disable logging banned commands usage
     enabled: true
+  # Banned words log (when someone use a banned word)
+  banned-words:
+    # Enable/disable logging banned words usage
+    enabled: true
 
 # #################################################################
 # ┌─────────────────────────────────────────────────────────────┐ #
@@ -457,6 +461,18 @@ print:
 ping:
   # Enable/disable this command
   enabled: true
+  # Ping colors (you can add more)
+  colors:
+    - range: "0-100"
+      color: "&#00FF00"
+    - range: "101-200"
+      color: "&#FFFF00"
+    - range: "201-300"
+      color: "&#FF6600"
+    - range: "301-500"
+      color: "&#FF0000"
+    - range: "501-15000"
+      color: "&#800080"
 
 # #################################################################
 # ┌─────────────────────────────────────────────────────────────┐ #
@@ -477,3 +493,17 @@ chat-color:
 helpop:
   # Format of the helpop command
   format: "&c[HelpOp] &f%player%&7: &f%message%"
+
+# #################################################################
+# ┌─────────────────────────────────────────────────────────────┐ #
+# │                             List                            │ #
+# └─────────────────────────────────────────────────────────────┘ #
+# #################################################################
+
+list:
+  # First message
+  header: "&7Online players:"
+  # Text between player and player
+  append: ", "
+  # Last message
+  footer: "&7────────────────"

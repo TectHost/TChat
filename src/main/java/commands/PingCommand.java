@@ -1,6 +1,7 @@
 package commands;
 
 import minealex.tchat.TChat;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -24,12 +25,29 @@ public class PingCommand implements CommandExecutor {
             return true;
         }
 
-        if (player.hasPermission("tchat.ping") ||player.hasPermission("tchat.admin")) {
-            int ping = player.getPing();
+        if (player.hasPermission("tchat.ping") || player.hasPermission("tchat.admin")) {
+            if (args.length == 0) {
+                int ping = player.getPing();
 
-            String message = plugin.getMessagesManager().getPing();
-            message = message.replace("%ping%", String.valueOf(ping));
-            sender.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + message));
+                String message = plugin.getMessagesManager().getPing();
+                String color = plugin.getConfigManager().getColorForPing(ping);
+                message = message.replace("%ping%", String.valueOf(ping)).replace("%color%", color);
+                sender.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + message));
+                return true;
+            } else if (args.length == 1) {
+                Player target = Bukkit.getPlayer(args[0]);
+                if (target != null) {
+                    int ping = target.getPing();
+                    String message = plugin.getMessagesManager().getOtherPing();
+                    String color = plugin.getConfigManager().getColorForPing(ping);
+                    message = message.replace("%player%", target.getName()).replace("%ping%", String.valueOf(ping)).replace("%color%", color);
+                    sender.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + message));
+                } else {
+                    String message = plugin.getMessagesManager().getPlayerNotFound();
+                    sender.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + message));
+                }
+                return true;
+            }
         } else {
             String message = plugin.getMessagesManager().getNoPermission();
             sender.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + message));

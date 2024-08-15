@@ -8,6 +8,8 @@
 
 # Tags:
 # [MESSAGE] - Sends a message | - "[MESSAGE] &7Test message"
+# [GLOBAL] - Sends a message to all online players | - "[ALL] &7Test message &bfor all &#c03afeo&#ac2ff9n&#9824f4l&#8319eei&#6f0ee9n&#5b03e4e players (%player_name%)"
+# [BROADCAST] - Sends a message to all online players with broadcast format (works even if it is deactivated in config.yml) | - "[BROADCAST] Test message"
 # [TITLE] - Sends a title | - "[TITLE] &aTitle;&bSubtitle"
 # [PLAYER_COMMAND] - The player will automatically execute a command | - "[PLAYER_COMMAND] spawn {player}"
 # [CONSOLE_COMMAND] - The console will automatically execute a command | - "[CONSOLE_COMMAND] give {player} diamond 1"
@@ -32,11 +34,20 @@
     # (OR) You can use || to compare another condition if one of them is not met: - "[IF] %statistic_hours_played% >= 10 && %player_is_op% == yes"
   # [ELSE] - If none of the conditions ([IF] and all the [ELSE IF] if any) are not met, this will be executed | - "[ELSE]"
   # [FI] - The condition ends, from this tag, the rest is out of this condition | - "[FI]"
+# Loops
+  # [FOR] - Starts a loop for a specified number of repetitions | - "[FOR] 5"
+    # Placeholders:
+      # %i% - Number of loop executions
+  # [ROF] - Ends a loop | - "[ROF]"
+
+# Placeholders:
+# %prefix% - Returns the prefix of TChat
+# %i% - Returns the repetition number of the current loop
 
 commands:
   test:
     permission-required: false # tchat.customcommands.test
-    args: false # May only work in 1.21
+    args: false
     cooldown: 0
     actions:
       - "[IF] %statistic_hours_played% >= 10 || %player_is_op% == yes"

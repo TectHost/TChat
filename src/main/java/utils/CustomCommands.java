@@ -29,6 +29,8 @@ public class CustomCommands implements Listener {
     private final TChat plugin;
     private final CommandsManager commandsManager;
     private final Map<UUID, Long> commandCooldowns = new HashMap<>();
+    private int currentIteration;
+    private boolean inForLoop;
 
     public CustomCommands(@NotNull TChat plugin) {
         this.plugin = plugin;
@@ -95,11 +97,42 @@ public class CustomCommands implements Listener {
         boolean isElseIfBlock = false;
         boolean skipActions = false;
         boolean inConditional = false;
+        boolean inLoop = false;
+        List<String> loopActions = new ArrayList<>();
+        int loopCount = 0;
 
         for (String action : actions) {
             action = processPlaceholders(player, action);
 
-            if (action.startsWith("[IF]")) {
+            if (action.startsWith("[FOR]")) {
+                if (inLoop) {
+                    skipActions = true;
+                } else {
+                    try {
+                        loopCount = Integer.parseInt(action.substring(5).trim());
+                        loopActions = new ArrayList<>();
+                        inLoop = true;
+                        inForLoop = true;
+                    } catch (NumberFormatException e) {
+                        plugin.getLogger().warning("Número de iteraciones inválido en [FOR]: " + action);
+                        skipActions = true;
+                    }
+                }
+            } else if (action.startsWith("[ROF]")) {
+                if (inLoop) {
+                    inLoop = false;
+                    for (currentIteration = 1; currentIteration <= loopCount; currentIteration++) {
+                        for (String loopAction : loopActions) {
+                            executeAction(player, loopAction, args);
+                        }
+                    }
+                    inForLoop = false;
+                } else {
+                    skipActions = true;
+                }
+            } else if (inLoop) {
+                loopActions.add(action);
+            } else if (action.startsWith("[IF]")) {
                 if (inConditional) {
                     skipActions = true;
                 } else {
@@ -230,6 +263,7 @@ public class CustomCommands implements Listener {
         }
 
         data = data.replace("%prefix%", prefix);
+        data = data.replace("%i%", String.valueOf(currentIteration));
 
         if (args != null) {
             String modifiedArgs = args.substring(1);
@@ -363,6 +397,44 @@ public class CustomCommands implements Listener {
                 break;
             case "[CLICK_ACTION]":
                 handleClickAction(player, data);
+                break;
+            case "[CHATCOLOR]":
+                handleChatColorAction(player, data);
+                break;
+            case "[GLOBAL]":
+                for (Player p : Bukkit.getOnlinePlayers()) {
+                    p.sendMessage(plugin.getTranslateColors().translateColors(p, data));
+                }
+                break;
+            case "[BROADCAST]":
+                String format = plugin.getConfigManager().getBroadcastFormat();
+                format = format.replace("%message%", data);
+                for (Player p : Bukkit.getOnlinePlayers()) {
+                    p.sendMessage(plugin.getTranslateColors().translateColors(p, format));
+                }
+                break;
+        }
+    }
+
+    private void handleChatColorAction(Player player, @NotNull String data) {
+        String[] parts = data.split("/", 2);
+        if (parts.length < 2) {
+            plugin.getLogger().warning("Invalid [CHATCOLOR] format: " + data);
+            return;
+        }
+
+        String type = parts[0].trim();
+        String colorOrFormat = parts[1].trim();
+
+        switch (type.toUpperCase()) {
+            case "COLOR":
+                plugin.getSaveManager().setChatColor(player.getUniqueId(), colorOrFormat);
+                break;
+            case "FORMAT":
+                plugin.getSaveManager().setFormat(player.getUniqueId(), colorOrFormat);
+                break;
+            default:
+                plugin.getLogger().warning("Unknown [CHATCOLOR] type: " + type);
                 break;
         }
     }

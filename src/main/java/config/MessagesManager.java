@@ -132,6 +132,18 @@ public class MessagesManager {
     private String depurationAntiFlood;
     private String helpOp;
     private String usageHelpOp;
+    private String usageCalculator;
+    private String invalidOperator;
+    private String divisionZero;
+    private String calculatorResult;
+    private String invalidNumber;
+    private String invalidColor;
+    private String colorReset;
+    private String usagePlayer;
+    private List<String> playerMessage;
+    private List<String> playerMessageAdmin;
+    private String otherPing;
+    private List<String> serverMessage;
 
     public MessagesManager(TChat plugin){
         this.messagesFile = new ConfigFile("messages.yml", null, plugin);
@@ -209,7 +221,30 @@ public class MessagesManager {
             ignoreListEmpty = config.getString("messages.ignore.ignore-list-empty");
         }
 
+        if (plugin.getConfigManager().isChatColorEnabled()) {
+            colorReset = config.getString("messages.color-reset");
+            invalidColor = config.getString("messages.invalid-color");
+            colorSelectedMessage = config.getString("messages.color-selected");
+            noItemFoundMessage = config.getString("messages.no-item-found");
+            invalidIdMessage = config.getString("messages.invalid-id");
+            formatSelectedMessage = config.getString("messages.format-selected");
+        }
+
+        if (plugin.getConfigManager().isPingEnabled()) {
+            ping = config.getString("messages.ping");
+            otherPing = config.getString("messages.other-ping");
+        }
+
         // Messages
+        serverMessage = config.getStringList("server");
+        playerMessageAdmin = config.getStringList("player.admin");
+        playerMessage = config.getStringList("player.global");
+        usagePlayer = config.getString("messages.usage.usage-player");
+        divisionZero = config.getString("messages.division-zero");
+        invalidOperator = config.getString("messages.invalid-operator");
+        invalidNumber = config.getString("messages.invalid-number");
+        calculatorResult = config.getString("messages.calculator-result");
+        usageCalculator = config.getString("messages.usage.usage-calculator");
         usageHelpOp = config.getString("messages.usage.usage-helpop");
         helpOp = config.getString("messages.helpop");
         bannedCommandsRemoved = config.getString("messages.bannedcommands.removed");
@@ -271,7 +306,6 @@ public class MessagesManager {
         endTitle = config.getString("messages.poll.message.end.title");
         pollOptionsMessage = config.getString("messages.poll.join.message-options");
         pollMessage = config.getString("messages.poll.join.message");
-        ping = config.getString("messages.ping");
         customCommandsCooldown = config.getString("messages.custom-commands-cooldown");
         noGames = config.getString("messages.chatgames.no-games");
         noEnabledGames = config.getString("messages.chatgames.no-enabled-games");
@@ -298,15 +332,11 @@ public class MessagesManager {
         channelNotExist = config.getString("messages.channel.channel-not-exist");
         usageLeaveChannel = config.getString("messages.usage.leave-channel");
         usageJoinChannel = config.getString("messages.usage.join-channel");
-        noItemFoundMessage = config.getString("messages.no-item-found");
-        invalidIdMessage = config.getString("messages.invalid-id");
-        formatSelectedMessage = config.getString("messages.format-selected");
         noPermission = config.getString("messages.no-permission");
         versionMessage = config.getString("messages.version-message");
         reloadMessage = config.getString("messages.reload-message");
         unknownMessage = config.getString("messages.unknown-command");
         antiCapMessage = config.getString("messages.anticap");
-        colorSelectedMessage = config.getString("messages.color-selected");
         usageChannel = config.getString("messages.usage.channel");
 
         // Messages depuration
@@ -321,6 +351,18 @@ public class MessagesManager {
     }
 
     // Messages
+    public List<String> getServerMessage() { return serverMessage; }
+    public String getOtherPing() { return otherPing; }
+    public List<String> getPlayerMessageAdmin() { return playerMessageAdmin; }
+    public List<String> getPlayerMessage() { return playerMessage; }
+    public String getUsagePlayer() { return usagePlayer; }
+    public String getColorReset() { return colorReset; }
+    public String getInvalidColor() { return invalidColor; }
+    public String getInvalidNumber() { return invalidNumber; }
+    public String getCalculatorResult() { return calculatorResult; }
+    public String getDivisionZero() { return divisionZero; }
+    public String getInvalidOperator() { return invalidOperator; }
+    public String getUsageCalculator() { return usageCalculator; }
     public String getUsageHelpOp() { return usageHelpOp; }
     public String getHelpOp() { return helpOp; }
     public String getDepurationAntiFlood() { return depurationAntiFlood; }

@@ -147,25 +147,30 @@ public class ChatColorInventoryManager implements Listener {
 
         String permission = "tchat.chatcolor." + itemKey;
 
+        String prefix = plugin.getMessagesManager().getPrefix();
+
         if (player.hasPermission(permission) || player.hasPermission("tchat.admin") || player.hasPermission("tchat.chatcolor.all")) {
             if (id.matches("&[0-9a-f]")) {
                 plugin.getSaveManager().setChatColor(player.getUniqueId(), id);
-                String message = plugin.getMessagesManager().getColorSelectedMessage().replace("%id%", id).replace("%color%", itemKey);
-                String prefix = plugin.getMessagesManager().getPrefix();
+                String format = plugin.getSaveManager().getFormat(player.getUniqueId());
+                String message = plugin.getMessagesManager().getColorSelectedMessage().replace("%id%", id).replace("%color%", itemKey).replace("%format%", format);
                 player.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + message));
             } else if (id.matches("&[k-o&r]")) {
                 plugin.getSaveManager().setFormat(player.getUniqueId(), id);
-                String message = plugin.getMessagesManager().getFormatSelectedMessage().replace("%id%", id).replace("%color%", itemKey);
-                String prefix = plugin.getMessagesManager().getPrefix();
+                String color = plugin.getSaveManager().getChatColor(player.getUniqueId());
+                String message = plugin.getMessagesManager().getFormatSelectedMessage().replace("%id%", id).replace("%format%", itemKey).replace("%color%", color);
+                player.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + message));
+            } else if (id.equalsIgnoreCase("reset")) {
+                plugin.getSaveManager().removeFormat(player.getUniqueId());
+                plugin.getSaveManager().removeChatColor(player.getUniqueId());
+                String message = plugin.getMessagesManager().getColorReset();
                 player.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + message));
             } else {
                 String message = plugin.getMessagesManager().getInvalidIdMessage();
-                String prefix = plugin.getMessagesManager().getPrefix();
                 player.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + message));
             }
         } else {
             String message = plugin.getMessagesManager().getNoPermission();
-            String prefix = plugin.getMessagesManager().getPrefix();
             player.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + message));
         }
     }

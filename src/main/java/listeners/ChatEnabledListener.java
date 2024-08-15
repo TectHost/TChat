@@ -2,10 +2,10 @@ package listeners;
 
 import minealex.tchat.TChat;
 import config.WorldsManager;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.entity.Player;
 
 public class ChatEnabledListener implements Listener {
 
@@ -19,12 +19,16 @@ public class ChatEnabledListener implements Listener {
 
     @EventHandler
     public void checkChatEnabled(AsyncPlayerChatEvent event, Player player) {
-        if (event.isCancelled()) { return; }
+        if (event.isCancelled()) {
+            return;
+        }
 
         String worldName = player.getWorld().getName();
 
-        if (worldsManager.getWorldsConfig().containsKey(worldName)) {
-            boolean chatEnabled = worldsManager.getWorldsConfig().get(worldName);
+        WorldsManager.WorldConfigData configData = worldsManager.getWorldsConfig().get(worldName);
+
+        if (configData != null) {
+            boolean chatEnabled = configData.chatEnabled();
             if (!chatEnabled) {
                 event.setCancelled(true);
                 String prefix = plugin.getMessagesManager().getPrefix();

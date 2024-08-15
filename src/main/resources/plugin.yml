@@ -1,5 +1,5 @@
 main: minealex.tchat.TChat
-version: 4.0.4
+version: 4.0.5
 name: TChat
 author: Mine_Alex
 api-version: 1.13
@@ -49,8 +49,26 @@ commands:
     description: Get help from the staff
   showitem:
     description: Show the item in your hand
+  list:
+    description: View all online players
+  calculator:
+    description: Calculate math operations
+  player:
+    description: Show player information
+  server:
+    description: Shows server information
 
 permissions:
+  tchat.admin.server:
+    description: Permission to use server command
+  tchat.admin.player:
+    description: Permission to use full player command
+  tchat.player:
+    description: Permission to use player command
+  tchat.admin.calculator:
+    description: Permission to use calculator command
+  tchat.admin.list:
+    description: Permission to use list command
   tchat.admin.helpop:
     description: Permission to receive helpop messages
   tchat.helpop:

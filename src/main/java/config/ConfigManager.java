@@ -3,10 +3,15 @@ package config;
 import minealex.tchat.TChat;
 import org.bukkit.configuration.file.FileConfiguration;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 public class ConfigManager {
     private final ConfigFile configFile;
+    private Map<Integer, String> pingColors;
+
     private String format;
     private boolean formatGroup;
     private boolean registerMessagesOnConsole;
@@ -89,6 +94,10 @@ public class ConfigManager {
     private boolean depurationAntiFloodEnabled;
     private String helpOpFormat;
     private boolean logBannedCommandsEnabled;
+    private boolean logBannedWordsEnabled;
+    private String listHeader;
+    private String listAppend;
+    private String listFooter;
 
     public ConfigManager(TChat plugin) {
         this.configFile = new ConfigFile("config.yml", null, plugin);
@@ -242,12 +251,53 @@ public class ConfigManager {
         logsChatEnabled = config.getBoolean("logs.chat.enabled");
         logsCommandEnabled = config.getBoolean("logs.command.enabled");
         logBannedCommandsEnabled = config.getBoolean("logs.banned-commands.enabled");
+        logBannedWordsEnabled = config.getBoolean("logs.banned-words.enabled");
 
         pollBar = config.getInt("poll.options.bar.length");
         pollFill = config.getString("poll.options.bar.filled");
         pollEmpty = config.getString("poll.options.bar.empty");
 
         helpOpFormat = config.getString("helpop.format");
+
+        listAppend = config.getString("list.append");
+        listFooter = config.getString("list.footer");
+        listHeader = config.getString("list.header");
+
+        pingColors = new HashMap<>();
+
+        List<Map<?, ?>> colorConfigs = config.getMapList("ping.colors");
+        for (Map<?, ?> colorConfig : colorConfigs) {
+            String range = (String) colorConfig.get("range");
+            String colorCode = (String) colorConfig.get("color");
+
+            if (range == null || colorCode == null) {
+                throw new IllegalArgumentException("[Ping] Error in config: " + colorConfig);
+            }
+
+            String[] parts = range.split("-");
+            if (parts.length < 1 || parts.length > 2) {
+                throw new IllegalArgumentException("[Ping]: '" + range + "' does not have min-max format: '" + range + "'");
+            }
+
+            int min;
+            int max;
+
+            try {
+                min = Integer.parseInt(parts[0].trim());
+            } catch (NumberFormatException e) {
+                throw new IllegalArgumentException("[Ping]: '" + parts[0] + "' is not valid (0)", e);
+            }
+
+            try {
+                max = Integer.parseInt(parts[1].trim());
+            } catch (NumberFormatException e) {
+                throw new IllegalArgumentException("[Ping]: '" + parts[1] + "' is not valid (1)", e);
+            }
+
+            for (int i = min; i <= max; i++) {
+                pingColors.put(i, colorCode);
+            }
+        }
     }
 
     public void reloadConfig() {
@@ -255,6 +305,10 @@ public class ConfigManager {
         loadConfig();
     }
 
+    public String getListFooter() { return listFooter; }
+    public String getListAppend() { return listAppend; }
+    public String getListHeader() { return listHeader; }
+    public boolean isLogBannedWordsEnabled() { return logBannedWordsEnabled; }
     public boolean isLogBannedCommandsEnabled() { return logBannedCommandsEnabled; }
     public String getHelpOpFormat() { return helpOpFormat; }
     public boolean isDepurationAntiFloodEnabled() { return depurationAntiFloodEnabled; }
@@ -341,4 +395,12 @@ public class ConfigManager {
     public double getAntiCapPercent() { return antiCapPercent; }
     public String getAntiCapMode() { return antiCapMode; }
     public boolean isAntiCapMessageEnabled() { return antiCapMessageEnabled; }
+
+    public String getColorForPing(int ping) {
+        return pingColors.entrySet().stream()
+                .filter(entry -> ping >= entry.getKey())
+                .reduce((first, second) -> second)
+                .map(Map.Entry::getValue)
+                .orElse("&#FFFFFF");
+    }
 }
