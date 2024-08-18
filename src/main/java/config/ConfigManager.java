@@ -3,6 +3,7 @@ package config;
 import minealex.tchat.TChat;
 import org.bukkit.configuration.file.FileConfiguration;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -98,6 +99,10 @@ public class ConfigManager {
     private String listHeader;
     private String listAppend;
     private String listFooter;
+    private boolean ignoreLogEnabled;
+    private int socialSpyMode;
+    private List<String> socialSpyCommands;
+    private boolean antiAdvertisingLogEnabled;
 
     public ConfigManager(TChat plugin) {
         this.configFile = new ConfigFile("config.yml", null, plugin);
@@ -120,6 +125,7 @@ public class ConfigManager {
         advertisingBypass = config.getString("advertising.bypass");
 
         ignoreEnabled = config.getBoolean("ignore.enabled");
+        ignoreLogEnabled = config.getBoolean("logs.ignore.enabled");
 
         chatColorEnabled = config.getBoolean("chat-color.enabled");
 
@@ -145,6 +151,10 @@ public class ConfigManager {
         spyEnabled = config.getBoolean("spy.commands.enabled");
         if (spyEnabled) {
             spyFormat = config.getString("spy.commands.format");
+            socialSpyMode = config.getInt("spy.commands.mode");
+            if (socialSpyMode != 1) {
+                socialSpyCommands = config.getStringList("spy.commands.commands");
+            }
         }
 
         unicodeEnabled = config.getBoolean("unicode.enabled");
@@ -263,6 +273,8 @@ public class ConfigManager {
         listFooter = config.getString("list.footer");
         listHeader = config.getString("list.header");
 
+        antiAdvertisingLogEnabled = config.getBoolean("logs.anti-advertising.enabled");
+
         pingColors = new HashMap<>();
 
         List<Map<?, ?>> colorConfigs = config.getMapList("ping.colors");
@@ -305,6 +317,10 @@ public class ConfigManager {
         loadConfig();
     }
 
+    public boolean isAntiAdvertisingLogEnabled() { return antiAdvertisingLogEnabled; }
+    public List<String> getSocialSpyCommands() { return socialSpyCommands; }
+    public int getSocialSpyMode() { return socialSpyMode; }
+    public boolean isIgnoreLogEnabled() { return ignoreLogEnabled; }
     public String getListFooter() { return listFooter; }
     public String getListAppend() { return listAppend; }
     public String getListHeader() { return listHeader; }
@@ -395,6 +411,10 @@ public class ConfigManager {
     public double getAntiCapPercent() { return antiCapPercent; }
     public String getAntiCapMode() { return antiCapMode; }
     public boolean isAntiCapMessageEnabled() { return antiCapMessageEnabled; }
+
+    public FileConfiguration getConfig() { return this.configFile.getConfig(); }
+
+    public void saveConfig() { configFile.saveConfig(); }
 
     public String getColorForPing(int ping) {
         return pingColors.entrySet().stream()

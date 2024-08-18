@@ -31,7 +31,7 @@ public class ChatListener implements Listener {
     private final Map<Player, Integer> particleCount = new HashMap<>();
     private final Map<Player, Boolean> actionbarEnabled = new HashMap<>();
     private final Map<Player, String> actionbar = new HashMap<>();
-
+    private final Map<Player, String> permissions = new HashMap<>();
 
     public ChatListener(TChat plugin, ChatFormatListener chatFormatListener) {
         this.plugin = plugin;
@@ -53,8 +53,8 @@ public class ChatListener implements Listener {
         antiBot(event, player, null);
         plugin.getAntiFloodListener().checkFlood(event, message, player);
         replacer(event, message);
-        grammar(event, player, message);
         plugin.getBannedWords().playerBannedWords(event);
+        grammar(event, player, message);
 
         chatFormatListener.playerFormat(event);
         plugin.getChatGamesSender().checkPlayerResponse(player, message);
@@ -93,6 +93,13 @@ public class ChatListener implements Listener {
                         return;
                     }
 
+                    String channel = plugin.getChannelsManager().getPlayerChannel(player);
+                    if (channel == null || channel.isEmpty()) {
+                        channel = "none";
+                    }
+
+                    String permission = permissions.getOrDefault(player, "default_permission");
+
                     AutoBroadcastManager.Broadcast broadcast = new AutoBroadcastManager.Broadcast(
                             broadcastEnabled.get(player),
                             messages,
@@ -105,7 +112,8 @@ public class ChatListener implements Listener {
                             particle.getOrDefault(player, null),
                             particleCount.getOrDefault(player, 0),
                             actionbarEnabled.getOrDefault(player, false),
-                            actionbar.getOrDefault(player, null)
+                            actionbar.getOrDefault(player, null),
+                            channel, permission
                     );
 
                     plugin.getAutoBroadcastManager().addBroadcast(
@@ -121,7 +129,9 @@ public class ChatListener implements Listener {
                             broadcast.getParticle(),
                             broadcast.getParticleCount(),
                             broadcast.isActionbarEnabled(),
-                            broadcast.getActionbar()
+                            broadcast.getActionbar(),
+                            broadcast.getChannel(),
+                            broadcast.getPermission()
                     );
                     plugin.getAutoBroadcastManager().reloadConfig();
 
@@ -138,6 +148,7 @@ public class ChatListener implements Listener {
                     particleCount.remove(player);
                     actionbarEnabled.remove(player);
                     actionbar.remove(player);
+                    permissions.remove(player);
                 } else {
                     messages.add(message);
                 }

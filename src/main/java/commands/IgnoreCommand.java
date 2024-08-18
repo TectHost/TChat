@@ -83,6 +83,10 @@ public class IgnoreCommand implements CommandExecutor {
             ignoreList.add(targetId.toString());
             plugin.getSaveManager().setIgnore(senderId, ignoreList);
 
+            if (plugin.getConfigManager().isIgnoreLogEnabled()) {
+                plugin.getLogsManager().logIgnore(player.getName(), target.getName());
+            }
+
             String addedMessage = plugin.getMessagesManager().getIgnoreMessage().replace("%player%", target.getName());
             sender.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + addedMessage));
 

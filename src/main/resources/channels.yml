@@ -10,7 +10,7 @@ channels:
     permission: "tchat.channel.admin"
     format:
       enabled: true
-      format: "%channel% &a%player% &b>"
+      format: "%channel% &a%player% &b> "
     # Modes:
     # 0 -> Messages visible to all
     # 1 -> Messages visible to all users with the permission (recommended)
@@ -28,6 +28,6 @@ channels:
     permission: "tchat.test"
     format:
       enabled: true
-      format: "%channel% &a%player% &b>"
+      format: "%channel% &a%player% &b> "
     message-mode: 1
     announce-mode: 1

@@ -114,7 +114,7 @@ public class CustomCommands implements Listener {
                         inLoop = true;
                         inForLoop = true;
                     } catch (NumberFormatException e) {
-                        plugin.getLogger().warning("Número de iteraciones inválido en [FOR]: " + action);
+                        plugin.getLogger().warning("Invalid number in [FOR]: " + action);
                         skipActions = true;
                     }
                 }
@@ -411,6 +411,37 @@ public class CustomCommands implements Listener {
                 format = format.replace("%message%", data);
                 for (Player p : Bukkit.getOnlinePlayers()) {
                     p.sendMessage(plugin.getTranslateColors().translateColors(p, format));
+                }
+                break;
+            case "[SLEEP]":
+                String unit = data.substring(data.length() - 1);
+                long time;
+
+                try {
+                    time = Long.parseLong(data.substring(0, data.length() - 1));
+                } catch (NumberFormatException e) {
+                    plugin.getLogger().warning("Invalid sleep time format: " + data);
+                    return;
+                }
+
+                switch (unit) {
+                    case "s":
+                        time *= 1000;
+                        break;
+                    case "t":
+                        time *= 50;
+                        break;
+                    case "m":
+                        break;
+                    default:
+                        plugin.getLogger().warning("Invalid time unit for [SLEEP]: " + unit);
+                        return;
+                }
+
+                try {
+                    Thread.sleep(time);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
                 }
                 break;
         }

@@ -1,5 +1,5 @@
 main: minealex.tchat.TChat
-version: 4.0.5
+version: 4.1.0
 name: TChat
 author: Mine_Alex
 api-version: 1.13
@@ -57,8 +57,16 @@ commands:
     description: Show player information
   server:
     description: Shows server information
+  socialspy:
+    description: Configure social spy options inside Minecraft
+  commandtimer:
+    description: Add or remove command timers
 
 permissions:
+  tchat.admin.commandtimer:
+    description: Permission to use commantimer command
+  tchat.admin.command.social-spy:
+    description: Permission to use socialspy command
   tchat.admin.server:
     description: Permission to use server command
   tchat.admin.player:

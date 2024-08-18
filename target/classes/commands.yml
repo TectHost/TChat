@@ -25,6 +25,9 @@
 # [BUNGEECORD] - Moves the player to another server | - "[BUNGEECORD] survival"
 # [CLICK_ACTION] (action) (executor) | (message) - Message with Text Component | - "[CLICK_ACTION] OPEN https://tect.host/ | Click here to go to tect.host"
 # [CLICK_ACTION] OPEN/SUGGEST/EXECUTE
+# [CHATCOLOR] (COLOR/FORMAT) - Sets the color or format of the player | - "[CHATCOLOR] COLOR &2"
+# [SLEEP] (time)(s/t/m) - Wait a defined period of time before proceeding with the actions | - "[SLEEP] 2s"
+  # s = seconds | t = ticks (20 = 1 second) | m = milliseconds (1000 = 1)
 # Conditionals
   # [IF] - Initiates a conditional within the actions | - "[IF] %player_is_op% == true"
     # (ADD) You can use && to add conditions to the if: - "[IF] %statistic_hours_played% >= 10 && %player_is_op% == yes"

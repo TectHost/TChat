@@ -52,6 +52,40 @@ public class CommandTimerManager {
         return commands;
     }
 
+    public boolean addCommandTimer(String name, int time, List<String> commandList) {
+        FileConfiguration config = commandTimerFile.getConfig();
+
+        if (config.getConfigurationSection("commands." + name) != null) {
+            return false;
+        }
+
+        config.set("commands." + name + ".enabled", true);
+        config.set("commands." + name + ".time", time);
+        config.set("commands." + name + ".commands", commandList);
+
+        commandTimerFile.saveConfig();
+
+        loadConfig();
+
+        return true;
+    }
+
+    public boolean removeCommandTimer(String name) {
+        FileConfiguration config = commandTimerFile.getConfig();
+
+        if (config.getConfigurationSection("commands." + name) == null) {
+            return false;
+        }
+
+        config.set("commands." + name, null);
+
+        commandTimerFile.saveConfig();
+
+        loadConfig();
+
+        return true;
+    }
+
     public static class CommandConfig {
         private final boolean enabled;
         private final List<String> commands;

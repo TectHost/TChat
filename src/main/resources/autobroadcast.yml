@@ -25,6 +25,10 @@ broadcasts:
       - "│          &aThe server use         &f│"
       - "│                &#c03afeT&#a72cf8C&#8e1ff1h&#7411eba&#5b03e4t                &f│"
       - "└─────────────────┘"
+    # The channel to send the broadcast
+    channel: "none"
+    # Permission to view the broadcast
+    permission: "tchat.broadcast.view.broadcast1"
     actions:
       title:
         enabled: true
@@ -45,6 +49,8 @@ broadcasts:
     message:
       - "%center%&#ec4141&lANNOUNCE"
       - "%center%&7Try Tect.host, the best hosting!"
+    channel: "none"
+    permission: "none"
     actions:
       title:
         enabled: true

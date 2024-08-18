@@ -6,6 +6,7 @@ import hook.DiscordHook;
 import listeners.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.plugin.java.JavaPlugin;
 import placeholders.Placeholders;
 import utils.*;
@@ -58,6 +59,7 @@ public class TChat extends JavaPlugin {
     private ChatEnabledListener chatEnabledListener;
     private PlayerLeftListener playerLeftListener;
     private PlaceholdersConfig placeholdersConfig;
+    private JoinManager joinManager;
 
     @Override
     public void onEnable() {
@@ -137,6 +139,7 @@ public class TChat extends JavaPlugin {
         deathManager = new DeathManager(this);
         worldsManager = new WorldsManager(this);
         placeholdersConfig = new PlaceholdersConfig(this);
+        joinManager = new JoinManager(this);
     }
 
     public void initializeManagers() {
@@ -200,6 +203,9 @@ public class TChat extends JavaPlugin {
         Objects.requireNonNull(getCommand("calculator")).setExecutor(new CalculatorCommand(this));
         Objects.requireNonNull(getCommand("player")).setExecutor(new PlayerCommand(this));
         Objects.requireNonNull(getCommand("server")).setExecutor(new ServerCommand(this));
+        Objects.requireNonNull(getCommand("socialspy")).setExecutor(new SocialSpyCommand(this));
+        Objects.requireNonNull(getCommand("socialspy")).setTabCompleter(new SocialSpyCommand(this));
+        Objects.requireNonNull(getCommand("commandtimer")).setExecutor(new CommandTimerCommand(this));
     }
 
     public void registerPlaceholders() {
@@ -208,6 +214,7 @@ public class TChat extends JavaPlugin {
 
     // ------------------------------------------------------------------------------
 
+    public JoinManager getJoinManager() { return joinManager; }
     public PlaceholdersConfig getPlaceholdersConfig() { return placeholdersConfig; }
     public AutoBroadcastSender getAutoBroadcastSender() { return autoBroadcastSender; }
     public PlayerLeftListener getPlayerLeftListener() { return playerLeftListener; }

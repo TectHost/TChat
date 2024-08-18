@@ -8,6 +8,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.Objects;
+
 public class ChatPlaceholdersListener implements Listener {
 
     private final TChat plugin;
@@ -64,6 +66,21 @@ public class ChatPlaceholdersListener implements Listener {
                 itemMessage = itemMessage.replace("%item%", itemName);
 
                 message = message.replace(plugin.getPlaceholdersConfig().getItemName(), itemMessage);
+            } else {
+                String error = plugin.getMessagesManager().getNoPermission();
+                player.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + error));
+            }
+        }
+
+        if (plugin.getPlaceholdersConfig().isWorldEnabled() && message.contains(plugin.getPlaceholdersConfig().getWorldName())) {
+            if (player.hasPermission("tchat.admin") || player.hasPermission("tchat.placeholder.world")) {
+                String worldName = Objects.requireNonNull(player.getLocation().getWorld()).getName();
+
+                String worldMessage = plugin.getTranslateColors().translateColors(player, plugin.getPlaceholdersConfig().getWorldFormat());
+
+                worldMessage = worldMessage.replace("%world%", worldName);
+
+                message = message.replace(plugin.getPlaceholdersConfig().getWorldName(), worldMessage);
             } else {
                 String error = plugin.getMessagesManager().getNoPermission();
                 player.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + error));

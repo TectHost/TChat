@@ -35,42 +35,46 @@ public class AutoBroadcastSender {
                     AutoBroadcastManager.Broadcast[] broadcasts = autoBroadcastManager.getBroadcasts().values().toArray(new AutoBroadcastManager.Broadcast[0]);
 
                     if (broadcasts.length == 0) {
+                        plugin.getLogger().info("No broadcasts available.");
                         return;
                     }
 
                     AutoBroadcastManager.Broadcast currentBroadcast = broadcasts[currentBroadcastIndex];
 
                     if (currentBroadcast.isEnabled()) {
-                        for (Player player : Bukkit.getOnlinePlayers()) {
-                            for (String line : currentBroadcast.getMessage()) {
-                                String translatedMessage = plugin.getTranslateColors().translateColors(player, line);
-                                if (translatedMessage.contains("%center%")) {
-                                    translatedMessage = translatedMessage.replace("%center%", "");
-                                    translatedMessage = centerText(translatedMessage);
-                                }
-                                player.sendMessage(translatedMessage);
-                            }
+                        String channelName = currentBroadcast.getChannel();
 
-                            if (currentBroadcast.isTitleEnabled()) {
-                                player.sendTitle(plugin.getTranslateColors().translateColors(player, currentBroadcast.getTitle()), plugin.getTranslateColors().translateColors(player, currentBroadcast.getSubtitle()), 10, 70, 20);
-                            }
+                        if (currentBroadcast.getChannel().equalsIgnoreCase("none")) {
+                            sendMessageToPlayers(Bukkit.getOnlinePlayers(), currentBroadcast);
+                        } else {
+                            int messageMode = plugin.getChannelsConfigManager().getChannel(channelName).getMessageMode();
 
-                            if (currentBroadcast.isActionbarEnabled()) {
-                                player.spigot().sendMessage(net.md_5.bungee.api.ChatMessageType.ACTION_BAR, net.md_5.bungee.api.chat.TextComponent.fromLegacyText(plugin.getTranslateColors().translateColors(player, currentBroadcast.getActionbar())));
-                            }
+                            switch (messageMode) {
+                                case 0:
+                                    sendMessageToPlayers(Bukkit.getOnlinePlayers(), currentBroadcast);
+                                    break;
 
-                            if (currentBroadcast.isSoundEnabled()) {
-                                Sound sound = Sound.valueOf(currentBroadcast.getSound().toUpperCase());
-                                player.playSound(player.getLocation(), sound, 1.0F, 1.0F);
-                            }
+                                case 1:
+                                    for (Player player : Bukkit.getOnlinePlayers()) {
+                                        String permission = plugin.getChannelsConfigManager().getChannel(channelName).getPermission();
+                                        if (player.hasPermission(permission)) {
+                                            sendMessageToPlayer(player, currentBroadcast);
+                                        }
+                                    }
+                                    break;
 
-                            if (currentBroadcast.isParticlesEnabled()) {
-                                try {
-                                    Particle particle = Particle.valueOf(currentBroadcast.getParticle().toUpperCase());
-                                    player.getWorld().spawnParticle(particle, player.getLocation(), currentBroadcast.getParticleCount());
-                                } catch (IllegalArgumentException e) {
-                                    plugin.getLogger().warning("Invalid particle type: " + currentBroadcast.getParticle());
-                                }
+                                case 2:
+                                    for (Player player : plugin.getChannelsManager().getPlayersInChannel(channelName)) {
+                                        sendMessageToPlayer(player, currentBroadcast);
+                                    }
+                                    break;
+
+                                case 3:
+                                    break;
+
+                                default:
+                                    plugin.getLogger().warning("Unknown Message Mode: " + messageMode);
+                                    break;
                             }
                         }
                     }
@@ -91,6 +95,64 @@ public class AutoBroadcastSender {
         stopBroadcastTask();
         currentBroadcastIndex = 0;
         startBroadcastTask();
+    }
+
+    private void sendMessageToPlayers(Iterable<? extends Player> players, AutoBroadcastManager.Broadcast broadcast) {
+        for (Player player : players) {
+            sendMessageToPlayer(player, broadcast);
+        }
+    }
+
+    private void sendMessageToPlayer(Player player, AutoBroadcastManager.Broadcast broadcast) {
+        String broadcastPermission = broadcast.getPermission();
+
+        if (broadcastPermission != null && !broadcastPermission.equalsIgnoreCase("none") && !broadcastPermission.isEmpty()) {
+            if (!player.hasPermission(broadcastPermission)) {
+                return;
+            }
+        }
+
+        for (String line : broadcast.getMessage()) {
+            String translatedMessage = plugin.getTranslateColors().translateColors(player, line);
+            if (translatedMessage.contains("%center%")) {
+                translatedMessage = translatedMessage.replace("%center%", "");
+                translatedMessage = centerText(translatedMessage);
+            }
+            player.sendMessage(translatedMessage);
+        }
+
+        if (broadcast.isTitleEnabled()) {
+            player.sendTitle(
+                    plugin.getTranslateColors().translateColors(player, broadcast.getTitle()),
+                    plugin.getTranslateColors().translateColors(player, broadcast.getSubtitle()),
+                    10, 70, 20
+            );
+        }
+
+        if (broadcast.isActionbarEnabled()) {
+            player.spigot().sendMessage(
+                    net.md_5.bungee.api.ChatMessageType.ACTION_BAR,
+                    net.md_5.bungee.api.chat.TextComponent.fromLegacyText(plugin.getTranslateColors().translateColors(player, broadcast.getActionbar()))
+            );
+        }
+
+        if (broadcast.isSoundEnabled()) {
+            try {
+                Sound sound = Sound.valueOf(broadcast.getSound().toUpperCase());
+                player.playSound(player.getLocation(), sound, 1.0F, 1.0F);
+            } catch (IllegalArgumentException e) {
+                plugin.getLogger().warning("Invalid sound type: " + broadcast.getSound());
+            }
+        }
+
+        if (broadcast.isParticlesEnabled()) {
+            try {
+                Particle particle = Particle.valueOf(broadcast.getParticle().toUpperCase());
+                player.getWorld().spawnParticle(particle, player.getLocation(), broadcast.getParticleCount());
+            } catch (IllegalArgumentException e) {
+                plugin.getLogger().warning("Invalid particle type: " + broadcast.getParticle());
+            }
+        }
     }
 
     private String centerText(String message) {

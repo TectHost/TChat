@@ -52,15 +52,19 @@ public class ChatFormatListener implements Listener {
         WorldsManager.WorldConfigData worldConfigData = plugin.getWorldsManager().getWorldsConfig().get(worldName);
         boolean perWorldChat = worldConfigData != null && worldConfigData.pwc();
 
-        Set<Player> recipients = new HashSet<>(event.getRecipients());
-
         if (perWorldChat) {
-            recipients = recipients.stream()
+            Set<Player> recipients = event.getRecipients().stream()
                     .filter(recipient -> recipient.hasPermission("tchat.admin") ||
                             recipient.hasPermission("tchat.bypass.pwc") ||
                             recipient.getWorld().getName().equals(worldName))
                     .collect(Collectors.toSet());
-        } else {
+
+            event.getRecipients().clear();
+            event.getRecipients().addAll(recipients);
+
+        } else if (plugin.getWorldsManager().getBridgesConfig().values().stream()
+                .anyMatch(bridge -> bridge.enabled() && bridge.worlds().contains(worldName))) {
+
             Set<String> worldsToInclude = new HashSet<>();
             worldsToInclude.add(worldName);
 
@@ -70,15 +74,15 @@ public class ChatFormatListener implements Listener {
                 }
             }
 
-            recipients = Bukkit.getOnlinePlayers().stream()
+            Set<Player> recipients = Bukkit.getOnlinePlayers().stream()
                     .filter(recipient -> recipient.hasPermission("tchat.admin") ||
                             recipient.hasPermission("tchat.bypass.bridge") ||
                             worldsToInclude.contains(recipient.getWorld().getName()))
                     .collect(Collectors.toSet());
-        }
 
-        event.getRecipients().clear();
-        event.getRecipients().addAll(recipients);
+            event.getRecipients().clear();
+            event.getRecipients().addAll(recipients);
+        }
 
         String channelName = plugin.getChannelsManager().getPlayerChannel(player);
         ChannelsConfigManager.Channel channel = channelsConfigManager.getChannel(channelName);
@@ -130,16 +134,8 @@ public class ChatFormatListener implements Listener {
             if (plugin.getConfigManager().isChatColorEnabled()) {
                 String chatColor = plugin.getSaveManager().getChatColor(player.getUniqueId()) + plugin.getSaveManager().getFormat(player.getUniqueId());
                 if (!chatColor.equalsIgnoreCase("")) {
-                    ChatColor color;
-                    if (chatColor.startsWith("&")) {
-                        color = ChatColor.getByChar(chatColor.charAt(1));
-                    } else {
-                        color = ChatColor.of(chatColor);
-                    }
-                    if (color != null) {
-                        message = chatColor + message;
-                        message = plugin.getTranslateColors().translateColors(player, message);
-                    }
+                    message = chatColor + message;
+                    message = plugin.getTranslateColors().translateColors(player, message);
                 }
             }
 

@@ -95,6 +95,20 @@ public class ChatColorCommand implements CommandExecutor {
                         String message = plugin.getTranslateColors().translateColors(player, plugin.getMessagesManager().getNoPermission());
                         player.sendMessage(prefix + message);
                     }
+                } else if (arg.startsWith("&#")) {
+                    String colorPermission = "tchat.chatcolor.command.hex";
+                    if (player.hasPermission(colorPermission)) {
+                        plugin.getSaveManager().setChatColor(player.getUniqueId(), arg);
+                        String format = plugin.getSaveManager().getFormat(player.getUniqueId());
+                        String message = plugin.getMessagesManager().getColorSelectedMessage();
+                        message = message.replace("%id%", arg);
+                        message = message.replace("%format%", format);
+                        message = message.replace("%color%", "hex");
+                        player.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + message));
+                    } else {
+                        String message = plugin.getTranslateColors().translateColors(player, plugin.getMessagesManager().getNoPermission());
+                        player.sendMessage(prefix + message);
+                    }
                 } else {
                     String message = plugin.getMessagesManager().getInvalidColor();
                     message = message.replace("%color%", arg);

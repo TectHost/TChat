@@ -144,6 +144,7 @@ public class AutoBroadcastCommand implements CommandExecutor {
         }
 
         @Override
+        @SuppressWarnings("unchecked")
         public Prompt acceptInput(@NotNull ConversationContext context, String input) {
             if (input == null || input.trim().isEmpty()) {
                 return this;
@@ -208,12 +209,16 @@ public class AutoBroadcastCommand implements CommandExecutor {
                 boolean actionbarEnabled = context.getSessionData("actionbarEnabled") != null ? (Boolean) context.getSessionData("actionbarEnabled") : false;
                 String actionbar = (String) context.getSessionData("actionbar");
 
+                String channel = context.getSessionData("channel") != null ? (String) context.getSessionData("channel") : "none";
+                String permission = context.getSessionData("permission") != null ? (String) context.getSessionData("permission") : "none";
+
                 plugin.getAutoBroadcastManager().addBroadcast(
                         broadcastKey, enabled, messages,
                         titleEnabled, title, subtitle,
                         soundEnabled, sound,
                         particlesEnabled, particle, particleCount,
-                        actionbarEnabled, actionbar
+                        actionbarEnabled, actionbar,
+                        channel, permission
                 );
 
                 String message = plugin.getMessagesManager().getAutoBroadcastAddAdded();
@@ -227,36 +232,38 @@ public class AutoBroadcastCommand implements CommandExecutor {
                 String title = lowerInput.substring(6).trim();
                 context.setSessionData("titleEnabled", titleEnabled);
                 context.setSessionData("title", title);
-            }
-            if (lowerInput.startsWith("subtitle")) {
+            } else if (lowerInput.startsWith("subtitle")) {
                 String subtitle = lowerInput.substring(9).trim();
                 context.setSessionData("subtitle", subtitle);
-            }
-            else if (lowerInput.startsWith("sound")) {
+            } else if (lowerInput.startsWith("sound")) {
                 boolean soundEnabled = true;
                 String sound = lowerInput.substring(6).trim();
                 context.setSessionData("soundEnabled", soundEnabled);
                 context.setSessionData("sound", sound);
-            }
-            else if (lowerInput.startsWith("particles")) {
+            } else if (lowerInput.startsWith("particles")) {
                 try {
                     int count = Integer.parseInt(lowerInput.substring(11).trim());
                     context.setSessionData("particleCount", count);
                 } catch (NumberFormatException e) {
                     context.getForWhom().sendRawMessage(plugin.getTranslateColors().translateColors(null, prefix + "Invalid number for particles."));
                 }
-            }
-            else if (lowerInput.startsWith("particle")) {
+            } else if (lowerInput.startsWith("particle")) {
                 boolean particlesEnabled = true;
                 String particle = lowerInput.substring(9).trim();
                 context.setSessionData("particlesEnabled", particlesEnabled);
                 context.setSessionData("particle", particle);
-            }
-            else if (lowerInput.startsWith("actionbar")) {
+            } else if (lowerInput.startsWith("actionbar")) {
                 boolean actionbarEnabled = true;
                 String actionbar = lowerInput.substring(10).trim();
                 context.setSessionData("actionbarEnabled", actionbarEnabled);
                 context.setSessionData("actionbar", actionbar);
+            }
+            else if (lowerInput.startsWith("channel")) {
+                String channel = lowerInput.substring(8).trim();
+                context.setSessionData("channel", channel);
+            } else if (lowerInput.startsWith("permission")) {
+                String permission = lowerInput.substring(10).trim();
+                context.setSessionData("permission", permission);
             } else {
                 context.getForWhom().sendRawMessage(plugin.getTranslateColors().translateColors(null, prefix + "Unknown command. Use 'done' to finish."));
             }

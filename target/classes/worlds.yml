@@ -29,7 +29,7 @@ worlds:
 
 bridges:
   bridge1:
-    enabled: true
+    enabled: false
     worlds:
       - "world"
       - "world_nether"

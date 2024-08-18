@@ -11,6 +11,9 @@ public class PlaceholdersConfig {
     private boolean itemEnabled;
     private String itemFormat;
     private String itemName;
+    private boolean worldEnabled;
+    private String worldFormat;
+    private String worldName;
 
     public PlaceholdersConfig(TChat plugin) {
         this.configFile = new ConfigFile("placeholders.yml", null, plugin);
@@ -32,12 +35,22 @@ public class PlaceholdersConfig {
             itemFormat = config.getString("chat.item.format");
             itemName = config.getString("chat.item.name");
         }
+
+        worldEnabled = config.getBoolean("chat.world.enabled");
+        if (worldEnabled) {
+            worldName = config.getString("chat.world.name");
+            worldFormat = config.getString("chat.world.format");
+        }
     }
 
     public void reloadConfig() {
         configFile.reloadConfig();
         loadConfig();
     }
+
+    public boolean isWorldEnabled() { return worldEnabled; }
+    public String getWorldFormat() { return worldFormat; }
+    public String getWorldName() { return worldName; }
 
     public boolean isItemEnabled() { return itemEnabled; }
     public String getItemFormat() { return itemFormat; }

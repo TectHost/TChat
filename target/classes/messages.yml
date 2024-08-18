@@ -137,6 +137,19 @@ messages:
     removed: "&cCommand removed from blocked list."
     not-blocked-tab: "&cCommand is not blocked from tab completion."
     removed-tab: "&cCommand removed from no tab completion list."
+  socialspy:
+    already-enabled: "&cThe socialspy is already enabled."
+    already-disabled: "&cThe socialspy is already disabled."
+    enabled: "&aSocialspy is now enabled."
+    disabled: "&aSocialspy is now disabled."
+    invalid-mode: "&cInvalid mode, use: /socialspy mode <1-3>"
+    mode: "&aMode set to: &#109AFE%mode%"
+  commandtimer:
+    added: "&aCommand timer '%timer%' successfully created."
+    already-added: "&cA timer with that name already exists."
+    invalid-number: "&cThe time must be a whole number."
+    removed: "&aCommand timer '%timer%' removed."
+    not-exist: "&cThere is no timer with that name."
   autobroadcast:
     start: "&aAutoBroadcast has been started."
     stop: "&cAutoBroadcast has been stopped."
@@ -182,6 +195,10 @@ messages:
     usage-helpop: "&cUsage: /helpop <message>"
     usage-calculator: "&cUsage: /calculator <number1> <operator> <number2>"
     usage-player: "&cUsage: /player <player>"
+    usage-socialspy: "&cUsage: /socialspy <enable|disable|mode>"
+    usage-commandtimer: "&cUsage: /commandtimer <create|remove> <name> [time] | [command 1] | [command 2] | ..."
+    usage-commandtimer-add: "&cUsage: /commandtimer create <name> <time> | <command 1> | <command 2> | ..."
+    usage-commandtimer-remove: "&cUsage: /commandtimer remove <name>"
   # Debug messages are only seen in the console
   debug:
     no-format-group: "&cError in groups.yml - No format found for group: %group%"

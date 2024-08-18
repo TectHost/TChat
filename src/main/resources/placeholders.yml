@@ -22,6 +22,14 @@ chat:
     name: "[item]"
     # Replace format
     format: "&7[&9%item%&7]"
+  # [world] placeholder
+  world:
+    # Enable/disable this placeholder
+    enabled: true
+    # The name of the placeholder to be detected and replaced in chat
+    name: "[world]"
+    # Replace format
+    format: "&7[&9%world%&7]"
 
 # #################################################################
 # ┌─────────────────────────────────────────────────────────────┐ #

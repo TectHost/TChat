@@ -64,6 +64,9 @@ public class AntiAdvertising {
                     Particle particle = Particle.valueOf(config.getParticleType().toUpperCase());
                     player.getWorld().spawnParticle(particle, player.getLocation(), config.getParticles());
                 }
+                if (plugin.getConfigManager().isAntiAdvertisingLogEnabled()) {
+                    plugin.getLogsManager().logAntiAdvertising(player.getName(), command);
+                }
             }
         }
     }

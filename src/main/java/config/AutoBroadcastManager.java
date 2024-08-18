@@ -45,11 +45,13 @@ public class AutoBroadcastManager {
             int particleCount = config.getInt("broadcasts." + key + ".actions.particles.particles");
             boolean actionbarEnabled = config.getBoolean("broadcasts." + key + ".actions.actionbar.enabled");
             String actionbar = config.getString("broadcasts." + key + ".actions.actionbar.bar");
+            String channel = config.getString("broadcasts." + key + ".channel");
+            String permission = config.getString("broadcasts." + key + ".permission");
 
             Broadcast broadcast = new Broadcast(
                     broadcastEnabled, messages, titleEnabled, title, subtitle,
                     soundEnabled, sound, particlesEnabled, particle, particleCount,
-                    actionbarEnabled, actionbar
+                    actionbarEnabled, actionbar, channel, permission
             );
             broadcasts.put(key, broadcast);
         }
@@ -74,11 +76,11 @@ public class AutoBroadcastManager {
 
     public void addBroadcast(String key, boolean enabled, List<String> messages, boolean titleEnabled, String title, String subtitle,
                              boolean soundEnabled, String sound, boolean particlesEnabled, String particle, int particleCount,
-                             boolean actionbarEnabled, String actionbar) {
+                             boolean actionbarEnabled, String actionbar, String channel, String permission) {
         Broadcast broadcast = new Broadcast(
                 enabled, messages, titleEnabled, title, subtitle,
                 soundEnabled, sound, particlesEnabled, particle, particleCount,
-                actionbarEnabled, actionbar
+                actionbarEnabled, actionbar, channel, permission
         );
         broadcasts.put(key, broadcast);
 
@@ -96,6 +98,7 @@ public class AutoBroadcastManager {
         config.set("broadcasts." + key + ".actions.particles.particles", particleCount);
         config.set("broadcasts." + key + ".actions.actionbar.enabled", actionbarEnabled);
         config.set("broadcasts." + key + ".actions.actionbar.bar", actionbar);
+        config.set("broadcasts." + key + ".channel", channel);
 
         autoBroadcastFile.saveConfig();
         loadConfig();
@@ -126,12 +129,15 @@ public class AutoBroadcastManager {
         private final int particleCount;
         private final boolean actionbarEnabled;
         private final String actionbar;
+        private final String channel;
+        private final String permission;
 
         public Broadcast(boolean enabled, List<String> message,
                          boolean titleEnabled, String title, String subtitle,
                          boolean soundEnabled, String sound,
                          boolean particlesEnabled, String particle, int particleCount,
-                         boolean actionbarEnabled, String actionbar) {
+                         boolean actionbarEnabled, String actionbar, String channel,
+                         String permission) {
             this.enabled = enabled;
             this.message = message;
             this.titleEnabled = titleEnabled;
@@ -144,10 +150,20 @@ public class AutoBroadcastManager {
             this.particleCount = particleCount;
             this.actionbarEnabled = actionbarEnabled;
             this.actionbar = actionbar;
+            this.channel = channel;
+            this.permission = permission;
+        }
+
+        public String getPermission() {
+            return permission;
         }
 
         public boolean isEnabled() {
             return enabled;
+        }
+
+        public String getChannel() {
+            return channel;
         }
 
         public List<String> getMessage() {

@@ -144,6 +144,21 @@ public class MessagesManager {
     private List<String> playerMessageAdmin;
     private String otherPing;
     private List<String> serverMessage;
+    private String usageSocialSpy;
+    private String alreadyEnabledSpy;
+    private String alreadyDisabledSpy;
+    private String enabledSpy;
+    private String disabledSpy;
+    private String invalidModeSpy;
+    private String modeSpy;
+    private String usageCommandTimer;
+    private String usageCommandTimerAdd;
+    private String usageCommandTimerRemove;
+    private String commandTimerAdded;
+    private String commandTimerAlreadyAdded;
+    private String commandTimerInvalidNumber;
+    private String commandTimerRemoved;
+    private String commandTimerNotExist;
 
     public MessagesManager(TChat plugin){
         this.messagesFile = new ConfigFile("messages.yml", null, plugin);
@@ -235,7 +250,25 @@ public class MessagesManager {
             otherPing = config.getString("messages.other-ping");
         }
 
+        if (plugin.getConfigManager().isSpyEnabled()) {
+            usageSocialSpy = config.getString("messages.usage.usage-socialspy");
+            alreadyEnabledSpy = config.getString("messages.socialspy.already-enabled");
+            alreadyDisabledSpy = config.getString("messages.socialspy.already-disabled");
+            enabledSpy = config.getString("messages.socialspy.enabled");
+            disabledSpy = config.getString("messages.socialspy.disabled");
+            modeSpy = config.getString("messages.socialspy.mode");
+            invalidModeSpy = config.getString("messages.socialspy.invalid-mode");
+        }
+
         // Messages
+        commandTimerInvalidNumber = config.getString("messages.commandtimer.invalid-number");
+        commandTimerRemoved = config.getString("messages.commandtimer.removed");
+        commandTimerAdded = config.getString("messages.commandtimer.added");
+        commandTimerAlreadyAdded = config.getString("messages.commandtimer.already-added");
+        commandTimerNotExist = config.getString("messages.commandtimer.not-exist");;
+        usageCommandTimer = config.getString("messages.usage.usage-commandtimer");
+        usageCommandTimerRemove = config.getString("messages.usage.usage-commandtimer-remove");
+        usageCommandTimerAdd = config.getString("messages.usage.usage-commandtimer-add");
         serverMessage = config.getStringList("server");
         playerMessageAdmin = config.getStringList("player.admin");
         playerMessage = config.getStringList("player.global");
@@ -351,6 +384,21 @@ public class MessagesManager {
     }
 
     // Messages
+    public String getCommandTimerNotExist() { return commandTimerNotExist; }
+    public String getCommandTimerRemoved() { return commandTimerRemoved; }
+    public String getCommandTimerAlreadyAdded() { return commandTimerAlreadyAdded; }
+    public String getCommandTimerAdded() { return commandTimerAdded; }
+    public String getCommandTimerInvalidNumer() { return commandTimerInvalidNumber; }
+    public String getUsageCommandTimerRemove() { return usageCommandTimerRemove; }
+    public String getUsageCommandTimerAdd() { return usageCommandTimerAdd; }
+    public String getUsageCommandTimer() { return usageCommandTimer; }
+    public String getInvalidModeSpy() { return invalidModeSpy; }
+    public String getModeSpy() { return modeSpy; }
+    public String getAlreadyEnabledSpy() { return alreadyEnabledSpy; }
+    public String getAlreadyDisabledSpy() { return alreadyDisabledSpy; }
+    public String getDisabledSpy() { return disabledSpy; }
+    public String getEnabledSpy() { return enabledSpy; }
+    public String getUsageSocialSpy() { return usageSocialSpy; }
     public List<String> getServerMessage() { return serverMessage; }
     public String getOtherPing() { return otherPing; }
     public List<String> getPlayerMessageAdmin() { return playerMessageAdmin; }

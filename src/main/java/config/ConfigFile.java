@@ -47,6 +47,8 @@ public class ConfigFile {
             e.printStackTrace();
         }
     }
+
+    @SuppressWarnings("")
     public void saveConfig() {
         try {
             fileConfiguration.save(file);
