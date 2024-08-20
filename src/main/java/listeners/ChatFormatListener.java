@@ -7,7 +7,10 @@ import config.WorldsManager;
 import me.clip.placeholderapi.PlaceholderAPI;
 import minealex.tchat.TChat;
 import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.*;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -17,10 +20,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import utils.TranslateHexColorCodes;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ChatFormatListener implements Listener {
@@ -125,7 +125,7 @@ public class ChatFormatListener implements Listener {
                 for (Player recipient : event.getRecipients()) {
                     String mention = mentionCharacter + recipient.getName();
                     if (message.contains(mention)) {
-                        String coloredMention = plugin.getTranslateColors().translateColors(player,mentionColor + mention);
+                        String coloredMention = plugin.getTranslateColors().translateColors(player, mentionColor + mention);
                         message = message.replace(mention, coloredMention);
                     }
                 }
@@ -135,6 +135,18 @@ public class ChatFormatListener implements Listener {
                 String chatColor = plugin.getSaveManager().getChatColor(player.getUniqueId()) + plugin.getSaveManager().getFormat(player.getUniqueId());
                 if (!chatColor.equalsIgnoreCase("")) {
                     message = chatColor + message;
+                    message = plugin.getTranslateColors().translateColors(player, message);
+                } else if (player.hasPermission("tchat.admin") || player.hasPermission("tchat.chatcolor.all")) {
+
+                    String finalMessage1 = message;
+                    if (message.length() == 2 && message.charAt(0) == '&') {
+                        char thirdChar = finalMessage1.charAt(1);
+                        if (ChatColor.ALL_CODES.indexOf(thirdChar) > -1) {
+                            event.setCancelled(true);
+                            return;
+                        }
+                    }
+
                     message = plugin.getTranslateColors().translateColors(player, message);
                 }
             }
