@@ -60,6 +60,7 @@ public class TChat extends JavaPlugin {
     private PlayerLeftListener playerLeftListener;
     private PlaceholdersConfig placeholdersConfig;
     private JoinManager joinManager;
+    private MentionsManager mentionsManager;
 
     @Override
     public void onEnable() {
@@ -140,6 +141,7 @@ public class TChat extends JavaPlugin {
         worldsManager = new WorldsManager(this);
         placeholdersConfig = new PlaceholdersConfig(this);
         joinManager = new JoinManager(this);
+        mentionsManager = new MentionsManager(this);
     }
 
     public void initializeManagers() {
@@ -206,6 +208,8 @@ public class TChat extends JavaPlugin {
         Objects.requireNonNull(getCommand("socialspy")).setExecutor(new SocialSpyCommand(this));
         Objects.requireNonNull(getCommand("socialspy")).setTabCompleter(new SocialSpyCommand(this));
         Objects.requireNonNull(getCommand("commandtimer")).setExecutor(new CommandTimerCommand(this));
+        Objects.requireNonNull(getCommand("nick")).setExecutor(new NickCommand(this));
+        Objects.requireNonNull(getCommand("seen")).setExecutor(new SeenCommand(this));
     }
 
     public void registerPlaceholders() {
@@ -214,6 +218,7 @@ public class TChat extends JavaPlugin {
 
     // ------------------------------------------------------------------------------
 
+    public MentionsManager getMentionsManager() { return mentionsManager; }
     public JoinManager getJoinManager() { return joinManager; }
     public PlaceholdersConfig getPlaceholdersConfig() { return placeholdersConfig; }
     public AutoBroadcastSender getAutoBroadcastSender() { return autoBroadcastSender; }

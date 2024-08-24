@@ -137,6 +137,9 @@ messages:
     removed: "&cCommand removed from blocked list."
     not-blocked-tab: "&cCommand is not blocked from tab completion."
     removed-tab: "&cCommand removed from no tab completion list."
+  nick:
+    set: "&aYour nick has been changed to &e%nick%"
+    remove: "&aYour nick has been deleted."
   socialspy:
     already-enabled: "&cThe socialspy is already enabled."
     already-disabled: "&cThe socialspy is already disabled."
@@ -199,6 +202,9 @@ messages:
     usage-commandtimer: "&cUsage: /commandtimer <create|remove> <name> [time] | [command 1] | [command 2] | ..."
     usage-commandtimer-add: "&cUsage: /commandtimer create <name> <time> | <command 1> | <command 2> | ..."
     usage-commandtimer-remove: "&cUsage: /commandtimer remove <name>"
+    usage-nick: "&cUsage: /nick <set/remove> <nick>"
+    usage-nick-set: "&cUsage: /nick set <nick>"
+    usage-seen: "&cUsage: /seen <player>"
   # Debug messages are only seen in the console
   debug:
     no-format-group: "&cError in groups.yml - No format found for group: %group%"
@@ -237,3 +243,14 @@ server:
   - '&cFree Memory: &f%server_ram_free% MB'
   - '&cPlugins: &f%plugins%'
   - '&cWorlds: &f%worlds%'
+
+seen:
+  # tchat.command.seen
+  player:
+    - "&fOnline: &#C03AFE%player_online%"
+    - "&fJoin date: &#C03AFE%player_first_join_date%"
+    - "&fLast join: &#C03AFE%player_last_join_date%"
+  # tchat.admin.command.seen
+  admin:
+    - "&fIP: &#C03AFE%player_ip%"
+    - "&fUUID: &#C03AFE%player_uuid%"

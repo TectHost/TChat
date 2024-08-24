@@ -3,11 +3,9 @@ package config;
 import minealex.tchat.TChat;
 import org.bukkit.configuration.file.FileConfiguration;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 public class ConfigManager {
     private final ConfigFile configFile;
@@ -78,9 +76,6 @@ public class ConfigManager {
     private int pollBar;
     private boolean warningEnabled;
     private String warningFormat;
-    private boolean mentionsEnabled;
-    private String mentionColor;
-    private String mentionCharacter;
     private boolean rulesEnabled;
     private boolean rulesPrefixEnabled;
     private List<String> rulesMessage;
@@ -246,12 +241,6 @@ public class ConfigManager {
             antibotMoved = config.getBoolean("antibot.messages.antibot-moved");
         }
 
-        mentionsEnabled = config.getBoolean("mentions.enabled");
-        if (mentionsEnabled) {
-            mentionColor = config.getString("mentions.color");
-            mentionCharacter = config.getString("mentions.character");
-        }
-
         rulesEnabled = config.getBoolean("rules.enabled");
         if (rulesEnabled) {
             rulesMessage = config.getStringList("rules.message");
@@ -339,9 +328,6 @@ public class ConfigManager {
     public List<String> getRulesMessage() { return rulesMessage; }
     public boolean isRulesPrefixEnabled() { return rulesPrefixEnabled; }
     public boolean isRulesEnabled() { return rulesEnabled; }
-    public String getMentionCharacter() { return mentionCharacter; }
-    public String getMentionColor() { return mentionColor; }
-    public boolean isMentionsEnabled() { return mentionsEnabled; }
     public boolean isWarningEnabled() { return warningEnabled; }
     public String getWarningFormat() { return warningFormat; }
     public int getPollBar() { return pollBar; }

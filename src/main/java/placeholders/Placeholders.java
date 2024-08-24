@@ -7,6 +7,8 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.UUID;
+
 public class Placeholders extends PlaceholderExpansion {
 
     private final GroupManager groupManager;
@@ -46,19 +48,22 @@ public class Placeholders extends PlaceholderExpansion {
     public @Nullable String onPlaceholderRequest(Player player, @NotNull String identifier) {
         if (player == null) { return ""; }
 
+        UUID playerId = player.getUniqueId();
+
         return switch (identifier) {
             case "prefix" -> groupManager.getGroupPrefix(player);
             case "suffix" -> groupManager.getGroupSuffix(player);
             case "group" -> groupManager.getGroupName(player);
-            case "chatcolor" -> plugin.getSaveManager().getChatColor(player.getUniqueId()) + plugin.getSaveManager().getFormat(player.getUniqueId());
-            case "chatcolor_color" -> plugin.getSaveManager().getChatColor(player.getUniqueId());
-            case "chatcolor_format" -> plugin.getSaveManager().getFormat(player.getUniqueId());
+            case "chatcolor" -> plugin.getSaveManager().getChatColor(playerId) + plugin.getSaveManager().getFormat(playerId);
+            case "chatcolor_color" -> plugin.getSaveManager().getChatColor(playerId);
+            case "chatcolor_format" -> plugin.getSaveManager().getFormat(playerId);
             case "channel" -> getChannel(player);
-            case "xp" -> String.valueOf(plugin.getSaveManager().getXp(player.getUniqueId()));
-            case "level" -> String.valueOf(plugin.getSaveManager().getLevel(player.getUniqueId()));
-            case "chatgames_wins" -> String.valueOf(plugin.getSaveManager().getChatGamesWins(player.getUniqueId()));
+            case "xp" -> String.valueOf(plugin.getSaveManager().getXp(playerId));
+            case "level" -> String.valueOf(plugin.getSaveManager().getLevel(playerId));
+            case "chatgames_wins" -> String.valueOf(plugin.getSaveManager().getChatGamesWins(playerId));
             case "ping" -> plugin.getConfigManager().getColorForPing(player.getPing()) + player.getPing();
             case "ping_color" -> plugin.getConfigManager().getColorForPing(player.getPing());
+            case "nick" -> plugin.getSaveManager().getNick(playerId, player);
             default -> null;
         };
     }

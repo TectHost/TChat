@@ -52,9 +52,9 @@ public class ChatListener implements Listener {
         plugin.getCapListener().playerAntiCap(event);
         antiBot(event, player, null);
         plugin.getAntiFloodListener().checkFlood(event, message, player);
-        replacer(event, message);
         plugin.getBannedWords().playerBannedWords(event);
         grammar(event, player, message);
+        replacer(event, message);
 
         chatFormatListener.playerFormat(event);
         plugin.getChatGamesSender().checkPlayerResponse(player, message);

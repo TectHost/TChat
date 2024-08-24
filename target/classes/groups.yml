@@ -16,6 +16,8 @@ groups:
     prefix: "&4&lOWNER"
     # Suffix of the group (%tchat_suffix%)
     suffix: ""
+    # Enable/disable format
+    format-enabled: true
     # Format of the group (read config.yml)
     # Use the "¡" character to split the format in the player and message part
     format: "%tchat_prefix% &f%player% &e> ¡&f"
@@ -59,6 +61,7 @@ groups:
     permission: tchat.group.admin
     prefix: "&c&lADMIN"
     suffix: ""
+    format-enabled: true
     format: "%tchat_prefix% &f%player% &e> ¡&f"
     hover:
       player:
@@ -89,6 +92,7 @@ groups:
     permission: tchat.group.mod
     prefix: "&a&lMOD"
     suffix: ""
+    format-enabled: true
     format: "%tchat_prefix% &f%player% &e> ¡&f"
     hover:
       player:
@@ -118,6 +122,7 @@ groups:
   default:
     prefix: "&7User"
     suffix: ""
+    format-enabled: true
     format: "%tchat_prefix% &f%player% &e> ¡&f"
     hover:
       player:

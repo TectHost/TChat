@@ -30,10 +30,11 @@ public class GroupManager {
             String permission = config.getString("groups." + key + ".permission", "");
             String prefix = config.getString("groups." + key + ".prefix", "");
             String suffix = config.getString("groups." + key + ".suffix", "");
+            boolean formatEnabled = config.getBoolean("groups." + key + ".format-enabled");
             String format = config.getString("groups." + key + ".format", "");
             HoverClickAction playerHoverClick = getHoverClickAction(config, "groups." + key + ".hover.player");
             HoverClickAction messageHoverClick = getHoverClickAction(config, "groups." + key + ".hover.message");
-            groups.put(key, new Group(permission, prefix, suffix, format, playerHoverClick, messageHoverClick));
+            groups.put(key, new Group(permission, prefix, suffix, formatEnabled, format, playerHoverClick, messageHoverClick));
         }
     }
 
@@ -87,6 +88,11 @@ public class GroupManager {
         return getGroup(player);
     }
 
+    public boolean isFormatEnabled(Player player) {
+        String group = getGroup(player);
+        return groups.get(group).isFormatEnabled();
+    }
+
     public HoverClickAction getPlayerHoverClickAction(String groupName) {
         Group group = groups.get(groupName);
         return group != null ? group.getPlayerHoverClick() : new HoverClickAction(false, null, false, null);
@@ -101,14 +107,16 @@ public class GroupManager {
         private final String permission;
         private final String prefix;
         private final String suffix;
+        private final boolean formatEnabled;
         private final String format;
         private final HoverClickAction playerHoverClick;
         private final HoverClickAction messageHoverClick;
 
-        public Group(String permission, String prefix, String suffix, String format, HoverClickAction playerHoverClick, HoverClickAction messageHoverClick) {
+        public Group(String permission, String prefix, String suffix, boolean formatEnabled, String format, HoverClickAction playerHoverClick, HoverClickAction messageHoverClick) {
             this.permission = permission;
             this.prefix = prefix;
             this.suffix = suffix;
+            this.formatEnabled = formatEnabled;
             this.format = format;
             this.playerHoverClick = playerHoverClick;
             this.messageHoverClick = messageHoverClick;
@@ -120,6 +128,10 @@ public class GroupManager {
 
         public String getPrefix() {
             return prefix;
+        }
+
+        public boolean isFormatEnabled() {
+            return formatEnabled;
         }
 
         public String getSuffix() {

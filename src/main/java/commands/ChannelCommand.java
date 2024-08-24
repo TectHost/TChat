@@ -68,7 +68,18 @@ public class ChannelCommand implements CommandExecutor {
         }
 
         String channelName = args[1];
-        joinChannel(player, channelName, prefix);
+        Player targetPlayer = player;
+
+        if (args.length >= 3) {
+            Player specifiedPlayer = Bukkit.getPlayer(args[2]);
+            if (specifiedPlayer == null) {
+                player.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + plugin.getMessagesManager().getPlayerNotFound().replace("%player%", args[2])));
+                return;
+            }
+            targetPlayer = specifiedPlayer;
+        }
+
+        joinChannel(targetPlayer, channelName, prefix);
     }
 
     private void handleLeave(Player player, String[] args, String prefix) {

@@ -59,7 +59,7 @@ public class CommandTimerCommand implements CommandExecutor {
         try {
             time = Integer.parseInt(args[2]);
         } catch (NumberFormatException e) {
-            String message = plugin.getMessagesManager().getCommandTimerInvalidNumer();
+            String message = plugin.getMessagesManager().getCommandTimerInvalidNumber();
             player.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + message));
             return true;
         }

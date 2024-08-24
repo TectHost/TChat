@@ -444,6 +444,91 @@ public class CustomCommands implements Listener {
                     Thread.currentThread().interrupt();
                 }
                 break;
+            case "[XP]":
+                handleXPAction(player, data);
+                break;
+            case "[LEVEL]":
+                handleLevelAction(player, data);
+                break;
+            default:
+                plugin.getLogger().warning("Unknown action type: " + type);
+                break;
+        }
+    }
+
+    private void handleXPAction(Player player, @NotNull String data) {
+        String[] parts = data.split(" ");
+        if (parts.length != 2) {
+            plugin.getLogger().warning("Invalid [XP] format: " + data + " (Expected format: ACTION VALUE)");
+            return;
+        }
+
+        String actionType = parts[0].toUpperCase();
+        int xpAmount;
+
+        try {
+            xpAmount = Integer.parseInt(parts[1]);
+        } catch (NumberFormatException e) {
+            plugin.getLogger().warning("Invalid XP value: " + parts[1]);
+            return;
+        }
+
+        UUID puuid = player.getUniqueId();
+        int xp = plugin.getSaveManager().getXp(puuid);
+
+        switch (actionType) {
+            case "ADD":
+                int result = xp + xpAmount;
+                plugin.getSaveManager().setXp(puuid, result);
+                break;
+            case "REMOVE":
+                int result1 = xp - xpAmount;
+                plugin.getSaveManager().setXp(puuid, result1);
+                break;
+            case "SET":
+                plugin.getSaveManager().setXp(puuid, xpAmount);
+                break;
+            default:
+                plugin.getLogger().warning("Unknown [XP] action type: " + actionType);
+                break;
+        }
+    }
+
+    private void handleLevelAction(Player player, @NotNull String data) {
+        String[] parts = data.split(" ");
+        if (parts.length != 2) {
+            plugin.getLogger().warning("Invalid [LEVEL] format: " + data + " (Expected format: ACTION VALUE)");
+            return;
+        }
+
+        String actionType = parts[0].toUpperCase();
+        int levelAmount;
+
+        try {
+            levelAmount = Integer.parseInt(parts[1]);
+        } catch (NumberFormatException e) {
+            plugin.getLogger().warning("Invalid Level value: " + parts[1]);
+            return;
+        }
+
+        UUID puuid = player.getUniqueId();
+        int level = plugin.getSaveManager().getLevel(puuid);
+
+        switch (actionType) {
+            case "ADD":
+                int result = level + levelAmount;
+                plugin.getSaveManager().setLevel(puuid, result);
+                break;
+            case "REMOVE":
+                int result1 = level - levelAmount;
+                plugin.getSaveManager().setLevel(puuid, result1);
+                break;
+            case "SET":
+                plugin.getSaveManager().setLevel(puuid, levelAmount);
+                break;
+            default:
+                plugin.getLogger().warning("Unknown [XP] action type: " + actionType);
+                break;
         }
     }
 

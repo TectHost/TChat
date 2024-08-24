@@ -2,12 +2,17 @@ package listeners;
 
 import config.DeathManager;
 import minealex.tchat.TChat;
+import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
+import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
 public class DeathsListener implements Listener {
 
@@ -24,83 +29,73 @@ public class DeathsListener implements Listener {
         Player player = event.getEntity();
         String playerName = player.getName();
 
+        // Enviar mensaje de muerte a Discord
         if (plugin.getDiscordManager().isDiscordEnabled() && plugin.getDiscordManager().isDeathEnabled()) {
             plugin.getDiscordHook().sendDeathMessage(playerName);
         }
 
-        String killerName = (player.getKiller() != null)
-                ? player.getKiller().getName()
-                : "desconocido";
+        String killerName = (player.getKiller() != null) ? player.getKiller().getName() : "desconocido";
+        String causeMessage;
 
-        String deathMessage;
         if (player.getLastDamageCause() != null) {
-            deathMessage = switch (player.getLastDamageCause().getCause()) {
+            DamageCause damageCause = player.getLastDamageCause().getCause();
+
+            causeMessage = switch (damageCause) {
                 case ENTITY_ATTACK -> {
-                    deathMessage = deathManager.getDeathMessage("player-killed-by-player");
-                    yield String.format(deathMessage, playerName, killerName);
+                    if (player.getKiller() != null) {
+                        yield deathManager.getDeathMessage("player-killed-by-player")
+                                .replace("%killer%", killerName);
+                    } else {
+                        yield deathManager.getDeathMessage("player-killed-by-entity")
+                                .replace("%killer%", player.getLastDamageCause().getEntityType().toString());
+                    }
                 }
-                case ENTITY_EXPLOSION -> {
-                    deathMessage = deathManager.getDeathMessage("player-killed-by-explosion");
-                    yield String.format(deathMessage, playerName);
+                case ENTITY_EXPLOSION -> deathManager.getDeathMessage("player-killed-by-explosion");
+                case FALL -> deathManager.getDeathMessage("player-killed-by-falling");
+                case DROWNING -> deathManager.getDeathMessage("player-killed-by-drowning");
+                case LAVA -> deathManager.getDeathMessage("player-killed-by-lava");
+                case FIRE, FIRE_TICK -> deathManager.getDeathMessage("player-killed-by-fire");
+                case POISON -> deathManager.getDeathMessage("player-killed-by-poison");
+                case MAGIC -> deathManager.getDeathMessage("player-killed-by-magic");
+                case SUFFOCATION -> deathManager.getDeathMessage("player-killed-by-suffocation");
+                case VOID -> deathManager.getDeathMessage("player-killed-by-void");
+                case STARVATION -> deathManager.getDeathMessage("player-killed-by-starvation");
+                case WITHER -> deathManager.getDeathMessage("player-killed-by-wither");
+                case THORNS -> deathManager.getDeathMessage("player-killed-by-thorns");
+
+                case FALLING_BLOCK -> {
+                    if (player.getLastDamageCause().getEntity() instanceof FallingBlock fallingBlock) {
+                        if (fallingBlock.getBlockData().getMaterial() == Material.ANVIL) {
+                            yield deathManager.getDeathMessage("player-killed-by-anvil");
+                        }
+                    }
+                    yield deathManager.getDeathMessage("player-killed-by-falling-block");
                 }
-                case FALL -> {
-                    deathMessage = deathManager.getDeathMessage("player-killed-by-falling");
-                    yield String.format(deathMessage, playerName);
-                }
-                case DROWNING -> {
-                    deathMessage = deathManager.getDeathMessage("player-killed-by-drowning");
-                    yield String.format(deathMessage, playerName);
-                }
-                case LAVA -> {
-                    deathMessage = deathManager.getDeathMessage("player-killed-by-lava");
-                    yield String.format(deathMessage, playerName);
-                }
-                case FIRE, FIRE_TICK -> {
-                    deathMessage = deathManager.getDeathMessage("player-killed-by-fire");
-                    yield String.format(deathMessage, playerName);
-                }
-                case POISON -> {
-                    deathMessage = deathManager.getDeathMessage("player-killed-by-poison");
-                    yield String.format(deathMessage, playerName);
-                }
-                case MAGIC -> {
-                    deathMessage = deathManager.getDeathMessage("player-killed-by-magic");
-                    yield String.format(deathMessage, playerName);
-                }
-                case SUFFOCATION -> {
-                    deathMessage = deathManager.getDeathMessage("player-killed-by-suffocation");
-                    yield String.format(deathMessage, playerName);
-                }
-                case VOID -> {
-                    deathMessage = deathManager.getDeathMessage("player-killed-by-void");
-                    yield String.format(deathMessage, playerName);
-                }
-                case STARVATION -> {
-                    deathMessage = deathManager.getDeathMessage("player-killed-by-starvation");
-                    yield String.format(deathMessage, playerName);
-                }
-                default -> {
-                    deathMessage = deathManager.getDeathMessage("player-killed-by-environment");
-                    yield String.format(deathMessage, playerName, player.getLastDamageCause().getCause());
-                }
+
+                default -> deathManager.getDeathMessage("player-killed-by-environment")
+                        .replace("%cause%", damageCause.toString());
             };
         } else {
-            deathMessage = deathManager.getDeathMessage("player-killed-by-environment");
-            deathMessage = String.format(deathMessage, playerName, "desconocido");
+            causeMessage = deathManager.getDeathMessage("player-killed-by-environment")
+                    .replace("%cause%", "desconocido");
         }
 
+        String deathMessage = causeMessage.replace("%player%", playerName);
         event.setDeathMessage(plugin.getTranslateColors().translateColors(player, deathMessage));
 
         if (deathManager.isTitleEnabled()) {
-            player.sendTitle(plugin.getTranslateColors().translateColors(player, deathManager.getTitle()), plugin.getTranslateColors().translateColors(player, deathManager.getSubtitle()),
-                    10,
-                    70,
-                    20
-            );
+            String title = deathManager.getTitle().replace("%player%", playerName);
+            String subtitle = deathManager.getSubtitle().replace("%player%", playerName);
+            player.sendTitle(plugin.getTranslateColors().translateColors(player, title),
+                    plugin.getTranslateColors().translateColors(player, subtitle),
+                    10, 70, 20);
         }
 
         if (deathManager.isActionBarEnabled()) {
-            player.spigot().sendMessage(net.md_5.bungee.api.ChatMessageType.ACTION_BAR, net.md_5.bungee.api.chat.TextComponent.fromLegacyText(plugin.getTranslateColors().translateColors(player, deathManager.getActionBarText())));
+            String actionBarText = deathManager.getActionBarText().replace("%player%", playerName);
+            player.spigot().sendMessage(net.md_5.bungee.api.ChatMessageType.ACTION_BAR,
+                    net.md_5.bungee.api.chat.TextComponent.fromLegacyText(
+                            plugin.getTranslateColors().translateColors(player, actionBarText)));
         }
 
         if (deathManager.isSoundEnabled()) {

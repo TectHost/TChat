@@ -11,7 +11,7 @@ import java.util.Objects;
 public class DeathManager {
 
     private final ConfigFile configFile;
-    private final Map<String, String> deathMessages = new HashMap<>();
+    private final Map<String, DeathMessage> deathMessages = new HashMap<>();
 
     private boolean titleEnabled;
     private String title;
@@ -34,10 +34,12 @@ public class DeathManager {
         FileConfiguration config = configFile.getConfig();
 
         if (config.contains("death-messages")) {
-            for (String key : Objects.requireNonNull(config.getConfigurationSection("death-messages")).getKeys(false)) {
-                String message = config.getString("death-messages." + key);
-                if (message != null) {
-                    deathMessages.put(key, message);
+            ConfigurationSection messagesSection = config.getConfigurationSection("death-messages");
+            for (String key : Objects.requireNonNull(messagesSection).getKeys(false)) {
+                boolean enabled = messagesSection.getBoolean(key + ".enabled", false);
+                String message = messagesSection.getString(key + ".message");
+                if (message != null && enabled) {
+                    deathMessages.put(key, new DeathMessage(enabled, message));
                 }
             }
         }
@@ -68,7 +70,10 @@ public class DeathManager {
     }
 
     public String getDeathMessage(String key) {
-        return deathMessages.getOrDefault(key, "Message not found (DeathManager)");
+        DeathMessage deathMessage = deathMessages.get(key);
+        return (deathMessage != null && deathMessage.isEnabled())
+                ? deathMessage.getMessage()
+                : null;
     }
 
     public boolean isTitleEnabled() {
@@ -109,5 +114,23 @@ public class DeathManager {
 
     public int getNumberOfParticles() {
         return numberOfParticles;
+    }
+
+    public static class DeathMessage {
+        private final boolean enabled;
+        private final String message;
+
+        public DeathMessage(boolean enabled, String message) {
+            this.enabled = enabled;
+            this.message = message;
+        }
+
+        public boolean isEnabled() {
+            return enabled;
+        }
+
+        public String getMessage() {
+            return message;
+        }
     }
 }

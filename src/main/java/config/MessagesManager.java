@@ -159,6 +159,13 @@ public class MessagesManager {
     private String commandTimerInvalidNumber;
     private String commandTimerRemoved;
     private String commandTimerNotExist;
+    private String usageNick;
+    private String usageNickSet;
+    private String nickSet;
+    private String nickRemove;
+    private List<String> seen;
+    private List<String> seenAdmin;
+    private String usageSeen;
 
     public MessagesManager(TChat plugin){
         this.messagesFile = new ConfigFile("messages.yml", null, plugin);
@@ -261,6 +268,13 @@ public class MessagesManager {
         }
 
         // Messages
+        usageSeen = config.getString("messages.usage.usage-seen");
+        seen = config.getStringList("seen.player");
+        seenAdmin = config.getStringList("seen.admin");
+        nickRemove = config.getString("messages.nick.remove");
+        nickSet = config.getString("messages.nick.set");
+        usageNick = config.getString("messages.usage.usage-nick");
+        usageNickSet = config.getString("messages.usage.usage-nick-set");
         commandTimerInvalidNumber = config.getString("messages.commandtimer.invalid-number");
         commandTimerRemoved = config.getString("messages.commandtimer.removed");
         commandTimerAdded = config.getString("messages.commandtimer.added");
@@ -384,11 +398,18 @@ public class MessagesManager {
     }
 
     // Messages
+    public String getUsageSeen() { return usageSeen; }
+    public List<String> getSeenAdmin() { return seenAdmin; }
+    public List<String> getSeen() { return seen; }
+    public String getNickRemove() { return nickRemove; }
+    public String getNickSet() { return nickSet; }
+    public String getUsageNickSet() { return usageNickSet; }
+    public String getUsageNick() { return usageNick; }
     public String getCommandTimerNotExist() { return commandTimerNotExist; }
     public String getCommandTimerRemoved() { return commandTimerRemoved; }
     public String getCommandTimerAlreadyAdded() { return commandTimerAlreadyAdded; }
     public String getCommandTimerAdded() { return commandTimerAdded; }
-    public String getCommandTimerInvalidNumer() { return commandTimerInvalidNumber; }
+    public String getCommandTimerInvalidNumber() { return commandTimerInvalidNumber; }
     public String getUsageCommandTimerRemove() { return usageCommandTimerRemove; }
     public String getUsageCommandTimerAdd() { return usageCommandTimerAdd; }
     public String getUsageCommandTimer() { return usageCommandTimer; }
