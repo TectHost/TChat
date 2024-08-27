@@ -15,10 +15,10 @@ public class DiscordHook {
         this.plugin = plugin;
     }
 
-    public void sendMessage(String message) {
+    public void sendMessage(String message, String URL) {
         HttpURLConnection connection = null;
         try {
-            URL url = new URL(plugin.getDiscordManager().getDiscordHook());
+            URL url = new URL(URL);
             connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("POST");
             connection.setRequestProperty("Content-Type", "application/json; utf-8");

@@ -1,5 +1,5 @@
 main: minealex.tchat.TChat
-version: 4.1.1
+version: 4.1.2
 name: TChat
 author: Mine_Alex
 api-version: 1.13
@@ -65,8 +65,22 @@ commands:
     description: Change the username
   seen:
     description: View player information
+  realname:
+    description: Show the realname
+  stafflist:
+    description: Show the staff list
+  bannedwords:
+    description: List all banned words
 
 permissions:
+  tchat.admin.command.bannedwords:
+    description: Permission to use bannedwords command
+  tchat.command.stafflist:
+    description: Permission to use stafflist command
+  tchat.staff:
+    description: Permission to show you in stafflist
+  tchat.realname:
+    description: Permission to use realname command
   tchat.admin.command.seen:
     description: Permission to use seen command
   tchat.command.seen:

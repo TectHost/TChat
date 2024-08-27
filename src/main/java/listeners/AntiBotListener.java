@@ -6,6 +6,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 public class AntiBotListener implements Listener {
 
@@ -17,8 +20,8 @@ public class AntiBotListener implements Listener {
 
     @EventHandler
     public void playerChat(AsyncPlayerChatEvent event, Player player) {
-        event.setCancelled(true);
         if (plugin.getConfigManager().isAntibotChat()) {
+            event.setCancelled(true);
             String prefix = plugin.getMessagesManager().getPrefix();
             String message = plugin.getMessagesManager().getAntibotChat();
             player.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + message));
@@ -26,9 +29,16 @@ public class AntiBotListener implements Listener {
     }
 
     @EventHandler
-    public void playerCommand(PlayerCommandPreprocessEvent event, Player player) {
-        event.setCancelled(true);
+    public void playerCommand(@NotNull PlayerCommandPreprocessEvent event) {
         if (plugin.getConfigManager().isAntibotCommand()) {
+            Player player = event.getPlayer();
+
+            String command = event.getMessage().split(" ")[0].toLowerCase();
+            List<String> whitelist = plugin.getConfigManager().getWhitelistCommandsAntiBot();
+            if (whitelist.contains(command)) { return; }
+
+            event.setCancelled(true);
+
             String prefix = plugin.getMessagesManager().getPrefix();
             String message = plugin.getMessagesManager().getAntibotCommand();
             player.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + message));

@@ -39,9 +39,7 @@ public class ChatFormatListener implements Listener {
     @EventHandler
     @SuppressWarnings("deprecation")
     public void playerFormat(@NotNull AsyncPlayerChatEvent event) {
-        if (event.isCancelled()) {
-            return;
-        }
+        if (event.isCancelled()) { return; }
 
         Player player = event.getPlayer();
         String message = event.getMessage();
@@ -49,7 +47,10 @@ public class ChatFormatListener implements Listener {
 
         String worldName = player.getWorld().getName();
         WorldsManager.WorldConfigData worldConfigData = plugin.getWorldsManager().getWorldsConfig().get(worldName);
+
         boolean perWorldChat = worldConfigData != null && worldConfigData.pwc();
+
+        boolean chatRadiusEnabled = worldConfigData != null && worldConfigData.chatrEnabled();
 
         if (perWorldChat) {
             Set<Player> recipients = event.getRecipients().stream()
@@ -83,12 +84,31 @@ public class ChatFormatListener implements Listener {
             event.getRecipients().addAll(recipients);
         }
 
+        if (chatRadiusEnabled) {
+            int chatRadius = worldConfigData.chatr();
+
+            Set<Player> recipients = event.getRecipients().stream()
+                    .filter(recipient -> recipient.hasPermission("tchat.admin") ||
+                            recipient.hasPermission("tchat.bypass.chat-radius") ||
+                            (recipient.getWorld().getName().equals(worldName) &&
+                                    recipient.getLocation().distance(player.getLocation()) <= chatRadius))
+                    .collect(Collectors.toSet());
+
+            event.getRecipients().clear();
+            event.getRecipients().addAll(recipients);
+        }
+
         if (plugin.getConfigManager().isChatColorEnabled()) {
             String chatColor = plugin.getSaveManager().getChatColor(player.getUniqueId()) + plugin.getSaveManager().getFormat(player.getUniqueId());
+
             if (!chatColor.equalsIgnoreCase("")) {
                 message = chatColor + message;
                 message = plugin.getTranslateColors().translateColors(player, message);
-            } else if (player.hasPermission("tchat.admin") || player.hasPermission("tchat.color.all")) {
+            }
+        }
+
+        if (plugin.getConfigManager().isColorsChatEnabled()) {
+            if (player.hasPermission("tchat.admin") || player.hasPermission("tchat.color.all")) {
                 message = plugin.getTranslateColors().translateColors(player, message);
             } else {
                 String finalMessage1 = message;
@@ -97,11 +117,9 @@ public class ChatFormatListener implements Listener {
                     char colorCode = finalMessage1.charAt(1);
 
                     if (ChatColor.ALL_CODES.indexOf(colorCode) > -1) {
-
                         if (player.hasPermission("tchat.color." + colorCode)) {
                             message = plugin.getTranslateColors().translateColors(player, message);
                         } else {
-
                             message = ChatColor.stripColor(message);
                         }
                     }
@@ -201,13 +219,25 @@ public class ChatFormatListener implements Listener {
             }
 
             if (plugin.getDiscordManager().isDiscordEnabled()) {
-                String discordMessage = removeMinecraftColorCodes(mainComponent.toLegacyText());
-                plugin.getDiscordHook().sendMessage(discordMessage);
+                if (channelName == null) {
+                    String discordMessage = removeMinecraftColorCodes(mainComponent.toLegacyText());
+                    plugin.getDiscordHook().sendMessage(discordMessage, plugin.getDiscordManager().getDiscordHook());
+                } else {
+                    String URL = plugin.getChannelsConfigManager().getChannel(channelName).getDiscordHook();
+                    String discordMessage = removeMinecraftColorCodes(mainComponent.toLegacyText());
+                    plugin.getDiscordHook().sendMessage(discordMessage, URL);
+                }
             }
         } else {
             if (plugin.getDiscordManager().isDiscordEnabled()) {
-                String discordMessage = removeMinecraftColorCodes(message);
-                plugin.getDiscordHook().sendMessage(discordMessage);
+                if (channelName == null) {
+                    String discordMessage = removeMinecraftColorCodes(message);
+                    plugin.getDiscordHook().sendMessage(discordMessage, plugin.getDiscordManager().getDiscordHook());
+                } else {
+                    String URL = plugin.getChannelsConfigManager().getChannel(channelName).getDiscordHook();
+                    String discordMessage = removeMinecraftColorCodes(message);
+                    plugin.getDiscordHook().sendMessage(discordMessage, URL);
+                }
             }
         }
     }
@@ -303,7 +333,7 @@ public class ChatFormatListener implements Listener {
             }
 
             if (personalConfig.isActionbarEnabled()) {
-                mentionedPlayer.spigot().sendMessage(net.md_5.bungee.api.ChatMessageType.ACTION_BAR, new TextComponent(personalConfig.getActionbarMessage()));
+                mentionedPlayer.spigot().sendMessage(net.md_5.bungee.api.ChatMessageType.ACTION_BAR, new TextComponent(plugin.getTranslateColors().translateColors(player, personalConfig.getActionbarMessage())));
             }
         }
 
@@ -339,7 +369,7 @@ public class ChatFormatListener implements Listener {
                 }
 
                 if (globalConfig.isActionbarEnabled()) {
-                    recipient.spigot().sendMessage(net.md_5.bungee.api.ChatMessageType.ACTION_BAR, new TextComponent(globalConfig.getActionbarMessage()));
+                    recipient.spigot().sendMessage(net.md_5.bungee.api.ChatMessageType.ACTION_BAR, new TextComponent(plugin.getTranslateColors().translateColors(player, globalConfig.getActionbarMessage())));
                 }
             }
         }

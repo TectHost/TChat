@@ -1,6 +1,5 @@
 package listeners;
 
-import commands.AutoBroadcastCommand;
 import commands.MuteChatCommand;
 import config.AutoBroadcastManager;
 import minealex.tchat.TChat;
@@ -10,6 +9,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import blocked.BannedCommands;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.List;
@@ -39,7 +39,7 @@ public class ChatListener implements Listener {
     }
 
     @EventHandler
-    public void onPlayerChat(AsyncPlayerChatEvent event) {
+    public void onPlayerChat(@NotNull AsyncPlayerChatEvent event) {
         Player player = event.getPlayer();
         String message = event.getMessage();
 
@@ -53,8 +53,8 @@ public class ChatListener implements Listener {
         antiBot(event, player, null);
         plugin.getAntiFloodListener().checkFlood(event, message, player);
         plugin.getBannedWords().playerBannedWords(event);
-        grammar(event, player, message);
-        replacer(event, message);
+        replacer(event);
+        grammar(event);
 
         chatFormatListener.playerFormat(event);
         plugin.getChatGamesSender().checkPlayerResponse(player, message);
@@ -64,7 +64,7 @@ public class ChatListener implements Listener {
     }
 
     @EventHandler
-    public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
+    public void onPlayerCommandPreprocess(@NotNull PlayerCommandPreprocessEvent event) {
         Player player = event.getPlayer();
         String command = event.getMessage();
 
@@ -181,22 +181,25 @@ public class ChatListener implements Listener {
             if (chatEvent != null) {
                 plugin.getAntiBotListener().playerChat(chatEvent, player);
             } else if (commandEvent != null) {
-                plugin.getAntiBotListener().playerCommand(commandEvent, player);
+                plugin.getAntiBotListener().playerCommand(commandEvent);
             }
         }
     }
 
-    public void replacer(AsyncPlayerChatEvent event, String message) {
+    public void replacer(@NotNull AsyncPlayerChatEvent event) {
         if (event.isCancelled()) { return; }
 
         if (plugin.getReplacerManager().getReplacerEnabled()) {
+            String message = event.getMessage();
             message = plugin.getReplacerManager().replaceWords(message, event.getPlayer());
             event.setMessage(message);
         }
     }
 
-    public void grammar(AsyncPlayerChatEvent event, Player player, String message) {
+    public void grammar(AsyncPlayerChatEvent event) {
         if (plugin.getConfigManager().isGrammarEnabled()) {
+            Player player = event.getPlayer();
+            String message = event.getMessage();
             plugin.getGrammarListener().checkGrammar(event, player, message);
             message = event.getMessage();
             event.setMessage(message);

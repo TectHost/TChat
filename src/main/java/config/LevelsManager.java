@@ -2,6 +2,7 @@ package config;
 
 import minealex.tchat.TChat;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
 
 import java.util.HashMap;
 import java.util.List;
@@ -10,14 +11,18 @@ import java.util.Objects;
 
 public class LevelsManager {
 
+    private final TChat plugin;
     private final ConfigFile levelsFile;
     private int minXp;
     private int maxXp;
     private final Map<Integer, Level> levels;
+    private final Map<String, Multiplier> multipliers;
 
     public LevelsManager(TChat plugin) {
+        this.plugin = plugin;
         this.levelsFile = new ConfigFile("levels.yml", null, plugin);
         this.levels = new HashMap<>();
+        this.multipliers = new HashMap<>();
         this.levelsFile.registerConfig();
         loadConfig();
     }
@@ -27,6 +32,16 @@ public class LevelsManager {
 
         minXp = config.getInt("options.min");
         maxXp = config.getInt("options.max");
+
+        multipliers.clear();
+        if (config.contains("multiplier")) {
+            for (String key : Objects.requireNonNull(config.getConfigurationSection("multiplier")).getKeys(false)) {
+                double xpMultiplier = config.getDouble("multiplier." + key + ".xp", 1.0);
+
+                Multiplier multiplier = new Multiplier(xpMultiplier);
+                multipliers.put(key, multiplier);
+            }
+        }
 
         levels.clear();
         if (config.contains("levels")) {
@@ -48,6 +63,11 @@ public class LevelsManager {
 
     public int getMaxXp() { return maxXp; }
     public int getMinXp() { return minXp; }
+
+    public Multiplier getMultiplier(Player player) {
+        String playerGroup = plugin.getGroupManager().getGroup(player);
+        return multipliers.getOrDefault(playerGroup, new Multiplier(1.0));
+    }
 
     public Level getLevel(int levelId) {
         return levels.get(levelId);
@@ -72,6 +92,18 @@ public class LevelsManager {
 
         public List<String> getRewards() {
             return rewards;
+        }
+    }
+
+    public static class Multiplier {
+        private final double xpMultiplier;
+
+        public Multiplier(double xpMultiplier) {
+            this.xpMultiplier = xpMultiplier;
+        }
+
+        public double getXpMultiplier() {
+            return xpMultiplier;
         }
     }
 }

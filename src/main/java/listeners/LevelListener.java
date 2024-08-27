@@ -9,6 +9,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Random;
@@ -19,30 +20,37 @@ public class LevelListener implements Listener {
     private final Random random = new Random();
     private final TChat plugin;
 
-    public LevelListener(TChat plugin) {
+    public LevelListener(@NotNull TChat plugin) {
         this.plugin = plugin;
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
     @EventHandler
-    public void addXp(AsyncPlayerChatEvent event) {
+    public void addXp(@NotNull AsyncPlayerChatEvent event) {
         if (event.isCancelled()) { return; }
 
         Player player = event.getPlayer();
         UUID playerId = player.getUniqueId();
-        int minXp = plugin.getLevelsManager().getMinXp();
-        int maxXp = plugin.getLevelsManager().getMaxXp();
+        LevelsManager levelsManager = plugin.getLevelsManager();
+
+        LevelsManager.Multiplier multiplier = levelsManager.getMultiplier(player);
+        double xpMultiplier = multiplier.getXpMultiplier();
+
+        int minXp = levelsManager.getMinXp();
+        int maxXp = levelsManager.getMaxXp();
         int randomNumber = minXp + random.nextInt(maxXp - minXp + 1);
+
+        int adjustedXp = (int) (randomNumber * xpMultiplier);
 
         Bukkit.getScheduler().runTask(plugin, () -> {
             int currentXp = plugin.getSaveManager().getXp(playerId);
-            int totalXp = currentXp + randomNumber;
+            int totalXp = currentXp + adjustedXp;
 
             handleLevelUp(player, totalXp);
         });
     }
 
-    private void handleLevelUp(Player player, int totalXp) {
+    private void handleLevelUp(@NotNull Player player, int totalXp) {
         UUID playerId = player.getUniqueId();
         LevelsManager levelsManager = plugin.getLevelsManager();
 
@@ -51,12 +59,13 @@ public class LevelListener implements Listener {
         for (int levelId = currentLevel + 1; levelsManager.getLevels().containsKey(levelId); levelId++) {
             LevelsManager.Level level = levelsManager.getLevel(levelId);
 
-            if (totalXp >= level.getXp()) {
+            int requiredXp = level.getXp();
+
+            if (totalXp >= requiredXp) {
                 plugin.getSaveManager().setLevel(playerId, levelId);
-                totalXp -= level.getXp();
+                totalXp -= requiredXp;
 
                 applyRewards(player, level.getRewards());
-
                 String prefix = plugin.getMessagesManager().getPrefix();
                 String message = plugin.getMessagesManager().getLevelUp();
                 message = message.replace("%level%", String.valueOf(levelId));

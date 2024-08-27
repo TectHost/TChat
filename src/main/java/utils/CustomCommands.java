@@ -264,6 +264,11 @@ public class CustomCommands implements Listener {
 
         data = data.replace("%prefix%", prefix);
         data = data.replace("%i%", String.valueOf(currentIteration));
+        data = data.replace("%player%", player.getName());
+
+        int spaces = 56 - data.length();
+        String center = " ".repeat(spaces);
+        data = data.replace("%center%", center);
 
         if (args != null) {
             String modifiedArgs = args.substring(1);
@@ -281,10 +286,10 @@ public class CustomCommands implements Listener {
                 }
                 break;
             case "[PLAYER_COMMAND]":
-                player.performCommand(data.replace("{player}", player.getName()));
+                player.performCommand(data);
                 break;
             case "[CONSOLE_COMMAND]":
-                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), data.replace("{player}", player.getName()));
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), data);
                 break;
             case "[SOUND]":
                 player.playSound(player.getLocation(), Sound.valueOf(data), 1.0F, 1.0F);
@@ -355,8 +360,7 @@ public class CustomCommands implements Listener {
                         net.md_5.bungee.api.chat.TextComponent.fromLegacyText(translatedData));
                 break;
             case "[BUNGEECORD]":
-                String serverName = action.replace("[BUNGEECORD] ", "");
-                sendPlayerToBungeeServer(player, serverName);
+                sendPlayerToBungeeServer(player, data);
                 break;
             case "[INVENTORY]":
                 String[] inventoryParts = data.split(" ");
@@ -402,16 +406,12 @@ public class CustomCommands implements Listener {
                 handleChatColorAction(player, data);
                 break;
             case "[GLOBAL]":
-                for (Player p : Bukkit.getOnlinePlayers()) {
-                    p.sendMessage(plugin.getTranslateColors().translateColors(p, data));
-                }
+                Bukkit.broadcastMessage(plugin.getTranslateColors().translateColors(player, data));
                 break;
             case "[BROADCAST]":
                 String format = plugin.getConfigManager().getBroadcastFormat();
                 format = format.replace("%message%", data);
-                for (Player p : Bukkit.getOnlinePlayers()) {
-                    p.sendMessage(plugin.getTranslateColors().translateColors(p, format));
-                }
+                Bukkit.broadcastMessage(plugin.getTranslateColors().translateColors(player, format));
                 break;
             case "[SLEEP]":
                 String unit = data.substring(data.length() - 1);
@@ -449,6 +449,11 @@ public class CustomCommands implements Listener {
                 break;
             case "[LEVEL]":
                 handleLevelAction(player, data);
+                break;
+            case "[WARNING]":
+                String format1 = plugin.getConfigManager().getWarningFormat();
+                format1 = format1.replace("%message%", data);
+                Bukkit.broadcastMessage(plugin.getTranslateColors().translateColors(player, format1));
                 break;
             default:
                 plugin.getLogger().warning("Unknown action type: " + type);

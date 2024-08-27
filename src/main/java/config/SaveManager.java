@@ -5,6 +5,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 public class SaveManager {
@@ -133,5 +134,18 @@ public class SaveManager {
         String path = "players." + playerId.toString() + ".format";
         config.set(path, format);
         savesFile.saveConfig();
+    }
+
+    public UUID getPlayerIdByNick(String nick) {
+        if (config.getConfigurationSection("players") == null) { return null; }
+
+        for (String playerKey : Objects.requireNonNull(config.getConfigurationSection("players")).getKeys(false)) {
+            String storedNick = config.getString("players." + playerKey + ".nick");
+            if (storedNick != null && storedNick.equalsIgnoreCase(nick)) {
+                return UUID.fromString(playerKey);
+            }
+        }
+
+        return null;
     }
 }

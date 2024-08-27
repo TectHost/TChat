@@ -210,6 +210,9 @@ public class TChat extends JavaPlugin {
         Objects.requireNonNull(getCommand("commandtimer")).setExecutor(new CommandTimerCommand(this));
         Objects.requireNonNull(getCommand("nick")).setExecutor(new NickCommand(this));
         Objects.requireNonNull(getCommand("seen")).setExecutor(new SeenCommand(this));
+        Objects.requireNonNull(getCommand("realname")).setExecutor(new RealNameCommand(this));
+        Objects.requireNonNull(getCommand("stafflist")).setExecutor(new StaffListCommand(this));
+        Objects.requireNonNull(getCommand("bannedwords")).setExecutor(new BannedWordsCommand(this, bannedWordsManager));
     }
 
     public void registerPlaceholders() {

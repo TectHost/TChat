@@ -4,6 +4,13 @@ options:
   # Max XP per message
   max: 7
 
+# Per group multiplier (you can use two decimals)
+multiplier:
+  # (Group): (multiplier)
+  op: 2.0
+  # Add more groups
+  #default: 2.0
+
 levels:
   1:
     xp: 200

@@ -3,10 +3,12 @@ package placeholders;
 import config.GroupManager;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import minealex.tchat.TChat;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.UUID;
 
 public class Placeholders extends PlaceholderExpansion {
@@ -64,6 +66,8 @@ public class Placeholders extends PlaceholderExpansion {
             case "ping" -> plugin.getConfigManager().getColorForPing(player.getPing()) + player.getPing();
             case "ping_color" -> plugin.getConfigManager().getColorForPing(player.getPing());
             case "nick" -> plugin.getSaveManager().getNick(playerId, player);
+            case "staff_number" -> String.valueOf(getStaffNumber());
+            case "staff_list" -> getStaffList();
             default -> null;
         };
     }
@@ -71,5 +75,24 @@ public class Placeholders extends PlaceholderExpansion {
     private @NotNull String getChannel(Player player) {
         String channel = plugin.getChannelsManager().getPlayerChannel(player);
         return (channel != null) ? channel : "null";
+    }
+
+    private int getStaffNumber() {
+        return (int) Bukkit.getOnlinePlayers().stream()
+                .filter(p -> p.hasPermission("tchat.admin") || p.hasPermission("tchat.staff") || p.isOp())
+                .count();
+    }
+
+    private @NotNull String getStaffList() {
+        List<String> staffList = Bukkit.getOnlinePlayers().stream()
+                .filter(p -> p.hasPermission("tchat.admin") || p.hasPermission("tchat.staff") || p.isOp())
+                .map(Player::getName)
+                .toList();
+
+        if (staffList.isEmpty()) {
+            return "No staff online";
+        }
+
+        return String.join(", ", staffList);
     }
 }

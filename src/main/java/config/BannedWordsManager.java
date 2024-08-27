@@ -66,6 +66,19 @@ public class BannedWordsManager {
         }
     }
 
+    public void saveBannedWords() {
+        FileConfiguration bannedWordsConfig = YamlConfiguration.loadConfiguration(bannedWordsFile);
+        bannedWordsConfig.set("bannedWords", bannedWords);
+
+        try {
+            bannedWordsConfig.save(bannedWordsFile);
+        } catch (Exception e) {
+            plugin.getLogger().severe("Error saving banned words [BannedWordsManager.java]");
+            e.printStackTrace();
+        }
+    }
+
+
     public int getParticles() { return particles; }
     public Particle getParticle() { return particle; }
     public boolean isParticlesEnabled() { return particlesEnabled; }

@@ -166,6 +166,22 @@ public class MessagesManager {
     private List<String> seen;
     private List<String> seenAdmin;
     private String usageSeen;
+    private String usageRealName;
+    private String noPlayerRealName;
+    private String offlineRealName;
+    private String realName;
+    private String noStaff;
+    private String headerStaffList;
+    private String footerStaffList;
+    private String usageBannedWords;
+    private String usageBannedWordsAdd;
+    private String usageBannedWordsRemove;
+    private String bannedWordsNone;
+    private String bannedWordsList;
+    private String bannedWordsAdd;
+    private String bannedWordsAlready;
+    private String bannedWordsRemoved;
+    private String bannedWordsUnknown;
 
     public MessagesManager(TChat plugin){
         this.messagesFile = new ConfigFile("messages.yml", null, plugin);
@@ -268,6 +284,22 @@ public class MessagesManager {
         }
 
         // Messages
+        bannedWordsUnknown = config.getString("messages.bannedwords.unknown");
+        bannedWordsAlready = config.getString("messages.bannedwords.already");
+        bannedWordsList = config.getString("messages.bannedwords.list");
+        bannedWordsNone = config.getString("messages.bannedwords.none");
+        bannedWordsRemoved = config.getString("messages.bannedwords.removed");
+        bannedWordsAdd = config.getString("messages.bannedwords.add");
+        usageBannedWordsRemove = config.getString("messages.usage.bannedwords-remove");
+        usageBannedWordsAdd = config.getString("messages.usage.bannedwords-add");
+        usageBannedWords = config.getString("messages.usage.bannedwords");
+        headerStaffList = config.getString("messages.stafflist.header");
+        footerStaffList = config.getString("messages.stafflist.footer");
+        noStaff = config.getString("messages.no-staff");
+        offlineRealName = config.getString("messages.realname.offline");
+        noPlayerRealName = config.getString("messages.realname.no-player");
+        realName = config.getString("messages.realname.realname");
+        usageRealName = config.getString("messages.usage.usage-realname");
         usageSeen = config.getString("messages.usage.usage-seen");
         seen = config.getStringList("seen.player");
         seenAdmin = config.getStringList("seen.admin");
@@ -398,6 +430,22 @@ public class MessagesManager {
     }
 
     // Messages
+    public String getBannedWordsAdd() { return bannedWordsAdd; }
+    public String getBannedWordsNone() { return bannedWordsNone; }
+    public String getBannedWordsList() { return bannedWordsList;}
+    public String getBannedWordsAlready() { return bannedWordsAlready; }
+    public String getBannedWordsRemoved() { return bannedWordsRemoved; }
+    public String getBannedWordsUnknown() { return bannedWordsUnknown; }
+    public String getUsageBannedWordsRemove() { return usageBannedWordsRemove; }
+    public String getUsageBannedWordsAdd() { return usageBannedWordsAdd; }
+    public String getUsageBannedWords() { return usageBannedWords; }
+    public String getFooterStaffList() { return footerStaffList; }
+    public String getHeaderStaffList() { return headerStaffList; }
+    public String getNoStaff() { return noStaff; }
+    public String getRealName() { return realName; }
+    public String getOfflineRealName() { return offlineRealName; }
+    public String getNoPlayerRealName() { return noPlayerRealName; }
+    public String getUsageRealName() { return usageRealName; }
     public String getUsageSeen() { return usageSeen; }
     public List<String> getSeenAdmin() { return seenAdmin; }
     public List<String> getSeen() { return seen; }

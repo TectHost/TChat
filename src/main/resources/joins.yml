@@ -61,14 +61,19 @@ groups:
           - "&7Say hello and make them feel welcome!"
         # Title configuration for the global join event.
         title:
-          enabled: false  # Not enabled for global messages by default.
+          # Enable/disable title
+          enabled: false
+          # Title
+          title: "&eWelcome to &6Our Server!"
+          # Subtitle
+          subtitle: "&7Enjoy your adventure, %player_name%!"
         # Sound configuration for the global join event.
         sound:
           enabled: true
           sound: "block_bell_use"
         # Particle effects configuration for the global join event.
         particles:
-          enabled: true
+          enabled: false
           particle: "VILLAGER_HAPPY"
         # Actionbar configuration for the global join event.
         actionbar:
@@ -87,16 +92,16 @@ groups:
         - "&7Hope to see you again soon!"
       # Title configuration for the quit event.
       title:
-        enabled: true
+        enabled: false
         title: "&cGoodbye, %player_name%!"
         subtitle: "&7Thanks for playing on Our Server!"
       # Sound configuration for the quit event.
       sound:
-        enabled: true
+        enabled: false
         sound: "entity_ender_dragon_flap"
       # Particle effects configuration for the quit event.
       particles:
-        enabled: true
+        enabled: false
         particle: "SMOKE"
       # Actionbar configuration for the quit event.
       actionbar:

@@ -23,6 +23,10 @@ channels:
     # 2 -> Announce visible to all users on the channel
     # 3 -> Disable announces
     announce-mode: 1
+    # Send discord messages to a concrete discord channel
+    discord:
+      enabled: true
+      hook: "https://discord.com/api/webhooks/..."
   test:
     enabled: true
     permission: "tchat.test"
@@ -31,3 +35,6 @@ channels:
       format: "%channel% &a%player% &b> "
     message-mode: 1
     announce-mode: 1
+    discord:
+      enabled: false
+      hook: "https://discord.com/api/webhooks/..."

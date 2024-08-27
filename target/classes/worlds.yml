@@ -11,12 +11,22 @@ worlds:
     chat-enabled: true
     # Per World Chat
     pwc: false
+    # Chat radius
+    chat-radius:
+      enabled: false
+      radius: 10
   world_nether:
     chat-enabled: true
     pwc: false
+    chat-radius:
+      enabled: false
+      radius: 10
   world_the_end:
     chat-enabled: true
     pwc: false
+    chat-radius:
+      enabled: false
+      radius: 10
   # Add more worlds
   #survival:
     #chat-enabled: false

@@ -47,6 +47,7 @@ messages:
   invalid-color: "&cInvalid color or format: %color%"
   color-reset: "&aColor and format &freset&a."
   other-ping: "&f%player%'s ping: %color%%ping%"
+  no-staff: "&cThere are no staff members connected."
   chat-help:
     message:
       - "&8--------- { &#c03afeT&#a72cf8C&#8e1ff1h&#7411eba&#5b03e4t &8} ---------"
@@ -103,6 +104,9 @@ messages:
   cooldown:
     chat: "&cPlease wait %cooldown% seconds before sending another message."
     command: "&cPlease wait %cooldown% seconds before executing another command."
+  stafflist:
+    header: "&#9713FE======= [ Staff List (%staff%) ] ======="
+    footer: "&#9713FE========================================"
   chatgames:
     no-games: "&cThere are no games configured."
     no-enabled-games: "&cThere are no games enabled."
@@ -137,6 +141,13 @@ messages:
     removed: "&cCommand removed from blocked list."
     not-blocked-tab: "&cCommand is not blocked from tab completion."
     removed-tab: "&cCommand removed from no tab completion list."
+  bannedwords:
+    none: "&cThere are no banned words."
+    list: "&eBanned Words: &f%words%"
+    add: "&aThe word '&e%word%&a' has been added to the list of banned words."
+    already: "&cThe word '&e%word%&c' is already in the list of banned words."
+    removed: "&aThe word '&e%word%&a' has been removed from the list of banned words."
+    unknown: "&cThe word '&e%word%&c' is not in the banned words list."
   nick:
     set: "&aYour nick has been changed to &e%nick%"
     remove: "&aYour nick has been deleted."
@@ -147,6 +158,10 @@ messages:
     disabled: "&aSocialspy is now disabled."
     invalid-mode: "&cInvalid mode, use: /socialspy mode <1-3>"
     mode: "&aMode set to: &#109AFE%mode%"
+  realname:
+    no-player: "&cNo player found with the nickname: %nick%"
+    offline: "&cThe player with that nickname is currently offline."
+    realname: "&aThe real name of &f%nick% &ais &f%player%"
   commandtimer:
     added: "&aCommand timer '%timer%' successfully created."
     already-added: "&cA timer with that name already exists."
@@ -205,6 +220,10 @@ messages:
     usage-nick: "&cUsage: /nick <set/remove> <nick>"
     usage-nick-set: "&cUsage: /nick set <nick>"
     usage-seen: "&cUsage: /seen <player>"
+    usage-realname: "&cUsage: /realname <nick>"
+    bannedwords: "&cUsage: /bannedwords <list|add|remove> [word]"
+    bannedwords-add: "&cUsage: /bannedwords add <word>"
+    bannedwords-remove: "&cUsage: /bannedwords remove <word>"
   # Debug messages are only seen in the console
   debug:
     no-format-group: "&cError in groups.yml - No format found for group: %group%"

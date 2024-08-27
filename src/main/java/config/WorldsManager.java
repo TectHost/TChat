@@ -31,7 +31,9 @@ public class WorldsManager {
         for (String worldName : Objects.requireNonNull(config.getConfigurationSection("worlds")).getKeys(false)) {
             boolean chatEnabled = config.getBoolean("worlds." + worldName + ".chat-enabled");
             boolean pwc = config.getBoolean("worlds." + worldName + ".pwc");
-            worldsConfig.put(worldName, new WorldConfigData(chatEnabled, pwc));
+            boolean chatrEnabled = config.getBoolean("worlds." + worldName + ".chat-radius.enabled");
+            int chatr = config.getInt("worlds." + worldName + ".chat-radius.radius");
+            worldsConfig.put(worldName, new WorldConfigData(chatEnabled, pwc, chatrEnabled, chatr));
         }
 
         for (String bridgeName : Objects.requireNonNull(config.getConfigurationSection("bridges")).getKeys(false)) {
@@ -54,7 +56,7 @@ public class WorldsManager {
         return bridgesConfig;
     }
 
-    public record WorldConfigData(boolean chatEnabled, boolean pwc) {
+    public record WorldConfigData(boolean chatEnabled, boolean pwc, boolean chatrEnabled, int chatr) {
     }
 
     public record BridgeConfigData(boolean enabled, List<String> worlds) {

@@ -98,6 +98,8 @@ public class ConfigManager {
     private int socialSpyMode;
     private List<String> socialSpyCommands;
     private boolean antiAdvertisingLogEnabled;
+    private boolean colorsChatEnabled;
+    private List<String> whitelistCommandsAntiBot;
 
     public ConfigManager(TChat plugin) {
         this.configFile = new ConfigFile("config.yml", null, plugin);
@@ -123,6 +125,7 @@ public class ConfigManager {
         ignoreLogEnabled = config.getBoolean("logs.ignore.enabled");
 
         chatColorEnabled = config.getBoolean("chat-color.enabled");
+        colorsChatEnabled = config.getBoolean("chat-color.colors-in-chat-enabled");
 
         printEnabled = config.getBoolean("print.enabled");
 
@@ -235,10 +238,13 @@ public class ConfigManager {
         antibotEnabled = config.getBoolean("antibot.enabled");
         if (antibotEnabled) {
             antibotBypass = config.getString("antibot.bypass-permission");
-            antibotChat = config.getBoolean("antibot.messages.antibot-chat");
-            antibotCommand = config.getBoolean("antibot.messages.antibot-command");
+            antibotChat = config.getBoolean("antibot.antibot-chat");
+            antibotCommand = config.getBoolean("antibot.antibot-command");
             antibotJoin = config.getBoolean("antibot.messages.antibot-join");
             antibotMoved = config.getBoolean("antibot.messages.antibot-moved");
+            if (antibotCommand) {
+                whitelistCommandsAntiBot = config.getStringList("antibot.commands.whitelist");
+            }
         }
 
         rulesEnabled = config.getBoolean("rules.enabled");
@@ -306,6 +312,8 @@ public class ConfigManager {
         loadConfig();
     }
 
+    public List<String> getWhitelistCommandsAntiBot() { return whitelistCommandsAntiBot; }
+    public boolean isColorsChatEnabled() { return colorsChatEnabled; }
     public boolean isAntiAdvertisingLogEnabled() { return antiAdvertisingLogEnabled; }
     public List<String> getSocialSpyCommands() { return socialSpyCommands; }
     public int getSocialSpyMode() { return socialSpyMode; }

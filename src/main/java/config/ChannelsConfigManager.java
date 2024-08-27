@@ -30,7 +30,10 @@ public class ChannelsConfigManager {
             String format = config.getString(path + "format.format");
             int messageMode = config.getInt(path + "message-mode");
             int announceMode = config.getInt(path + "announce-mode");
-            channels.put(channelName, new Channel(enabled, permission, format, formatEnabled, messageMode, announceMode));
+            boolean discordEnabled = config.getBoolean(path + "discord.enabled");
+            String discordHook = config.getString(path + "discord.hook", "");
+
+            channels.put(channelName, new Channel(enabled, permission, format, formatEnabled, messageMode, announceMode, discordEnabled, discordHook));
         }
     }
 
@@ -52,14 +55,18 @@ public class ChannelsConfigManager {
         private final boolean formatEnabled;
         private final int messageMode;
         private final int announceMode;
+        private final boolean discordEnabled;
+        private final String discordHook;
 
-        public Channel(boolean enabled, String permission, String format, boolean formatEnabled, int messageMode, int announceMode) {
+        public Channel(boolean enabled, String permission, String format, boolean formatEnabled, int messageMode, int announceMode, boolean discordEnabled, String discordHook) {
             this.enabled = enabled;
             this.permission = permission;
             this.format = format;
             this.formatEnabled = formatEnabled;
             this.messageMode = messageMode;
             this.announceMode = announceMode;
+            this.discordEnabled = discordEnabled;
+            this.discordHook = discordHook;
         }
 
         public boolean isFormatEnabled() { return formatEnabled; }
@@ -68,5 +75,7 @@ public class ChannelsConfigManager {
         public String getPermission() { return permission; }
         public String getFormat() { return format; }
         public int getMessageMode() { return messageMode; }
+        public boolean isDiscordEnabled() { return discordEnabled; }
+        public String getDiscordHook() { return discordHook; }
     }
 }

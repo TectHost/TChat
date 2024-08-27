@@ -11,7 +11,7 @@ chat:
   use-group-format: false
   # Global format (use only if the use-group-format option is false)
   # Use the "¡" character to split the format in the player and message part
-  format: "%tchat_prefix% &a%player% &e>> ¡&7"
+  format: "%tchat_prefix% &a%tchat_nick% &e>> ¡&7"
   # This option is used to display on the console the messages from the players
   register-messages-on-console: true
 
@@ -251,12 +251,18 @@ antibot:
   enabled: true
   # Permission to bypass anti bot
   bypass-permission: "tchat.bypass.antibot"
+  # Enable/disable disable chat on join
+  antibot-chat: true
+  # Enable/disable disable commands on join
+  antibot-command: true
+  commands:
+    # Whitelisted commands
+    whitelist:
+      - "/login"
+      - "/register"
+      - "/premium"
   # Enable/disable messages
   messages:
-    # Enable/disable on chat message
-    antibot-chat: true
-    # Enable/disable on command message
-    antibot-command: true
     # Enable/disable on join message
     antibot-join: true
     # Enable/disable on move message
@@ -481,6 +487,8 @@ ping:
 chat-color:
   # Enable/disable this command
   enabled: true
+  # Enable/disable colors in chat
+  colors-in-chat-enabled: true
 
 # #################################################################
 # ┌─────────────────────────────────────────────────────────────┐ #

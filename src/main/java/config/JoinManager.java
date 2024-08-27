@@ -9,12 +9,10 @@ import java.util.Map;
 
 public class JoinManager {
 
-    private final TChat plugin;
     private final ConfigFile configFile;
     private final Map<String, GroupConfig> groupConfigs;
 
     public JoinManager(TChat plugin) {
-        this.plugin = plugin;
         this.configFile = new ConfigFile("joins.yml", null, plugin);
         this.configFile.registerConfig();
         this.groupConfigs = new HashMap<>();

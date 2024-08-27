@@ -10,6 +10,7 @@
 # [MESSAGE] - Sends a message | - "[MESSAGE] &7Test message"
 # [GLOBAL] - Sends a message to all online players | - "[ALL] &7Test message &bfor all &#c03afeo&#ac2ff9n&#9824f4l&#8319eei&#6f0ee9n&#5b03e4e players (%player_name%)"
 # [BROADCAST] - Sends a message to all online players with broadcast format (works even if it is deactivated in config.yml) | - "[BROADCAST] Test message"
+# [WARNING] - Sends a message to all online players with warning format (works even if it is deactivated in config.yml) | - "[WARNING] Test message"
 # [TITLE] - Sends a title | - "[TITLE] &aTitle;&bSubtitle"
 # [PLAYER_COMMAND] - The player will automatically execute a command | - "[PLAYER_COMMAND] spawn {player}"
 # [CONSOLE_COMMAND] - The console will automatically execute a command | - "[CONSOLE_COMMAND] give {player} diamond 1"
@@ -48,6 +49,8 @@
 # Placeholders:
 # %prefix% - Returns the prefix of TChat
 # %i% - Returns the repetition number of the current loop
+# %player% - Returns the player name
+# %center% - Centers a message
 
 commands:
   test:
