@@ -100,6 +100,9 @@ public class ConfigManager {
     private boolean antiAdvertisingLogEnabled;
     private boolean colorsChatEnabled;
     private List<String> whitelistCommandsAntiBot;
+    private String langFile;
+    private boolean chatColorMenuEnabled;
+    private boolean deathLogs;
 
     public ConfigManager(TChat plugin) {
         this.configFile = new ConfigFile("config.yml", null, plugin);
@@ -122,9 +125,11 @@ public class ConfigManager {
         advertisingBypass = config.getString("advertising.bypass");
 
         ignoreEnabled = config.getBoolean("ignore.enabled");
-        ignoreLogEnabled = config.getBoolean("logs.ignore.enabled");
 
         chatColorEnabled = config.getBoolean("chat-color.enabled");
+        if (chatColorEnabled) {
+            chatColorMenuEnabled = config.getBoolean("chat-color.menu-enabled");
+        }
         colorsChatEnabled = config.getBoolean("chat-color.colors-in-chat-enabled");
 
         printEnabled = config.getBoolean("print.enabled");
@@ -257,6 +262,9 @@ public class ConfigManager {
         logsCommandEnabled = config.getBoolean("logs.command.enabled");
         logBannedCommandsEnabled = config.getBoolean("logs.banned-commands.enabled");
         logBannedWordsEnabled = config.getBoolean("logs.banned-words.enabled");
+        antiAdvertisingLogEnabled = config.getBoolean("logs.anti-advertising.enabled");
+        ignoreLogEnabled = config.getBoolean("logs.ignore.enabled");
+        deathLogs = config.getBoolean("logs.death.enabled");
 
         pollBar = config.getInt("poll.options.bar.length");
         pollFill = config.getString("poll.options.bar.filled");
@@ -268,7 +276,7 @@ public class ConfigManager {
         listFooter = config.getString("list.footer");
         listHeader = config.getString("list.header");
 
-        antiAdvertisingLogEnabled = config.getBoolean("logs.anti-advertising.enabled");
+        langFile = config.getString("chat.lang");
 
         pingColors = new HashMap<>();
 
@@ -312,6 +320,9 @@ public class ConfigManager {
         loadConfig();
     }
 
+    public boolean isDeathLogs() {return deathLogs;}
+    public boolean isChatColorMenuEnabled() {return chatColorMenuEnabled;}
+    public String getLangFile() { return langFile; }
     public List<String> getWhitelistCommandsAntiBot() { return whitelistCommandsAntiBot; }
     public boolean isColorsChatEnabled() { return colorsChatEnabled; }
     public boolean isAntiAdvertisingLogEnabled() { return antiAdvertisingLogEnabled; }

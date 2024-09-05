@@ -14,6 +14,8 @@ chat:
   format: "%tchat_prefix% &a%tchat_nick% &e>> ¡&7"
   # This option is used to display on the console the messages from the players
   register-messages-on-console: true
+  # Select lang file (inside the lang folder)
+  lang: "messages_en.yml"
 
 # #################################################################
 # ┌─────────────────────────────────────────────────────────────┐ #
@@ -133,7 +135,7 @@ advertising:
 cap:
   # Enable/disable anti-cap
   enabled: true
-  # Enable/disable the message
+  # Enable/disable the message (for BLOCK mode)
   message-enabled: true
   # Modes:
   # - ToLowerCase | Converts all uppercase letters to lowercase letters (recommended)
@@ -298,6 +300,10 @@ logs:
   # Anti advertising log (when someone uses anti advertising)
   anti-advertising:
     # Enable/disable logging anti advertising usage
+    enabled: true
+  # Deaths log (when someone dies)
+  death:
+    # Enable/disable logging deaths
     enabled: true
 
 # #################################################################
@@ -489,6 +495,8 @@ chat-color:
   enabled: true
   # Enable/disable colors in chat
   colors-in-chat-enabled: true
+  # Enable/disable chat color menu (disable it if your Minecraft version is not +1.21)
+  menu-enabled: true
 
 # #################################################################
 # ┌─────────────────────────────────────────────────────────────┐ #

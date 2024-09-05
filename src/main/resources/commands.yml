@@ -29,6 +29,7 @@
 # [CHATCOLOR] (COLOR/FORMAT) - Sets the color or format of the player | - "[CHATCOLOR] COLOR &2"
 # [XP] (ADD/REMOVE/SET) - Change the chat XP (levels.yml) | - "[XP] ADD 3" - "[XP] REMOVE 5" - "[XP] SET 47"
 # [LEVEL] (ADD/REMOVE/SET) - Change the chat Level (levels.yml) | - "[LEVEL] ADD 3" - "[LEVEL] REMOVE 5" - "[LEVEL] SET 47"
+# [MUTE] (Duration) - Mute the executor (use -1 for permanent) | - "[MUTE] 5m" - "[MUTE] -1"
 # [SLEEP] (time)(s/t/m) - Wait a defined period of time before proceeding with the actions | - "[SLEEP] 2s"
   # s = seconds | t = ticks (20 = 1 second) | m = milliseconds (1000 = 1)
 # Conditionals
@@ -44,11 +45,13 @@
   # [FOR] - Starts a loop for a specified number of repetitions | - "[FOR] 5"
     # Placeholders:
       # %i% - Number of loop executions
-  # [ROF] - Ends a loop | - "[ROF]"
+  # [ROF] - Ends a FOR loop | - "[ROF]"
+  # [WHILE] - Starts a loop until the condition is not met | - "[WHILE] %player_health% < 20"
+  # [ELIHW] - Ends a while loop | - "[ELIHW]"
 
 # Placeholders:
 # %prefix% - Returns the prefix of TChat
-# %i% - Returns the repetition number of the current loop
+# %i% - Returns the repetition number of the current loop (for)
 # %player% - Returns the player name
 # %center% - Centers a message
 

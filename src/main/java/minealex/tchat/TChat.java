@@ -6,7 +6,6 @@ import hook.DiscordHook;
 import listeners.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.command.TabCompleter;
 import org.bukkit.plugin.java.JavaPlugin;
 import placeholders.Placeholders;
 import utils.*;
@@ -61,6 +60,7 @@ public class TChat extends JavaPlugin {
     private PlaceholdersConfig placeholdersConfig;
     private JoinManager joinManager;
     private MentionsManager mentionsManager;
+    private CheckPlayerMuted checkPlayerMuted;
 
     @Override
     public void onEnable() {
@@ -103,6 +103,7 @@ public class TChat extends JavaPlugin {
         SignListener signListener = new SignListener(this);
         levelListener = new LevelListener(this);
         chatEnabledListener = new ChatEnabledListener(this);
+        this.checkPlayerMuted = new CheckPlayerMuted(this);
 
         getServer().getPluginManager().registerEvents(new ChatPlaceholdersListener(this), this);
         getServer().getPluginManager().registerEvents(new PollListener(this), this);
@@ -213,6 +214,9 @@ public class TChat extends JavaPlugin {
         Objects.requireNonNull(getCommand("realname")).setExecutor(new RealNameCommand(this));
         Objects.requireNonNull(getCommand("stafflist")).setExecutor(new StaffListCommand(this));
         Objects.requireNonNull(getCommand("bannedwords")).setExecutor(new BannedWordsCommand(this, bannedWordsManager));
+        Objects.requireNonNull(getCommand("mute")).setExecutor(new MuteCommand(this));
+        Objects.requireNonNull(getCommand("logs")).setExecutor(new LogsCommand(this));
+        Objects.requireNonNull(getCommand("logs")).setTabCompleter(new LogsCommand(this));
     }
 
     public void registerPlaceholders() {
@@ -221,6 +225,8 @@ public class TChat extends JavaPlugin {
 
     // ------------------------------------------------------------------------------
 
+
+    public CheckPlayerMuted getCheckPlayerMuted() {return checkPlayerMuted;}
     public MentionsManager getMentionsManager() { return mentionsManager; }
     public JoinManager getJoinManager() { return joinManager; }
     public PlaceholdersConfig getPlaceholdersConfig() { return placeholdersConfig; }

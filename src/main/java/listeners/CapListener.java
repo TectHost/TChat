@@ -5,6 +5,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.jetbrains.annotations.NotNull;
 
 public class CapListener implements Listener {
 
@@ -15,13 +16,19 @@ public class CapListener implements Listener {
     }
 
     @EventHandler
-    public void playerAntiCap(AsyncPlayerChatEvent event) {
+    public void playerAntiCap(@NotNull AsyncPlayerChatEvent event) {
         if (event.isCancelled()) { return; }
 
-        if (plugin.getConfigManager().isAntiCapEnabled()) {
+        boolean isAntiCapEnabled = plugin.getConfigManager().isAntiCapEnabled();
+
+        if (isAntiCapEnabled) {
             Player player = event.getPlayer();
-            if (!(player.hasPermission("tchat.bypass.anticap") || !(player.hasPermission("tchat.admin")))) {
+            boolean hasBypassPermission = player.hasPermission("tchat.bypass.anticap");
+            boolean hasAdminPermission = player.hasPermission("tchat.admin");
+
+            if (!(hasBypassPermission || hasAdminPermission)) {
                 String message = event.getMessage();
+
                 int totalChars = 0;
                 int uppercaseChars = 0;
 
@@ -36,7 +43,9 @@ public class CapListener implements Listener {
 
                 double percentUppercase = totalChars > 0 ? (double) uppercaseChars / totalChars : 0;
 
-                if (percentUppercase > plugin.getConfigManager().getAntiCapPercent()) {
+                double antiCapPercent = plugin.getConfigManager().getAntiCapPercent();
+
+                if (percentUppercase > antiCapPercent) {
                     String antiCapMode = plugin.getConfigManager().getAntiCapMode();
 
                     switch (antiCapMode) {
@@ -51,6 +60,7 @@ public class CapListener implements Listener {
                                 String prefix = plugin.getMessagesManager().getPrefix();
                                 event.getPlayer().sendMessage(plugin.getTranslateColors().translateColors(player, prefix + error));
                             }
+                            // If not, Anti-cap message is not enabled
                             break;
 
                         case "CENSOR":
@@ -66,6 +76,7 @@ public class CapListener implements Listener {
                             break;
 
                         default:
+                            plugin.getLogger().warning("Unknown anti-cap mode: " + antiCapMode);
                             break;
                     }
                 }

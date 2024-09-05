@@ -21,8 +21,14 @@ public class NickCommand implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         String prefix = plugin.getMessagesManager().getPrefix();
         if (!(sender instanceof Player player)) {
-            String message = plugin.getMessagesManager().getNoPermission();
+            String message = plugin.getMessagesManager().getNoPlayer();
             sender.sendMessage(plugin.getTranslateColors().translateColors(null, prefix + message));
+            return true;
+        }
+
+        if (!player.hasPermission("tchat.admin") && !player.hasPermission("tchat.nick")) {
+            String m = plugin.getMessagesManager().getNoPermission();
+            player.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + m));
             return true;
         }
 

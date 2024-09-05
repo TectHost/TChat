@@ -1,5 +1,5 @@
 main: minealex.tchat.TChat
-version: 4.1.2
+version: 4.1.3
 name: TChat
 author: Mine_Alex
 api-version: 1.13
@@ -71,8 +71,16 @@ commands:
     description: Show the staff list
   bannedwords:
     description: List all banned words
+  mute:
+    description: Mute other players
+  logs:
+    description: View logs
 
 permissions:
+  tchat.admin.command.logs:
+    description: Permission to use logs command
+  tchat.admin.mute:
+    description: Permission to use mute command
   tchat.admin.command.bannedwords:
     description: Permission to use bannedwords command
   tchat.command.stafflist:

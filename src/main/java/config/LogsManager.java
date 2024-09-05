@@ -19,6 +19,7 @@ public class LogsManager {
     private final File bannedWordsFile;
     private final File ignoreFile;
     private final File antiAdverFile;
+    private final File deathFile;
 
     public LogsManager(@NotNull TChat plugin) {
         File pluginDataFolder = plugin.getDataFolder();
@@ -34,6 +35,7 @@ public class LogsManager {
         this.bannedWordsFile = new File(logsFolder, "banned_words.log");
         this.ignoreFile = new File(logsFolder, "ignore.log");
         this.antiAdverFile = new File(logsFolder, "anti_advertising.log");
+        this.deathFile = new File(logsFolder, "death.log");
 
         regenerateFiles();
     }
@@ -45,7 +47,8 @@ public class LogsManager {
                 bannedCommandsFile,
                 bannedWordsFile,
                 ignoreFile,
-                antiAdverFile
+                antiAdverFile,
+                deathFile
         };
 
         for (File file : files) {
@@ -121,5 +124,43 @@ public class LogsManager {
         } catch (IOException e) {
             Bukkit.getLogger().severe("Failed to log banned command: " + e.getMessage() + " (#8nr7c - LogsManager.java)");
         }
+    }
+
+    public void logDeaths(String player) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(deathFile, true))) {
+            String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+            writer.write("[" + timestamp + "] Player " + player + " has died");
+            writer.newLine();
+        } catch (IOException e) {
+            Bukkit.getLogger().severe("Failed to log death: " + e.getMessage() + " (#n56gb - LogsManager.java)");
+        }
+    }
+
+    public File getChatLogFile() {
+        return chatLogFile;
+    }
+
+    public File getCommandLogFile() {
+        return commandLogFile;
+    }
+
+    public File getBannedCommandsFile() {
+        return bannedCommandsFile;
+    }
+
+    public File getBannedWordsFile() {
+        return bannedWordsFile;
+    }
+
+    public File getIgnoreFile() {
+        return ignoreFile;
+    }
+
+    public File getAntiAdverFile() {
+        return antiAdverFile;
+    }
+
+    public File getDeathFile() {
+        return deathFile;
     }
 }

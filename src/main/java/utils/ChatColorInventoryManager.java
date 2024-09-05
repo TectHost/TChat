@@ -14,6 +14,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
@@ -78,12 +79,12 @@ public class ChatColorInventoryManager implements Listener {
         }
     }
 
-    private void setItem(Player player, Inventory inv, int slot, Material material, int amount, String name, List<String> loreMessages) {
+    private void setItem(Player player, @NotNull Inventory inv, int slot, Material material, int amount, String name, List<String> loreMessages) {
         ItemStack item = createItem(player, material, amount, name, loreMessages, "menu_item");
         inv.setItem(slot, item);
     }
 
-    private ItemStack createItem(Player player, Material material, int amount, String name, List<String> loreMessages, String id) {
+    private @NotNull ItemStack createItem(Player player, Material material, int amount, String name, List<String> loreMessages, String id) {
         ItemStack item = new ItemStack(material, amount);
         ItemMeta meta = item.getItemMeta();
         if (meta != null) {
@@ -100,7 +101,9 @@ public class ChatColorInventoryManager implements Listener {
     }
 
     @EventHandler
-    public void onInventoryClick(InventoryClickEvent event) {
+    public void onInventoryClick(@NotNull InventoryClickEvent event) {
+        if (!plugin.getConfigManager().isChatColorMenuEnabled()) { return;
+        }
         String inventory = event.getView().getTitle().replace("§", "&");
         if (inventory.equals(plugin.getChatColorManager().getTitle())) {
             event.setCancelled(true);

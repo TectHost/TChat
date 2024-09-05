@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -22,17 +23,17 @@ public class BannedWords implements Listener {
     }
 
     @EventHandler
-    public void playerBannedWords(AsyncPlayerChatEvent event) {
+    public void playerBannedWords(@NotNull AsyncPlayerChatEvent event) {
         if (event.isCancelled()) return;
 
         Player player = event.getPlayer();
         if (!player.hasPermission(bannedWordsManager.getBypassPermission()) && !player.hasPermission("tchat.admin")) {
-            String message = event.getMessage().toLowerCase();
+            String message = event.getMessage();
             List<String> bannedWords = bannedWordsManager.getBannedWords();
             boolean isBlocked = false;
 
             for (String word : bannedWords) {
-                if (message.contains(word.toLowerCase())) {
+                if (message.toLowerCase().contains(word.toLowerCase())) {
 
                     if (plugin.getConfigManager().isLogBannedWordsEnabled()) {
                         plugin.getLogsManager().logBannedWords(player.getName(), word);
@@ -80,14 +81,14 @@ public class BannedWords implements Listener {
         }
     }
 
-    private String censorWord(String word, String message) {
+    private @NotNull String censorWord(@NotNull String word, @NotNull String message) {
         String regex = word.replaceAll("\\.", "$0[^a-zA-Z]*");
         String censoredWord = "*".repeat(word.length());
 
         return message.replaceAll("(?i)" + regex, censoredWord);
     }
 
-    private String translateAndReplace(Player player, String text, String word) {
+    private @NotNull String translateAndReplace(Player player, String text, String word) {
         String translatedText = plugin.getTranslateColors().translateColors(player, text);
         return ChatColor.translateAlternateColorCodes('&', translatedText.replace("{word}", word));
     }

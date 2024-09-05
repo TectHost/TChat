@@ -25,7 +25,7 @@ channels:
     announce-mode: 1
     # Send discord messages to a concrete discord channel
     discord:
-      enabled: true
+      enabled: false
       hook: "https://discord.com/api/webhooks/..."
   test:
     enabled: true

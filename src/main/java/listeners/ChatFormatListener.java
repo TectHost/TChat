@@ -256,22 +256,33 @@ public class ChatFormatListener implements Listener {
     @Contract("_, _ -> new")
     @SuppressWarnings("deprecation")
     private @NotNull HoverEvent createHoverEvent(Player player, @NotNull List<String> hoverText) {
-        TextComponent hoverComponent = new TextComponent("");
-        boolean first = true;
+        TextComponent hoverComponent = new TextComponent();
 
-        for (String line : hoverText) {
+        List<String> processedLines = hoverText.stream()
+                .map(line -> plugin.getTranslateColors().translateColors(player, line))
+                .toList();
+
+        int maxLineLength = processedLines.stream()
+                .mapToInt(line -> ChatColor.stripColor(line.replace("%center%", "")).length())
+                .max()
+                .orElse(0);
+
+        boolean first = true;
+        for (String line : processedLines) {
             if (!first) {
                 hoverComponent.addExtra("\n");
             } else {
                 first = false;
             }
 
-            String replacedLine = PlaceholderAPI.setPlaceholders(player, line);
-
-            replacedLine = TranslateHexColorCodes.translateHexColorCodes("&#", "", replacedLine);
-            replacedLine = ChatColor.translateAlternateColorCodes('&', replacedLine);
-
-            hoverComponent.addExtra(new TextComponent(TextComponent.fromLegacyText(replacedLine)));
+            if (line.contains("%center%")) {
+                String strippedLine = ChatColor.stripColor(line.replace("%center%", ""));
+                int spacesToAdd = (maxLineLength - strippedLine.length()) / 2;
+                String centeredLine = line.replace("%center%", " ".repeat(Math.max(0, spacesToAdd)));
+                hoverComponent.addExtra(new TextComponent(TextComponent.fromLegacyText(centeredLine)));
+            } else {
+                hoverComponent.addExtra(new TextComponent(TextComponent.fromLegacyText(line)));
+            }
         }
 
         return new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(hoverComponent).create());
@@ -284,7 +295,7 @@ public class ChatFormatListener implements Listener {
         return ignoreList.contains(senderId.toString());
     }
 
-    private String handleMentions(AsyncPlayerChatEvent event, Player player, String message) {
+    private String handleMentions(@NotNull AsyncPlayerChatEvent event, Player player, String message) {
         Set<Player> mentionedPlayers = new HashSet<>();
         String finalMessage = message;
 

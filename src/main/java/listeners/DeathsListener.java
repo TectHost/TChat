@@ -11,6 +11,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.jetbrains.annotations.NotNull;
 
 public class DeathsListener implements Listener {
 
@@ -23,7 +24,7 @@ public class DeathsListener implements Listener {
     }
 
     @EventHandler
-    public void onPlayerDeath(PlayerDeathEvent event) {
+    public void onPlayerDeath(@NotNull PlayerDeathEvent event) {
         Player player = event.getEntity();
         String playerName = player.getName();
 
@@ -79,6 +80,8 @@ public class DeathsListener implements Listener {
         }
 
         if (causeMessage == null) { return; }
+
+        if (plugin.getConfigManager().isDeathLogs()) { plugin.getLogsManager().logDeaths(playerName); }
 
         String deathMessage = causeMessage.replace("%player%", playerName)
                 .replace("%killer%", killerName);

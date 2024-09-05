@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -30,7 +31,6 @@ public class CustomCommands implements Listener {
     private final CommandsManager commandsManager;
     private final Map<UUID, Long> commandCooldowns = new HashMap<>();
     private int currentIteration;
-    private boolean inForLoop;
 
     public CustomCommands(@NotNull TChat plugin) {
         this.plugin = plugin;
@@ -98,13 +98,46 @@ public class CustomCommands implements Listener {
         boolean skipActions = false;
         boolean inConditional = false;
         boolean inLoop = false;
+        boolean inWhileLoop = false;
         List<String> loopActions = new ArrayList<>();
+        String originalWhileCondition = "";
         int loopCount = 0;
+        currentIteration = 0;
 
         for (String action : actions) {
-            action = processPlaceholders(player, action);
+            if (action.startsWith("[WHILE]")) {
+                if (inWhileLoop) {
+                    skipActions = true;
+                } else {
+                    originalWhileCondition = action.substring(7).trim();
+                    loopActions = new ArrayList<>();
+                    inWhileLoop = true;
+                }
+            } else if (action.startsWith("[ELIHW]")) {
+                if (inWhileLoop) {
+                    inWhileLoop = false;
+                    List<String> finalLoopActions = new ArrayList<>(loopActions);
+                    String finalOriginalWhileCondition = originalWhileCondition;
+                    Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+                        currentIteration = 1;
+                        while (true) {
+                            String evaluatedCondition = processPlaceholders(player, finalOriginalWhileCondition);
 
-            if (action.startsWith("[FOR]")) {
+                            if (!evaluateCondition(evaluatedCondition)) {break;}
+
+                            for (String loopAction : finalLoopActions) {
+                                String evaluatedAction = processPlaceholders(player, loopAction);
+                                evaluatedAction = evaluatedAction.replace("%i%", String.valueOf(currentIteration));
+                                executeAction(player, evaluatedAction, args);
+                            }
+
+                            currentIteration++;
+                        }
+                    });
+                } else {
+                    skipActions = true;
+                }
+            } else if (action.startsWith("[FOR]")) {
                 if (inLoop) {
                     skipActions = true;
                 } else {
@@ -112,7 +145,6 @@ public class CustomCommands implements Listener {
                         loopCount = Integer.parseInt(action.substring(5).trim());
                         loopActions = new ArrayList<>();
                         inLoop = true;
-                        inForLoop = true;
                     } catch (NumberFormatException e) {
                         plugin.getLogger().warning("Invalid number in [FOR]: " + action);
                         skipActions = true;
@@ -123,26 +155,29 @@ public class CustomCommands implements Listener {
                     inLoop = false;
                     for (currentIteration = 1; currentIteration <= loopCount; currentIteration++) {
                         for (String loopAction : loopActions) {
-                            executeAction(player, loopAction, args);
+                            String evaluatedAction = processPlaceholders(player, loopAction);
+                            executeAction(player, evaluatedAction, args);
                         }
                     }
-                    inForLoop = false;
+                    currentIteration = 0;
                 } else {
                     skipActions = true;
                 }
-            } else if (inLoop) {
+            } else if (inWhileLoop || inLoop) {
                 loopActions.add(action);
             } else if (action.startsWith("[IF]")) {
                 if (inConditional) {
                     skipActions = true;
                 } else {
-                    isIfBlock = evaluateCondition(action.substring(4).trim(), player);
+                    String condition = action.substring(4).trim();
+                    isIfBlock = evaluateCondition(processPlaceholders(player, condition));
                     skipActions = !isIfBlock;
                     inConditional = true;
                 }
             } else if (action.startsWith("[ELSE IF]")) {
                 if (inConditional && !isIfBlock) {
-                    isElseIfBlock = evaluateCondition(action.substring(9).trim(), player);
+                    String condition = action.substring(9).trim();
+                    isElseIfBlock = evaluateCondition(processPlaceholders(player, condition));
                     skipActions = !isElseIfBlock;
                 } else {
                     skipActions = true;
@@ -165,7 +200,7 @@ public class CustomCommands implements Listener {
         }
     }
 
-    private boolean evaluateCondition(@NotNull String condition, Player player) {
+    private boolean evaluateCondition(@NotNull String condition) {
         String[] orConditions = condition.split("\\|\\|");
         boolean finalResult = false;
 
@@ -174,7 +209,7 @@ public class CustomCommands implements Listener {
             boolean orResult = true;
 
             for (String andCondition : andConditions) {
-                boolean result = evaluateSingleCondition(andCondition.trim(), player);
+                boolean result = evaluateSingleCondition(andCondition.trim());
                 orResult = orResult && result;
             }
 
@@ -184,57 +219,40 @@ public class CustomCommands implements Listener {
         return finalResult;
     }
 
-    private boolean evaluateSingleCondition(String condition, Player player) {
-        Pattern pattern = Pattern.compile("%(\\w+)%|([0-9]+)\\s*(>=|<=|>|<|==|!=)\\s*(\\d+)");
+    private boolean evaluateSingleCondition(String condition) {
+        Pattern pattern = Pattern.compile("%(\\w+)%|(.+)\\s*(>=|<=|>|<|==|!=)\\s*(.+)");
         Matcher matcher = pattern.matcher(condition);
 
         if (matcher.find()) {
-            String placeholder = matcher.group(1);
-            String literalValue = matcher.group(2);
+            String leftSide = matcher.group(2).trim();
             String operator = matcher.group(3);
-            int value = Integer.parseInt(matcher.group(4));
-
-            int placeholderNumber;
-            if (placeholder != null) {
-                String placeholderValue = PlaceholderAPI.setPlaceholders(player, "%" + placeholder + "%");
-                try {
-                    placeholderNumber = Integer.parseInt(placeholderValue);
-                } catch (NumberFormatException e) {
-                    plugin.getLogger().warning("Invalid placeholder value for " + placeholder + ": " + placeholderValue);
-                    return false;
-                }
-            } else {
-                placeholderNumber = Integer.parseInt(literalValue);
-            }
+            String rightSide = matcher.group(4).trim();
+            boolean isNumericComparison = false;
+            double leftValue = 0;
+            double rightValue = 0;
+            try {
+                leftValue = Double.parseDouble(leftSide);
+                rightValue = Double.parseDouble(rightSide);
+                isNumericComparison = true;
+            } catch (NumberFormatException ignored) {}
 
             boolean result;
-            switch (operator) {
-                case ">=":
-                    result = placeholderNumber >= value;
-                    break;
-                case "<=":
-                    result = placeholderNumber <= value;
-                    break;
-                case ">":
-                    result = placeholderNumber > value;
-                    break;
-                case "<":
-                    result = placeholderNumber < value;
-                    break;
-                case "==":
-                    result = placeholderNumber == value;
-                    break;
-                case "!=":
-                    result = placeholderNumber != value;
-                    break;
-                case "=~":
-                    Pattern regexPattern = Pattern.compile(String.valueOf(value));
-                    Matcher regexMatcher = regexPattern.matcher(String.valueOf(placeholderNumber));
-                    result = regexMatcher.matches();
-                    break;
-                default:
-                    plugin.getLogger().warning("Unsupported operator: " + operator);
-                    return false;
+            if (isNumericComparison) {
+                result = switch (operator) {
+                    case ">=" -> leftValue >= rightValue;
+                    case "<=" -> leftValue <= rightValue;
+                    case ">" -> leftValue > rightValue;
+                    case "<" -> leftValue < rightValue;
+                    case "==" -> leftValue == rightValue;
+                    case "!=" -> leftValue != rightValue;
+                    default -> false;
+                };
+            } else {
+                result = switch (operator) {
+                    case "==" -> leftSide.equals(rightSide);
+                    case "!=" -> !leftSide.equals(rightSide);
+                    default -> false;
+                };
             }
 
             return result;
@@ -250,10 +268,7 @@ public class CustomCommands implements Listener {
     private void executeAction(Player player, @NotNull String action, String args) {
         String prefix = plugin.getMessagesManager().getPrefix();
         String[] parts = action.split(" ", 2);
-        if (parts.length < 2) {
-            plugin.getLogger().info("Invalid action format: " + action);
-            return;
-        }
+        if (parts.length < 2) { return; }
 
         String type = parts[0].trim();
         String data = parts[1].trim();
@@ -266,7 +281,7 @@ public class CustomCommands implements Listener {
         data = data.replace("%i%", String.valueOf(currentIteration));
         data = data.replace("%player%", player.getName());
 
-        int spaces = 56 - data.length();
+        int spaces = Math.max(56 - data.length(), 0);
         String center = " ".repeat(spaces);
         data = data.replace("%center%", center);
 
@@ -455,10 +470,52 @@ public class CustomCommands implements Listener {
                 format1 = format1.replace("%message%", data);
                 Bukkit.broadcastMessage(plugin.getTranslateColors().translateColors(player, format1));
                 break;
+            case "[MUTE]":
+                handleMuteAction(player, data);
+                break;
             default:
                 plugin.getLogger().warning("Unknown action type: " + type);
                 break;
         }
+    }
+
+    private void handleMuteAction(Player player, @NotNull String data) {
+        String timePart = data.trim();
+
+        long duration = parseTime(timePart);
+        if (duration == 0) {
+            plugin.getLogger().warning("Invalid time format for [MUTE]: " + timePart);
+            return;
+        }
+
+        plugin.getSaveManager().mutePlayer(player.getUniqueId(), duration);
+
+        String p = plugin.getMessagesManager().getPrefix();
+        String m;
+        if (duration == -1) {
+            m = plugin.getMessagesManager().getMutePermanent();
+        } else {
+            m = plugin.getMessagesManager().getMuteTemp().replace("%time%", timePart);
+        }
+        player.sendMessage(plugin.getTranslateColors().translateColors(player, p + m));
+    }
+
+    private long parseTime(@NotNull String duration) throws IllegalArgumentException {
+        char timeUnit = duration.charAt(duration.length() - 1);
+        long timeValue = Long.parseLong(duration.substring(0, duration.length() - 1));
+
+        String p = plugin.getMessagesManager().getPrefix();
+        String m = plugin.getMessagesManager().getMuteInvalidUnit();
+
+        return switch (timeUnit) {
+            case 's' -> TimeUnit.SECONDS.toMillis(timeValue);
+            case 'm' -> TimeUnit.MINUTES.toMillis(timeValue);
+            case 'h' -> TimeUnit.HOURS.toMillis(timeValue);
+            case 'd' -> TimeUnit.DAYS.toMillis(timeValue);
+            case 'w' -> TimeUnit.DAYS.toMillis(timeValue * 7);
+            case 'M' -> TimeUnit.DAYS.toMillis(timeValue * 30);
+            default -> throw new IllegalArgumentException(plugin.getTranslateColors().translateColors(null, p + m));
+        };
     }
 
     private void handleXPAction(Player player, @NotNull String data) {

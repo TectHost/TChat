@@ -27,6 +27,7 @@ groups:
         # Enable/disable player hover text part
         enabled: true
         # Hover text lines of the player part
+        # You can use %center% placeholder for center the line
         hover:
           - "This is the player"
           - "&7Hover text"
@@ -44,6 +45,7 @@ groups:
         # Enable/disable player hover text part
         enabled: true
         # Hover text lines of the player part
+        # You can use %center% placeholder for center the line
         hover:
           - "This is the message"
           - "&7Hover text"

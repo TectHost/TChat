@@ -18,11 +18,12 @@ public class ChatEnabledListener implements Listener {
     }
 
     @EventHandler
-    public void checkChatEnabled(AsyncPlayerChatEvent event, Player player) {
+    public void checkChatEnabled(AsyncPlayerChatEvent event) {
         if (event.isCancelled()) {
             return;
         }
 
+        Player player = event.getPlayer();
         String worldName = player.getWorld().getName();
 
         WorldsManager.WorldConfigData configData = worldsManager.getWorldsConfig().get(worldName);

@@ -19,8 +19,11 @@ public class AntiFloodListener implements Listener {
     }
 
     @EventHandler
-    public void checkFlood(@NotNull AsyncPlayerChatEvent event, String message, Player player) {
+    public void checkFlood(@NotNull AsyncPlayerChatEvent event) {
         if (event.isCancelled()) { return; }
+
+        Player player = event.getPlayer();
+        String message = event.getMessage();
 
         if (!player.hasPermission("tchat.bypass.antiflood") && !player.hasPermission("tchat.admin")) {
             if (plugin.getConfigManager().isFloodRepeatEnabled() && containsFlood(message) || plugin.getConfigManager().isFloodPercentEnabled() && containsHighPercentageOfSameChar(message)) {

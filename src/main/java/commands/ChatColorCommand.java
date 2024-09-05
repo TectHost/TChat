@@ -58,7 +58,7 @@ public class ChatColorCommand implements CommandExecutor {
 
         String prefix = plugin.getTranslateColors().translateColors(player, plugin.getMessagesManager().getPrefix());
 
-        if (args.length == 0) {
+        if (args.length == 0 && plugin.getConfigManager().isChatColorMenuEnabled()) {
             if (player.hasPermission("tchat.chatcolor.menu")) {
                 plugin.getChatColorInventoryManager().openInventory(player, plugin.getTranslateColors().translateColors(player, plugin.getChatColorManager().getTitle()));
             } else {

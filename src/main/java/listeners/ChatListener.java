@@ -43,15 +43,16 @@ public class ChatListener implements Listener {
         Player player = event.getPlayer();
         String message = event.getMessage();
 
-        plugin.getChatEnabledListener().checkChatEnabled(event, player);
-        chatMuted(event, player);
+        plugin.getCheckPlayerMuted().checkMuted(event);
+        plugin.getChatEnabledListener().checkChatEnabled(event);
+        chatMuted(event);
         plugin.getChatCooldownListener().chatCooldown(event, player);
-        plugin.getAntiUnicodeListener().checkUnicode(event, player, message);
+        plugin.getAntiUnicodeListener().checkUnicode(event);
         plugin.getChatBotListener().chatBot(event);
         plugin.getAntiAdvertising().checkAdvertising(event);
         plugin.getCapListener().playerAntiCap(event);
         antiBot(event, player, null);
-        plugin.getAntiFloodListener().checkFlood(event, message, player);
+        plugin.getAntiFloodListener().checkFlood(event);
         plugin.getBannedWords().playerBannedWords(event);
         replacer(event);
         grammar(event);
@@ -206,7 +207,8 @@ public class ChatListener implements Listener {
         }
     }
 
-    public void chatMuted(AsyncPlayerChatEvent event, Player player) {
+    public void chatMuted(AsyncPlayerChatEvent event) {
+        Player player = event.getPlayer();
         if (MuteChatCommand.isChatMuted() && !player.hasPermission(plugin.getConfigManager().getBypassMuteChatPermission())) {
             String prefix = plugin.getMessagesManager().getPrefix();
             String message = plugin.getMessagesManager().getChatMuted();

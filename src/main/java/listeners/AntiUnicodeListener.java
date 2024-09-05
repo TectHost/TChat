@@ -19,7 +19,10 @@ public class AntiUnicodeListener implements Listener {
     }
 
     @EventHandler
-    public void checkUnicode(AsyncPlayerChatEvent event, Player player, String message) {
+    public void checkUnicode(AsyncPlayerChatEvent event) {
+        Player player = event.getPlayer();
+        String message = event.getMessage();
+
         if (plugin.getConfigManager().isUnicodeEnabled() && !player.hasPermission("tchat.bypass.unicode") && !player.hasPermission("tchat.admin")) {
             if (event.isCancelled()) { return; }
 

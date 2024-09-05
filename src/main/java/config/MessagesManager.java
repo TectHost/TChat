@@ -7,7 +7,7 @@ import java.util.List;
 
 public class MessagesManager {
 
-    private final ConfigFile messagesFile;
+    private ConfigFile messagesFile;
     private final TChat plugin;
     private String noPermission;
     private String versionMessage;
@@ -182,22 +182,29 @@ public class MessagesManager {
     private String bannedWordsAlready;
     private String bannedWordsRemoved;
     private String bannedWordsUnknown;
+    private String muted;
+    private String muteUsage;
+    private String mutePermanent;
+    private String muteTemp;
+    private String muteInvalidDuration;
+    private String muteInvalidUnit;
+    private String usageLogs;
+    private String logsInvalid;
+    private String logsNoRegister;
+    private String logsHeader;
 
     public MessagesManager(TChat plugin){
-        this.messagesFile = new ConfigFile("messages.yml", null, plugin);
+        this.messagesFile = new ConfigFile(plugin.getConfigManager().getLangFile(), "lang", plugin);
         this.plugin = plugin;
         this.messagesFile.registerConfig();
         loadConfig();
+        generateAdditionalFiles();
     }
 
     public void loadConfig(){
         FileConfiguration config = messagesFile.getConfig();
         boolean prefixEnabled = config.getBoolean("prefix.enabled");
-        if (prefixEnabled) {
-            prefix = config.getString("prefix.prefix");
-        } else {
-            prefix = "";
-        }
+        if (prefixEnabled) { prefix = config.getString("prefix.prefix"); } else { prefix = ""; }
 
         if (plugin.getConfigManager().isCooldownChat()) {
             cooldownChat = config.getString("messages.cooldown.chat");
@@ -283,6 +290,18 @@ public class MessagesManager {
             invalidModeSpy = config.getString("messages.socialspy.invalid-mode");
         }
 
+        logsHeader = config.getString("messages.logs.header");
+        logsInvalid = config.getString("messages.logs.invalid");
+        logsNoRegister = config.getString("messages.logs.no-register");
+        usageLogs = config.getString("messages.usage.logs");
+
+        muted = config.getString("messages.muted");
+        muteInvalidDuration = config.getString("messages.mute.invalid-duration");
+        muteInvalidUnit = config.getString("messages.mute.invalid-unit");
+        mutePermanent = config.getString("messages.mute.permanent");
+        muteUsage = config.getString("messages.usage.mute");
+        muteTemp = config.getString("messages.mute.temp");
+
         // Messages
         bannedWordsUnknown = config.getString("messages.bannedwords.unknown");
         bannedWordsAlready = config.getString("messages.bannedwords.already");
@@ -311,7 +330,7 @@ public class MessagesManager {
         commandTimerRemoved = config.getString("messages.commandtimer.removed");
         commandTimerAdded = config.getString("messages.commandtimer.added");
         commandTimerAlreadyAdded = config.getString("messages.commandtimer.already-added");
-        commandTimerNotExist = config.getString("messages.commandtimer.not-exist");;
+        commandTimerNotExist = config.getString("messages.commandtimer.not-exist");
         usageCommandTimer = config.getString("messages.usage.usage-commandtimer");
         usageCommandTimerRemove = config.getString("messages.usage.usage-commandtimer-remove");
         usageCommandTimerAdd = config.getString("messages.usage.usage-commandtimer-add");
@@ -425,11 +444,32 @@ public class MessagesManager {
     }
 
     public void reloadConfig(){
+        this.messagesFile = new ConfigFile(plugin.getConfigManager().getLangFile(), "lang", plugin);
         messagesFile.reloadConfig();
         loadConfig();
     }
 
+    public void generateAdditionalFiles() {
+        createConfigFile("messages_es.yml");
+        createConfigFile("messages_en.yml");
+    }
+
+    private void createConfigFile(String fileName) {
+        ConfigFile configFile = new ConfigFile(fileName, "lang", plugin);
+        configFile.registerConfig();
+    }
+
     // Messages
+    public String getUsageLogs() {return usageLogs;}
+    public String getLogsInvalid() {return logsInvalid;}
+    public String getLogsNoRegister() {return logsNoRegister;}
+    public String getLogsHeader() {return logsHeader;}
+    public String getMuteUsage() {return muteUsage;}
+    public String getMutePermanent() {return mutePermanent;}
+    public String getMuteTemp() {return muteTemp;}
+    public String getMuteInvalidDuration() {return muteInvalidDuration;}
+    public String getMuteInvalidUnit() {return muteInvalidUnit;}
+    public String getMuted() {return muted;}
     public String getBannedWordsAdd() { return bannedWordsAdd; }
     public String getBannedWordsNone() { return bannedWordsNone; }
     public String getBannedWordsList() { return bannedWordsList;}

@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 public class Placeholders extends PlaceholderExpansion {
@@ -52,6 +53,16 @@ public class Placeholders extends PlaceholderExpansion {
 
         UUID playerId = player.getUniqueId();
 
+        if (identifier.startsWith("chatgames_wins_top_")) {
+            String topNumberStr = identifier.replace("chatgames_wins_top_", "");
+            try {
+                int topNumber = Integer.parseInt(topNumberStr);
+                return getTopChatGamesWinsPlayer(topNumber);
+            } catch (NumberFormatException e) {
+                return "Invalid number";
+            }
+        }
+
         return switch (identifier) {
             case "prefix" -> groupManager.getGroupPrefix(player);
             case "suffix" -> groupManager.getGroupSuffix(player);
@@ -76,6 +87,22 @@ public class Placeholders extends PlaceholderExpansion {
         String channel = plugin.getChannelsManager().getPlayerChannel(player);
         return (channel != null) ? channel : "null";
     }
+
+    private @NotNull String getTopChatGamesWinsPlayer(int topNumber) {
+        List<UUID> allPlayers = plugin.getSaveManager().getAllPlayerUUIDs();
+
+        List<UUID> sortedPlayers = allPlayers.stream()
+                .sorted((p1, p2) -> Integer.compare(plugin.getSaveManager().getChatGamesWins(p2), plugin.getSaveManager().getChatGamesWins(p1)))
+                .toList();
+
+        if (topNumber > 0 && topNumber <= sortedPlayers.size()) {
+            UUID topPlayerId = sortedPlayers.get(topNumber - 1);
+            return Objects.requireNonNull(Bukkit.getOfflinePlayer(topPlayerId).getName());
+        } else {
+            return "No data";
+        }
+    }
+
 
     private int getStaffNumber() {
         return (int) Bukkit.getOnlinePlayers().stream()
