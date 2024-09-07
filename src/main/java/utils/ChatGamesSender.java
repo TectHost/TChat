@@ -3,9 +3,12 @@ package utils;
 import minealex.tchat.TChat;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import config.ChatGamesManager;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -51,6 +54,8 @@ public class ChatGamesSender {
         winners.clear();
         gameActive = true;
 
+        showStartEffects();
+
         if (currentGame.getMessages() != null && !currentGame.getMessages().isEmpty()) {
             for (String message : currentGame.getMessages()) {
                 if (message.contains("%center%")) {
@@ -80,6 +85,8 @@ public class ChatGamesSender {
 
         gameActive = false;
 
+        showEndEffects();
+
         BukkitRunnable endGameTask = new BukkitRunnable() {
             @Override
             public void run() {
@@ -87,6 +94,82 @@ public class ChatGamesSender {
             }
         };
         endGameTask.runTaskLater(plugin, currentGame.getOptions().getTime() * 20L);
+    }
+
+    private void showStartEffects() {
+        showEffects(currentGame.getStartEffects(), null);
+    }
+
+    private void showEndEffects() {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            if (winners.contains(player.getName())) {
+                showEffects(currentGame.getWinnerEffects(), player);
+            } else {
+                showEffects(currentGame.getEndEffects(), player);
+            }
+        }
+    }
+
+    private void showEffects(ChatGamesManager.@NotNull Effects effects, Player winner) {
+        TranslateColors translateColors = plugin.getTranslateColors();
+        if (translateColors == null) { return; }
+
+        if (effects.getTitle().isEnabled()) {
+            String titleText = translateColors.translateColors(winner, effects.getTitle().getText());
+            String subtitleText = translateColors.translateColors(winner, effects.getTitle().getSubtitle());
+
+            if (titleText.contains("%winner%") && winner != null) {
+                titleText = titleText.replace("%winner%", winner.getName());
+            }
+            if (subtitleText.contains("%winner%") && winner != null) {
+                subtitleText = subtitleText.replace("%winner%", winner.getName());
+            }
+
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                player.sendTitle(
+                        titleText,
+                        subtitleText,
+                        effects.getTitle().getFadeIn(),
+                        effects.getTitle().getStay(),
+                        effects.getTitle().getFadeOut()
+                );
+            }
+        }
+
+        if (effects.getSound().isEnabled()) {
+            try {
+                Sound sound = Sound.valueOf(effects.getSound().getName().toUpperCase());
+                for (Player player : Bukkit.getOnlinePlayers()) {
+                    player.playSound(player.getLocation(), sound, effects.getSound().getVolume(), effects.getSound().getPitch());
+                }
+            } catch (IllegalArgumentException e) {
+                plugin.getLogger().warning("Invalid sound name: " + effects.getSound().getName());
+            }
+        }
+
+        if (effects.getParticle().isEnabled()) {
+            try {
+                Particle particle = Particle.valueOf(effects.getParticle().getName().toUpperCase());
+                for (Player player : Bukkit.getOnlinePlayers()) {
+                    player.getWorld().spawnParticle(
+                            particle,
+                            player.getLocation(),
+                            effects.getParticle().getCount(),
+                            0.5, 0.5, 0.5,
+                            effects.getParticle().getSpeed()
+                    );
+                }
+            } catch (IllegalArgumentException e) {
+                plugin.getLogger().warning("Invalid particle name: " + effects.getParticle().getName());
+            }
+        }
+
+        if (effects.getActionBar().isEnabled()) {
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                String bar = effects.getActionBar().getText();
+                player.spigot().sendMessage(net.md_5.bungee.api.ChatMessageType.ACTION_BAR, net.md_5.bungee.api.chat.TextComponent.fromLegacyText(plugin.getTranslateColors().translateColors(player, bar)));
+            }
+        }
     }
 
     public void checkPlayerResponse(Player player, String message) {
@@ -104,6 +187,10 @@ public class ChatGamesSender {
             wins++;
             plugin.getSaveManager().setChatGamesWins(playerId, wins);
             executeRewards(player);
+
+            showEffects(currentGame.getWinnerEffects(), player);
+            showEffects(currentGame.getEndEffects(), null);
+
             endGame();
         }
     }

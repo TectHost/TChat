@@ -25,8 +25,13 @@ channels:
     announce-mode: 1
     # Send discord messages to a concrete discord channel
     discord:
-      enabled: true
+      enabled: false
       hook: "https://discord.com/api/webhooks/..."
+    # Cooldown between messages
+    cooldown:
+      enabled: true
+      # Time in ms
+      cooldown: 3000
   test:
     enabled: true
     permission: "tchat.test"
@@ -38,3 +43,6 @@ channels:
     discord:
       enabled: false
       hook: "https://discord.com/api/webhooks/..."
+    cooldown:
+      enabled: false
+      cooldown: 3000

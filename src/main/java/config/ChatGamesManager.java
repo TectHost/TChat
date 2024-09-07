@@ -2,6 +2,7 @@ package config;
 
 import minealex.tchat.TChat;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +32,11 @@ public class ChatGamesManager {
                     int endTime = config.getInt("games." + key + ".options.endTime");
                     int time = config.getInt("games." + key + ".options.time");
 
-                    Game game = new Game(messages, keywords, rewards, new Options(endTime, time), enabled);
+                    Effects startEffects = loadEffects(config, "games." + key + ".startEffects");
+                    Effects endEffects = loadEffects(config, "games." + key + ".endEffects");
+                    Effects winnerEffects = loadEffects(config, "games." + key + ".winnerEffects");
+
+                    Game game = new Game(messages, keywords, rewards, new Options(endTime, time), enabled, startEffects, endEffects, winnerEffects);
                     games.add(game);
                 }
             }
@@ -40,7 +45,37 @@ public class ChatGamesManager {
         }
     }
 
+    private @NotNull Effects loadEffects(@NotNull FileConfiguration config, String path) {
+        boolean titleEnabled = config.getBoolean(path + ".title.enabled", false);
+        String titleText = config.getString(path + ".title.text", "");
+        String subtitleText = config.getString(path + ".title.subtitle", "");
+        int fadeIn = config.getInt(path + ".title.fadeIn", 10);
+        int stay = config.getInt(path + ".title.stay", 70);
+        int fadeOut = config.getInt(path + ".title.fadeOut", 20);
+
+        boolean soundEnabled = config.getBoolean(path + ".sound.enabled", false);
+        String soundName = config.getString(path + ".sound.name", "ENTITY_PLAYER_LEVELUP");
+        float volume = (float) config.getDouble(path + ".sound.volume", 1.0);
+        float pitch = (float) config.getDouble(path + ".sound.pitch", 1.0);
+
+        boolean particleEnabled = config.getBoolean(path + ".particle.enabled", false);
+        String particleName = config.getString(path + ".particle.name", "EXPLOSION_NORMAL");
+        int particleCount = config.getInt(path + ".particle.count", 10);
+        double speed = config.getDouble(path + ".particle.speed", 1.0);
+
+        boolean actionBarEnabled = config.getBoolean(path + ".actionBar.enabled", false);
+        String actionBarText = config.getString(path + ".actionBar.text", "");
+
+        return new Effects(
+                new Title(titleEnabled, titleText, subtitleText, fadeIn, stay, fadeOut),
+                new SoundEffect(soundEnabled, soundName, volume, pitch),
+                new ParticleEffect(particleEnabled, particleName, particleCount, speed),
+                new ActionBar(actionBarEnabled, actionBarText)
+        );
+    }
+
     public void reloadConfig(){
+        games.clear();
         configFile.reloadConfig();
         loadGames();
     }
@@ -55,13 +90,19 @@ public class ChatGamesManager {
         private final List<String> rewards;
         private final Options options;
         private final boolean enabled;
+        private final Effects startEffects;
+        private final Effects endEffects;
+        private final Effects winnerEffects;
 
-        public Game(List<String> messages, List<String> keywords, List<String> rewards, Options options, boolean enabled) {
+        public Game(List<String> messages, List<String> keywords, List<String> rewards, Options options, boolean enabled, Effects startEffects, Effects endEffects, Effects winnerEffects) {
             this.messages = messages;
             this.keywords = keywords;
             this.rewards = rewards;
             this.options = options;
             this.enabled = enabled;
+            this.startEffects = startEffects;
+            this.endEffects = endEffects;
+            this.winnerEffects = winnerEffects;
         }
 
         public List<String> getMessages() {
@@ -83,6 +124,18 @@ public class ChatGamesManager {
         public boolean isEnabled() {
             return enabled;
         }
+
+        public Effects getStartEffects() {
+            return startEffects;
+        }
+
+        public Effects getEndEffects() {
+            return endEffects;
+        }
+
+        public Effects getWinnerEffects() {
+            return winnerEffects;
+        }
     }
 
     public static class Options {
@@ -100,6 +153,156 @@ public class ChatGamesManager {
 
         public int getTime() {
             return time;
+        }
+    }
+
+    public static class Effects {
+        private final Title title;
+        private final SoundEffect sound;
+        private final ParticleEffect particle;
+        private final ActionBar actionBar;
+
+        public Effects(Title title, SoundEffect sound, ParticleEffect particle, ActionBar actionBar) {
+            this.title = title;
+            this.sound = sound;
+            this.particle = particle;
+            this.actionBar = actionBar;
+        }
+
+        public Title getTitle() {
+            return title;
+        }
+
+        public SoundEffect getSound() {
+            return sound;
+        }
+
+        public ParticleEffect getParticle() {
+            return particle;
+        }
+
+        public ActionBar getActionBar() {
+            return actionBar;
+        }
+    }
+
+    public static class Title {
+        private final boolean enabled;
+        private final String text;
+        private final String subtitle;
+        private final int fadeIn;
+        private final int stay;
+        private final int fadeOut;
+
+        public Title(boolean enabled, String text, String subtitle, int fadeIn, int stay, int fadeOut) {
+            this.enabled = enabled;
+            this.text = text;
+            this.subtitle = subtitle;
+            this.fadeIn = fadeIn;
+            this.stay = stay;
+            this.fadeOut = fadeOut;
+        }
+
+        public boolean isEnabled() {
+            return enabled;
+        }
+
+        public String getText() {
+            return text;
+        }
+
+        public String getSubtitle() {
+            return subtitle;
+        }
+
+        public int getFadeIn() {
+            return fadeIn;
+        }
+
+        public int getStay() {
+            return stay;
+        }
+
+        public int getFadeOut() {
+            return fadeOut;
+        }
+    }
+
+    public static class SoundEffect {
+        private final boolean enabled;
+        private final String name;
+        private final float volume;
+        private final float pitch;
+
+        public SoundEffect(boolean enabled, String name, float volume, float pitch) {
+            this.enabled = enabled;
+            this.name = name;
+            this.volume = volume;
+            this.pitch = pitch;
+        }
+
+        public boolean isEnabled() {
+            return enabled;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public float getVolume() {
+            return volume;
+        }
+
+        public float getPitch() {
+            return pitch;
+        }
+    }
+
+    public static class ParticleEffect {
+        private final boolean enabled;
+        private final String name;
+        private final int count;
+        private final double speed;
+
+        public ParticleEffect(boolean enabled, String name, int count, double speed) {
+            this.enabled = enabled;
+            this.name = name;
+            this.count = count;
+            this.speed = speed;
+        }
+
+        public boolean isEnabled() {
+            return enabled;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public int getCount() {
+            return count;
+        }
+
+        public double getSpeed() {
+            return speed;
+        }
+    }
+
+    public static class ActionBar {
+        private final boolean enabled;
+        private final String text;
+
+        public ActionBar(boolean enabled, String text) {
+            this.enabled = enabled;
+            this.text = text;
+        }
+
+        public boolean isEnabled() {
+            return enabled;
+        }
+
+        public String getText() {
+            return text;
         }
     }
 }

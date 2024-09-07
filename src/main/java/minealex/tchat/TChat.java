@@ -61,6 +61,7 @@ public class TChat extends JavaPlugin {
     private JoinManager joinManager;
     private MentionsManager mentionsManager;
     private CheckPlayerMuted checkPlayerMuted;
+    private InvseeConfigManager invseeConfigManager;
 
     @Override
     public void onEnable() {
@@ -120,9 +121,10 @@ public class TChat extends JavaPlugin {
     }
 
     public void registerConfigFiles() {
+        bannedWordsManager = new BannedWordsManager(this);
+        commandTimerManager = new CommandTimerManager(this);
         configManager = new ConfigManager(this);
         messagesManager = new MessagesManager(this);
-        bannedWordsManager = new BannedWordsManager(this);
         bannedCommandsManager = new BannedCommandsManager(this);
         replacerManager = new ReplacerManager(this);
         saveManager = new SaveManager(this);
@@ -130,7 +132,6 @@ public class TChat extends JavaPlugin {
         channelsConfigManager = new ChannelsConfigManager(this);
         autoBroadcastManager = new AutoBroadcastManager(this);
         chatBotManager = new ChatBotManager(this);
-        commandTimerManager = new CommandTimerManager(this);
         chatGamesManager = new ChatGamesManager(this);
         chatGamesSender = new ChatGamesSender(this);
         logsManager = new LogsManager(this);
@@ -143,6 +144,7 @@ public class TChat extends JavaPlugin {
         placeholdersConfig = new PlaceholdersConfig(this);
         joinManager = new JoinManager(this);
         mentionsManager = new MentionsManager(this);
+        invseeConfigManager = new InvseeConfigManager(this);
     }
 
     public void initializeManagers() {
@@ -217,6 +219,7 @@ public class TChat extends JavaPlugin {
         Objects.requireNonNull(getCommand("mute")).setExecutor(new MuteCommand(this));
         Objects.requireNonNull(getCommand("logs")).setExecutor(new LogsCommand(this));
         Objects.requireNonNull(getCommand("logs")).setTabCompleter(new LogsCommand(this));
+        Objects.requireNonNull(getCommand("invsee")).setExecutor(new InvseeCommand(this));
     }
 
     public void registerPlaceholders() {
@@ -226,6 +229,7 @@ public class TChat extends JavaPlugin {
     // ------------------------------------------------------------------------------
 
 
+    public InvseeConfigManager getInvseeConfigManager() {return invseeConfigManager;}
     public CheckPlayerMuted getCheckPlayerMuted() {return checkPlayerMuted;}
     public MentionsManager getMentionsManager() { return mentionsManager; }
     public JoinManager getJoinManager() { return joinManager; }

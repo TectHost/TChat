@@ -25,6 +25,8 @@ chat:
 
 advertising:
   bypass: "tchat.bypass.advertising"
+  whitelist:
+    - "tect.host"
   ipv4:
     # Enable/disable anti advertising IPv4
     enabled: true
@@ -36,9 +38,9 @@ advertising:
         enabled: true
         # Message (list)
         message:
-        - "&8--------- { &#c03afeT&#a72cf8C&#8e1ff1h&#7411eba&#5b03e4t &8} ---------"
-        - "  &cYou can't send IPs in the chat!"
-        - "&8---------------------------"
+          - "&8--------- { &#c03afeT&#a72cf8C&#8e1ff1h&#7411eba&#5b03e4t &8} ---------"
+          - "  &cYou can't send IPs in the chat!"
+          - "&8---------------------------"
       title:
         # Enable/disable title
         enabled: true
@@ -46,6 +48,10 @@ advertising:
         title: "✶ &#fe0000Y&#f50101o&#ec0202u &#e20202c&#d90303a&#d00404n&#c70505'&#bd0606t &#b40707w&#ab0707r&#a20808i&#980909t&#8f0a0ae &#860b0bt&#7d0b0bh&#730c0ca&#6a0d0dt &f✶"
         # Subtitle (small title)
         subtitle: "&#A5A5A5Detected IPv4 in your message."
+        # Title timings
+        fade-in: 10
+        stay: 70
+        fade-out: 20
       actionbar:
         # Enable/disable actionbar
         enabled: true
@@ -75,13 +81,17 @@ advertising:
       message:
         enabled: true
         message:
-        - "&8--------- { &#c03afeT&#a72cf8C&#8e1ff1h&#7411eba&#5b03e4t &8} ---------"
-        - "&cYou can't send domains in the chat!"
-        - "&8---------------------------"
+          - "&8--------- { &#c03afeT&#a72cf8C&#8e1ff1h&#7411eba&#5b03e4t &8} ---------"
+          - "&cYou can't send domains in the chat!"
+          - "&8---------------------------"
       title:
         enabled: true
         title: "✶ &#fe0000Y&#f50101o&#ec0202u &#e20202c&#d90303a&#d00404n&#c70505'&#bd0606t &#b40707w&#ab0707r&#a20808i&#980909t&#8f0a0ae &#860b0bt&#7d0b0bh&#730c0ca&#6a0d0dt &f✶"
         subtitle: "&#A5A5A5Detected domain in your message."
+        # Title timings
+        fade-in: 10
+        stay: 70
+        fade-out: 20
       actionbar:
         enabled: true
         bar: "&7[&#c03afeT&#a72cf8C&#8e1ff1h&#7411eba&#5b03e4t&7] &#fe0000Y&#f50101o&#ec0202u &#e20202c&#d90303a&#d00404n&#c70505'&#bd0606t &#b40707w&#ab0707r&#a20808i&#980909t&#8f0a0ae &#860b0bt&#7d0b0bh&#730c0ca&#6a0d0dt"
@@ -102,13 +112,14 @@ advertising:
       message:
         enabled: true
         message:
-        - "&8--------- { &#c03afeT&#a72cf8C&#8e1ff1h&#7411eba&#5b03e4t &8} ---------"
-        - "&cYou can't send links in the chat!"
-        - "&8---------------------------"
+          - "&8--------- { &#c03afeT&#a72cf8C&#8e1ff1h&#7411eba&#5b03e4t &8} ---------"
+          - "&cYou can't send links in the chat!"
+          - "&8---------------------------"
       title:
         enabled: true
         title: "✶ &#fe0000Y&#f50101o&#ec0202u &#e20202c&#d90303a&#d00404n&#c70505'&#bd0606t &#b40707w&#ab0707r&#a20808i&#980909t&#8f0a0ae &#860b0bt&#7d0b0bh&#730c0ca&#6a0d0dt &f✶"
         subtitle: "&#A5A5A5Detected link in your message."
+        # Title timings
         fade-in: 10
         stay: 70
         fade-out: 20
@@ -202,7 +213,27 @@ pm:
       # Format of the message for the sender
       sender: "&5&l! &a%sender% &e&l> &a%recipient%&7: &f%message%"
       # Format of the message for the receiver
-      receiver: "&5&l! &a%sender% &e&l> &a%recipient%&7: &f%message%"
+      receiver: "&6&l! &a%sender% &e&l> &a%recipient%&7: &f%message%"
+    # Per group hover text (groups.yml)
+    hover:
+      # Group name
+      op:
+        sender:
+          - "&bTest hover"
+          - "&aFor sender"
+        # Actions:
+        # [EXECUTE] - Executes a command
+        # [SUGGEST] - Suggests a command
+        # [OPEN] - Open a URL
+        sender-action: "[SUGGEST] /r "
+        receiver:
+          - "&bTest hover"
+          - "&aFor receiver"
+        # Actions:
+        # [EXECUTE] - Executes a command
+        # [SUGGEST] - Suggests a command
+        # [OPEN] - Open a URL
+        receiver-action: "[SUGGEST] /r "
   reply:
     # Enables the reply function for private messages
     enabled: true
@@ -212,7 +243,26 @@ pm:
       # Format of the reply message for the sender
       sender: "&5&l! &a%sender% &e&l> &a%recipient%&7: &f%message%"
       # Format of the reply message for the receiver
-      receiver: "&5&l! &a%sender% &e&l> &a%recipient%&7: &f%message%"
+      receiver: "&6&l! &a%sender% &e&l> &a%recipient%&7: &f%message%"
+    hover:
+      # Group name
+      op:
+        sender:
+          - "&bHover text for reply"
+          - "&aFor sender"
+        # Actions:
+        # [EXECUTE] - Executes a command
+        # [SUGGEST] - Suggests a command
+        # [OPEN] - Open a URL
+        sender-action: "[SUGGEST] /r "
+        receiver:
+          - "&bHover text for reply"
+          - "&aFor receiver"
+        # Actions:
+        # [EXECUTE] - Executes a command
+        # [SUGGEST] - Suggests a command
+        # [OPEN] - Open a URL
+        receiver-action: "[SUGGEST] /r "
 
 # #################################################################
 # ┌─────────────────────────────────────────────────────────────┐ #

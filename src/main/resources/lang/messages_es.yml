@@ -43,6 +43,7 @@ messages:
   other-ping: "&fPing de %player%: %color%%ping%"
   no-staff: "&cNo hay miembros del staff conectados."
   muted: "&c¡Estás muteado!"
+  cooldown-channel: "&cDebes esperar %seconds% segundos antes de enviar otro mensaje en este canal."
   chat-help:
     message:
       - "&8--------- { &#c03afeT&#a72cf8C&#8e1ff1h&#7411eba&#5b03e4t &8} ---------"
@@ -228,6 +229,7 @@ messages:
       bannedwords-remove: "&cUso: /bannedwords remove <palabra>"
       mute: "&cUso: /mute <jugador> [duración]"
       logs: "&cUso: /logs <chat|bannedwords|...> [jugador] [filtro]"
+      invsee: "&cUso: /invsee <jugador>"
     # Mensajes de depuración solo visibles en la consola
     debug:
       no-format-group: "&cError en groups.yml - No se encontró formato para el grupo: %group%"

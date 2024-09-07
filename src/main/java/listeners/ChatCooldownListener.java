@@ -6,6 +6,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,15 +19,18 @@ public class ChatCooldownListener implements Listener {
     private final long chatCooldownTime;
     private final long commandCooldownTime;
 
-    public ChatCooldownListener(TChat plugin) {
+    public ChatCooldownListener(@NotNull TChat plugin) {
         this.plugin = plugin;
         this.chatCooldownTime = plugin.getConfigManager().getCooldownChatTime();
         this.commandCooldownTime = plugin.getConfigManager().getCooldownCommandTime();
     }
 
     @EventHandler
-    public void chatCooldown(AsyncPlayerChatEvent event, Player player) {
+    public void chatCooldown(@NotNull AsyncPlayerChatEvent event, Player player) {
         if (event.isCancelled()) { return; }
+
+        String channelName = plugin.getChannelsManager().getPlayerChannel(player);
+        if (channelName != null && plugin.getChannelsConfigManager().getChannel(channelName).isCooldownEnabled()) {return;}
 
         if (!player.hasPermission("tchat.admin") && !player.hasPermission("tchat.bypass.chatcooldown")) {
             if (plugin.getConfigManager().isCooldownChat()) {
@@ -58,7 +62,7 @@ public class ChatCooldownListener implements Listener {
     }
 
     @EventHandler
-    public void commandCooldown(PlayerCommandPreprocessEvent event, Player player) {
+    public void commandCooldown(@NotNull PlayerCommandPreprocessEvent event, Player player) {
         if (event.isCancelled()) { return; }
 
         if (!player.hasPermission("tchat.admin") && !player.hasPermission("tchat.bypass.commandcooldown")) {
@@ -90,7 +94,7 @@ public class ChatCooldownListener implements Listener {
         }
     }
 
-    private boolean isCooldownActive(Player player, Map<Player, Long> cooldownMap, long currentTime, long cooldownTime) {
+    private boolean isCooldownActive(Player player, @NotNull Map<Player, Long> cooldownMap, long currentTime, long cooldownTime) {
         if (cooldownMap.containsKey(player)) {
             long lastTime = cooldownMap.get(player);
             return (currentTime - lastTime) < cooldownTime;

@@ -4,6 +4,7 @@ import minealex.tchat.TChat;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
 import config.CommandProgrammerManager;
+import org.jetbrains.annotations.NotNull;
 
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
@@ -25,6 +26,8 @@ public class CommandProgrammerSender {
     }
 
     private void startScheduler() {
+        if (plugin.getCommandProgrammerManager().isEnabled()) {return;}
+
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -113,7 +116,7 @@ public class CommandProgrammerSender {
         return requiredPlayers <= Bukkit.getOnlinePlayers().size();
     }
 
-    private void executeCommands(List<String> commands) {
+    private void executeCommands(@NotNull List<String> commands) {
         for (String command : commands) {
             Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), command);
         }

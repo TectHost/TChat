@@ -30,6 +30,26 @@ chat:
     name: "[world]"
     # Replace format
     format: "&7[&9%world%&7]"
+  # [inventory] placeholder
+  inventory:
+    # Enable/disable this placeholder
+    enabled: true
+    # The name of the placeholder to be detected and replaced in chat
+    name: "[inventory]"
+    # Replace format
+    format: "%tchat_format%%before_inv%&7[&aSee my inventory!&7]%after_inv%"
+    # Hover configuration
+    hover:
+      text:
+        enabled: true
+        lines:
+          - "&aClick here to view my inventory!"
+          - "&bThis will show you the contents of my inventory."
+          - "&cOnly players with the correct permissions can view it."
+      action:
+        enabled: true
+        # Executed command
+        command: "/invsee %player%"
 
 # #################################################################
 # ┌─────────────────────────────────────────────────────────────┐ #

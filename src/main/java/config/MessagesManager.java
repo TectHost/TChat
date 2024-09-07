@@ -192,6 +192,8 @@ public class MessagesManager {
     private String logsInvalid;
     private String logsNoRegister;
     private String logsHeader;
+    private String cooldownChannel;
+    private String invseeUsage;
 
     public MessagesManager(TChat plugin){
         this.messagesFile = new ConfigFile(plugin.getConfigManager().getLangFile(), "lang", plugin);
@@ -290,6 +292,33 @@ public class MessagesManager {
             invalidModeSpy = config.getString("messages.socialspy.invalid-mode");
         }
 
+        if (plugin.getConfigManager().isAntiCapEnabled()) {
+            antiCapMessage = config.getString("messages.anticap");
+        }
+
+        if (plugin.getBannedWordsManager().isEnabled()) {
+            bannedWordsUnknown = config.getString("messages.bannedwords.unknown");
+            bannedWordsAlready = config.getString("messages.bannedwords.already");
+            bannedWordsList = config.getString("messages.bannedwords.list");
+            bannedWordsNone = config.getString("messages.bannedwords.none");
+            bannedWordsRemoved = config.getString("messages.bannedwords.removed");
+            bannedWordsAdd = config.getString("messages.bannedwords.add");
+            usageBannedWordsRemove = config.getString("messages.usage.bannedwords-remove");
+            usageBannedWordsAdd = config.getString("messages.usage.bannedwords-add");
+            usageBannedWords = config.getString("messages.usage.bannedwords");
+        }
+
+        if (plugin.getCommandTimerManager().isEnabled()) {
+            commandTimerInvalidNumber = config.getString("messages.commandtimer.invalid-number");
+            commandTimerRemoved = config.getString("messages.commandtimer.removed");
+            commandTimerAdded = config.getString("messages.commandtimer.added");
+            commandTimerAlreadyAdded = config.getString("messages.commandtimer.already-added");
+            commandTimerNotExist = config.getString("messages.commandtimer.not-exist");
+            usageCommandTimer = config.getString("messages.usage.usage-commandtimer");
+            usageCommandTimerRemove = config.getString("messages.usage.usage-commandtimer-remove");
+            usageCommandTimerAdd = config.getString("messages.usage.usage-commandtimer-add");
+        }
+
         logsHeader = config.getString("messages.logs.header");
         logsInvalid = config.getString("messages.logs.invalid");
         logsNoRegister = config.getString("messages.logs.no-register");
@@ -303,15 +332,6 @@ public class MessagesManager {
         muteTemp = config.getString("messages.mute.temp");
 
         // Messages
-        bannedWordsUnknown = config.getString("messages.bannedwords.unknown");
-        bannedWordsAlready = config.getString("messages.bannedwords.already");
-        bannedWordsList = config.getString("messages.bannedwords.list");
-        bannedWordsNone = config.getString("messages.bannedwords.none");
-        bannedWordsRemoved = config.getString("messages.bannedwords.removed");
-        bannedWordsAdd = config.getString("messages.bannedwords.add");
-        usageBannedWordsRemove = config.getString("messages.usage.bannedwords-remove");
-        usageBannedWordsAdd = config.getString("messages.usage.bannedwords-add");
-        usageBannedWords = config.getString("messages.usage.bannedwords");
         headerStaffList = config.getString("messages.stafflist.header");
         footerStaffList = config.getString("messages.stafflist.footer");
         noStaff = config.getString("messages.no-staff");
@@ -326,14 +346,6 @@ public class MessagesManager {
         nickSet = config.getString("messages.nick.set");
         usageNick = config.getString("messages.usage.usage-nick");
         usageNickSet = config.getString("messages.usage.usage-nick-set");
-        commandTimerInvalidNumber = config.getString("messages.commandtimer.invalid-number");
-        commandTimerRemoved = config.getString("messages.commandtimer.removed");
-        commandTimerAdded = config.getString("messages.commandtimer.added");
-        commandTimerAlreadyAdded = config.getString("messages.commandtimer.already-added");
-        commandTimerNotExist = config.getString("messages.commandtimer.not-exist");
-        usageCommandTimer = config.getString("messages.usage.usage-commandtimer");
-        usageCommandTimerRemove = config.getString("messages.usage.usage-commandtimer-remove");
-        usageCommandTimerAdd = config.getString("messages.usage.usage-commandtimer-add");
         serverMessage = config.getStringList("server");
         playerMessageAdmin = config.getStringList("player.admin");
         playerMessage = config.getStringList("player.global");
@@ -434,8 +446,10 @@ public class MessagesManager {
         versionMessage = config.getString("messages.version-message");
         reloadMessage = config.getString("messages.reload-message");
         unknownMessage = config.getString("messages.unknown-command");
-        antiCapMessage = config.getString("messages.anticap");
         usageChannel = config.getString("messages.usage.channel");
+        cooldownChannel = config.getString("messages.cooldown-channel");
+
+        invseeUsage = config.getString("messages.usage.invsee");
 
         // Messages depuration
         materialNotFound = config.getString("messages.debug.material-not-found");
@@ -460,6 +474,8 @@ public class MessagesManager {
     }
 
     // Messages
+    public String getInvseeUsage() {return invseeUsage;}
+    public String getCooldownChannel() {return cooldownChannel;}
     public String getUsageLogs() {return usageLogs;}
     public String getLogsInvalid() {return logsInvalid;}
     public String getLogsNoRegister() {return logsNoRegister;}

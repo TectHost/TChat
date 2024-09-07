@@ -4,6 +4,11 @@
 # └─────────────────────────────────────────────────────────────┘ #
 # #################################################################
 
+# General options
+options:
+  # Enable/disable full module
+  enabled: true
+
 # List of banned words
 bannedWords:
   - Arse
@@ -543,6 +548,9 @@ bannedWords:
   - wtf
   - xrated
   - xxx
+
+whitelist:
+  - tecthost
 
 # Types:
 # - BLOCK - Blocks the message

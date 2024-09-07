@@ -32,8 +32,10 @@ public class ChannelsConfigManager {
             int announceMode = config.getInt(path + "announce-mode");
             boolean discordEnabled = config.getBoolean(path + "discord.enabled");
             String discordHook = config.getString(path + "discord.hook", "");
+            boolean cooldownEnabled = config.getBoolean(path + "cooldown.enabled");
+            int cooldown = config.getInt(path + "cooldown.cooldown");
 
-            channels.put(channelName, new Channel(enabled, permission, format, formatEnabled, messageMode, announceMode, discordEnabled, discordHook));
+            channels.put(channelName, new Channel(enabled, permission, format, formatEnabled, messageMode, announceMode, discordEnabled, discordHook, cooldownEnabled, cooldown));
         }
     }
 
@@ -57,8 +59,10 @@ public class ChannelsConfigManager {
         private final int announceMode;
         private final boolean discordEnabled;
         private final String discordHook;
+        private final boolean cooldownEnabled;
+        private final int cooldown;
 
-        public Channel(boolean enabled, String permission, String format, boolean formatEnabled, int messageMode, int announceMode, boolean discordEnabled, String discordHook) {
+        public Channel(boolean enabled, String permission, String format, boolean formatEnabled, int messageMode, int announceMode, boolean discordEnabled, String discordHook, boolean cooldownEnabled, int cooldown) {
             this.enabled = enabled;
             this.permission = permission;
             this.format = format;
@@ -67,6 +71,8 @@ public class ChannelsConfigManager {
             this.announceMode = announceMode;
             this.discordEnabled = discordEnabled;
             this.discordHook = discordHook;
+            this.cooldownEnabled = cooldownEnabled;
+            this.cooldown = cooldown;
         }
 
         public boolean isFormatEnabled() { return formatEnabled; }
@@ -77,5 +83,7 @@ public class ChannelsConfigManager {
         public int getMessageMode() { return messageMode; }
         public boolean isDiscordEnabled() { return discordEnabled; }
         public String getDiscordHook() { return discordHook; }
+        public boolean isCooldownEnabled() {return cooldownEnabled;}
+        public int getCooldown() {return cooldown;}
     }
 }

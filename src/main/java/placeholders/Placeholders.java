@@ -1,6 +1,7 @@
 package placeholders;
 
 import config.GroupManager;
+import me.clip.placeholderapi.PlaceholderAPI;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import minealex.tchat.TChat;
 import org.bukkit.Bukkit;
@@ -79,8 +80,23 @@ public class Placeholders extends PlaceholderExpansion {
             case "nick" -> plugin.getSaveManager().getNick(playerId, player);
             case "staff_number" -> String.valueOf(getStaffNumber());
             case "staff_list" -> getStaffList();
+            case "format" -> getFormat(player);
+            case "group_format" -> getGroupFormat(player);
             default -> null;
         };
+    }
+
+    private @NotNull String getFormat(Player player) {
+        String format = plugin.getConfigManager().getFormat().replace("¡", "");
+        format = PlaceholderAPI.setPlaceholders(player, format);
+        return format;
+    }
+
+    private @NotNull String getGroupFormat(Player player) {
+        String channelName = plugin.getGroupManager().getGroupName(player);
+        String groupFormat = plugin.getGroupManager().getGroupFormat(channelName).replace("¡", "");
+        groupFormat = PlaceholderAPI.setPlaceholders(player, groupFormat);
+        return groupFormat;
     }
 
     private @NotNull String getChannel(Player player) {
@@ -102,7 +118,6 @@ public class Placeholders extends PlaceholderExpansion {
             return "No data";
         }
     }
-
 
     private int getStaffNumber() {
         return (int) Bukkit.getOnlinePlayers().stream()

@@ -25,6 +25,8 @@ tab:
     - about
     - "?"
     - ver
+  add-tab-complete-commands:
+    - r
 
 # Message displayed when someone executes a banned command
 blockedMessage:

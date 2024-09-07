@@ -1,11 +1,13 @@
 package config;
 
 import org.bukkit.configuration.file.FileConfiguration;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
 public class AdvertisingConfig {
     private final boolean enabled;
+    private final List<String> whitelist;
     private String match;
     private boolean messageEnabled;
     private List<String> message;
@@ -25,8 +27,10 @@ public class AdvertisingConfig {
     private int titleStay;
     private int titleFadeOut;
 
-    public AdvertisingConfig(FileConfiguration config, String basePath) {
+    public AdvertisingConfig(@NotNull FileConfiguration config, String basePath) {
         this.enabled = config.getBoolean(basePath + ".enabled");
+        this.whitelist = config.getStringList("advertising.whitelist");
+
         if (enabled) {
             this.match = config.getString(basePath + ".match");
             this.messageEnabled = config.getBoolean(basePath + ".actions.message.enabled");
@@ -59,7 +63,9 @@ public class AdvertisingConfig {
         }
     }
 
+    // Getters
     public boolean isEnabled() { return enabled; }
+    public List<String> getWhitelist() { return whitelist; }
     public String getMatch() { return match; }
     public boolean isMessageEnabled() { return messageEnabled; }
     public List<String> getMessage() { return message; }

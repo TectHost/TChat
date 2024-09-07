@@ -22,6 +22,69 @@ games:
     options:
       endTime: 30
       time: 300
+    startEffects:
+      title:
+        enabled: true
+        text: "&aGame 1 Started!"
+        subtitle: "&eSolve the puzzle!"
+        fadeIn: 10
+        stay: 70
+        fadeOut: 20
+      sound:
+        enabled: true
+        name: "ENTITY_PLAYER_LEVELUP"
+        volume: 1
+        pitch: 1
+      particle:
+        enabled: true
+        name: "EXPLOSION_NORMAL"
+        count: 10
+        speed: 1
+      actionBar:
+        enabled: true
+        text: "The game is live!"
+    endEffects:
+      title:
+        enabled: true
+        text: "&cGame Over!"
+        subtitle: "&eThanks for playing!"
+        fadeIn: 10
+        stay: 70
+        fadeOut: 20
+      sound:
+        enabled: true
+        name: "ENTITY_FIREWORK_ROCKET_LAUNCH"
+        volume: 1
+        pitch: 1
+      particle:
+        enabled: true
+        name: "FIREWORKS_SPARK"
+        count: 10
+        speed: 1
+      actionBar:
+        enabled: true
+        text: "&cGame has ended!"
+    winnerEffects:
+      title:
+        enabled: true
+        text: "&aCongratulations %winner%!"
+        subtitle: "&aYou are the champion!"
+        fadeIn: 10
+        stay: 70
+        fadeOut: 20
+      sound:
+        enabled: true
+        name: "ENTITY_FIREWORK_ROCKET_TWINKLE"
+        volume: 1
+        pitch: 1
+      particle:
+        enabled: true
+        name: "HEART"
+        count: 20
+        speed: 1
+      actionBar:
+        enabled: true
+        text: "&aYou've won the game!"
   game2:
     enabled: true
     messages:
@@ -35,3 +98,66 @@ games:
     options:
       endTime: 30
       time: 300
+    startEffects:
+      title:
+        enabled: true
+        text: "&aGame 2 Started!"
+        subtitle: "&eSolve the puzzle!"
+        fadeIn: 10
+        stay: 70
+        fadeOut: 20
+      sound:
+        enabled: true
+        name: "ENTITY_PLAYER_LEVELUP"
+        volume: 1
+        pitch: 1
+      particle:
+        enabled: true
+        name: "EXPLOSION_NORMAL"
+        count: 10
+        speed: 1
+      actionBar:
+        enabled: true
+        text: "The game is live!"
+    endEffects:
+      title:
+        enabled: true
+        text: "&cGame Over!"
+        subtitle: "&eThanks for playing!"
+        fadeIn: 10
+        stay: 70
+        fadeOut: 20
+      sound:
+        enabled: true
+        name: "ENTITY_FIREWORK_ROCKET_LAUNCH"
+        volume: 1
+        pitch: 1
+      particle:
+        enabled: true
+        name: "FIREWORKS_SPARK"
+        count: 10
+        speed: 1
+      actionBar:
+        enabled: true
+        text: "&cGame has ended!"
+    winnerEffects:
+      title:
+        enabled: true
+        text: "&aCongratulations %winner%!"
+        subtitle: "&aYou are the champion!"
+        fadeIn: 10
+        stay: 70
+        fadeOut: 20
+      sound:
+        enabled: true
+        name: "ENTITY_FIREWORK_ROCKET_TWINKLE"
+        volume: 1
+        pitch: 1
+      particle:
+        enabled: true
+        name: "HEART"
+        count: 20
+        speed: 1
+      actionBar:
+        enabled: true
+        text: "&aYou've won the game!"

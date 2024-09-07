@@ -14,13 +14,12 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import utils.TranslateHexColorCodes;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ChatFormatListener implements Listener {
+
+    private final Map<String, Map<UUID, Long>> channelCooldowns = new HashMap<>();
 
     private final ConfigManager configManager;
     private final GroupManager groupManager;
@@ -144,6 +143,27 @@ public class ChatFormatListener implements Listener {
         ChannelsConfigManager.Channel channel = channelsConfigManager.getChannel(channelName);
 
         if (plugin.getConfigManager().isFormatEnabled() && groupManager.isFormatEnabled(player)) {
+            if (channel != null && channel.isCooldownEnabled()) {
+                long cooldownTime = channel.getCooldown();
+
+                if (!canSendMessage(player, channelName, cooldownTime)) {
+                    long lastMessageTime = channelCooldowns.getOrDefault(channelName, new HashMap<>())
+                            .getOrDefault(player.getUniqueId(), 0L);
+                    long currentTime = System.currentTimeMillis();
+                    long timeLeft = cooldownTime - (currentTime - lastMessageTime);
+
+                    long secondsLeft = timeLeft / 1000;
+
+                    String p = plugin.getMessagesManager().getPrefix();
+                    String m = plugin.getMessagesManager().getCooldownChannel();
+                    m = m.replace("%seconds%", String.valueOf(secondsLeft));
+                    player.sendMessage(plugin.getTranslateColors().translateColors(player, p + m));
+                    event.setCancelled(true);
+                    return;
+                }
+
+                setLastMessageTime(player, channelName);
+            }
             if (channel != null && channel.isFormatEnabled() && channel.isEnabled() &&
                     (player.hasPermission(channel.getPermission()) || player.hasPermission("tchat.admin") || player.hasPermission("tchat.channel.all"))) {
                 format = channel.getFormat();
@@ -222,7 +242,7 @@ public class ChatFormatListener implements Listener {
                 if (channelName == null) {
                     String discordMessage = removeMinecraftColorCodes(mainComponent.toLegacyText());
                     plugin.getDiscordHook().sendMessage(discordMessage, plugin.getDiscordManager().getDiscordHook());
-                } else {
+                } else if (plugin.getChannelsConfigManager().getChannel(channelName).isDiscordEnabled()) {
                     String URL = plugin.getChannelsConfigManager().getChannel(channelName).getDiscordHook();
                     String discordMessage = removeMinecraftColorCodes(mainComponent.toLegacyText());
                     plugin.getDiscordHook().sendMessage(discordMessage, URL);
@@ -233,7 +253,7 @@ public class ChatFormatListener implements Listener {
                 if (channelName == null) {
                     String discordMessage = removeMinecraftColorCodes(message);
                     plugin.getDiscordHook().sendMessage(discordMessage, plugin.getDiscordManager().getDiscordHook());
-                } else {
+                } else if (plugin.getChannelsConfigManager().getChannel(channelName).isDiscordEnabled()) {
                     String URL = plugin.getChannelsConfigManager().getChannel(channelName).getDiscordHook();
                     String discordMessage = removeMinecraftColorCodes(message);
                     plugin.getDiscordHook().sendMessage(discordMessage, URL);
@@ -401,5 +421,16 @@ public class ChatFormatListener implements Listener {
             String command = replacedAction.substring("[SUGGEST] ".length());
             component.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, command));
         }
+    }
+
+    private boolean canSendMessage(@NotNull Player player, String channelName, long cooldownTime) {
+        Map<UUID, Long> playerCooldowns = channelCooldowns.getOrDefault(channelName, new HashMap<>());
+        long lastMessageTime = playerCooldowns.getOrDefault(player.getUniqueId(), 0L);
+        long currentTime = System.currentTimeMillis();
+        return (currentTime - lastMessageTime) >= cooldownTime;
+    }
+
+    private void setLastMessageTime(@NotNull Player player, String channelName) {
+        channelCooldowns.computeIfAbsent(channelName, k -> new HashMap<>()).put(player.getUniqueId(), System.currentTimeMillis());
     }
 }

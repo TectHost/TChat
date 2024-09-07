@@ -3,6 +3,8 @@ package config;
 import minealex.tchat.TChat;
 import org.bukkit.configuration.file.FileConfiguration;
 
+import java.util.List;
+
 public class PlaceholdersConfig {
     private final ConfigFile configFile;
     private boolean coordsEnabled;
@@ -14,6 +16,13 @@ public class PlaceholdersConfig {
     private boolean worldEnabled;
     private String worldFormat;
     private String worldName;
+    private boolean inventoryEnabled;
+    private String inventoryFormat;
+    private String inventoryName;
+    private boolean hoverInventoryTextEnabled;
+    private boolean hoverInventoryActionEnabled;
+    private String hoverInventoryAction;
+    private List<String> hoverInventoryText;
 
     public PlaceholdersConfig(TChat plugin) {
         this.configFile = new ConfigFile("placeholders.yml", null, plugin);
@@ -41,12 +50,34 @@ public class PlaceholdersConfig {
             worldName = config.getString("chat.world.name");
             worldFormat = config.getString("chat.world.format");
         }
+
+        inventoryEnabled = config.getBoolean("chat.inventory.enabled");
+        if (inventoryEnabled) {
+            inventoryName = config.getString("chat.inventory.name");
+            inventoryFormat = config.getString("chat.inventory.format");
+            hoverInventoryActionEnabled = config.getBoolean("chat.inventory.hover.action.enabled");
+            if (hoverInventoryActionEnabled) {
+                hoverInventoryAction = config.getString("chat.inventory.hover.action.command");
+            }
+            hoverInventoryTextEnabled = config.getBoolean("chat.inventory.hover.text.enabled");
+            if (hoverInventoryTextEnabled) {
+                hoverInventoryText = config.getStringList("chat.inventory.hover.text.lines");
+            }
+        }
     }
 
     public void reloadConfig() {
         configFile.reloadConfig();
         loadConfig();
     }
+
+    public boolean isInventoryEnabled() {return inventoryEnabled;}
+    public String getInventoryFormat() {return inventoryFormat;}
+    public String getInventoryName() {return inventoryName;}
+    public boolean isHoverInventoryTextEnabled() {return hoverInventoryTextEnabled;}
+    public boolean isHoverInventoryActionEnabled() {return hoverInventoryActionEnabled;}
+    public String getHoverInventoryAction() {return hoverInventoryAction;}
+    public List<String> getHoverInventoryText() {return hoverInventoryText;}
 
     public boolean isWorldEnabled() { return worldEnabled; }
     public String getWorldFormat() { return worldFormat; }

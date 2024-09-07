@@ -1,7 +1,6 @@
 package commands;
 
 import minealex.tchat.TChat;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -16,14 +15,14 @@ import java.util.Objects;
 public class Commands implements CommandExecutor, TabCompleter {
     private final TChat plugin;
 
-    public Commands(TChat plugin) {
+    public Commands(@NotNull TChat plugin) {
         this.plugin = plugin;
         Objects.requireNonNull(plugin.getCommand("tchat")).setExecutor(this);
         Objects.requireNonNull(plugin.getCommand("tchat")).setTabCompleter(this);
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, @NotNull Command command, @NotNull String alias, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, String[] args) {
         Player Player = null;
         if (sender.hasPermission("tchat.admin") || sender.hasPermission("tchat.admin.version") || sender.hasPermission("tchat.admin.reload")) {
             if (args.length >= 1) {
@@ -50,6 +49,7 @@ public class Commands implements CommandExecutor, TabCompleter {
                         plugin.getPlaceholdersConfig().reloadConfig();
                         plugin.getJoinManager().reloadConfig();
                         plugin.getMentionsManager().reloadConfig();
+                        plugin.getInvseeConfigManager().reloadConfig();
                         String message = plugin.getMessagesManager().getReloadMessage();
                         String prefix = plugin.getMessagesManager().getPrefix();
                         if (!(sender instanceof Player)) {
@@ -118,7 +118,7 @@ public class Commands implements CommandExecutor, TabCompleter {
     }
 
     @Override
-    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, String[] args) {
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, String @NotNull [] args) {
         List<String> completions = new ArrayList<>();
 
         if (args.length == 1) {

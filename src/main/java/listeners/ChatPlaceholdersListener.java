@@ -1,14 +1,20 @@
 package listeners;
 
 import minealex.tchat.TChat;
+import net.md_5.bungee.api.chat.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.regex.Pattern;
 
 public class ChatPlaceholdersListener implements Listener {
 
@@ -19,7 +25,7 @@ public class ChatPlaceholdersListener implements Listener {
     }
 
     @EventHandler
-    public void onPlayerChat(AsyncPlayerChatEvent event) {
+    public void onPlayerChat(@NotNull AsyncPlayerChatEvent event) {
         Player player = event.getPlayer();
         String message = event.getMessage();
 
@@ -53,7 +59,7 @@ public class ChatPlaceholdersListener implements Listener {
                 ItemStack itemInHand = player.getInventory().getItemInMainHand();
                 String itemName = "None";
 
-                if (itemInHand.getType() != org.bukkit.Material.AIR) {
+                if (itemInHand.getType() != Material.AIR) {
                     ItemMeta itemMeta = itemInHand.getItemMeta();
                     if (itemMeta != null && itemMeta.hasDisplayName()) {
                         itemName = itemMeta.getDisplayName();
@@ -87,6 +93,71 @@ public class ChatPlaceholdersListener implements Listener {
             }
         }
 
+        String inventoryName = plugin.getPlaceholdersConfig().getInventoryName();
+        if (plugin.getPlaceholdersConfig().isInventoryEnabled() && message.contains(inventoryName)) {
+            if (player.hasPermission("tchat.admin") || player.hasPermission("tchat.placeholder.inventory")) {
+                String[] parts = message.split(Pattern.quote(inventoryName), 2);
+
+                if (parts.length == 2) {
+                    String beforeInventory = parts[0];
+                    String afterInventory = parts[1];
+
+                    String initialMessage = plugin.getPlaceholdersConfig().getInventoryFormat();
+                    initialMessage = initialMessage.replace("%before_inv%", beforeInventory)
+                            .replace("%after_inv%", afterInventory);
+
+                    initialMessage = plugin.getTranslateColors().translateColors(player, initialMessage);
+
+                    TextComponent inventoryComponent = getTextComponent(initialMessage, player);
+
+                    event.setCancelled(true);
+                    for (Player onlinePlayer : plugin.getServer().getOnlinePlayers()) {
+                        onlinePlayer.spigot().sendMessage(inventoryComponent);
+                    }
+
+                    if (plugin.getConfigManager().isRegisterMessagesOnConsole()) {
+                        String consoleMessage = inventoryComponent.toLegacyText();
+                        consoleMessage = plugin.getTranslateColors().translateColors(player, consoleMessage);
+                        Bukkit.getConsoleSender().sendMessage(consoleMessage);
+                    }
+                }
+            } else {
+                String error = plugin.getMessagesManager().getNoPermission();
+                player.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + error));
+            }
+        } else {
+            event.setMessage(message);
+        }
+
         event.setMessage(message);
+    }
+
+    private @NotNull TextComponent getTextComponent(String initialMessage, @NotNull Player player) {
+        TextComponent inventoryComponent = new TextComponent(initialMessage);
+
+        List<String> hoverTextList = plugin.getPlaceholdersConfig().getHoverInventoryText();
+        if (hoverTextList != null && plugin.getPlaceholdersConfig().isHoverInventoryTextEnabled()) {
+            ComponentBuilder hoverBuilder = new ComponentBuilder();
+            for (int i = 0; i < hoverTextList.size(); i++) {
+                String line = hoverTextList.get(i);
+                String translatedLine = plugin.getTranslateColors().translateColors(player, line);
+                hoverBuilder.append(translatedLine);
+                if (i < hoverTextList.size() - 1) {
+                    hoverBuilder.append("\n");
+                }
+            }
+
+            TextComponent hoverComponent = new TextComponent(hoverBuilder.create());
+            HoverEvent hoverEvent = new HoverEvent(HoverEvent.Action.SHOW_TEXT, new BaseComponent[]{hoverComponent});
+            inventoryComponent.setHoverEvent(hoverEvent);
+        }
+
+        String action = plugin.getPlaceholdersConfig().getHoverInventoryAction();
+        if (action != null && plugin.getPlaceholdersConfig().isHoverInventoryActionEnabled()) {
+            action = action.replace("%player%", player.getName());
+            inventoryComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, action));
+        }
+
+        return inventoryComponent;
     }
 }

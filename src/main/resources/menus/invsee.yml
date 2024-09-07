@@ -1,0 +1,45 @@
+# #################################################################
+# ┌─────────────────────────────────────────────────────────────┐ #
+# │                         Invsee Menu                         │ #
+# └─────────────────────────────────────────────────────────────┘ #
+# #################################################################
+
+# General options
+options:
+  # Menu title
+  title: "&7%player%'s inventory"
+  # Number of slots of the menu
+  slots: 45
+
+# Empty slots
+empty:
+  # Material for empty slots
+  # https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html
+  material: "BARRIER"
+  # Display name for empty slots, you can put " " for empty name
+  name: "&cEmpty"
+
+# Decorative items in the menu
+glass:
+  # Material for decorative items, put "AIR" for disable it
+  # https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html
+  material: "GRAY_STAINED_GLASS_PANE"
+  # Display name
+  name: " "
+
+# Decorative slots
+glass-slots:
+  - 37
+  - 38
+  - 39
+  - 40
+
+# Armor slots
+armor-slots:
+  # Start slot
+  start: 41
+  # Number of armor slots (boots, leggings, chestplate and helmet)
+  length: 4
+
+# The slot for offhand item
+offhand-slot: 36

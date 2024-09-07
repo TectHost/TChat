@@ -24,15 +24,20 @@ public class BannedWords implements Listener {
 
     @EventHandler
     public void playerBannedWords(@NotNull AsyncPlayerChatEvent event) {
-        if (event.isCancelled()) return;
+        if (event.isCancelled() || !bannedWordsManager.isEnabled()) return;
 
         Player player = event.getPlayer();
         if (!player.hasPermission(bannedWordsManager.getBypassPermission()) && !player.hasPermission("tchat.admin")) {
             String message = event.getMessage();
             List<String> bannedWords = bannedWordsManager.getBannedWords();
+            List<String> whitelist = bannedWordsManager.getWhitelist();
             boolean isBlocked = false;
 
             for (String word : bannedWords) {
+                if (isWhitelisted(message, whitelist)) {
+                    continue;
+                }
+
                 if (message.toLowerCase().contains(word.toLowerCase())) {
 
                     if (plugin.getConfigManager().isLogBannedWordsEnabled()) {
@@ -79,6 +84,15 @@ public class BannedWords implements Listener {
                 event.setMessage(message);
             }
         }
+    }
+
+    private boolean isWhitelisted(@NotNull String message, @NotNull List<String> whitelist) {
+        for (String whitelistWord : whitelist) {
+            if (message.toLowerCase().matches(".*\\b" + whitelistWord.toLowerCase() + "\\b.*")) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private @NotNull String censorWord(@NotNull String word, @NotNull String message) {

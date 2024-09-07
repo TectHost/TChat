@@ -4,14 +4,12 @@ import config.AdvertisingConfig;
 import minealex.tchat.TChat;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
-import org.bukkit.ChatColor;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
-
-import static utils.TranslateHexColorCodes.translateHexColorCodes;
+import org.jetbrains.annotations.NotNull;
 
 public class AntiAdvertising {
     private final TChat plugin;
@@ -20,7 +18,7 @@ public class AntiAdvertising {
         this.plugin = plugin;
     }
 
-    public void checkAdvertising(AsyncPlayerChatEvent event) {
+    public void checkAdvertising(@NotNull AsyncPlayerChatEvent event) {
         if (event.isCancelled()) return;
 
         Player player = event.getPlayer();
@@ -31,7 +29,7 @@ public class AntiAdvertising {
         checkAndHandle(event, player, message, plugin.getConfigManager().getLinksConfig());
     }
 
-    public void checkAdvertisingCommand(PlayerCommandPreprocessEvent event, Player player, String command) {
+    public void checkAdvertisingCommand(@NotNull PlayerCommandPreprocessEvent event, Player player, String command) {
         if (event.isCancelled()) return;
 
         checkAndHandleCommand(event, player, command, plugin.getConfigManager().getIpv4Config());
@@ -39,71 +37,68 @@ public class AntiAdvertising {
         checkAndHandleCommand(event, player, command, plugin.getConfigManager().getLinksConfig());
     }
 
-    private void checkAndHandleCommand(PlayerCommandPreprocessEvent event, Player player, String command, AdvertisingConfig config) {
+    private void checkAndHandleCommand(PlayerCommandPreprocessEvent event, @NotNull Player player, String command, AdvertisingConfig config) {
         if (!player.hasPermission(plugin.getConfigManager().getAdvertisingBypass()) || !player.hasPermission("tchat.admin")) {
-            if (config.isEnabled() && command.matches(config.getMatch())) {
+            if (config.isEnabled() && command.matches(config.getMatch()) && isWhitelisted(command, config)) {
                 event.setCancelled(true);
-
-                if (config.isMessageEnabled()) {
-                    config.getMessage().forEach(msg -> player.sendMessage(translateAndReplace(msg, command)));
-                }
-                if (config.isTitleEnabled()) {
-                    String title = translateAndReplace(config.getTitle(), command);
-                    String subtitle = translateAndReplace(config.getSubtitle(), command);
-                    player.sendTitle(title, subtitle, config.getTitleFadeIn(), config.getTitleStay(), config.getTitleFadeOut());
-                }
-                if (config.isActionBarEnabled()) {
-                    String actionBarMessage = translateAndReplace(config.getActionBar(), command);
-                    player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(actionBarMessage));
-                }
-                if (config.isSoundEnabled()) {
-                    Sound sound = Sound.valueOf(config.getSound().toUpperCase());
-                    player.playSound(player.getLocation(), sound, config.getSoundVolume(), config.getSoundPitch());
-                }
-                if (config.isParticlesEnabled()) {
-                    Particle particle = Particle.valueOf(config.getParticleType().toUpperCase());
-                    player.getWorld().spawnParticle(particle, player.getLocation(), config.getParticles());
-                }
-                if (plugin.getConfigManager().isAntiAdvertisingLogEnabled()) {
-                    plugin.getLogsManager().logAntiAdvertising(player.getName(), command);
-                }
+                handleActions(player, command, config);
             }
         }
     }
 
-    public void checkAndHandle(AsyncPlayerChatEvent event, Player player, String message, AdvertisingConfig config) {
+    private boolean isWhitelisted(String message, @NotNull AdvertisingConfig config) {
+        if (config.getWhitelist() != null) {
+            for (String whitelistItem : config.getWhitelist()) {
+                if (message.contains(whitelistItem)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public void checkAndHandle(AsyncPlayerChatEvent event, @NotNull Player player, String message, AdvertisingConfig config) {
         if (!player.hasPermission(plugin.getConfigManager().getAdvertisingBypass()) || !player.hasPermission("tchat.admin")) {
-            if (config.isEnabled() && message.matches(config.getMatch())) {
-                if (event != null) {
-                    event.setCancelled(true);
-                }
-                if (config.isMessageEnabled()) {
-                    config.getMessage().forEach(msg -> player.sendMessage(translateAndReplace(msg, message)));
-                }
-                if (config.isTitleEnabled()) {
-                    String title = translateAndReplace(config.getTitle(), message);
-                    String subtitle = translateAndReplace(config.getSubtitle(), message);
-                    player.sendTitle(title, subtitle, config.getTitleFadeIn(), config.getTitleStay(), config.getTitleFadeOut());
-                }
-                if (config.isActionBarEnabled()) {
-                    String actionBarMessage = translateAndReplace(config.getActionBar(), message);
-                    player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(actionBarMessage));
-                }
-                if (config.isSoundEnabled()) {
-                    Sound sound = Sound.valueOf(config.getSound().toUpperCase());
-                    player.playSound(player.getLocation(), sound, config.getSoundVolume(), config.getSoundPitch());
-                }
-                if (config.isParticlesEnabled()) {
-                    Particle particle = Particle.valueOf(config.getParticleType().toUpperCase());
-                    player.getWorld().spawnParticle(particle, player.getLocation(), config.getParticles());
+            if (config.isEnabled()) {
+                if (message.matches(config.getMatch())) {
+                    if (isWhitelisted(message, config)) {
+                        if (event != null) {
+                            event.setCancelled(true);
+                        }
+                        handleActions(player, message, config);
+                    }
                 }
             }
         }
     }
 
 
-    private String translateAndReplace(String text, String word) {
-        String translatedText = translateHexColorCodes("&#", "", text);
-        return ChatColor.translateAlternateColorCodes('&', translatedText.replace("{word}", word));
+    private void handleActions(Player player, String message, @NotNull AdvertisingConfig config) {
+        if (config.isMessageEnabled()) {
+            config.getMessage().forEach(msg -> {
+                String messageToSend = plugin.getTranslateColors().translateColors(player, msg);
+                player.sendMessage(messageToSend);
+            });
+        }
+        if (config.isTitleEnabled()) {
+            String title = plugin.getTranslateColors().translateColors(player, config.getTitle());
+            String subtitle = plugin.getTranslateColors().translateColors(player, config.getSubtitle());
+            player.sendTitle(title, subtitle, config.getTitleFadeIn(), config.getTitleStay(), config.getTitleFadeOut());
+        }
+        if (config.isActionBarEnabled()) {
+            String actionBarMessage = plugin.getTranslateColors().translateColors(player, config.getActionBar());
+            player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(actionBarMessage));
+        }
+        if (config.isSoundEnabled()) {
+            Sound sound = Sound.valueOf(config.getSound().toUpperCase());
+            player.playSound(player.getLocation(), sound, config.getSoundVolume(), config.getSoundPitch());
+        }
+        if (config.isParticlesEnabled()) {
+            Particle particle = Particle.valueOf(config.getParticleType().toUpperCase());
+            player.getWorld().spawnParticle(particle, player.getLocation(), config.getParticles());
+        }
+        if (plugin.getConfigManager().isAntiAdvertisingLogEnabled()) {
+            plugin.getLogsManager().logAntiAdvertising(player.getName(), message);
+        }
     }
 }

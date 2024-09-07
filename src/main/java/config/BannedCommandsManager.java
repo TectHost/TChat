@@ -26,6 +26,7 @@ public class BannedCommandsManager {
     private boolean particlesEnabled;
     private Particle particle;
     private int particles;
+    private List<String> addTabCommands;
 
     public BannedCommandsManager(TChat plugin) {
         this.plugin = plugin;
@@ -42,6 +43,7 @@ public class BannedCommandsManager {
         blockedMessage = config.getStringList("blockedMessage");
         noTabCompleteCommands = config.getStringList("tab.noTabCompleteCommands");
         blockAllCommands = config.getBoolean("tab.block-all-additional-commands");
+        addTabCommands = config.getStringList("tab.add-tab-complete-commands");
 
         titleEnabled = config.getBoolean("title.enabled");
         if (titleEnabled) {
@@ -76,6 +78,7 @@ public class BannedCommandsManager {
         return configFile;
     }
 
+    public List<String> getAddTabCommands() {return addTabCommands;}
     public int getParticles() { return particles;}
     public Particle getParticle() { return particle; }
     public boolean isParticlesEnabled() { return particlesEnabled; }

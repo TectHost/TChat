@@ -1,5 +1,5 @@
 main: minealex.tchat.TChat
-version: 4.1.3
+version: 4.1.4
 name: TChat
 author: Mine_Alex
 api-version: 1.13
@@ -75,8 +75,12 @@ commands:
     description: Mute other players
   logs:
     description: View logs
+  invsee:
+    description: View any player inventory
 
 permissions:
+  tchat.command.invsee:
+    description: Permission to use invsee command
   tchat.admin.command.logs:
     description: Permission to use logs command
   tchat.admin.mute:
