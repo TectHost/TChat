@@ -62,6 +62,7 @@ public class TChat extends JavaPlugin {
     private MentionsManager mentionsManager;
     private CheckPlayerMuted checkPlayerMuted;
     private InvseeConfigManager invseeConfigManager;
+    private ShowEnderChestConfigManager showEnderChestConfigManager;
 
     @Override
     public void onEnable() {
@@ -145,6 +146,7 @@ public class TChat extends JavaPlugin {
         joinManager = new JoinManager(this);
         mentionsManager = new MentionsManager(this);
         invseeConfigManager = new InvseeConfigManager(this);
+        showEnderChestConfigManager = new ShowEnderChestConfigManager(this);
     }
 
     public void initializeManagers() {
@@ -152,6 +154,7 @@ public class TChat extends JavaPlugin {
         chatColorInventoryManager = new ChatColorInventoryManager(this);
         translateColors = new TranslateColors();
         channelsManager = new ChannelsManager();
+        new Metrics(this, 23305);
     }
 
     public void registerCommands() {
@@ -220,6 +223,8 @@ public class TChat extends JavaPlugin {
         Objects.requireNonNull(getCommand("logs")).setExecutor(new LogsCommand(this));
         Objects.requireNonNull(getCommand("logs")).setTabCompleter(new LogsCommand(this));
         Objects.requireNonNull(getCommand("invsee")).setExecutor(new InvseeCommand(this));
+        Objects.requireNonNull(getCommand("mention")).setExecutor(new MentionCommand(this));
+        Objects.requireNonNull(getCommand("showenderchest")).setExecutor(new ShowEnderChestCommand(this));
     }
 
     public void registerPlaceholders() {
@@ -228,7 +233,7 @@ public class TChat extends JavaPlugin {
 
     // ------------------------------------------------------------------------------
 
-
+    public ShowEnderChestConfigManager getShowEnderChestConfigManager() {return showEnderChestConfigManager;}
     public InvseeConfigManager getInvseeConfigManager() {return invseeConfigManager;}
     public CheckPlayerMuted getCheckPlayerMuted() {return checkPlayerMuted;}
     public MentionsManager getMentionsManager() { return mentionsManager; }

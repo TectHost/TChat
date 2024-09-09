@@ -312,6 +312,11 @@ public class ChatFormatListener implements Listener {
         UUID senderId = sender.getUniqueId();
         UUID recipientId = recipient.getUniqueId();
         List<String> ignoreList = plugin.getSaveManager().getIgnoreList(recipientId);
+
+        if (ignoreList.contains("all")) {
+            return true;
+        }
+
         return ignoreList.contains(senderId.toString());
     }
 

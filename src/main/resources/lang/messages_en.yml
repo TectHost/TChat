@@ -50,6 +50,7 @@ messages:
   no-staff: "&cThere are no staff members connected."
   muted: "&cYou are muted!"
   cooldown-channel: "&cYou must wait %seconds% seconds before sending another message on this channel."
+  mention-other: "&aYou mentioned &e%mentioned%&a!"
   chat-help:
     message:
       - "&8--------- { &#c03afeT&#a72cf8C&#8e1ff1h&#7411eba&#5b03e4t &8} ---------"
@@ -238,6 +239,7 @@ messages:
     mute: "&cUsage: /mute <player> [duration]"
     logs: "&cUsage: /logs <chat|bannedwords|...> [player] [filter]"
     invsee: "&cUsage: /invsee <player>"
+    mention: "&cUsage: /mention <player>"
   # Debug messages are only seen in the console
   debug:
     no-format-group: "&cError in groups.yml - No format found for group: %group%"

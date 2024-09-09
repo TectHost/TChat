@@ -109,6 +109,7 @@ public class ConfigManager {
     private boolean deathLogs;
     private Map<String, HoverConfig> pmHoverConfigs;
     private Map<String, HoverConfig> replyHoverConfigs;
+    private int maxRepeatMessages;
 
     public ConfigManager(TChat plugin) {
         this.plugin = plugin;
@@ -219,6 +220,7 @@ public class ConfigManager {
             if (repeatMessagesEnabled) {
                 repeatMessagesPercent = config.getDouble("grammar.repeat-messages.percent");
                 bypassRepeatMessages = config.getString("grammar.repeat-messages.bypass-permission");
+                maxRepeatMessages = config.getInt("grammar.repeat-messages.max-repeat-messages", 1);
             }
         }
 
@@ -369,6 +371,7 @@ public class ConfigManager {
         return replyHoverConfigs.get(group);
     }
 
+    public int getMaxRepeatMessages() {return maxRepeatMessages;}
     public boolean isDeathLogs() {return deathLogs;}
     public boolean isChatColorMenuEnabled() {return chatColorMenuEnabled;}
     public String getLangFile() { return langFile; }

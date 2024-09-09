@@ -1,6 +1,10 @@
 package utils;
 
 import minealex.tchat.TChat;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Particle;
@@ -10,9 +14,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import config.ChatGamesManager;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 public class ChatGamesSender {
 
@@ -57,12 +59,8 @@ public class ChatGamesSender {
         showStartEffects();
 
         if (currentGame.getMessages() != null && !currentGame.getMessages().isEmpty()) {
-            for (String message : currentGame.getMessages()) {
-                if (message.contains("%center%")) {
-                    message = message.replace("%center%", "");
-                    message = centerText(message);
-                }
-                sendToAllPlayers(message);
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                sendMessagesWithEffects(player, currentGame.getMessages(), currentGame.isHoverEnabled(), currentGame.getHover(), currentGame.isActionEnabled(), currentGame.getAction());
             }
         } else {
             String message = plugin.getMessagesManager().getNoMessages();
@@ -232,6 +230,56 @@ public class ChatGamesSender {
     private void sendToAllPlayers(String message) {
         for (Player player : Bukkit.getOnlinePlayers()) {
             player.sendMessage(plugin.getTranslateColors().translateColors(player, message));
+        }
+    }
+
+    private void applyHoverAndAction(TextComponent textComponent, boolean hoverEnabled, List<String> hoverLines, boolean actionEnabled, String action, String playerName) {
+        if (hoverEnabled) {
+            List<String> translatedHoverLines = new ArrayList<>();
+            for (String line : hoverLines) {
+                String translatedLine = plugin.getTranslateColors().translateColors(null, line);
+                translatedHoverLines.add(translatedLine);
+            }
+
+            String hoverText = String.join("\n", translatedHoverLines);
+            textComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(hoverText).create()));
+        }
+        if (actionEnabled) {
+            applyClickAction(textComponent, action, playerName);
+        }
+    }
+
+    private @NotNull TextComponent processMessage(@NotNull String message, boolean hoverEnabled, List<String> hoverLines, boolean actionEnabled, String action, String playerName) {
+        if (message.contains("%center%")) {
+            message = message.replace("%center%", "");
+            message = centerText(message);
+        }
+
+        TextComponent textComponent = new TextComponent(message);
+        applyHoverAndAction(textComponent, hoverEnabled, hoverLines, actionEnabled, action, playerName);
+        return textComponent;
+    }
+
+    private void sendMessagesWithEffects(Player player, @NotNull List<String> messages, boolean hoverEnabled, List<String> hoverLines, boolean actionEnabled, String action) {
+        for (String message : messages) {
+            message = plugin.getTranslateColors().translateColors(player, message);
+            TextComponent textComponent = processMessage(message, hoverEnabled, hoverLines, actionEnabled, action, player.getName());
+            player.spigot().sendMessage(textComponent);
+        }
+    }
+
+    private void applyClickAction(TextComponent component, @NotNull String clickAction, String playerName) {
+        String replacedAction = clickAction.replace("%player%", playerName);
+
+        if (replacedAction.startsWith("[EXECUTE]")) {
+            String command = replacedAction.substring("[EXECUTE] ".length());
+            component.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, command));
+        } else if (replacedAction.startsWith("[OPEN]")) {
+            String url = replacedAction.substring("[OPEN] ".length());
+            component.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, url));
+        } else if (replacedAction.startsWith("[SUGGEST]")) {
+            String command = replacedAction.substring("[SUGGEST] ".length());
+            component.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, command));
         }
     }
 }

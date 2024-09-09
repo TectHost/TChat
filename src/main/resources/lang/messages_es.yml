@@ -44,6 +44,7 @@ messages:
   no-staff: "&cNo hay miembros del staff conectados."
   muted: "&c¡Estás muteado!"
   cooldown-channel: "&cDebes esperar %seconds% segundos antes de enviar otro mensaje en este canal."
+  mention-other: "&a¡Has mencionado a &e%mentioned%&a!"
   chat-help:
     message:
       - "&8--------- { &#c03afeT&#a72cf8C&#8e1ff1h&#7411eba&#5b03e4t &8} ---------"
@@ -230,6 +231,7 @@ messages:
       mute: "&cUso: /mute <jugador> [duración]"
       logs: "&cUso: /logs <chat|bannedwords|...> [jugador] [filtro]"
       invsee: "&cUso: /invsee <jugador>"
+      mention: "&cUso: /mention <jugador>"
     # Mensajes de depuración solo visibles en la consola
     debug:
       no-format-group: "&cError en groups.yml - No se encontró formato para el grupo: %group%"

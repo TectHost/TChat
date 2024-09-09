@@ -48,6 +48,7 @@
   # [ROF] - Ends a FOR loop | - "[ROF]"
   # [WHILE] - Starts a loop until the condition is not met | - "[WHILE] %player_health% < 20"
   # [ELIHW] - Ends a while loop | - "[ELIHW]"
+  # [BREAK] - Breaks an active loop | - "[BREAK]"
 
 # Placeholders:
 # %prefix% - Returns the prefix of TChat

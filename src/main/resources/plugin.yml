@@ -1,5 +1,5 @@
 main: minealex.tchat.TChat
-version: 4.1.4
+version: 4.1.5
 name: TChat
 author: Mine_Alex
 api-version: 1.13
@@ -77,8 +77,16 @@ commands:
     description: View logs
   invsee:
     description: View any player inventory
+  mention:
+    description: Mention a player
+  showenderchest:
+    description: Opens the enderchest
+    aliases:
+      - showec
 
 permissions:
+  tchat.command.mention:
+    description: Permission to use mention command
   tchat.command.invsee:
     description: Permission to use invsee command
   tchat.admin.command.logs:

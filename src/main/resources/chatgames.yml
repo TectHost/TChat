@@ -11,9 +11,18 @@ games:
   game1:
     enabled: true
     messages:
-      - "&#c03afe┌&#b232fa─&#a32af7─&#9522f3─&#861bef─&#7813eb─&#690be8─&#5b03e4┐"
-      - "&#c03afe│ &#af31fa2 &#9e28f5+ &#8e1ff12 &#7d15ed= &#6c0ce8?  &#5b03e4│"
-      - "&#c03afe└&#b232fa─&#a32af7─&#9522f3─&#861bef─&#7813eb─&#690be8─&#5b03e4┘"
+      - " "
+      - "%center%&#44d742&lCHAT GAMES"
+      - "%center%&75 - 1 + (4 / 2) - 2"
+      - " "
+    hover:
+      enabled: true
+      lines:
+        - "&2Hint: &a2 + 2 = ?"
+        - "&bWrite the keyword"
+    action:
+      enabled: true
+      action: "[OPEN] https://tect.host/"
     keywords:
       - "4"
       - "four"
@@ -88,8 +97,18 @@ games:
   game2:
     enabled: true
     messages:
+      - " "
       - "%center%&#44d742&lCHAT GAMES"
       - "%center%&74 * 2 - 2 + 4 - 8 + 5 (1 + 1) - 4"
+      - " "
+    hover:
+      enabled: true
+      lines:
+        - "&2Hint: &a4 + 4 = ?"
+        - "&bWrite the keyword"
+    action:
+      enabled: true
+      action: "[OPEN] https://tect.host/"
     keywords:
       - "8"
       - "eight"

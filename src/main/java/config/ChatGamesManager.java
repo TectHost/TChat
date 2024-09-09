@@ -27,6 +27,10 @@ public class ChatGamesManager {
                 boolean enabled = config.getBoolean("games." + key + ".enabled", false);
                 if (enabled) {
                     List<String> messages = config.getStringList("games." + key + ".messages");
+                    boolean hoverEnabled = config.getBoolean("games." + key + ".hover.enabled");
+                    List<String> hover = config.getStringList("games." + key + ".hover.lines");
+                    boolean actionEnabled = config.getBoolean("games." + key + ".action.enabled");
+                    String action = config.getString("games." + key + ".action.action");
                     List<String> keywords = config.getStringList("games." + key + ".keywords");
                     List<String> rewards = config.getStringList("games." + key + ".rewards");
                     int endTime = config.getInt("games." + key + ".options.endTime");
@@ -36,7 +40,7 @@ public class ChatGamesManager {
                     Effects endEffects = loadEffects(config, "games." + key + ".endEffects");
                     Effects winnerEffects = loadEffects(config, "games." + key + ".winnerEffects");
 
-                    Game game = new Game(messages, keywords, rewards, new Options(endTime, time), enabled, startEffects, endEffects, winnerEffects);
+                    Game game = new Game(messages, hoverEnabled, hover, actionEnabled, action, keywords, rewards, new Options(endTime, time), enabled, startEffects, endEffects, winnerEffects);
                     games.add(game);
                 }
             }
@@ -86,6 +90,10 @@ public class ChatGamesManager {
 
     public static class Game {
         private final List<String> messages;
+        private final boolean hoverEnabled;
+        private final List<String> hover;
+        private final boolean actionEnabled;
+        private final String action;
         private final List<String> keywords;
         private final List<String> rewards;
         private final Options options;
@@ -94,8 +102,12 @@ public class ChatGamesManager {
         private final Effects endEffects;
         private final Effects winnerEffects;
 
-        public Game(List<String> messages, List<String> keywords, List<String> rewards, Options options, boolean enabled, Effects startEffects, Effects endEffects, Effects winnerEffects) {
+        public Game(List<String> messages, boolean hoverEnabled, List<String> hover, boolean actionEnabled, String action, List<String> keywords, List<String> rewards, Options options, boolean enabled, Effects startEffects, Effects endEffects, Effects winnerEffects) {
             this.messages = messages;
+            this.hoverEnabled = hoverEnabled;
+            this.hover = hover;
+            this.actionEnabled = actionEnabled;
+            this.action = action;
             this.keywords = keywords;
             this.rewards = rewards;
             this.options = options;
@@ -107,6 +119,22 @@ public class ChatGamesManager {
 
         public List<String> getMessages() {
             return messages;
+        }
+
+        public boolean isHoverEnabled() {
+            return hoverEnabled;
+        }
+
+        public List<String> getHover() {
+            return hover;
+        }
+
+        public boolean isActionEnabled() {
+            return actionEnabled;
+        }
+
+        public String getAction() {
+            return action;
         }
 
         public List<String> getKeywords() {

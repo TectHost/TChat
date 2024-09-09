@@ -1,6 +1,7 @@
 package hook;
 
 import minealex.tchat.TChat;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
@@ -109,7 +110,7 @@ public class DiscordHook {
         }
     }
 
-    private String buildEmbedLeft(String username) {
+    private @NotNull String buildEmbedLeft(String username) {
         String descriptionTemplate = plugin.getDiscordManager().getQuitDescription();
         String description = descriptionTemplate.replace("%player%", escapeJson(username));
         String avatarUrl = "https://mc-heads.net/avatar/" + username;
@@ -130,7 +131,7 @@ public class DiscordHook {
         return embedBuilder.toString();
     }
 
-    private String buildEmbedJoin(String username) {
+    private @NotNull String buildEmbedJoin(String username) {
         String descriptionTemplate = plugin.getDiscordManager().getJoinDescription();
         String description = descriptionTemplate.replace("%player%", escapeJson(username));
         String avatarUrl = "https://mc-heads.net/avatar/" + username;
@@ -183,7 +184,7 @@ public class DiscordHook {
         }
     }
 
-    private String buildEmbedDeath(String username) {
+    private @NotNull String buildEmbedDeath(String username) {
         String descriptionTemplate = plugin.getDiscordManager().getDeathDescription();
         String description = descriptionTemplate.replace("%player%", escapeJson(username));
         String avatarUrl = "https://mc-heads.net/avatar/" + username;
@@ -204,7 +205,7 @@ public class DiscordHook {
         return embedBuilder.toString();
     }
 
-    private String escapeJson(String message) {
+    private @NotNull String escapeJson(@NotNull String message) {
         return message.replace("\\", "\\\\")
                 .replace("\"", "\\\"")
                 .replace("\b", "\\b")

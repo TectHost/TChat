@@ -194,6 +194,8 @@ public class MessagesManager {
     private String logsHeader;
     private String cooldownChannel;
     private String invseeUsage;
+    private String usageMention;
+    private String mentionOther;
 
     public MessagesManager(TChat plugin){
         this.messagesFile = new ConfigFile(plugin.getConfigManager().getLangFile(), "lang", plugin);
@@ -330,6 +332,9 @@ public class MessagesManager {
         mutePermanent = config.getString("messages.mute.permanent");
         muteUsage = config.getString("messages.usage.mute");
         muteTemp = config.getString("messages.mute.temp");
+
+        usageMention = config.getString("messages.usage.mention");
+        mentionOther = config.getString("messages.mention-other");
 
         // Messages
         headerStaffList = config.getString("messages.stafflist.header");
@@ -474,6 +479,8 @@ public class MessagesManager {
     }
 
     // Messages
+    public String getUsageMention() {return usageMention;}
+    public String getMentionOther() {return mentionOther;}
     public String getInvseeUsage() {return invseeUsage;}
     public String getCooldownChannel() {return cooldownChannel;}
     public String getUsageLogs() {return usageLogs;}

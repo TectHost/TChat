@@ -1,17 +1,19 @@
 package listeners;
 
 import minealex.tchat.TChat;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class RepeatMessagesListener implements Listener {
+
     private final Map<Player, String> lastMessages = new HashMap<>();
+    private final Map<Player, Integer> messageCount = new HashMap<>();
     private final TChat plugin;
 
     public RepeatMessagesListener(TChat plugin) {
@@ -19,16 +21,25 @@ public class RepeatMessagesListener implements Listener {
     }
 
     @EventHandler
-    public void checkRepeatMessages(AsyncPlayerChatEvent event, Player player, String newMessage) {
+    public void checkRepeatMessages(@NotNull AsyncPlayerChatEvent event, Player player, String newMessage) {
         if (lastMessages.containsKey(player)) {
             String lastMessage = lastMessages.get(player);
 
             if (isSimilar(lastMessage, newMessage)) {
-                event.setCancelled(true);
-                String message = plugin.getMessagesManager().getRepeatMessage();
-                String prefix = plugin.getMessagesManager().getPrefix();
-                player.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + message));
-                return;
+                int count = messageCount.getOrDefault(player, 0) + 1;
+                int limit = plugin.getConfigManager().getMaxRepeatMessages();
+
+                if (count >= limit) {
+                    event.setCancelled(true);
+                    String message = plugin.getMessagesManager().getRepeatMessage();
+                    String prefix = plugin.getMessagesManager().getPrefix();
+                    player.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + message));
+                    return;
+                } else {
+                    messageCount.put(player, count);
+                }
+            } else {
+                messageCount.put(player, 1);
             }
         }
 

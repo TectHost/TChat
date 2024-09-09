@@ -1,0 +1,45 @@
+# #################################################################
+# ┌─────────────────────────────────────────────────────────────┐ #
+# │                    Show Ender Chest Menu                    │ #
+# └─────────────────────────────────────────────────────────────┘ #
+# #################################################################
+
+# General menu configuration
+menu:
+  # Menu title
+  title: "&7%player_name%'s enderchest"
+  # Number of slots
+  slots: 36
+  # Glass (decorative items)
+  glass:
+    # Material
+    # https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html
+    material: "GRAY_STAINED_GLASS_PANE"
+    # Display name for decorative items
+    display_name: " "
+    # Slots configuration
+    slots:
+      start: 27
+      end: 36
+  # Center item (decorative item)
+  head:
+    # The slot of the item
+    slot: 31
+    # Material
+    # https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html
+    material: "PLAYER_HEAD"
+    # The item display name
+    display_name: "Information about %player_name%"
+    # The description of the item
+    lore:
+      - "Name: %player%"
+      - "UUID: %uuid%"
+      - "Current Health: %health%"
+      - "Level: %level%"
+
+# Ender chest configuration
+ender:
+  # Slots for ender chest items
+  slots:
+    start: 0
+    end: 27

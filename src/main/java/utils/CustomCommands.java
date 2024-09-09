@@ -3,10 +3,9 @@ package utils;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.lang.reflect.Method;
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -101,6 +100,7 @@ public class CustomCommands implements Listener {
         boolean inConditional = false;
         boolean inLoop = false;
         boolean inWhileLoop = false;
+        AtomicBoolean breakLoop = new AtomicBoolean(false);
         List<String> loopActions = new ArrayList<>();
         String originalWhileCondition = "";
         int loopCount = 0;
@@ -124,17 +124,17 @@ public class CustomCommands implements Listener {
                         currentIteration = 1;
                         while (true) {
                             String evaluatedCondition = processPlaceholders(player, finalOriginalWhileCondition);
-
-                            if (!evaluateCondition(evaluatedCondition)) {break;}
-
+                            if (!evaluateCondition(evaluatedCondition) || breakLoop.get()) {
+                                break;
+                            }
                             for (String loopAction : finalLoopActions) {
                                 String evaluatedAction = processPlaceholders(player, loopAction);
                                 evaluatedAction = evaluatedAction.replace("%i%", String.valueOf(currentIteration));
                                 executeAction(player, evaluatedAction, args);
                             }
-
                             currentIteration++;
                         }
+                        breakLoop.set(false);
                     });
                 } else {
                     skipActions = true;
@@ -158,10 +158,44 @@ public class CustomCommands implements Listener {
                     for (currentIteration = 1; currentIteration <= loopCount; currentIteration++) {
                         for (String loopAction : loopActions) {
                             String evaluatedAction = processPlaceholders(player, loopAction);
-                            executeAction(player, evaluatedAction, args);
+                            evaluatedAction = evaluatedAction.replace("%i%", String.valueOf(currentIteration));
+
+                            if (evaluatedAction.startsWith("[IF]")) {
+                                String condition = evaluatedAction.substring(4).trim();
+                                condition = condition.replace("%i%", String.valueOf(currentIteration));
+
+                                skipActions = !evaluateCondition(condition);
+                                inConditional = true;
+                            } else if (evaluatedAction.startsWith("[ELSE IF]")) {
+                                if (inConditional && !isIfBlock) {
+                                    String condition = evaluatedAction.substring(9).trim();
+                                    condition = condition.replace("%i%", String.valueOf(currentIteration));
+
+                                    skipActions = !evaluateCondition(condition);
+                                } else {
+                                    skipActions = true;
+                                }
+                            } else if (evaluatedAction.startsWith("[ELSE]")) {
+                                skipActions = !inConditional || isIfBlock || isElseIfBlock;
+                            } else if (evaluatedAction.startsWith("[FI]")) {
+                                inConditional = false;
+                                isIfBlock = false;
+                                isElseIfBlock = false;
+                                skipActions = false;
+                            } else if (!skipActions) {
+                                if (evaluatedAction.startsWith("[BREAK]")) {
+                                    breakLoop.set(true);
+                                    break;
+                                }
+                                executeAction(player, evaluatedAction, args);
+                            }
+                        }
+                        if (breakLoop.get()) {
+                            break;
                         }
                     }
                     currentIteration = 0;
+                    breakLoop.set(false);
                 } else {
                     skipActions = true;
                 }
@@ -172,14 +206,18 @@ public class CustomCommands implements Listener {
                     skipActions = true;
                 } else {
                     String condition = action.substring(4).trim();
-                    isIfBlock = evaluateCondition(processPlaceholders(player, condition));
+                    condition = condition.replace("%i%", String.valueOf(currentIteration));
+
+                    isIfBlock = evaluateCondition(condition);
                     skipActions = !isIfBlock;
                     inConditional = true;
                 }
             } else if (action.startsWith("[ELSE IF]")) {
                 if (inConditional && !isIfBlock) {
                     String condition = action.substring(9).trim();
-                    isElseIfBlock = evaluateCondition(processPlaceholders(player, condition));
+                    condition = condition.replace("%i%", String.valueOf(currentIteration));
+
+                    isElseIfBlock = evaluateCondition(condition);
                     skipActions = !isElseIfBlock;
                 } else {
                     skipActions = true;
@@ -477,6 +515,7 @@ public class CustomCommands implements Listener {
                 break;
             default:
                 plugin.getLogger().warning("Unknown action type: " + type);
+                plugin.getLogger().warning("Action: " + data);
                 break;
         }
     }

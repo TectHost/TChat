@@ -193,6 +193,9 @@ grammar:
     enabled: true
     # Permission to bypass this function
     bypass-permission: "tchat.bypass.grammar.repeat"
+    # Number of equal messages allowed until blocked
+    # ( 1 = no repeated messages can be sent )
+    max-repeat-messages: 1
     # Percentage to block the message
     # 0.75 = 75% | 1.00 = 100%
     percent: 0.75

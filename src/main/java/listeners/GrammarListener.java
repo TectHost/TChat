@@ -4,6 +4,7 @@ import minealex.tchat.TChat;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.jetbrains.annotations.NotNull;
 
 public class GrammarListener {
     private final TChat plugin;
@@ -12,7 +13,7 @@ public class GrammarListener {
         this.plugin = plugin;
     }
 
-    public void checkGrammar(AsyncPlayerChatEvent event, Player player, String message) {
+    public void checkGrammar(@NotNull AsyncPlayerChatEvent event, Player player, String message) {
         if (event.isCancelled()) { return; }
 
         if (plugin.getConfigManager().isGrammarCapEnabled()) {
@@ -36,14 +37,14 @@ public class GrammarListener {
         }
     }
 
-    public String checkCap(String message) {
+    public String checkCap(@NotNull String message) {
         if (message.length() > plugin.getConfigManager().getGrammarMinCharactersCap()) {
             return message.substring(0, 1).toUpperCase() + message.substring(plugin.getConfigManager().getGrammarCapLetters());
         }
         return message;
     }
 
-    public String checkDot(String message) {
+    public String checkDot(@NotNull String message) {
         String dot = plugin.getConfigManager().getGrammarDotCharacter();
         if (message.length() > plugin.getConfigManager().getGrammarMinCharactersDot() && !message.endsWith(dot)) {
             return message + dot;
