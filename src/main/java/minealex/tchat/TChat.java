@@ -63,6 +63,9 @@ public class TChat extends JavaPlugin {
     private CheckPlayerMuted checkPlayerMuted;
     private InvseeConfigManager invseeConfigManager;
     private ShowEnderChestConfigManager showEnderChestConfigManager;
+    private TagsManager tagsManager;
+    private TagsMenuConfigManager tagsMenuConfigManager;
+    private TagsInventoryManager tagsInventoryManager;
 
     @Override
     public void onEnable() {
@@ -125,6 +128,7 @@ public class TChat extends JavaPlugin {
         bannedWordsManager = new BannedWordsManager(this);
         commandTimerManager = new CommandTimerManager(this);
         configManager = new ConfigManager(this);
+        levelsManager = new LevelsManager(this);
         messagesManager = new MessagesManager(this);
         bannedCommandsManager = new BannedCommandsManager(this);
         replacerManager = new ReplacerManager(this);
@@ -139,7 +143,6 @@ public class TChat extends JavaPlugin {
         commandProgrammerManager = new CommandProgrammerManager(this);
         commandsManager = new CommandsManager(this);
         discordManager = new DiscordManager(this);
-        levelsManager = new LevelsManager(this);
         deathManager = new DeathManager(this);
         worldsManager = new WorldsManager(this);
         placeholdersConfig = new PlaceholdersConfig(this);
@@ -147,6 +150,8 @@ public class TChat extends JavaPlugin {
         mentionsManager = new MentionsManager(this);
         invseeConfigManager = new InvseeConfigManager(this);
         showEnderChestConfigManager = new ShowEnderChestConfigManager(this);
+        tagsManager = new TagsManager(this);
+        tagsMenuConfigManager = new TagsMenuConfigManager(this);
     }
 
     public void initializeManagers() {
@@ -155,6 +160,7 @@ public class TChat extends JavaPlugin {
         translateColors = new TranslateColors();
         channelsManager = new ChannelsManager();
         new Metrics(this, 23305);
+        tagsInventoryManager = new TagsInventoryManager(this, tagsMenuConfigManager);
     }
 
     public void registerCommands() {
@@ -222,9 +228,21 @@ public class TChat extends JavaPlugin {
         Objects.requireNonNull(getCommand("mute")).setExecutor(new MuteCommand(this));
         Objects.requireNonNull(getCommand("logs")).setExecutor(new LogsCommand(this));
         Objects.requireNonNull(getCommand("logs")).setTabCompleter(new LogsCommand(this));
-        Objects.requireNonNull(getCommand("invsee")).setExecutor(new InvseeCommand(this));
+        if (getInvseeConfigManager().isEnabled()) {
+            Objects.requireNonNull(getCommand("invsee")).setExecutor(new InvseeCommand(this));
+        }
         Objects.requireNonNull(getCommand("mention")).setExecutor(new MentionCommand(this));
-        Objects.requireNonNull(getCommand("showenderchest")).setExecutor(new ShowEnderChestCommand(this));
+        if (getShowEnderChestConfigManager().isEnabled()) {
+            Objects.requireNonNull(getCommand("showenderchest")).setExecutor(new ShowEnderChestCommand(this));
+        }
+        if (getConfigManager().isMeEnabled()) {
+            Objects.requireNonNull(getCommand("me")).setExecutor(new MeCommand(this));
+        }
+        if (getConfigManager().isSccEnabled()) {
+            Objects.requireNonNull(getCommand("showcoords")).setExecutor(new ShowCoordsCommand(this));
+        }
+        Objects.requireNonNull(getCommand("chatgames")).setExecutor(new ChatGamesCommand(this, chatGamesSender, chatGamesManager));
+        new TagsCommand(this, tagsManager, tagsInventoryManager);
     }
 
     public void registerPlaceholders() {
@@ -233,6 +251,8 @@ public class TChat extends JavaPlugin {
 
     // ------------------------------------------------------------------------------
 
+    public TagsMenuConfigManager getTagsMenuConfigManager() {return tagsMenuConfigManager;}
+    public TagsManager getTagsManager() {return tagsManager;}
     public ShowEnderChestConfigManager getShowEnderChestConfigManager() {return showEnderChestConfigManager;}
     public InvseeConfigManager getInvseeConfigManager() {return invseeConfigManager;}
     public CheckPlayerMuted getCheckPlayerMuted() {return checkPlayerMuted;}

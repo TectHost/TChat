@@ -31,6 +31,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
 
 public class Metrics {
 
@@ -45,7 +46,7 @@ public class Metrics {
      * @param serviceId The id of the service. It can be found at <a
      *     href="https://bstats.org/what-is-my-plugin-id">What is my plugin id?</a>
      */
-    public Metrics(Plugin plugin, int serviceId) {
+    public Metrics(@NotNull Plugin plugin, int serviceId) {
         this.plugin = plugin;
         // Get the config file
         File bStatsFolder = new File(plugin.getDataFolder().getParentFile(), "bStats");
@@ -110,7 +111,7 @@ public class Metrics {
         metricsBase.addCustomChart(chart);
     }
 
-    private void appendPlatformData(JsonObjectBuilder builder) {
+    private void appendPlatformData(@NotNull JsonObjectBuilder builder) {
         builder.appendField("playerAmount", getPlayerAmount());
         builder.appendField("onlineMode", Bukkit.getOnlineMode() ? 1 : 0);
         builder.appendField("bukkitVersion", Bukkit.getVersion());
@@ -122,7 +123,7 @@ public class Metrics {
         builder.appendField("coreCount", Runtime.getRuntime().availableProcessors());
     }
 
-    private void appendServiceData(JsonObjectBuilder builder) {
+    private void appendServiceData(@NotNull JsonObjectBuilder builder) {
         builder.appendField("pluginVersion", plugin.getDescription().getVersion());
     }
 
@@ -834,7 +835,7 @@ public class Metrics {
          * @param value The value to escape.
          * @return The escaped value.
          */
-        private static String escape(String value) {
+        private static @NotNull String escape(@NotNull String value) {
             final StringBuilder builder = new StringBuilder();
             for (int i = 0; i < value.length(); i++) {
                 char c = value.charAt(i);

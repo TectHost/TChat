@@ -26,6 +26,7 @@ public class ShowEnderChestConfigManager {
     private int endSlotGlass;
     private int startSlotEnder;
     private int endSlotEnder;
+    private boolean enabled;
 
     public ShowEnderChestConfigManager(TChat plugin) {
         this.configFile = new ConfigFile("show_ender_chest.yml", "menus", plugin);
@@ -36,24 +37,28 @@ public class ShowEnderChestConfigManager {
     public void loadConfig() {
         FileConfiguration config = configFile.getConfig();
 
-        menuTitle = config.getString("menu.title", "%player_name%'s enderchest");
+        enabled = config.getBoolean("menu.enabled", false);
 
-        slots = config.getInt("menu.slots", 36);
+        if (enabled) {
+            menuTitle = config.getString("menu.title", "%player_name%'s enderchest");
 
-        String glassMaterialName = config.getString("menu.glass.material", "GRAY_STAINED_GLASS_PANE");
-        glassMaterial = Material.matchMaterial(glassMaterialName);
-        glassDisplayName = config.getString("menu.glass.display_name", " ");
-        startSlotGlass = config.getInt("menu.glass.slots.start", 27);
-        endSlotGlass = config.getInt("menu.glass.slots.end", 36);
+            slots = config.getInt("menu.slots", 36);
 
-        String headMaterialName = config.getString("menu.head.material", "PLAYER_HEAD");
-        headMaterial = Material.matchMaterial(headMaterialName);
-        headSlot = config.getInt("menu.head.slot", 31);
-        headDisplayName = config.getString("menu.head.display_name", "Information about %player%");
-        headLore = config.getStringList("menu.head.lore");
+            String glassMaterialName = config.getString("menu.glass.material", "GRAY_STAINED_GLASS_PANE");
+            glassMaterial = Material.matchMaterial(glassMaterialName);
+            glassDisplayName = config.getString("menu.glass.display_name", " ");
+            startSlotGlass = config.getInt("menu.glass.slots.start", 27);
+            endSlotGlass = config.getInt("menu.glass.slots.end", 36);
 
-        startSlotEnder = config.getInt("ender.slots.start", 0);
-        endSlotEnder = config.getInt("ender.slots.end", 27);
+            String headMaterialName = config.getString("menu.head.material", "PLAYER_HEAD");
+            headMaterial = Material.matchMaterial(headMaterialName);
+            headSlot = config.getInt("menu.head.slot", 31);
+            headDisplayName = config.getString("menu.head.display_name", "Information about %player%");
+            headLore = config.getStringList("menu.head.lore");
+
+            startSlotEnder = config.getInt("ender.slots.start", 0);
+            endSlotEnder = config.getInt("ender.slots.end", 27);
+        }
     }
 
     public void reloadConfig() {
@@ -65,16 +70,12 @@ public class ShowEnderChestConfigManager {
         return menuTitle;
     }
 
+    public boolean isEnabled() {return enabled;}
     public int getSlots() {return slots;}
-
     public int getHeadSlot() {return headSlot;}
-
     public int getStartSlotGlass() {return startSlotGlass;}
-
     public int getEndSlotGlass() {return endSlotGlass;}
-
     public int getStartSlotEnder() {return startSlotEnder;}
-
     public int getEndSlotEnder() {return endSlotEnder;}
 
     public ItemStack createGlass() {

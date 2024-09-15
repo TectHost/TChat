@@ -13,6 +13,7 @@ public class LevelsManager {
 
     private final TChat plugin;
     private final ConfigFile levelsFile;
+    private boolean enabled;
     private int minXp;
     private int maxXp;
     private final Map<Integer, Level> levels;
@@ -30,28 +31,32 @@ public class LevelsManager {
     public void loadConfig() {
         FileConfiguration config = levelsFile.getConfig();
 
-        minXp = config.getInt("options.min");
-        maxXp = config.getInt("options.max");
+        enabled = config.getBoolean("options.enabled", false);
 
-        multipliers.clear();
-        if (config.contains("multiplier")) {
-            for (String key : Objects.requireNonNull(config.getConfigurationSection("multiplier")).getKeys(false)) {
-                double xpMultiplier = config.getDouble("multiplier." + key + ".xp", 1.0);
+        if (enabled) {
+            minXp = config.getInt("options.min");
+            maxXp = config.getInt("options.max");
 
-                Multiplier multiplier = new Multiplier(xpMultiplier);
-                multipliers.put(key, multiplier);
+            multipliers.clear();
+            if (config.contains("multiplier")) {
+                for (String key : Objects.requireNonNull(config.getConfigurationSection("multiplier")).getKeys(false)) {
+                    double xpMultiplier = config.getDouble("multiplier." + key + ".xp", 1.0);
+
+                    Multiplier multiplier = new Multiplier(xpMultiplier);
+                    multipliers.put(key, multiplier);
+                }
             }
-        }
 
-        levels.clear();
-        if (config.contains("levels")) {
-            for (String key : Objects.requireNonNull(config.getConfigurationSection("levels")).getKeys(false)) {
-                int levelId = Integer.parseInt(key);
-                int xp = config.getInt("levels." + key + ".xp");
-                List<String> rewards = config.getStringList("levels." + key + ".rewards");
+            levels.clear();
+            if (config.contains("levels")) {
+                for (String key : Objects.requireNonNull(config.getConfigurationSection("levels")).getKeys(false)) {
+                    int levelId = Integer.parseInt(key);
+                    int xp = config.getInt("levels." + key + ".xp");
+                    List<String> rewards = config.getStringList("levels." + key + ".rewards");
 
-                Level level = new Level(xp, rewards);
-                levels.put(levelId, level);
+                    Level level = new Level(xp, rewards);
+                    levels.put(levelId, level);
+                }
             }
         }
     }
@@ -61,6 +66,7 @@ public class LevelsManager {
         loadConfig();
     }
 
+    public boolean isEnabled() {return enabled;}
     public int getMaxXp() { return maxXp; }
     public int getMinXp() { return minXp; }
 

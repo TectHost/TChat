@@ -1,6 +1,7 @@
 package placeholders;
 
 import config.GroupManager;
+import config.TagsManager;
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import minealex.tchat.TChat;
@@ -82,8 +83,16 @@ public class Placeholders extends PlaceholderExpansion {
             case "staff_list" -> getStaffList();
             case "format" -> getFormat(player);
             case "group_format" -> getGroupFormat(player);
+            case "tag" -> plugin.getSaveManager().getSelectedTag(playerId);
+            case "tag_displayname" -> getTagDisplayName(playerId);
             default -> null;
         };
+    }
+
+    private String getTagDisplayName(UUID playerId) {
+        String tagName = plugin.getSaveManager().getSelectedTag(playerId);
+        TagsManager.Tag tag = plugin.getTagsManager().getTags().get(tagName);
+        return tag.getDisplay();
     }
 
     private @NotNull String getFormat(Player player) {

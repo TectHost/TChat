@@ -31,10 +31,12 @@ public class ChatGamesSender {
         startNextGame();
     }
 
-    private void startNextGame() {
-        String prefix = plugin.getMessagesManager().getPrefix();
+    public void startNextGame() {
+        if (gameActive) { return;}
 
+        String prefix = plugin.getMessagesManager().getPrefix();
         var games = plugin.getChatGamesManager().getGames();
+
         if (games.isEmpty()) {
             String message = plugin.getMessagesManager().getNoGames();
             sendToAllPlayers(prefix + message);
@@ -70,8 +72,7 @@ public class ChatGamesSender {
         countdownTask = new BukkitRunnable() {
             @Override
             public void run() {
-                String message = plugin.getMessagesManager().getTimeFinished();
-                sendToAllPlayers(prefix + message);
+                sendToAllPlayers(prefix + plugin.getMessagesManager().getTimeFinished());
                 endGame();
             }
         };
@@ -79,10 +80,7 @@ public class ChatGamesSender {
     }
 
     private void endGame() {
-        if (countdownTask != null) { countdownTask.cancel(); }
-
-        gameActive = false;
-
+        stopGame();
         showEndEffects();
 
         BukkitRunnable endGameTask = new BukkitRunnable() {
@@ -214,6 +212,25 @@ public class ChatGamesSender {
         }
 
         return centeredMessage.toString();
+    }
+
+    public void stopGame() {
+        if (!gameActive) {
+            return;
+        }
+
+        if (countdownTask != null) {
+            countdownTask.cancel();
+            countdownTask = null;
+        }
+
+        gameActive = false;
+    }
+
+    public void restartGame() {
+        stopGame();
+        currentGameIndex = 0;
+        startNextGame();
     }
 
     private void executeRewards(Player player) {

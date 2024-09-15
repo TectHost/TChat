@@ -101,12 +101,17 @@ public class CustomCommands implements Listener {
         boolean inLoop = false;
         boolean inWhileLoop = false;
         AtomicBoolean breakLoop = new AtomicBoolean(false);
+        AtomicBoolean returnCondition = new AtomicBoolean(false);
         List<String> loopActions = new ArrayList<>();
         String originalWhileCondition = "";
         int loopCount = 0;
         currentIteration = 0;
 
         for (String action : actions) {
+            if (returnCondition.get()) {
+                break;
+            }
+
             if (action.startsWith("[WHILE]")) {
                 if (inWhileLoop) {
                     skipActions = true;
@@ -123,15 +128,25 @@ public class CustomCommands implements Listener {
                     Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
                         currentIteration = 1;
                         while (true) {
-                            String evaluatedCondition = processPlaceholders(player, finalOriginalWhileCondition);
-                            if (!evaluateCondition(evaluatedCondition) || breakLoop.get()) {
+                            if (returnCondition.get()) {
                                 break;
                             }
+
+                            String evaluatedCondition = processPlaceholders(player, finalOriginalWhileCondition);
+                            if (!evaluateCondition(evaluatedCondition, player) || breakLoop.get()) {
+                                break;
+                            }
+
                             for (String loopAction : finalLoopActions) {
+                                if (returnCondition.get()) {
+                                    break;
+                                }
+
                                 String evaluatedAction = processPlaceholders(player, loopAction);
                                 evaluatedAction = evaluatedAction.replace("%i%", String.valueOf(currentIteration));
                                 executeAction(player, evaluatedAction, args);
                             }
+
                             currentIteration++;
                         }
                         breakLoop.set(false);
@@ -157,6 +172,10 @@ public class CustomCommands implements Listener {
                     inLoop = false;
                     for (currentIteration = 1; currentIteration <= loopCount; currentIteration++) {
                         for (String loopAction : loopActions) {
+                            if (returnCondition.get()) {
+                                break;
+                            }
+
                             String evaluatedAction = processPlaceholders(player, loopAction);
                             evaluatedAction = evaluatedAction.replace("%i%", String.valueOf(currentIteration));
 
@@ -164,14 +183,14 @@ public class CustomCommands implements Listener {
                                 String condition = evaluatedAction.substring(4).trim();
                                 condition = condition.replace("%i%", String.valueOf(currentIteration));
 
-                                skipActions = !evaluateCondition(condition);
+                                skipActions = !evaluateCondition(condition, player);
                                 inConditional = true;
                             } else if (evaluatedAction.startsWith("[ELSE IF]")) {
                                 if (inConditional && !isIfBlock) {
                                     String condition = evaluatedAction.substring(9).trim();
                                     condition = condition.replace("%i%", String.valueOf(currentIteration));
 
-                                    skipActions = !evaluateCondition(condition);
+                                    skipActions = !evaluateCondition(condition, player);
                                 } else {
                                     skipActions = true;
                                 }
@@ -190,7 +209,7 @@ public class CustomCommands implements Listener {
                                 executeAction(player, evaluatedAction, args);
                             }
                         }
-                        if (breakLoop.get()) {
+                        if (breakLoop.get() || returnCondition.get()) {
                             break;
                         }
                     }
@@ -208,7 +227,7 @@ public class CustomCommands implements Listener {
                     String condition = action.substring(4).trim();
                     condition = condition.replace("%i%", String.valueOf(currentIteration));
 
-                    isIfBlock = evaluateCondition(condition);
+                    isIfBlock = evaluateCondition(condition, player);
                     skipActions = !isIfBlock;
                     inConditional = true;
                 }
@@ -217,7 +236,7 @@ public class CustomCommands implements Listener {
                     String condition = action.substring(9).trim();
                     condition = condition.replace("%i%", String.valueOf(currentIteration));
 
-                    isElseIfBlock = evaluateCondition(condition);
+                    isElseIfBlock = evaluateCondition(condition, player);
                     skipActions = !isElseIfBlock;
                 } else {
                     skipActions = true;
@@ -234,13 +253,18 @@ public class CustomCommands implements Listener {
                 isIfBlock = false;
                 isElseIfBlock = false;
                 skipActions = false;
+            } else if (action.startsWith("[RETURN]")) {
+                if (isIfBlock || isElseIfBlock) {
+                    returnCondition.set(true);
+                    break;
+                }
             } else if (!skipActions) {
                 executeAction(player, action, args);
             }
         }
     }
 
-    private boolean evaluateCondition(@NotNull String condition) {
+    private boolean evaluateCondition(@NotNull String condition, Player player) {
         String[] orConditions = condition.split("\\|\\|");
         boolean finalResult = false;
 
@@ -249,7 +273,7 @@ public class CustomCommands implements Listener {
             boolean orResult = true;
 
             for (String andCondition : andConditions) {
-                boolean result = evaluateSingleCondition(andCondition.trim());
+                boolean result = evaluateSingleCondition(andCondition.trim(), player);
                 orResult = orResult && result;
             }
 
@@ -259,17 +283,20 @@ public class CustomCommands implements Listener {
         return finalResult;
     }
 
-    private boolean evaluateSingleCondition(String condition) {
-        Pattern pattern = Pattern.compile("%(\\w+)%|(.+)\\s*(>=|<=|>|<|==|!=)\\s*(.+)");
+    private boolean evaluateSingleCondition(String condition, Player player) {
+        condition = processPlaceholders(player, condition);
+
+        Pattern pattern = Pattern.compile("(.+?)\\s*(>=|<=|>|<|==|!=)\\s*(.+)");
         Matcher matcher = pattern.matcher(condition);
 
-        if (matcher.find()) {
-            String leftSide = matcher.group(2).trim();
-            String operator = matcher.group(3);
-            String rightSide = matcher.group(4).trim();
+        if (matcher.matches()) {
+            String leftSide = matcher.group(1).trim();
+            String operator = matcher.group(2);
+            String rightSide = matcher.group(3).trim();
             boolean isNumericComparison = false;
             double leftValue = 0;
             double rightValue = 0;
+
             try {
                 leftValue = Double.parseDouble(leftSide);
                 rightValue = Double.parseDouble(rightSide);

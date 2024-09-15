@@ -102,8 +102,8 @@ public class ChatColorInventoryManager implements Listener {
 
     @EventHandler
     public void onInventoryClick(@NotNull InventoryClickEvent event) {
-        if (!plugin.getConfigManager().isChatColorMenuEnabled()) { return;
-        }
+        if (!plugin.getConfigManager().isChatColorMenuEnabled()) { return; }
+
         String inventory = event.getView().getTitle().replace("§", "&");
         if (inventory.equals(plugin.getChatColorManager().getTitle())) {
             event.setCancelled(true);
@@ -139,12 +139,7 @@ public class ChatColorInventoryManager implements Listener {
 
         ChatColorManager.ChatColorItem item = plugin.getChatColorManager().getItem(itemKey);
 
-        if (item == null) {
-            String message = plugin.getMessagesManager().getNoItemFoundMessage();
-            String prefix = plugin.getMessagesManager().getPrefix();
-            player.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + message).replace("%item%", displayName));
-            return;
-        }
+        if (item == null) { return; }
 
         String id = item.getId();
 

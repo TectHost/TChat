@@ -27,7 +27,7 @@ public class LevelListener implements Listener {
 
     @EventHandler
     public void addXp(@NotNull AsyncPlayerChatEvent event) {
-        if (event.isCancelled()) { return; }
+        if (event.isCancelled() || !plugin.getLevelsManager().isEnabled()) { return; }
 
         Player player = event.getPlayer();
         UUID playerId = player.getUniqueId();

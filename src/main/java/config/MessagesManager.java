@@ -20,7 +20,6 @@ public class MessagesManager {
     private String colorSelectedMessage;
     private String formatSelectedMessage;
     private String invalidIdMessage;
-    private String noItemFoundMessage;
     private String materialNotFound;
     private String usageChannel;
     private String usageJoinChannel;
@@ -196,6 +195,20 @@ public class MessagesManager {
     private String invseeUsage;
     private String usageMention;
     private String mentionOther;
+    private String meUsage;
+    private String cgUsage;
+    private String cgStart;
+    private String cgStop;
+    private String cgUsageAdd;
+    private String cgAdd;
+    private String cgUsageRemove;
+    private String cgRemove;
+    private String cgRestart;
+    private String tagsUsage;
+    private String tagsList;
+    private String tagsUsageSelect;
+    private String tagsNotFound;
+    private String tagsSelected;
 
     public MessagesManager(TChat plugin){
         this.messagesFile = new ConfigFile(plugin.getConfigManager().getLangFile(), "lang", plugin);
@@ -238,6 +251,12 @@ public class MessagesManager {
             antiUnicode = config.getString("messages.unicode");
         }
 
+        tagsUsage = config.getString("messages.usage.tags", "&cUsage: /tags list or /tags select <tag>");
+        tagsUsageSelect = config.getString("messages.usage.tags-selected", "&cUsage: /tags select <tag>");
+        tagsList = config.getString("messages.tags.list", "&aList of available tags:");
+        tagsSelected = config.getString("messages.tags.selected", "&aYou have selected the tag: &e%tag%");
+        tagsNotFound = config.getString("messages.tags.unknown", "&aThe tag '&e%tag%&a' does not exist.");
+
         if (plugin.getConfigManager().isFloodPercentEnabled() || plugin.getConfigManager().isFloodRepeatEnabled()) {
             antiFlood = config.getString("messages.anti-flood");
             if (plugin.getConfigManager().isDepurationAntiFloodEnabled()) {
@@ -247,6 +266,10 @@ public class MessagesManager {
 
         if (plugin.getConfigManager().isBroadcastEnabled()) {
             broadcastUsage = config.getString("messages.usage.usage-broadcast");
+        }
+
+        if (plugin.getConfigManager().isMeEnabled()) {
+            meUsage = config.getString("messages.usage.me", "&cUsage: /me <player>");
         }
 
         if (plugin.getConfigManager().isWarningEnabled()) {
@@ -261,6 +284,15 @@ public class MessagesManager {
             printUsage = config.getString("messages.usage.usage-print");
         }
 
+        cgUsage = config.getString("messages.usage.cg", "&cUsage: /chatgames <start|stop|restart|add|remove>");
+        cgUsageAdd = config.getString("messages.usage.cg-add", "&cUsage: /chatgames add <name> <message1,message1,...> <keyword1,keyword2,...> <reward1,reward2,...>");
+        cgUsageRemove = config.getString("messages.usage.cg-remove", "&cUsage: /chatgames remove <name>");
+        cgAdd = config.getString("messages.chatgames.add", "&aThe game '&e%name%&a' has been added successfully.");
+        cgRemove = config.getString("messages.chatgames.remove", "&aThe game '&e%name%&a' has been removed successfully.");
+        cgRestart = config.getString("messages.chatgames.restart", "&eThe game has been restarted.");
+        cgStart = config.getString("messages.chatgames.start", "&aThe game has started.");
+        cgStop = config.getString("messages.chatgames.stop", "&aThe game has been stopped.");
+
         if (plugin.getConfigManager().isIgnoreEnabled()) {
             ignoreSelf = config.getString("messages.ignore.ignore-self");
             ignoreAlready = config.getString("messages.ignore.already-ignored");
@@ -274,7 +306,6 @@ public class MessagesManager {
             colorReset = config.getString("messages.color-reset");
             invalidColor = config.getString("messages.invalid-color");
             colorSelectedMessage = config.getString("messages.color-selected");
-            noItemFoundMessage = config.getString("messages.no-item-found");
             invalidIdMessage = config.getString("messages.invalid-id");
             formatSelectedMessage = config.getString("messages.format-selected");
         }
@@ -335,6 +366,10 @@ public class MessagesManager {
 
         usageMention = config.getString("messages.usage.mention");
         mentionOther = config.getString("messages.mention-other");
+
+        if (plugin.getLevelsManager().isEnabled()) {
+            levelUp = config.getString("messages.level-up");
+        }
 
         // Messages
         headerStaffList = config.getString("messages.stafflist.header");
@@ -397,7 +432,6 @@ public class MessagesManager {
         autoBroadcastUsage = config.getString("messages.usage.usage-autobroadcast");
         chatDisabledWorld = config.getString("messages.chat-disabled-world");
         chatMessage = config.getStringList("messages.chat-help.message");
-        levelUp = config.getString("messages.level-up");
         updateProgressBar = config.getString("messages.poll.message.update.progress-bar");
         updateTitle = config.getString("messages.poll.message.update.title");
         updateText = config.getString("messages.poll.message.update.text");
@@ -479,6 +513,20 @@ public class MessagesManager {
     }
 
     // Messages
+    public String getTagsUsage() {return tagsUsage;}
+    public String getTagsList() {return tagsList;}
+    public String getTagsUsageSelect() {return tagsUsageSelect;}
+    public String getTagsNotFound() {return tagsNotFound;}
+    public String getTagsSelected() {return tagsSelected;}
+    public String getCgUsage() {return cgUsage;}
+    public String getCgStart() {return cgStart;}
+    public String getCgStop() {return cgStop;}
+    public String getCgUsageAdd() {return cgUsageAdd;}
+    public String getCgAdd() {return cgAdd;}
+    public String getCgUsageRemove() {return cgUsageRemove;}
+    public String getCgRemove() {return cgRemove;}
+    public String getCgRestart() {return cgRestart;}
+    public String getMeUsage() {return meUsage;}
     public String getUsageMention() {return usageMention;}
     public String getMentionOther() {return mentionOther;}
     public String getInvseeUsage() {return invseeUsage;}
@@ -651,7 +699,6 @@ public class MessagesManager {
     public String getUsageLeaveChannel() { return usageLeaveChannel; }
     public String getUsageJoinChannel() { return usageJoinChannel; }
     public String getUsageChannel() { return usageChannel; }
-    public String getNoItemFoundMessage() { return noItemFoundMessage; }
     public String getInvalidIdMessage() { return invalidIdMessage; }
     public String getFormatSelectedMessage() { return formatSelectedMessage; }
     public String getColorSelectedMessage() { return colorSelectedMessage; }

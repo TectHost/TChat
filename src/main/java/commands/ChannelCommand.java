@@ -57,7 +57,7 @@ public class ChannelCommand implements CommandExecutor {
     }
 
     private void handleJoin(Player player, String[] args, String prefix) {
-        if (hasPermission(player, "tchat.channel.command.join")) {
+        if (hasPermission(player, "tchat.channel.command.join") || hasPermission(player, "tchat.admin")) {
             sendMessage(player, plugin.getMessagesManager().getNoPermission(), prefix);
             return;
         }

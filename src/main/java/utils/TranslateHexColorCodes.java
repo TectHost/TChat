@@ -1,5 +1,7 @@
 package utils;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -7,7 +9,7 @@ import static org.bukkit.ChatColor.COLOR_CHAR;
 
 public class TranslateHexColorCodes {
 
-    public static String translateHexColorCodes(String startTag, String endTag, String message) {
+    public static @NotNull String translateHexColorCodes(String startTag, String endTag, String message) {
         final Pattern hexPattern = Pattern.compile(startTag + "([A-Fa-f0-9]{6})" + endTag);
         Matcher matcher = hexPattern.matcher(message);
         StringBuilder buffer = new StringBuilder(message.length() + 4 * 8);

@@ -17,7 +17,6 @@ messages:
   color-selected: "&aColor selected: %id%%format%%color%"
   format-selected: "&aFormat selected: %color%%id%%format%"
   invalid-id: "&cInvalid item ID."
-  no-item-found: "&cNo item found for display name: %item%"
   player-not-found: "&cPlayer not found."
   no-reply: "&cYou have no one to reply to."
   chat-clear: "&aChat has been cleared by an administrator."
@@ -116,6 +115,11 @@ messages:
     no-messages: "&cThe game has no messages configured."
     time-finished: "&cThe game time is over."
     win: "&aCongratulations %player%! You have won the game!"
+    add: "&aThe game '&e%name%&a' has been added successfully."
+    remove: "&aThe game '&e%name%&a' has been removed successfully."
+    start: "&aThe game has started."
+    stop: "&aThe game has been stopped."
+    restart: "&eThe game has been restarted."
   antibot:
     antibot-chat: "&cYou need to move to start chatting."
     antibot-command: "&cYou need to move to execute commands."
@@ -180,6 +184,10 @@ messages:
     invalid-number: "&cThe time must be a whole number."
     removed: "&aCommand timer '%timer%' removed."
     not-exist: "&cThere is no timer with that name."
+  tags:
+    list: "&aList of available tags:"
+    selected: "&aYou have selected the tag: &e%tag%"
+    unknown: "&cThe tag '&e%tag%&c' does not exist."
   autobroadcast:
     start: "&aAutoBroadcast has been started."
     stop: "&cAutoBroadcast has been stopped."
@@ -240,6 +248,12 @@ messages:
     logs: "&cUsage: /logs <chat|bannedwords|...> [player] [filter]"
     invsee: "&cUsage: /invsee <player>"
     mention: "&cUsage: /mention <player>"
+    me: "&cUsage: /me <player>"
+    cg: "&cUsage: /chatgames <start|stop|restart|add|remove>"
+    cg-add: "&cUsage: /chatgames add <name> <message1,message1,...> <keyword1,keyword2,...> <reward1,reward2,...>"
+    cg-remove: "&cUsage: /chatgames remove <name>"
+    tags: "&cUsage: /tags list or /tags select <tag>"
+    tags-selected: "&cUsage: /tags select <tag>"
   # Debug messages are only seen in the console
   debug:
     no-format-group: "&cError in groups.yml - No format found for group: %group%"

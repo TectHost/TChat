@@ -11,7 +11,6 @@ messages:
   color-selected: "&aColor seleccionado: %id%%format%%color%"
   format-selected: "&aFormato seleccionado: %color%%id%%format%"
   invalid-id: "&cID de ítem inválido."
-  no-item-found: "&cNo se encontró ningún ítem con el nombre: %item%"
   player-not-found: "&cJugador no encontrado."
   no-reply: "&cNo tienes a nadie a quien responder."
   chat-clear: "&aEl chat ha sido limpiado por un administrador."
@@ -47,48 +46,48 @@ messages:
   mention-other: "&a¡Has mencionado a &e%mentioned%&a!"
   chat-help:
     message:
-      - "&8--------- { &#c03afeT&#a72cf8C&#8e1ff1h&#7411eba&#5b03e4t &8} ---------"
-      - "&5/announcement &6- &bHacer un anuncio"
-      - "&5/broadcast &6- &bHacer una transmisión"
-      - "&5/chatcolor &6- &bCambiar tu color en el chat"
-      - "&5/clearchat &6- &bLimpiar el chat"
-      - "&5/chat [reload|mute|clear|version] &6- &bMuestra este mensaje, recarga los archivos de configuración, muestra la versión de TChat..."
-      - "&5/discord &6- &bMuestra el Discord del servidor"
-      - "&5/facebook &6- &bMuestra el Facebook del servidor"
-      - "&5/help &6- &bMuestra ayuda"
-      - "&5/ignore &6- &bIgnorar a otros usuarios"
-      - "&5/instagram &6- &bMuestra el Instagram del servidor"
-      - "&5/mention &6- &bMenciona a otros jugadores (reproduce un sonido) (próximamente)"
-      - "&5/msg &6- &bHabla con otros usuarios en privado"
-      - "&5/ping &6- &bMuestra tu ping"
-      - "&5/plugin &6- &bMuestra información del plugin"
-      - "&5/print &6- &bMuestra un mensaje limpio"
-      - "&5/reply &6- &bResponder un mensaje privado de un usuario"
-      - "&5/rules &6- &bMuestra las reglas del servidor"
-      - "&5/seen &6- &bMuestra información del jugador"
-      - "&5/teamspeak &6- &bMuestra el Teamspeak del servidor"
-      - "&5/tiktok &6- &bMuestra el Tiktok del servidor"
-      - "&5/twitter &6- &bMuestra el Twitter del servidor"
-      - "&5/warning &6- &bHace un anuncio"
-      - "&5/website &6- &bMuestra la web del servidor"
-      - "&5/youtube &6- &bMuestra el canal de YouTube del servidor"
+    - "&8--------- { &#c03afeT&#a72cf8C&#8e1ff1h&#7411eba&#5b03e4t &8} ---------"
+    - "&5/announcement &6- &bHacer un anuncio"
+    - "&5/broadcast &6- &bHacer una transmisión"
+    - "&5/chatcolor &6- &bCambiar tu color en el chat"
+    - "&5/clearchat &6- &bLimpiar el chat"
+    - "&5/chat [reload|mute|clear|version] &6- &bMuestra este mensaje, recarga los archivos de configuración, muestra la versión de TChat..."
+    - "&5/discord &6- &bMuestra el Discord del servidor"
+    - "&5/facebook &6- &bMuestra el Facebook del servidor"
+    - "&5/help &6- &bMuestra ayuda"
+    - "&5/ignore &6- &bIgnorar a otros usuarios"
+    - "&5/instagram &6- &bMuestra el Instagram del servidor"
+    - "&5/mention &6- &bMenciona a otros jugadores (reproduce un sonido) (próximamente)"
+    - "&5/msg &6- &bHabla con otros usuarios en privado"
+    - "&5/ping &6- &bMuestra tu ping"
+    - "&5/plugin &6- &bMuestra información del plugin"
+    - "&5/print &6- &bMuestra un mensaje limpio"
+    - "&5/reply &6- &bResponder un mensaje privado de un usuario"
+    - "&5/rules &6- &bMuestra las reglas del servidor"
+    - "&5/seen &6- &bMuestra información del jugador"
+    - "&5/teamspeak &6- &bMuestra el Teamspeak del servidor"
+    - "&5/tiktok &6- &bMuestra el Tiktok del servidor"
+    - "&5/twitter &6- &bMuestra el Twitter del servidor"
+    - "&5/warning &6- &bHace un anuncio"
+    - "&5/website &6- &bMuestra la web del servidor"
+    - "&5/youtube &6- &bMuestra el canal de YouTube del servidor"
   poll:
     message:
-      start:
-        title: "&6[Nueva Encuesta] "
-        text: "&aTítulo: "
-        option-line: "&6• %option%: &c%votes% votos (&a%.2f%%&c)"
-        progress-bar: "&7[&c%filled%&7]"
-      update:
-        title: "&6[Encuesta] "
-        text: "&aTítulo: "
-        option-line: "&6• %option%: &c%votes% votos (&a%.2f%%&c)"
-        progress-bar: "&7[&c%filled%&7]"
-      end:
-        title: "&6[Resultados de la Encuesta] "
-        text: "&aTítulo: "
-        option-line: "&6• %option%: &c%votes% votos (&a%.2f%%&c)"
-        progress-bar: "&7[&a%filled%&c%empty%&7]"
+    start:
+      title: "&6[Nueva Encuesta] "
+      text: "&aTítulo: "
+      option-line: "&6• %option%: &c%votes% votos (&a%.2f%%&c)"
+      progress-bar: "&7[&c%filled%&7]"
+    update:
+      title: "&6[Encuesta] "
+      text: "&aTítulo: "
+      option-line: "&6• %option%: &c%votes% votos (&a%.2f%%&c)"
+      progress-bar: "&7[&c%filled%&7]"
+    end:
+      title: "&6[Resultados de la Encuesta] "
+      text: "&aTítulo: "
+      option-line: "&6• %option%: &c%votes% votos (&a%.2f%%&c)"
+      progress-bar: "&7[&a%filled%&c%empty%&7]"
     join:
       message: "&6[Encuesta] &fHay una encuesta en curso: &a%poll%"
       message-options: "&6[Opciones de la Encuesta] &f%options%"
@@ -110,6 +109,11 @@ messages:
     no-messages: "&cEl juego no tiene mensajes configurados."
     time-finished: "&cEl tiempo del juego ha terminado."
     win: "&a¡Felicidades %player%! ¡Has ganado el juego!"
+    add: "&aSe ha añadido el juego '&e%name%&a' con éxito."
+    remove: "&aSe ha eliminado el juego '&e%name%&a' con éxito."
+    start: "&aEl juego ha comenzado."
+    stop: "&aEl juego ha sido detenido."
+    restart: "&eEl juego ha sido reiniciado."
   antibot:
     antibot-chat: "&cNecesitas moverte para empezar a chatear."
     antibot-command: "&cNecesitas moverte para ejecutar comandos."
@@ -149,133 +153,143 @@ messages:
     removed: "&aLa palabra '&e%word%&a' ha sido eliminada de la lista de palabras prohibidas."
     unknown: "&cLa palabra '&e%word%&c' no está en la lista de palabras prohibidas."
     nick:
-      set: "&aTu apodo ha sido cambiado a &e%nick%"
-      remove: "&aTu apodo ha sido eliminado."
-    socialspy:
-      already-enabled: "&cEl socialspy ya está activado."
-      already-disabled: "&cEl socialspy ya está desactivado."
-      enabled: "&aEl socialspy ahora está activado."
-      disabled: "&aEl socialspy ahora está desactivado."
-      invalid-mode: "&cModo inválido, usa: /socialspy mode <1-3>"
-      mode: "&aModo establecido a: &#109AFE%mode%"
-    realname:
-      no-player: "&cNo se encontró ningún jugador con el apodo: %nick%"
-      offline: "&cEl jugador con ese apodo está desconectado."
-      realname: "&aEl nombre real de &f%nick% &aes &f%player%"
-    logs:
-      invalid: "&cTipo de log no válido. Usa /logs <chat|bannedwords|...>"
-      no-register: "&cNo se encontraron registros para los criterios especificados."
-      header: "&aResultados:"
-    commandtimer:
-      added: "&aEl temporizador de comando '%timer%' se ha creado con éxito."
-      already-added: "&cYa existe un temporizador con ese nombre."
-      invalid-number: "&cEl tiempo debe ser un número entero."
-      removed: "&aEl temporizador de comando '%timer%' ha sido eliminado."
-      not-exist: "&cNo existe un temporizador con ese nombre."
-    autobroadcast:
-      start: "&aEl AutoBroadcast ha comenzado."
-      stop: "&cEl AutoBroadcast ha sido detenido."
-      restart: "&eEl AutoBroadcast ha sido reiniciado."
-      usage-remove: "&cUso: /autobroadcast remove <nombre del broadcast>"
-      removed: "&aEl broadcast &e%broadcast% &aha sido eliminado."
-      usage-add: "&cUso: /autobroadcast add <nombre del broadcast>"
-      create:
-        enabled: "&f¿El broadcast está habilitado? (&ayes&f/&cno&f)"
-        new-line: "&fIngresa una línea del mensaje (o escribe '&adone&f' para finalizar):"
-        one-line: "&cDebes ingresar al menos un mensaje."
-        added: "&aEl broadcast &e%broadcast% &aha sido añadido."
-        actions-prompt: |
-          &6Por favor, configura las acciones del auto-broadcast usando los siguientes comandos:
-          &e- Título: Escribe 'title [tu título]' para establecer el título.
-          &e- Subtítulo: Escribe 'subtitle [tu subtítulo]' para establecer el subtítulo.
-          &e- Sonido: Escribe 'sound [nombre del sonido]' para establecer el efecto de sonido.
-          &e- Partículas: Escribe 'particle [tipo de partícula]' para establecer el efecto de partículas.
-          &e- Número de Partículas: Escribe 'particles [número]' para establecer el número de partículas.
-          &e- Barra de Acción: Escribe 'actionbar [texto de tu barra de acción]' para establecer el texto de la barra de acción.
-          &eEscribe 'done' cuando hayas terminado de configurar todas las acciones.
-    usage:
-      channel: "&cUso: /channel <join|leave> <channel>"
-      join-channel: "&cUso: /channel join <channel>"
-      leave-channel: "&cUso: /channel leave <channel>"
-      usage-msg: "&cUso: /msg <jugador> <mensaje>"
-      usage-broadcast: "&cUso: /broadcast <mensaje>"
-      usage-ignore: "&cUso: /ignore <jugador>"
-      usage-poll: "&cUso: /poll <create|vote> [argumentos]"
-      usage-poll-create: "&cUso: /poll create <duración> <título | opciones...>"
-      usage-poll-vote: "&cUso: /poll vote <opción>"
-      usage-print: "&cUso: /print <mensaje>"
-      usage-warning: "&cUso: /warning <mensaje>"
-      usage-announcement: "&cUso: /announcement <mensaje>"
-      usage-autobroadcast: "&cUso: /autobroadcast <start|stop|restart|remove|add>"
-      usage-plugin: "&cUso: /plugin <nombre_del_plugin>"
-      usage-bannedcommands: "&cUso: /bannedcommands <list|add|remove>"
-      usage-list-bannedcommands: "&cUso: /bannedcommands list <command|tab>"
-      usage-reply: "&cUso: /reply <mensaje>"
-      usage-send-channel: "&cUso: /channel send <channel> <mensaje>"
-      usage-add-bc: "&cUso: /bannedcommands add <command|tab> <comando>"
-      usage-remove-bc: "&cUso: /bannedcommands remove <command|tab> <comando>"
-      usage-helpop: "&cUso: /helpop <mensaje>"
-      usage-calculator: "&cUso: /calculator <número1> <operador> <número2>"
-      usage-player: "&cUso: /player <jugador>"
-      usage-socialspy: "&cUso: /socialspy <enable|disable|mode>"
-      usage-commandtimer: "&cUso: /commandtimer <create|remove> <nombre> [tiempo] | [comando 1] | [comando 2] | ..."
-      usage-commandtimer-add: "&cUso: /commandtimer create <nombre> <tiempo> | <comando 1> | <comando 2> | ..."
-      usage-commandtimer-remove: "&cUso: /commandtimer remove <nombre>"
-      usage-nick: "&cUso: /nick <set/remove> <apodo>"
-      usage-nick-set: "&cUso: /nick set <apodo>"
-      usage-seen: "&cUso: /seen <jugador>"
-      usage-realname: "&cUso: /realname <apodo>"
-      bannedwords: "&cUso: /bannedwords <list|add|remove> [palabra]"
-      bannedwords-add: "&cUso: /bannedwords add <palabra>"
-      bannedwords-remove: "&cUso: /bannedwords remove <palabra>"
-      mute: "&cUso: /mute <jugador> [duración]"
-      logs: "&cUso: /logs <chat|bannedwords|...> [jugador] [filtro]"
-      invsee: "&cUso: /invsee <jugador>"
-      mention: "&cUso: /mention <jugador>"
+    set: "&aTu apodo ha sido cambiado a &e%nick%"
+    remove: "&aTu apodo ha sido eliminado."
+  socialspy:
+    already-enabled: "&cEl socialspy ya está activado."
+    already-disabled: "&cEl socialspy ya está desactivado."
+    enabled: "&aEl socialspy ahora está activado."
+    disabled: "&aEl socialspy ahora está desactivado."
+    invalid-mode: "&cModo inválido, usa: /socialspy mode <1-3>"
+    mode: "&aModo establecido a: &#109AFE%mode%"
+  realname:
+    no-player: "&cNo se encontró ningún jugador con el apodo: %nick%"
+    offline: "&cEl jugador con ese apodo está desconectado."
+    realname: "&aEl nombre real de &f%nick% &aes &f%player%"
+  logs:
+    invalid: "&cTipo de log no válido. Usa /logs <chat|bannedwords|...>"
+    no-register: "&cNo se encontraron registros para los criterios especificados."
+    header: "&aResultados:"
+  commandtimer:
+    added: "&aEl temporizador de comando '%timer%' se ha creado con éxito."
+    already-added: "&cYa existe un temporizador con ese nombre."
+    invalid-number: "&cEl tiempo debe ser un número entero."
+    removed: "&aEl temporizador de comando '%timer%' ha sido eliminado."
+    not-exist: "&cNo existe un temporizador con ese nombre."
+  tags:
+    list: "&aLista de tags disponibles:"
+    selected: "&aHas seleccionado el tag: &e%tag%"
+    unknown: "&cEl tag '&e%tag%&c' no existe."
+  autobroadcast:
+    start: "&aEl AutoBroadcast ha comenzado."
+    stop: "&cEl AutoBroadcast ha sido detenido."
+    restart: "&eEl AutoBroadcast ha sido reiniciado."
+    usage-remove: "&cUso: /autobroadcast remove <nombre del broadcast>"
+    removed: "&aEl broadcast &e%broadcast% &aha sido eliminado."
+    usage-add: "&cUso: /autobroadcast add <nombre del broadcast>"
+    create:
+    enabled: "&f¿El broadcast está habilitado? (&ayes&f/&cno&f)"
+    new-line: "&fIngresa una línea del mensaje (o escribe '&adone&f' para finalizar):"
+    one-line: "&cDebes ingresar al menos un mensaje."
+    added: "&aEl broadcast &e%broadcast% &aha sido añadido."
+    actions-prompt: |
+      &6Por favor, configura las acciones del auto-broadcast usando los siguientes comandos:
+      &e- Título: Escribe 'title [tu título]' para establecer el título.
+      &e- Subtítulo: Escribe 'subtitle [tu subtítulo]' para establecer el subtítulo.
+      &e- Sonido: Escribe 'sound [nombre del sonido]' para establecer el efecto de sonido.
+      &e- Partículas: Escribe 'particle [tipo de partícula]' para establecer el efecto de partículas.
+      &e- Número de Partículas: Escribe 'particles [número]' para establecer el número de partículas.
+      &e- Barra de Acción: Escribe 'actionbar [texto de tu barra de acción]' para establecer el texto de la barra de acción.
+      &eEscribe 'done' cuando hayas terminado de configurar todas las acciones.
+  usage:
+    channel: "&cUso: /channel <join|leave> <channel>"
+    join-channel: "&cUso: /channel join <channel>"
+    leave-channel: "&cUso: /channel leave <channel>"
+    usage-msg: "&cUso: /msg <jugador> <mensaje>"
+    usage-broadcast: "&cUso: /broadcast <mensaje>"
+    usage-ignore: "&cUso: /ignore <jugador>"
+    usage-poll: "&cUso: /poll <create|vote> [argumentos]"
+    usage-poll-create: "&cUso: /poll create <duración> <título | opciones...>"
+    usage-poll-vote: "&cUso: /poll vote <opción>"
+    usage-print: "&cUso: /print <mensaje>"
+    usage-warning: "&cUso: /warning <mensaje>"
+    usage-announcement: "&cUso: /announcement <mensaje>"
+    usage-autobroadcast: "&cUso: /autobroadcast <start|stop|restart|remove|add>"
+    usage-plugin: "&cUso: /plugin <nombre_del_plugin>"
+    usage-bannedcommands: "&cUso: /bannedcommands <list|add|remove>"
+    usage-list-bannedcommands: "&cUso: /bannedcommands list <command|tab>"
+    usage-reply: "&cUso: /reply <mensaje>"
+    usage-send-channel: "&cUso: /channel send <channel> <mensaje>"
+    usage-add-bc: "&cUso: /bannedcommands add <command|tab> <comando>"
+    usage-remove-bc: "&cUso: /bannedcommands remove <command|tab> <comando>"
+    usage-helpop: "&cUso: /helpop <mensaje>"
+    usage-calculator: "&cUso: /calculator <número1> <operador> <número2>"
+    usage-player: "&cUso: /player <jugador>"
+    usage-socialspy: "&cUso: /socialspy <enable|disable|mode>"
+    usage-commandtimer: "&cUso: /commandtimer <create|remove> <nombre> [tiempo] | [comando 1] | [comando 2] | ..."
+    usage-commandtimer-add: "&cUso: /commandtimer create <nombre> <tiempo> | <comando 1> | <comando 2> | ..."
+    usage-commandtimer-remove: "&cUso: /commandtimer remove <nombre>"
+    usage-nick: "&cUso: /nick <set/remove> <apodo>"
+    usage-nick-set: "&cUso: /nick set <apodo>"
+    usage-seen: "&cUso: /seen <jugador>"
+    usage-realname: "&cUso: /realname <apodo>"
+    bannedwords: "&cUso: /bannedwords <list|add|remove> [palabra]"
+    bannedwords-add: "&cUso: /bannedwords add <palabra>"
+    bannedwords-remove: "&cUso: /bannedwords remove <palabra>"
+    mute: "&cUso: /mute <jugador> [duración]"
+    logs: "&cUso: /logs <chat|bannedwords|...> [jugador] [filtro]"
+    invsee: "&cUso: /invsee <jugador>"
+    mention: "&cUso: /mention <jugador>"
+    me: "&cUso: /me <jugador>"
+    cg: "&cUsa: /chatgames <start|stop|restart|add|remove>"
+    cg-add: "&cUsa: /chatgames add <nombre> <mensaje1,mensaje2,...> <keyword1,keyword2,...> <reward1,reward2,...>"
+    cg-remove: "&cUso: /chatgames remove <nombre>"
+    tags: "&cUso: /tags list o /tags select <tag>"
+    tags-selected: "&cUso: /tags select <tag>"
     # Mensajes de depuración solo visibles en la consola
-    debug:
-      no-format-group: "&cError en groups.yml - No se encontró formato para el grupo: %group%"
-      no-player: "&cSolo los jugadores pueden ejecutar este comando."
-      material-not-found: "&cMaterial no encontrado: %material%"
-      chat-cooldown: "El jugador %player% estaba en tiempo de espera del chat. Tiempo restante: %time% segundos."
-      command-cooldown: "El jugador %player% estaba en tiempo de espera de comandos. Tiempo restante: %time% segundos."
-      anti-flood: "El jugador %player% escribió un mensaje con flood: %message%"
+  debug:
+    no-format-group: "&cError en groups.yml - No se encontró formato para el grupo: %group%"
+    no-player: "&cSolo los jugadores pueden ejecutar este comando."
+    material-not-found: "&cMaterial no encontrado: %material%"
+    chat-cooldown: "El jugador %player% estaba en tiempo de espera del chat. Tiempo restante: %time% segundos."
+    command-cooldown: "El jugador %player% estaba en tiempo de espera de comandos. Tiempo restante: %time% segundos."
+    anti-flood: "El jugador %player% escribió un mensaje con flood: %message%"
 
-  plugin:
-    - "&cPlugin: &f%plugin%"
-    - "&cVersión: &f%version%"
-    - "&cAutor: &f%author%"
+plugin:
+  - "&cPlugin: &f%plugin%"
+  - "&cVersión: &f%version%"
+  - "&cAutor: &f%author%"
 
+player:
+  global:
+  - "&7---- { &#c03afeT&#a72cf8C&#8e1ff1h&#7411eba&#5b03e4t &7} ----"
+  - "&cJugador: &f%player_name%"
+  - "&cHoras: &f%statistic_hours_played%"
+  admin:
+  - "&cIP: &f%player_ip%"
+  - "&cUUID: &f%player_uuid%"
+
+server:
+  - '&cJava: &f%java_version%'
+  - '&cPuerto del Servidor: &f%port%'
+  - '&cVersión del Servidor: &f%version%'
+  - '&cSistema Operativo: &f%os_name%'
+  - '&cVersión del SO: &f%os_version%'
+  - '&cTPS: &f%server_tps_1%'
+  - '&cFamilia de CPU: &f%cpu_family%'
+  - '&cNúcleos de CPU: &f%cpu_cores%'
+  - '&cMemoria Máxima: &f%server_ram_max% MB'
+  - '&cMemoria Total: &f%server_ram_total% MB'
+  - '&cMemoria Usada: &f%server_ram_used% MB'
+  - '&cMemoria Libre: &f%server_ram_free% MB'
+  - '&cPlugins: &f%plugins%'
+  - '&cMundos: &f%worlds%'
+
+seen:
   player:
-    global:
-      - "&7---- { &#c03afeT&#a72cf8C&#8e1ff1h&#7411eba&#5b03e4t &7} ----"
-      - "&cJugador: &f%player_name%"
-      - "&cHoras: &f%statistic_hours_played%"
-    admin:
-      - "&cIP: &f%player_ip%"
-      - "&cUUID: &f%player_uuid%"
-
-  server:
-    - '&cJava: &f%java_version%'
-    - '&cPuerto del Servidor: &f%port%'
-    - '&cVersión del Servidor: &f%version%'
-    - '&cSistema Operativo: &f%os_name%'
-    - '&cVersión del SO: &f%os_version%'
-    - '&cTPS: &f%server_tps_1%'
-    - '&cFamilia de CPU: &f%cpu_family%'
-    - '&cNúcleos de CPU: &f%cpu_cores%'
-    - '&cMemoria Máxima: &f%server_ram_max% MB'
-    - '&cMemoria Total: &f%server_ram_total% MB'
-    - '&cMemoria Usada: &f%server_ram_used% MB'
-    - '&cMemoria Libre: &f%server_ram_free% MB'
-    - '&cPlugins: &f%plugins%'
-    - '&cMundos: &f%worlds%'
-
-  seen:
-    player:
-      - "&fEn línea: &#C03AFE%player_online%"
-      - "&fFecha de ingreso: &#C03AFE%player_first_join_date%"
-      - "&fÚltima conexión: &#C03AFE%player_last_join_date%"
-    admin:
-      - "&fIP: &#C03AFE%player_ip%"
-      - "&fUUID: &#C03AFE%player_uuid%"
+  - "&fEn línea: &#C03AFE%player_online%"
+  - "&fFecha de ingreso: &#C03AFE%player_first_join_date%"
+  - "&fÚltima conexión: &#C03AFE%player_last_join_date%"
+  admin:
+  - "&fIP: &#C03AFE%player_ip%"
+  - "&fUUID: &#C03AFE%player_uuid%"

@@ -88,6 +88,56 @@ public class ChatGamesManager {
         return games;
     }
 
+    public void addGame(String name, List<String> messages, List<String> keywords, List<String> rewards, Options options, Effects startEffects, Effects endEffects, Effects winnerEffects) {
+        Game newGame = new Game(messages, false, new ArrayList<>(), false, "", keywords, rewards, options, true, startEffects, endEffects, winnerEffects);
+        games.add(newGame);
+
+        FileConfiguration config = configFile.getConfig();
+        String path = "games." + name;
+        config.set(path + ".enabled", true);
+        config.set(path + ".messages", messages);
+        config.set(path + ".keywords", keywords);
+        config.set(path + ".rewards", rewards);
+        config.set(path + ".options.endTime", options.getEndTime());
+        config.set(path + ".options.time", options.getTime());
+
+        saveEffects(config, path + ".startEffects", startEffects);
+        saveEffects(config, path + ".endEffects", endEffects);
+        saveEffects(config, path + ".winnerEffects", winnerEffects);
+
+        configFile.saveConfig();
+    }
+
+    public void removeGame(String name) {
+        games.removeIf(game -> game.getKeywords().contains(name));
+
+        FileConfiguration config = configFile.getConfig();
+        config.set("games." + name, null);
+        configFile.saveConfig();
+    }
+
+    private void saveEffects(@NotNull FileConfiguration config, String path, @NotNull Effects effects) {
+        config.set(path + ".title.enabled", effects.getTitle().isEnabled());
+        config.set(path + ".title.text", effects.getTitle().getText());
+        config.set(path + ".title.subtitle", effects.getTitle().getSubtitle());
+        config.set(path + ".title.fadeIn", effects.getTitle().getFadeIn());
+        config.set(path + ".title.stay", effects.getTitle().getStay());
+        config.set(path + ".title.fadeOut", effects.getTitle().getFadeOut());
+
+        config.set(path + ".sound.enabled", effects.getSound().isEnabled());
+        config.set(path + ".sound.name", effects.getSound().getName());
+        config.set(path + ".sound.volume", effects.getSound().getVolume());
+        config.set(path + ".sound.pitch", effects.getSound().getPitch());
+
+        config.set(path + ".particle.enabled", effects.getParticle().isEnabled());
+        config.set(path + ".particle.name", effects.getParticle().getName());
+        config.set(path + ".particle.count", effects.getParticle().getCount());
+        config.set(path + ".particle.speed", effects.getParticle().getSpeed());
+
+        config.set(path + ".actionBar.enabled", effects.getActionBar().isEnabled());
+        config.set(path + ".actionBar.text", effects.getActionBar().getText());
+    }
+
     public static class Game {
         private final List<String> messages;
         private final boolean hoverEnabled;

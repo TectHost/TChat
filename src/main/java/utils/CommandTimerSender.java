@@ -4,7 +4,7 @@ import minealex.tchat.TChat;
 import config.CommandTimerManager;
 import config.CommandTimerManager.CommandConfig;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +21,7 @@ public class CommandTimerSender {
     private final List<String> commandKeys = new ArrayList<>();
     private int currentIndex = 0;
 
-    public CommandTimerSender(TChat plugin) {
+    public CommandTimerSender(@NotNull TChat plugin) {
         this.plugin = plugin;
         this.commandTimerManager = plugin.getCommandTimerManager();
         initializeCommands();
@@ -54,18 +54,12 @@ public class CommandTimerSender {
 
     private void executeCommand(String command) {
         Bukkit.getScheduler().runTask(plugin, () -> {
-            // Determine the type of sender and prepare the command
             if (command.startsWith("[CONSOLE]")) {
-                // Execute as console
                 String consoleCommand = command.substring("[CONSOLE]".length()).trim();
                 Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), consoleCommand);
             } else if (command.startsWith("[PLAYER]")) {
-                // Execute as player
                 String playerCommand = command.substring("[PLAYER]".length()).trim();
-                Player player = Bukkit.getOnlinePlayers().stream().findFirst().orElse(null);
-                if (player != null) {
-                    player.performCommand(playerCommand);
-                }
+                Bukkit.getOnlinePlayers().stream().findFirst().ifPresent(player -> player.performCommand(playerCommand));
             }
         });
     }

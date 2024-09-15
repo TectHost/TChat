@@ -6,6 +6,8 @@
 
 # General options
 options:
+  # Enable/disable the menu (and command)
+  enabled: true
   # Menu title
   title: "&7%player%'s inventory"
   # Number of slots of the menu

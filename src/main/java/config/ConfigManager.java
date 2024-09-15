@@ -4,11 +4,9 @@ import minealex.tchat.TChat;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class ConfigManager {
     private final TChat plugin;
@@ -110,6 +108,11 @@ public class ConfigManager {
     private Map<String, HoverConfig> pmHoverConfigs;
     private Map<String, HoverConfig> replyHoverConfigs;
     private int maxRepeatMessages;
+    private String printPrefix;
+    private boolean meEnabled;
+    private String meFormat;
+    private boolean sccEnabled;
+    private String sccFormat;
 
     public ConfigManager(TChat plugin) {
         this.plugin = plugin;
@@ -141,10 +144,23 @@ public class ConfigManager {
         colorsChatEnabled = config.getBoolean("chat-color.colors-in-chat-enabled");
 
         printEnabled = config.getBoolean("print.enabled");
+        if (printEnabled) {
+            printPrefix = config.getString("print.prefix", "%prefix%");
+        }
 
         warningEnabled = config.getBoolean("broadcast.warning.enabled");
         if (warningEnabled) {
             warningFormat = config.getString("broadcast.warning.format");
+        }
+
+        sccEnabled = config.getBoolean("scc.enabled", true);
+        if (sccEnabled) {
+            sccFormat = config.getString("scc.format", "&7[&a%player_name%&7] &#3AFE09These are my coordinates: &#FEB322%x, %y, %z&#3AFE09!");
+        }
+
+        meEnabled = config.getBoolean("me.enabled", true);
+        if (meEnabled) {
+            meFormat = config.getString("me.format", "&5* &#3AFE09%player_name% &#FEAD10> &7%message%");
         }
 
         broadcastEnabled = config.getBoolean("broadcast.broadcast.enabled");
@@ -371,6 +387,11 @@ public class ConfigManager {
         return replyHoverConfigs.get(group);
     }
 
+    public boolean isSccEnabled() {return sccEnabled;}
+    public String getSccFormat() {return sccFormat;}
+    public boolean isMeEnabled() {return meEnabled;}
+    public String getMeFormat() {return meFormat;}
+    public String getPrintPrefix() {return printPrefix;}
     public int getMaxRepeatMessages() {return maxRepeatMessages;}
     public boolean isDeathLogs() {return deathLogs;}
     public boolean isChatColorMenuEnabled() {return chatColorMenuEnabled;}

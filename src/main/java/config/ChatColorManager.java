@@ -147,7 +147,7 @@ public class ChatColorManager {
             String name = config.getString(path + "name");
             List<String> lorePerm = config.getStringList(path + "lore-perm");
             List<String> loreNoPerm = config.getStringList(path + "lore-no-perm");
-            String id = config.getString(path + "id");
+            String id = config.getString(path + "id", null);
             int slot = config.getInt(path + "slot");
             items.put(key, new ChatColorItem(slot, id, material, amount, name, lorePerm, loreNoPerm));
         }

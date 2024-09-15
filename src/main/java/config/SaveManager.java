@@ -42,6 +42,17 @@ public class SaveManager {
         savesFile.saveConfig();
     }
 
+    public void saveSelectedTag(@NotNull UUID playerId, String tag) {
+        String path = "players." + playerId + ".selected-tag";
+        config.set(path, tag);
+        savesFile.saveConfig();
+    }
+
+    public String getSelectedTag(@NotNull UUID playerId) {
+        String path = "players." + playerId + ".selected-tag";
+        return config.getString(path, null);
+    }
+
     public String getChatColor(@NotNull UUID playerId) {
         String path = "players." + playerId + ".chatcolor";
         return config.getString(path, "");

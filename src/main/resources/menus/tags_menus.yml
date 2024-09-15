@@ -1,0 +1,246 @@
+# #################################################################
+# ┌─────────────────────────────────────────────────────────────┐ #
+# │                           Tags Menu                         │ #
+# └─────────────────────────────────────────────────────────────┘ #
+# #################################################################
+
+# General options
+options:
+  enabled: true
+  default_menu: "menu1"
+
+# https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html
+# open_menu only opens menus of this file, the argument is optional
+# commands executes commands in the console (use %player% placeholder for get the name of the executor), the argument is optional
+
+menus:
+  # You can use any name, the name doesn't need to start with "menu" or something like that, you can use "tags1" for example
+  menu1:
+    # For HEX colors, use LEGACY code (https://hex.tect.host/)
+    title: "&x&c&0&3&a&f&eT&x&b&3&3&3&f&ba&x&a&7&2&c&f&8g&x&9&a&2&5&f&4s &x&8&e&1&f&f&1M&x&8&1&1&8&e&ee&x&7&4&1&1&e&bn&x&6&8&0&a&e&7u &x&5&b&0&3&e&41"
+    size: 45
+    items:
+      0:
+        material: "BLACK_STAINED_GLASS_PANE"
+        name: " "
+        lore: []
+      1:
+        material: "GRAY_STAINED_GLASS_PANE"
+        name: " "
+        lore: []
+      9:
+        material: "GRAY_STAINED_GLASS_PANE"
+        name: " "
+        lore: []
+      7:
+        material: "GRAY_STAINED_GLASS_PANE"
+        name: " "
+        lore: []
+      6:
+        material: "LIGHT_GRAY_STAINED_GLASS_PANE"
+        name: " "
+        lore: []
+      22:
+        material: "NAME_TAG"
+        name: "&#1E90FF&l[&#FF69B4&lVIP&#1E90FF&l] "
+        lore:
+          - "&#FFD700&oExclusive Chat Tag"
+          - "&#FF4500&lShow your &#FF6347&lprestige"
+          - "&#00FF00&l✔ &#00CED1&oGain respect in the chat"
+          - "&#9400D3&lCustomize your appearance!"
+        commands:
+          - "tags select vip"
+      5:
+        material: "LIGHT_GRAY_STAINED_GLASS_PANE"
+        name: " "
+        lore: []
+      4:
+        material: "LIGHT_GRAY_STAINED_GLASS_PANE"
+        name: " "
+        lore: []
+      3:
+        material: "LIGHT_GRAY_STAINED_GLASS_PANE"
+        name: " "
+        lore: []
+      2:
+        material: "LIGHT_GRAY_STAINED_GLASS_PANE"
+        name: " "
+        lore: []
+      26:
+        material: "ARROW"
+        name: "&#1ABC9C&l➤ &#00CED1&lGo to &#FF4500&lNext Menu"
+        lore:
+          - "&#00FF7F&l➔ &#FFA500&oExplore more options!"
+          - "&#FFD700&l➔ &#FF69B4&oDiscover new features"
+          - "&#1E90FF&lClick to open &#9400D3&lNext Menu"
+        open_menu: "menu2"
+      18:
+        material: "LIGHT_GRAY_STAINED_GLASS_PANE"
+        name: " "
+        lore: []
+      8:
+        material: "BLACK_STAINED_GLASS_PANE"
+        name: " "
+        lore: []
+      17:
+        material: "GRAY_STAINED_GLASS_PANE"
+        name: " "
+        lore: []
+      44:
+        material: "BLACK_STAINED_GLASS_PANE"
+        name: " "
+        lore: []
+      43:
+        material: "GRAY_STAINED_GLASS_PANE"
+        name: " "
+        lore: []
+      35:
+        material: "GRAY_STAINED_GLASS_PANE"
+        name: " "
+        lore: []
+      36:
+        material: "BLACK_STAINED_GLASS_PANE"
+        name: " "
+        lore: []
+      37:
+        material: "GRAY_STAINED_GLASS_PANE"
+        name: " "
+        lore: []
+      38:
+        material: "LIGHT_GRAY_STAINED_GLASS_PANE"
+        name: " "
+        lore: []
+      39:
+        material: "LIGHT_GRAY_STAINED_GLASS_PANE"
+        name: " "
+        lore: []
+      40:
+        material: "LIGHT_GRAY_STAINED_GLASS_PANE"
+        name: " "
+        lore: []
+      41:
+        material: "LIGHT_GRAY_STAINED_GLASS_PANE"
+        name: " "
+        lore: []
+      42:
+        material: "LIGHT_GRAY_STAINED_GLASS_PANE"
+        name: " "
+        lore: []
+      27:
+        material: "GRAY_STAINED_GLASS_PANE"
+        name: " "
+        lore: []
+  menu2:
+    title: "&x&c&0&3&a&f&eT&x&b&3&3&3&f&ba&x&a&7&2&c&f&8g&x&9&a&2&5&f&4s &x&8&e&1&f&f&1M&x&8&1&1&8&e&ee&x&7&4&1&1&e&bn&x&6&8&0&a&e&7u &x&5&b&0&3&e&42"
+    size: 45
+    items:
+      0:
+        material: "BLACK_STAINED_GLASS_PANE"
+        name: " "
+        lore: []
+      1:
+        material: "GRAY_STAINED_GLASS_PANE"
+        name: " "
+        lore: []
+      9:
+        material: "GRAY_STAINED_GLASS_PANE"
+        name: " "
+        lore: []
+      7:
+        material: "GRAY_STAINED_GLASS_PANE"
+        name: " "
+        lore: []
+      6:
+        material: "LIGHT_GRAY_STAINED_GLASS_PANE"
+        name: " "
+        lore: []
+      22:
+        material: "NAME_TAG"
+        name: "&#FF4500&l[&#FFD700&lSTAFF&#FF4500&l] "
+        lore:
+          - "&#00FF00&oOfficial Chat Tag"
+          - "&#1ABC9C&lShow your &#FF69B4&lauthority"
+          - "&#FFD700&l✔ &#FFA500&oGain trust and respect"
+          - "&#FF6347&lLead the community!"
+        commands:
+          - "tags select staff"
+      5:
+        material: "LIGHT_GRAY_STAINED_GLASS_PANE"
+        name: " "
+        lore: []
+      4:
+        material: "LIGHT_GRAY_STAINED_GLASS_PANE"
+        name: " "
+        lore: []
+      3:
+        material: "LIGHT_GRAY_STAINED_GLASS_PANE"
+        name: " "
+        lore: []
+      2:
+        material: "LIGHT_GRAY_STAINED_GLASS_PANE"
+        name: " "
+        lore: []
+      26:
+        material: "LIGHT_GRAY_STAINED_GLASS_PANE"
+        name: " "
+        lore: []
+      18:
+        material: "ARROW"
+        name: "&#1ABC9C&l➤ &#00CED1&lGo to &#FF4500&lPrevious Menu"
+        lore:
+          - "&#00FF7F&l➔ &#FFA500&oExplore more options!"
+          - "&#FFD700&l➔ &#FF69B4&oDiscover new features"
+          - "&#1E90FF&lClick to open the &#9400D3&lPrevious Menu"
+        open_menu: "menu1"
+      8:
+        material: "BLACK_STAINED_GLASS_PANE"
+        name: " "
+        lore: []
+      17:
+        material: "GRAY_STAINED_GLASS_PANE"
+        name: " "
+        lore: []
+      44:
+        material: "BLACK_STAINED_GLASS_PANE"
+        name: " "
+        lore: []
+      43:
+        material: "GRAY_STAINED_GLASS_PANE"
+        name: " "
+        lore: []
+      35:
+        material: "GRAY_STAINED_GLASS_PANE"
+        name: " "
+        lore: []
+      36:
+        material: "BLACK_STAINED_GLASS_PANE"
+        name: " "
+        lore: []
+      37:
+        material: "GRAY_STAINED_GLASS_PANE"
+        name: " "
+        lore: []
+      38:
+        material: "LIGHT_GRAY_STAINED_GLASS_PANE"
+        name: " "
+        lore: []
+      39:
+        material: "LIGHT_GRAY_STAINED_GLASS_PANE"
+        name: " "
+        lore: []
+      40:
+        material: "LIGHT_GRAY_STAINED_GLASS_PANE"
+        name: " "
+        lore: []
+      41:
+        material: "LIGHT_GRAY_STAINED_GLASS_PANE"
+        name: " "
+        lore: []
+      42:
+        material: "LIGHT_GRAY_STAINED_GLASS_PANE"
+        name: " "
+        lore: []
+      27:
+        material: "GRAY_STAINED_GLASS_PANE"
+        name: " "
+        lore: []

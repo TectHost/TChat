@@ -514,6 +514,9 @@ rules:
 print:
   # Enable/disable the command
   enabled: true
+  # Use %prefix% placeholder for use the (messages file) prefix
+  # The prefix for the print messages
+  prefix: "%prefix%"
 
 # #################################################################
 # ┌─────────────────────────────────────────────────────────────┐ #
@@ -567,6 +570,7 @@ helpop:
 # └─────────────────────────────────────────────────────────────┘ #
 # #################################################################
 
+# /list command
 list:
   # First message
   header: "&7Online players:"
@@ -574,3 +578,29 @@ list:
   append: ", "
   # Last message
   footer: "&7────────────────"
+
+# #################################################################
+# ┌─────────────────────────────────────────────────────────────┐ #
+# │                         Me formatter                        │ #
+# └─────────────────────────────────────────────────────────────┘ #
+# #################################################################
+
+# /me command
+me:
+  # Enable/disable the command
+  enabled: true
+  # Message format
+  format: "&5* &#3AFE09%player_name% &#FEAD10> &7%message%"
+
+# #################################################################
+# ┌─────────────────────────────────────────────────────────────┐ #
+# │                     Show Coords command                     │ #
+# └─────────────────────────────────────────────────────────────┘ #
+# #################################################################
+
+# /showcoords command
+scc:
+  # Enable/disable the command
+  enabled: true
+  # Message format
+  format: "&7[&a%player_name%&7] &#3AFE09These are my coordinates: &#FEB322%x, %y, %z&#3AFE09!"

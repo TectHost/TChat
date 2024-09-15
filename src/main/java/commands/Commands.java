@@ -50,6 +50,10 @@ public class Commands implements CommandExecutor, TabCompleter {
                         plugin.getJoinManager().reloadConfig();
                         plugin.getMentionsManager().reloadConfig();
                         plugin.getInvseeConfigManager().reloadConfig();
+                        plugin.getChatGamesSender().restartGame();
+                        plugin.getAutoBroadcastSender().restartBroadcasts();
+                        plugin.getTagsManager().reloadConfig();
+                        plugin.getTagsMenuConfigManager().reloadConfig();
                         String message = plugin.getMessagesManager().getReloadMessage();
                         String prefix = plugin.getMessagesManager().getPrefix();
                         if (!(sender instanceof Player)) {

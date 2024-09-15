@@ -41,6 +41,7 @@
     # (OR) You can use || to compare another condition if one of them is not met: - "[IF] %statistic_hours_played% >= 10 && %player_is_op% == yes"
   # [ELSE] - If none of the conditions ([IF] and all the [ELSE IF] if any) are not met, this will be executed | - "[ELSE]"
   # [FI] - The condition ends, from this tag, the rest is out of this condition | - "[FI]"
+  # [RETURN] - Breaks an active conditional | - "[RETURN]"
 # Loops
   # [FOR] - Starts a loop for a specified number of repetitions | - "[FOR] 5"
     # Placeholders:

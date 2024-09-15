@@ -1,5 +1,5 @@
 main: minealex.tchat.TChat
-version: 4.1.5
+version: 4.2.0
 name: TChat
 author: Mine_Alex
 api-version: 1.13
@@ -81,10 +81,24 @@ commands:
     description: Mention a player
   showenderchest:
     description: Opens the enderchest
-    aliases:
-      - showec
+  me:
+    description: Me command
+  showcoords:
+    description: Shows the coords
+  chatgames:
+    description: Configure chatgames inside the server
+  tags:
+    description: Select a tag
 
 permissions:
+  tchat.tags.all:
+    description: Permission to use all tags
+  tchat.admin.chatgames:
+    description: Permission to use chatgames command
+  tchat.scc:
+    description: Permission to use showcoords command
+  tchat.me:
+    description: Permission to use me command
   tchat.command.mention:
     description: Permission to use mention command
   tchat.command.invsee:
