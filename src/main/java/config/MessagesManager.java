@@ -209,6 +209,9 @@ public class MessagesManager {
     private String tagsUsageSelect;
     private String tagsNotFound;
     private String tagsSelected;
+    private String ignoreBlacklist;
+    private String channelFull;
+    private String pollFinish;
 
     public MessagesManager(TChat plugin){
         this.messagesFile = new ConfigFile(plugin.getConfigManager().getLangFile(), "lang", plugin);
@@ -300,6 +303,7 @@ public class MessagesManager {
             ignoreUsage = config.getString("messages.usage.usage-ignore");
             ignoreListMessage = config.getString("messages.ignore.ignore-list-message");
             ignoreListEmpty = config.getString("messages.ignore.ignore-list-empty");
+            ignoreBlacklist = config.getString("messages.ignore.blacklist", "&cThe player '&4%player%&c' is blacklisted. You cannot ignore him.");
         }
 
         if (plugin.getConfigManager().isChatColorEnabled()) {
@@ -441,6 +445,7 @@ public class MessagesManager {
         startTitle = config.getString("messages.poll.message.start.title");
         startText = config.getString("messages.poll.message.start.text");
         pollCreate = config.getString("messages.poll-create");
+        pollFinish = config.getString("messages.poll.finish", "&6[Poll] &aThe poll has finished!");
         votePoll = config.getString("messages.vote");
         invalidOptionPoll = config.getString("messages.invalid-option-poll");
         noPoll = config.getString("messages.no-poll");
@@ -481,6 +486,7 @@ public class MessagesManager {
         channelNotExist = config.getString("messages.channel.channel-not-exist");
         usageLeaveChannel = config.getString("messages.usage.leave-channel");
         usageJoinChannel = config.getString("messages.usage.join-channel");
+        channelFull = config.getString("messages.channel.full", "&cThe channel '&e%channel%&c' is full (&a%players%&c/&e%limit%&c).");
         noPermission = config.getString("messages.no-permission");
         versionMessage = config.getString("messages.version-message");
         reloadMessage = config.getString("messages.reload-message");
@@ -513,6 +519,9 @@ public class MessagesManager {
     }
 
     // Messages
+    public String getPollFinish() {return pollFinish;}
+    public String getChannelFull() {return channelFull;}
+    public String getIgnoreBlacklist() {return ignoreBlacklist;}
     public String getTagsUsage() {return tagsUsage;}
     public String getTagsList() {return tagsList;}
     public String getTagsUsageSelect() {return tagsUsageSelect;}

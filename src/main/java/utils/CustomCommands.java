@@ -52,7 +52,7 @@ public class CustomCommands implements Listener {
             if (commandsManager.getCommands().containsKey(commandName)) {
                 String prefix = plugin.getMessagesManager().getPrefix();
                 CommandsManager.Command command = commandsManager.getCommands().get(commandName);
-                boolean allowArgs = command.isArgs();
+                boolean allowArgs = command.args();
 
                 if (allowArgs && commandArgs.length < 2) {
                     String message1 = plugin.getMessagesManager().getCustomCommandsArguments();
@@ -61,7 +61,7 @@ public class CustomCommands implements Listener {
                     return;
                 }
 
-                if (command.isPermissionRequired()) {
+                if (command.permissionRequired()) {
                     String permission = "tchat.customcommand." + commandName;
                     if (!player.hasPermission(permission) && !player.hasPermission("tchat.admin")) {
                         String message1 = plugin.getMessagesManager().getNoPermission();
@@ -81,7 +81,7 @@ public class CustomCommands implements Listener {
                     return;
                 }
 
-                List<String> actions = command.getActions();
+                List<String> actions = command.actions();
                 processActions(player, actions, allowArgs ? message.substring(commandArgs[0].length() + 1) : null);
 
                 if (cooldownSeconds > 0) {
@@ -318,6 +318,8 @@ public class CustomCommands implements Listener {
                 result = switch (operator) {
                     case "==" -> leftSide.equals(rightSide);
                     case "!=" -> !leftSide.equals(rightSide);
+                    case "=~" -> leftSide.matches(rightSide);
+                    case "=@" -> leftSide.matches(rightSide.replace("*", ".*"));
                     default -> false;
                 };
             }
@@ -686,7 +688,7 @@ public class CustomCommands implements Listener {
     }
 
     private int getCooldown(String commandName) {
-        return commandsManager.getCommands().get(commandName).getCooldown();
+        return commandsManager.getCommands().get(commandName).cooldown();
     }
 
     private void handleClickAction(Player player, @NotNull String data) {

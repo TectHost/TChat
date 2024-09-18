@@ -109,15 +109,10 @@ public class ChatPlaceholdersListener implements Listener {
                 commandFormat = plugin.getTranslateColors().translateColors(player, commandFormat);
                 TextComponent commandComponent = getHoverCommand(commandFormat, player, command);
 
-                event.setCancelled(true);
+                event.getRecipients().clear();
+                event.setFormat(commandComponent.toLegacyText());
                 for (Player onlinePlayer : plugin.getServer().getOnlinePlayers()) {
                     onlinePlayer.spigot().sendMessage(commandComponent);
-                }
-
-                if (plugin.getConfigManager().isRegisterMessagesOnConsole()) {
-                    String consoleMessage = commandComponent.toLegacyText();
-                    consoleMessage = plugin.getTranslateColors().translateColors(player, consoleMessage);
-                    Bukkit.getConsoleSender().sendMessage(consoleMessage);
                 }
             } else {
                 event.setMessage(message);
@@ -141,15 +136,10 @@ public class ChatPlaceholdersListener implements Listener {
 
                     TextComponent enderComponent = getEnderTextComponent(initialMessage, player);
 
-                    event.setCancelled(true);
+                    event.getRecipients().clear();
+                    event.setFormat(enderComponent.toLegacyText());
                     for (Player onlinePlayer : plugin.getServer().getOnlinePlayers()) {
                         onlinePlayer.spigot().sendMessage(enderComponent);
-                    }
-
-                    if (plugin.getConfigManager().isRegisterMessagesOnConsole()) {
-                        String consoleMessage = enderComponent.toLegacyText();
-                        consoleMessage = plugin.getTranslateColors().translateColors(player, consoleMessage);
-                        Bukkit.getConsoleSender().sendMessage(consoleMessage);
                     }
                 }
             } else {
@@ -177,15 +167,10 @@ public class ChatPlaceholdersListener implements Listener {
 
                     TextComponent inventoryComponent = getTextComponent(initialMessage, player);
 
-                    event.setCancelled(true);
+                    event.getRecipients().clear();
+                    event.setFormat(inventoryComponent.toLegacyText());
                     for (Player onlinePlayer : plugin.getServer().getOnlinePlayers()) {
                         onlinePlayer.spigot().sendMessage(inventoryComponent);
-                    }
-
-                    if (plugin.getConfigManager().isRegisterMessagesOnConsole()) {
-                        String consoleMessage = inventoryComponent.toLegacyText();
-                        consoleMessage = plugin.getTranslateColors().translateColors(player, consoleMessage);
-                        Bukkit.getConsoleSender().sendMessage(consoleMessage);
                     }
                 }
             } else {

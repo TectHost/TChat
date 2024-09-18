@@ -15,7 +15,6 @@ public class ConfigManager {
 
     private String format;
     private boolean formatGroup;
-    private boolean registerMessagesOnConsole;
     private AdvertisingConfig ipv4Config;
     private AdvertisingConfig domainConfig;
     private AdvertisingConfig linksConfig;
@@ -113,6 +112,7 @@ public class ConfigManager {
     private String meFormat;
     private boolean sccEnabled;
     private String sccFormat;
+    private List<String> blackLIgnore;
 
     public ConfigManager(TChat plugin) {
         this.plugin = plugin;
@@ -128,7 +128,6 @@ public class ConfigManager {
             format = config.getString("chat.format");
             formatGroup = config.getBoolean("chat.use-group-format");
         }
-        registerMessagesOnConsole = config.getBoolean("chat.register-messages-on-console");
 
         ipv4Config = new AdvertisingConfig(config, "advertising.ipv4");
         domainConfig = new AdvertisingConfig(config, "advertising.domain");
@@ -136,6 +135,9 @@ public class ConfigManager {
         advertisingBypass = config.getString("advertising.bypass");
 
         ignoreEnabled = config.getBoolean("ignore.enabled");
+        if (ignoreEnabled) {
+            blackLIgnore = config.getStringList("ignore.blacklist");
+        }
 
         chatColorEnabled = config.getBoolean("chat-color.enabled");
         if (chatColorEnabled) {
@@ -387,6 +389,7 @@ public class ConfigManager {
         return replyHoverConfigs.get(group);
     }
 
+    public List<String> getBlackLIgnore() {return blackLIgnore;}
     public boolean isSccEnabled() {return sccEnabled;}
     public String getSccFormat() {return sccFormat;}
     public boolean isMeEnabled() {return meEnabled;}
@@ -477,8 +480,6 @@ public class ConfigManager {
 
     public String getFormat() { return format; }
     public boolean isFormatGroup() { return formatGroup; }
-
-    public boolean isRegisterMessagesOnConsole() { return registerMessagesOnConsole; }
 
     public AdvertisingConfig getIpv4Config() { return ipv4Config; }
     public AdvertisingConfig getDomainConfig() { return domainConfig; }

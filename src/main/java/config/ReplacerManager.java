@@ -3,6 +3,7 @@ package config;
 import minealex.tchat.TChat;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,7 +31,7 @@ public class ReplacerManager {
         loadConfig();
     }
 
-    private void loadReplacements(FileConfiguration config) {
+    private void loadReplacements(@NotNull FileConfiguration config) {
         replacements = new HashMap<>();
         replacerEnabled = config.getBoolean("replacer_enabled", false);
 
@@ -51,7 +52,7 @@ public class ReplacerManager {
     public String replaceWords(String message, Player player) {
         for (Replacement replacement : replacements.values()) {
             if ("none".equals(replacement.getPermission()) || player.hasPermission(replacement.getPermission())) {
-                message = message.replace(replacement.getOriginal(), replacement.getReplace());
+                message = message.replaceAll("\\b" + replacement.getOriginal() + "\\b", replacement.getReplace());
             }
         }
         return message;

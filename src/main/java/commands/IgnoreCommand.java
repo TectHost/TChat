@@ -27,6 +27,8 @@ public class IgnoreCommand implements CommandExecutor {
             return true;
         }
 
+        List<String> blacklist = plugin.getConfigManager().getBlackLIgnore();
+
         if (sender.hasPermission("tchat.ignore") || sender.hasPermission("tchat.admin")) {
             if (args.length == 0) {
                 String message = plugin.getMessagesManager().getIgnoreUsage();
@@ -66,6 +68,13 @@ public class IgnoreCommand implements CommandExecutor {
 
             UUID senderId = player.getUniqueId();
             UUID targetId = target.getUniqueId();
+
+            if (blacklist.contains(targetId.toString())) {
+                String message = plugin.getMessagesManager().getIgnoreBlacklist().replace("%player%", target.getName());
+                sender.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + message));
+                return true;
+            }
+
             if (targetId.equals(senderId)) {
                 String message = plugin.getMessagesManager().getIgnoreSelf();
                 sender.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + message));

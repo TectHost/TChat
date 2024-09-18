@@ -47,7 +47,7 @@ public class AutoBroadcastSender {
                         if (currentBroadcast.getChannel().equalsIgnoreCase("none")) {
                             sendMessageToPlayers(Bukkit.getOnlinePlayers(), currentBroadcast);
                         } else {
-                            int messageMode = plugin.getChannelsConfigManager().getChannel(channelName).getMessageMode();
+                            int messageMode = plugin.getChannelsConfigManager().getChannel(channelName).messageMode();
 
                             switch (messageMode) {
                                 case 0:
@@ -56,7 +56,7 @@ public class AutoBroadcastSender {
 
                                 case 1:
                                     for (Player player : Bukkit.getOnlinePlayers()) {
-                                        String permission = plugin.getChannelsConfigManager().getChannel(channelName).getPermission();
+                                        String permission = plugin.getChannelsConfigManager().getChannel(channelName).permission();
                                         if (player.hasPermission(permission)) {
                                             sendMessageToPlayer(player, currentBroadcast);
                                         }

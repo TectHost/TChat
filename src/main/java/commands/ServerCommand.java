@@ -2,7 +2,6 @@ package commands;
 
 import minealex.tchat.TChat;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -33,6 +32,7 @@ public class ServerCommand implements CommandExecutor {
             String osN = System.getProperty("os.name");
             String osV = System.getProperty("os.version");
             String cpuFamily = System.getenv("PROCESSOR_IDENTIFIER");
+            if (cpuFamily == null) { cpuFamily = "Unknown CPU Family"; }
             int numPlugins = Bukkit.getServer().getPluginManager().getPlugins().length;
             int numWorlds = Bukkit.getServer().getWorlds().size();
 

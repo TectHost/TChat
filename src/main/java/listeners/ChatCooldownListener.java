@@ -30,7 +30,7 @@ public class ChatCooldownListener implements Listener {
         if (event.isCancelled()) { return; }
 
         String channelName = plugin.getChannelsManager().getPlayerChannel(player);
-        if (channelName != null && plugin.getChannelsConfigManager().getChannel(channelName).isCooldownEnabled()) {return;}
+        if (channelName != null && plugin.getChannelsConfigManager().getChannel(channelName).cooldownEnabled()) {return;}
 
         if (!player.hasPermission("tchat.admin") && !player.hasPermission("tchat.bypass.chatcooldown")) {
             if (plugin.getConfigManager().isCooldownChat()) {

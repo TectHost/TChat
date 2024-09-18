@@ -85,10 +85,12 @@ public class ChatFormatListener implements Listener {
 
         if (chatRadiusEnabled) {
             int chatRadius = worldConfigData.chatr();
+            String cRadius = worldConfigData.bcchatr();
 
             Set<Player> recipients = event.getRecipients().stream()
                     .filter(recipient -> recipient.hasPermission("tchat.admin") ||
                             recipient.hasPermission("tchat.bypass.chat-radius") ||
+                            (event.getMessage().startsWith(cRadius) && recipient.hasPermission("tchat.bypass.chat-radius.character")) ||
                             (recipient.getWorld().getName().equals(worldName) &&
                                     recipient.getLocation().distance(player.getLocation()) <= chatRadius))
                     .collect(Collectors.toSet());
@@ -143,8 +145,8 @@ public class ChatFormatListener implements Listener {
         ChannelsConfigManager.Channel channel = channelsConfigManager.getChannel(channelName);
 
         if (plugin.getConfigManager().isFormatEnabled() && groupManager.isFormatEnabled(player)) {
-            if (channel != null && channel.isCooldownEnabled()) {
-                long cooldownTime = channel.getCooldown();
+            if (channel != null && channel.cooldownEnabled()) {
+                long cooldownTime = channel.cooldown();
 
                 if (!canSendMessage(player, channelName, cooldownTime)) {
                     long lastMessageTime = channelCooldowns.getOrDefault(channelName, new HashMap<>())
@@ -164,9 +166,9 @@ public class ChatFormatListener implements Listener {
 
                 setLastMessageTime(player, channelName);
             }
-            if (channel != null && channel.isFormatEnabled() && channel.isEnabled() &&
-                    (player.hasPermission(channel.getPermission()) || player.hasPermission("tchat.admin") || player.hasPermission("tchat.channel.all"))) {
-                format = channel.getFormat();
+            if (channel != null && channel.formatEnabled() && channel.enabled() &&
+                    (player.hasPermission(channel.permission()) || player.hasPermission("tchat.admin") || player.hasPermission("tchat.channel.all"))) {
+                format = channel.format();
                 format = format.replace("%channel%", channelName);
             } else {
                 String groupName = groupManager.getGroup(player);
@@ -215,35 +217,30 @@ public class ChatFormatListener implements Listener {
 
             mainComponent.addExtra(messageComponent);
 
-            event.setCancelled(true);
-
             for (Player p : event.getRecipients()) {
-                if (channel == null || !channel.isEnabled()) {
+                if (channel == null || !channel.enabled()) {
                     p.spigot().sendMessage(mainComponent);
                 } else {
                     String recipientChannel = plugin.getChannelsManager().getPlayerChannel(p);
-                    boolean hasPermissionForChannel = p.hasPermission(channel.getPermission()) || p.hasPermission("tchat.admin") || p.hasPermission("tchat.channel.all");
+                    boolean hasPermissionForChannel = p.hasPermission(channel.permission()) || p.hasPermission("tchat.admin") || p.hasPermission("tchat.channel.all");
                     boolean isInRecipientChannel = recipientChannel != null && recipientChannel.equals(channelName);
 
-                    int messageMode = channel.getMessageMode();
+                    int messageMode = channel.messageMode();
                     if (messageMode == 0 || (messageMode == 1 && hasPermissionForChannel) || (messageMode == 2 && isInRecipientChannel)) {
                         p.spigot().sendMessage(mainComponent);
                     }
                 }
             }
 
-            if (configManager.isRegisterMessagesOnConsole()) {
-                String consoleMessage = mainComponent.toLegacyText();
-                consoleMessage = plugin.getTranslateColors().translateColors(player, consoleMessage);
-                Bukkit.getConsoleSender().sendMessage(consoleMessage);
-            }
+            event.getRecipients().clear();
+            event.setFormat(mainComponent.toLegacyText());
 
             if (plugin.getDiscordManager().isDiscordEnabled()) {
                 if (channelName == null) {
                     String discordMessage = removeMinecraftColorCodes(mainComponent.toLegacyText());
                     plugin.getDiscordHook().sendMessage(discordMessage, plugin.getDiscordManager().getDiscordHook());
-                } else if (plugin.getChannelsConfigManager().getChannel(channelName).isDiscordEnabled()) {
-                    String URL = plugin.getChannelsConfigManager().getChannel(channelName).getDiscordHook();
+                } else if (plugin.getChannelsConfigManager().getChannel(channelName).discordEnabled()) {
+                    String URL = plugin.getChannelsConfigManager().getChannel(channelName).discordHook();
                     String discordMessage = removeMinecraftColorCodes(mainComponent.toLegacyText());
                     plugin.getDiscordHook().sendMessage(discordMessage, URL);
                 }
@@ -253,8 +250,8 @@ public class ChatFormatListener implements Listener {
                 if (channelName == null) {
                     String discordMessage = removeMinecraftColorCodes(message);
                     plugin.getDiscordHook().sendMessage(discordMessage, plugin.getDiscordManager().getDiscordHook());
-                } else if (plugin.getChannelsConfigManager().getChannel(channelName).isDiscordEnabled()) {
-                    String URL = plugin.getChannelsConfigManager().getChannel(channelName).getDiscordHook();
+                } else if (plugin.getChannelsConfigManager().getChannel(channelName).discordEnabled()) {
+                    String URL = plugin.getChannelsConfigManager().getChannel(channelName).discordHook();
                     String discordMessage = removeMinecraftColorCodes(message);
                     plugin.getDiscordHook().sendMessage(discordMessage, URL);
                 }

@@ -47,7 +47,7 @@ public class ChannelsCompleter implements TabCompleter {
                         .filter(channelName -> {
                             if ("join".equalsIgnoreCase(action)) {
                                 ChannelsConfigManager.Channel channel = channels.get(channelName);
-                                return player.hasPermission(channel.getPermission()) || player.hasPermission("tchat.admin") || player.hasPermission("tchat.channel.all");
+                                return player.hasPermission(channel.permission()) || player.hasPermission("tchat.admin") || player.hasPermission("tchat.channel.all");
                             } else if ("leave".equalsIgnoreCase(action)) {
                                 return channelName.equalsIgnoreCase(plugin.getChannelsManager().getPlayerChannel(player));
                             }
@@ -59,7 +59,7 @@ public class ChannelsCompleter implements TabCompleter {
             } else if ("send".equalsIgnoreCase(action)) {
                 Map<String, ChannelsConfigManager.Channel> channels = plugin.getChannelsConfigManager().getChannels();
                 List<String> filteredChannels = channels.keySet().stream()
-                        .filter(channelName -> player.hasPermission(channels.get(channelName).getPermission()) || player.hasPermission("tchat.admin") || player.hasPermission("tchat.channel.all"))
+                        .filter(channelName -> player.hasPermission(channels.get(channelName).permission()) || player.hasPermission("tchat.admin") || player.hasPermission("tchat.channel.all"))
                         .toList();
 
                 return filteredChannels.stream().filter(channelName -> channelName.startsWith(args[1])).collect(Collectors.toList());

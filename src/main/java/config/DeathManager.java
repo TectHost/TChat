@@ -76,6 +76,7 @@ public class DeathManager {
                 : null;
     }
 
+
     public boolean isTitleEnabled() {
         return titleEnabled;
     }

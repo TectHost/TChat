@@ -23,6 +23,8 @@ channels:
     # 2 -> Announce visible to all users on the channel
     # 3 -> Disable announces
     announce-mode: 1
+    # Limit of players in this channel (put 0 for unlimited)
+    channel-limit: 5
     # Send discord messages to a concrete discord channel
     discord:
       enabled: false
@@ -40,6 +42,7 @@ channels:
       format: "%channel% &a%player% &b> "
     message-mode: 1
     announce-mode: 1
+    channel-limit: 10
     discord:
       enabled: false
       hook: "https://discord.com/api/webhooks/..."

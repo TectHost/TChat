@@ -17,14 +17,19 @@ public class Poll {
     private final long endTime;
     private final Map<Player, String> votes;
     private final String[] options;
+    private final int minPlayers;
+    private final int maxPlayers;
 
-    public Poll(TChat plugin, String title, int duration, String[] options) {
+    public Poll(TChat plugin, String title, int duration, String[] options, int minPlayers, int maxPlayers) {
         this.plugin = plugin;
         this.title = title;
         this.endTime = System.currentTimeMillis() + (duration * 1000L);
         this.votes = new HashMap<>();
         this.options = options;
+        this.minPlayers = minPlayers;
+        this.maxPlayers = maxPlayers;
     }
+
 
     public String getTitle() {
         return title;
@@ -37,6 +42,10 @@ public class Poll {
     public void vote(Player player, String option) {
         if (!hasEnded() && isValidOption(option)) {
             votes.put(player, option);
+
+            if (votes.size() >= maxPlayers) {
+                finalizePoll();
+            }
         }
     }
 
@@ -65,9 +74,9 @@ public class Poll {
     }
 
     public void finalizePoll() {
-        if (!hasEnded()) {
-            return;
-        }
+        if (votes.size() < minPlayers) { return; }
+
+        if (!hasEnded()) { return; }
 
         Map<String, Integer> results = getResults();
 

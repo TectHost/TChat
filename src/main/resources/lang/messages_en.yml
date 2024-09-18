@@ -78,6 +78,7 @@ messages:
       - "&5/website &6- &bDisplays the server's website"
       - "&5/youtube &6- &bDisplays the server's YouTube channel"
   poll:
+    finish: "&6[Poll] &aThe poll has finished!"
     message:
       start:
         title: "&6[New Poll] "
@@ -103,6 +104,7 @@ messages:
     ignore: "&aNow you are ignoring: &e%player%"
     ignore-list-message: "&7You are currently ignoring the following players: &a%players%"
     ignore-list-empty: "&cYou are not ignoring any players."
+    blacklist: "&cThe player '&4%player%&c' is blacklisted. You cannot ignore him."
   cooldown:
     chat: "&cPlease wait %cooldown% seconds before sending another message."
     command: "&cPlease wait %cooldown% seconds before executing another command."
@@ -140,6 +142,7 @@ messages:
     join-channel-announce: "&a%player% has joined the channel %channel%"
     no-channel: "&cYou are not in the channel %channel%"
     channel-no-permission-left: "&cYou do not have permission to left channel: %channel%"
+    full: "&cThe channel '&e%channel%&c' is full (&a%players%&c/&e%limit%&c)."
   bannedcommands:
     no-commands-blocked: "&cNo commands are currently blocked."
     blocked-list: "&eBlocked commands:"
@@ -217,7 +220,7 @@ messages:
     usage-broadcast: "&cUsage: /broadcast <message>"
     usage-ignore: "&cUsage: /ignore <player>"
     usage-poll: "&cUsage: /poll <create|vote> [arguments]"
-    usage-poll-create: "&cUsage: /poll create <duration> <title | options...>"
+    usage-poll-create: "&cUsage: /poll create <duration> <title | 'options' | Min players | Max players>"
     usage-poll-vote: "&cUsage: /poll vote <option>"
     usage-print: "&cUsage: /print <message>"
     usage-warning: "&cUsage: /warning <message>"

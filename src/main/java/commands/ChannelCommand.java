@@ -121,7 +121,17 @@ public class ChannelCommand implements CommandExecutor {
             return;
         }
 
-        if (hasPermission(player, channel.getPermission())) {
+        int playerCount = channelsManager.getChannelPlayerCount(channelName);
+        int playerLimit = channel.pLimit();
+
+        if (playerLimit > 0 && playerCount >= playerLimit) {
+            String message = plugin.getMessagesManager().getChannelFull().replace("%channel%", channelName);
+            message = message.replace("%players%", String.valueOf(playerCount)).replace("%limit%", String.valueOf(playerLimit));
+            sendMessage(player, message, prefix);
+            return;
+        }
+
+        if (hasPermission(player, channel.permission())) {
             sendMessage(player, plugin.getMessagesManager().getChannelNoPermissionJoin().replace("%channel%", channelName), prefix);
             return;
         }
@@ -175,19 +185,19 @@ public class ChannelCommand implements CommandExecutor {
             return;
         }
 
-        String format = channel.isFormatEnabled() ? channel.getFormat() : "%player%";
+        String format = channel.formatEnabled() ? channel.format() : "%player%";
 
         String formattedMessage = format
                 .replace("%player%", player.getName())
                 .replace("%channel%", channelName);
 
         for (Player p : Bukkit.getOnlinePlayers()) {
-            if (channel.isEnabled()) {
+            if (channel.enabled()) {
                 String recipientChannel = plugin.getChannelsManager().getPlayerChannel(p);
-                boolean hasPermissionForChannel = p.hasPermission(channel.getPermission()) || p.hasPermission("tchat.admin") || p.hasPermission("tchat.channel.all");
+                boolean hasPermissionForChannel = p.hasPermission(channel.permission()) || p.hasPermission("tchat.admin") || p.hasPermission("tchat.channel.all");
                 boolean isInRecipientChannel = recipientChannel != null && recipientChannel.equals(channelName);
 
-                int messageMode = channel.getMessageMode();
+                int messageMode = channel.messageMode();
                 if (messageMode == 0 || (messageMode == 1 && hasPermissionForChannel) || (messageMode == 2 && isInRecipientChannel)) {
                     p.sendMessage(plugin.getTranslateColors().translateColors(player, formattedMessage + message));
                 }
@@ -204,12 +214,12 @@ public class ChannelCommand implements CommandExecutor {
             if (p.equals(player)) continue;
 
             String recipientChannel = channelsManager.getPlayerChannel(p);
-            boolean hasPermissionForChannel = p.hasPermission(channel.getPermission()) ||
+            boolean hasPermissionForChannel = p.hasPermission(channel.permission()) ||
                     p.hasPermission("tchat.admin") ||
                     p.hasPermission("tchat.channel.all");
             boolean isInRecipientChannel = recipientChannel != null && recipientChannel.equals(channelName);
 
-            int announceMode = channel.getAnnounceMode();
+            int announceMode = channel.announceMode();
             if (shouldAnnounce(announceMode, hasPermissionForChannel, isInRecipientChannel)) {
                 sendMessage(p, messageTemplate.replace("%player%", player.getName()).replace("%channel%", channelName), prefix);
             }

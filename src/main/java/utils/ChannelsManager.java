@@ -23,6 +23,16 @@ public class ChannelsManager {
         return playerChannels.containsKey(player);
     }
 
+    public int getChannelPlayerCount(String channelName) {
+        int count = 0;
+        for (String channel : playerChannels.values()) {
+            if (channel.equalsIgnoreCase(channelName)) {
+                count++;
+            }
+        }
+        return count;
+    }
+
     public void removePlayerFromChannel(Player player) {
         playerChannels.remove(player);
     }

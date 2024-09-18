@@ -3,6 +3,8 @@ package config;
 import minealex.tchat.TChat;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.List;
@@ -30,7 +32,7 @@ public class GroupManager {
             String permission = config.getString("groups." + key + ".permission", "");
             String prefix = config.getString("groups." + key + ".prefix", "");
             String suffix = config.getString("groups." + key + ".suffix", "");
-            boolean formatEnabled = config.getBoolean("groups." + key + ".format-enabled");
+            boolean formatEnabled = config.getBoolean("groups." + key + ".format-enabled", false);
             String format = config.getString("groups." + key + ".format", "");
             HoverClickAction playerHoverClick = getHoverClickAction(config, "groups." + key + ".hover.player");
             HoverClickAction messageHoverClick = getHoverClickAction(config, "groups." + key + ".hover.message");
@@ -38,7 +40,8 @@ public class GroupManager {
         }
     }
 
-    private HoverClickAction getHoverClickAction(FileConfiguration config, String path) {
+    @Contract("_, _ -> new")
+    private @NotNull HoverClickAction getHoverClickAction(@NotNull FileConfiguration config, String path) {
         if (config.getBoolean(path + ".enabled", false)) {
             List<String> hover = config.getStringList(path + ".hover");
             boolean clickEnabled = config.getBoolean(path + ".click.enabled", false);
@@ -53,7 +56,7 @@ public class GroupManager {
         loadGroups();
     }
 
-    public String getGroup(Player player) {
+    public String getGroup(@NotNull Player player) {
         FileConfiguration config = groupsFile.getConfig();
         if (player.isOp()) {
             return config.getString("config.op-group");

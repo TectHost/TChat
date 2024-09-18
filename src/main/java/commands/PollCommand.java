@@ -20,7 +20,7 @@ public class PollCommand implements CommandExecutor {
     }
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String @NotNull [] args) {
         String prefix = plugin.getMessagesManager().getPrefix();
         if (args.length < 2) {
             String message = plugin.getMessagesManager().getUsagePoll();
@@ -33,6 +33,8 @@ public class PollCommand implements CommandExecutor {
             return handleCreateCommand(sender, args);
         } else if (subCommand.equals("vote")) {
             return handleVoteCommand(sender, args);
+        } else if (subCommand.equals("finish")) {
+            return handleFinishCommand(sender, args);
         } else {
             String message = plugin.getMessagesManager().getUsagePoll();
             sender.sendMessage(plugin.getTranslateColors().translateColors(null, prefix + message));
@@ -40,7 +42,31 @@ public class PollCommand implements CommandExecutor {
         }
     }
 
-    private boolean handleCreateCommand(CommandSender sender, String[] args) {
+    private boolean handleFinishCommand(@NotNull CommandSender sender, String[] args) {
+        String prefix = plugin.getMessagesManager().getPrefix();
+
+        if (sender.hasPermission("tchat.poll.finish") || sender.hasPermission("tchat.admin")) {
+            Poll currentPoll = Poll.getCurrentPoll();
+
+            if (currentPoll == null) {
+                String message = plugin.getMessagesManager().getNoPoll();
+                sender.sendMessage(plugin.getTranslateColors().translateColors(null, prefix + message));
+                return false;
+            }
+
+            currentPoll.finalizePoll();
+            String message = plugin.getMessagesManager().getPollFinish();
+            sender.sendMessage(plugin.getTranslateColors().translateColors(null, prefix + message));
+            return true;
+
+        } else {
+            String message = plugin.getMessagesManager().getNoPermission();
+            sender.sendMessage(plugin.getTranslateColors().translateColors(null, prefix + message));
+            return false;
+        }
+    }
+
+    private boolean handleCreateCommand(@NotNull CommandSender sender, String[] args) {
         String prefix = plugin.getMessagesManager().getPrefix();
         if (sender.hasPermission("tchat.poll.create") || sender.hasPermission("tchat.admin")) {
             if (!(sender instanceof Player player)) {
@@ -65,7 +91,7 @@ public class PollCommand implements CommandExecutor {
             }
 
             String combinedArgs = String.join(" ", Arrays.copyOfRange(args, 2, args.length));
-            String[] parts = combinedArgs.split("\\|", 2);
+            String[] parts = combinedArgs.split("\\|", 4);
 
             if (parts.length < 2) {
                 String message = plugin.getMessagesManager().getUsagePollCreate();
@@ -75,6 +101,8 @@ public class PollCommand implements CommandExecutor {
 
             String title = parts[0].trim();
             String[] options = parts[1].trim().split("\\s+");
+            int minPlayer = Integer.parseInt(parts[2].trim());
+            int maxPlayer = Integer.parseInt(parts[3].trim());
 
             if (options.length < 1) {
                 String message = plugin.getMessagesManager().getOneOption();
@@ -82,7 +110,7 @@ public class PollCommand implements CommandExecutor {
                 return false;
             }
 
-            Poll newPoll = new Poll(plugin, title, duration, options);
+            Poll newPoll = new Poll(plugin, title, duration, options, minPlayer, maxPlayer);
             Poll.setCurrentPoll(newPoll);
 
             String message = plugin.getMessagesManager().getPollCreate();
@@ -123,7 +151,7 @@ public class PollCommand implements CommandExecutor {
         return true;
     }
 
-    private boolean handleVoteCommand(CommandSender sender, String[] args) {
+    private boolean handleVoteCommand(@NotNull CommandSender sender, String[] args) {
         String prefix = plugin.getMessagesManager().getPrefix();
         if (sender.hasPermission("tchat.admin") || sender.hasPermission("tchat.poll.vote")) {
             if (!(sender instanceof Player player)) {

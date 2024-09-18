@@ -17,13 +17,13 @@ public class GrammarListener {
         if (event.isCancelled()) { return; }
 
         if (plugin.getConfigManager().isGrammarCapEnabled()) {
-            if (!player.hasPermission(plugin.getConfigManager().getPermissionBypassCap()) || !player.hasPermission("tchat.admin")) {
+            if (!player.hasPermission(plugin.getConfigManager().getPermissionBypassCap()) && !player.hasPermission("tchat.admin")) {
                 message = checkCap(message);
             }
         }
 
         if (plugin.getConfigManager().isGrammarDotEnabled()) {
-            if (!player.hasPermission(plugin.getConfigManager().getPermissionBypassFinalDot()) || !player.hasPermission("tchat.admin")) {
+            if (!player.hasPermission(plugin.getConfigManager().getPermissionBypassFinalDot()) && !player.hasPermission("tchat.admin")) {
                 message = checkDot(message);
             }
         }

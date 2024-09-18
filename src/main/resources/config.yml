@@ -12,8 +12,6 @@ chat:
   # Global format (use only if the use-group-format option is false)
   # Use the "¡" character to split the format in the player and message part
   format: "%tchat_prefix% &a%tchat_nick% &e>> ¡&7"
-  # This option is used to display on the console the messages from the players
-  register-messages-on-console: true
   # Select lang file (inside the lang folder)
   lang: "messages_en.yml"
 
@@ -450,6 +448,9 @@ broadcast:
 ignore:
   # Enable/disable this command
   enabled: true
+  # Blacklist of users who cannot be ignored
+  blacklist:
+    - "TectHost"
 
 # #################################################################
 # ┌─────────────────────────────────────────────────────────────┐ #

@@ -48,33 +48,6 @@ public class CommandsManager {
         return plugin;
     }
 
-    public static class Command {
-        private final boolean permissionRequired;
-        private final List<String> actions;
-        private final int cooldown;
-        private final boolean args;
-
-        public Command(boolean permissionRequired, List<String> actions, int cooldown, boolean args) {
-            this.permissionRequired = permissionRequired;
-            this.actions = actions;
-            this.cooldown = cooldown;
-            this.args = args;
-        }
-
-        public boolean isPermissionRequired() {
-            return permissionRequired;
-        }
-
-        public List<String> getActions() {
-            return actions;
-        }
-
-        public int getCooldown() {
-            return cooldown;
-        }
-
-        public boolean isArgs() {
-            return args;
-        }
+    public record Command(boolean permissionRequired, List<String> actions, int cooldown, boolean args) {
     }
 }

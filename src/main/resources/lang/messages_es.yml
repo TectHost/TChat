@@ -72,22 +72,23 @@ messages:
     - "&5/website &6- &bMuestra la web del servidor"
     - "&5/youtube &6- &bMuestra el canal de YouTube del servidor"
   poll:
+    finish: "&6[Encuesta] &a¡La encuesta terminó!"
     message:
-    start:
-      title: "&6[Nueva Encuesta] "
-      text: "&aTítulo: "
-      option-line: "&6• %option%: &c%votes% votos (&a%.2f%%&c)"
-      progress-bar: "&7[&c%filled%&7]"
-    update:
-      title: "&6[Encuesta] "
-      text: "&aTítulo: "
-      option-line: "&6• %option%: &c%votes% votos (&a%.2f%%&c)"
-      progress-bar: "&7[&c%filled%&7]"
-    end:
-      title: "&6[Resultados de la Encuesta] "
-      text: "&aTítulo: "
-      option-line: "&6• %option%: &c%votes% votos (&a%.2f%%&c)"
-      progress-bar: "&7[&a%filled%&c%empty%&7]"
+      start:
+        title: "&6[Nueva Encuesta] "
+        text: "&aTítulo: "
+        option-line: "&6• %option%: &c%votes% votos (&a%.2f%%&c)"
+        progress-bar: "&7[&c%filled%&7]"
+      update:
+        title: "&6[Encuesta] "
+        text: "&aTítulo: "
+        option-line: "&6• %option%: &c%votes% votos (&a%.2f%%&c)"
+        progress-bar: "&7[&c%filled%&7]"
+      end:
+        title: "&6[Resultados de la Encuesta] "
+        text: "&aTítulo: "
+        option-line: "&6• %option%: &c%votes% votos (&a%.2f%%&c)"
+        progress-bar: "&7[&a%filled%&c%empty%&7]"
     join:
       message: "&6[Encuesta] &fHay una encuesta en curso: &a%poll%"
       message-options: "&6[Opciones de la Encuesta] &f%options%"
@@ -97,6 +98,7 @@ messages:
     ignore: "&aAhora estás ignorando a: &e%player%"
     ignore-list-message: "&7Actualmente estás ignorando a los siguientes jugadores: &a%players%"
     ignore-list-empty: "&cNo estás ignorando a ningún jugador."
+    blacklist: "&cEl jugador '&4%player%&c' está en la lista negra. No puedes ignorarlo."
   cooldown:
     chat: "&cPor favor espera %cooldown% segundos antes de enviar otro mensaje."
     command: "&cPor favor espera %cooldown% segundos antes de ejecutar otro comando."
@@ -134,6 +136,7 @@ messages:
     join-channel-announce: "&a%player% se ha unido al canal %channel%"
     no-channel: "&cNo estás en el canal %channel%"
     channel-no-permission-left: "&cNo tienes permiso para salir del canal: %channel%"
+    full: "&cEl canal '&e%channel%&c' está lleno (&a%players%&c/&e%limit%&c)."
   bannedcommands:
     no-commands-blocked: "&cNo hay comandos bloqueados actualmente."
     blocked-list: "&eComandos bloqueados:"
@@ -209,7 +212,7 @@ messages:
     usage-broadcast: "&cUso: /broadcast <mensaje>"
     usage-ignore: "&cUso: /ignore <jugador>"
     usage-poll: "&cUso: /poll <create|vote> [argumentos]"
-    usage-poll-create: "&cUso: /poll create <duración> <título | opciones...>"
+    usage-poll-create: "&cUso: /poll create <duración> <título | 'opciones' | Min jugadores | Max jugadores>"
     usage-poll-vote: "&cUso: /poll vote <opción>"
     usage-print: "&cUso: /print <mensaje>"
     usage-warning: "&cUso: /warning <mensaje>"

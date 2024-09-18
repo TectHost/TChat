@@ -79,40 +79,52 @@ public class DeathsListener implements Listener {
             };
         }
 
-        if (causeMessage == null) { return; }
+        if (causeMessage == null) {
+            causeMessage = deathManager.getDeathMessage("player-killed-by-environment");
+        }
 
-        if (plugin.getConfigManager().isDeathLogs()) { plugin.getLogsManager().logDeaths(playerName); }
+        if (causeMessage != null) {
+            if (plugin.getConfigManager().isDeathLogs()) {
+                plugin.getLogsManager().logDeaths(playerName);
+            }
 
-        String deathMessage = causeMessage.replace("%player%", playerName)
-                .replace("%killer%", killerName);
+            String deathMessage = causeMessage.replace("%player%", playerName)
+                    .replace("%killer%", killerName);
 
-        if (deathManager.getDeathMessage("player-killed-by-environment") != null) {
             event.setDeathMessage(plugin.getTranslateColors().translateColors(player, deathMessage));
-        }
 
-        if (deathManager.isTitleEnabled()) {
-            String title = deathManager.getTitle().replace("%player%", playerName);
-            String subtitle = deathManager.getSubtitle().replace("%player%", playerName);
-            player.sendTitle(plugin.getTranslateColors().translateColors(player, title),
-                    plugin.getTranslateColors().translateColors(player, subtitle),
-                    10, 70, 20);
-        }
+            if (deathManager.isTitleEnabled()) {
+                String title = deathManager.getTitle() != null ? deathManager.getTitle().replace("%player%", playerName) : "";
+                String subtitle = deathManager.getSubtitle() != null ? deathManager.getSubtitle().replace("%player%", playerName) : "";
+                player.sendTitle(plugin.getTranslateColors().translateColors(player, title),
+                        plugin.getTranslateColors().translateColors(player, subtitle),
+                        10, 70, 20);
+            }
 
-        if (deathManager.isActionBarEnabled()) {
-            String actionBarText = deathManager.getActionBarText().replace("%player%", playerName);
-            player.spigot().sendMessage(net.md_5.bungee.api.ChatMessageType.ACTION_BAR,
-                    net.md_5.bungee.api.chat.TextComponent.fromLegacyText(
-                            plugin.getTranslateColors().translateColors(player, actionBarText)));
-        }
+            if (deathManager.isActionBarEnabled()) {
+                String actionBarText = deathManager.getActionBarText() != null ? deathManager.getActionBarText().replace("%player%", playerName) : "";
+                player.spigot().sendMessage(net.md_5.bungee.api.ChatMessageType.ACTION_BAR,
+                        net.md_5.bungee.api.chat.TextComponent.fromLegacyText(
+                                plugin.getTranslateColors().translateColors(player, actionBarText)));
+            }
 
-        if (deathManager.isSoundEnabled()) {
-            Sound sound = Sound.valueOf(deathManager.getSound());
-            player.playSound(player.getLocation(), sound, 1.0f, 1.0f);
-        }
+            if (deathManager.isSoundEnabled()) {
+                try {
+                    Sound sound = Sound.valueOf(deathManager.getSound());
+                    player.playSound(player.getLocation(), sound, 1.0f, 1.0f);
+                } catch (IllegalArgumentException e) {
+                    plugin.getLogger().warning("Sonido configurado no válido: " + deathManager.getSound());
+                }
+            }
 
-        if (deathManager.isParticlesEnabled()) {
-            Particle particle = Particle.valueOf(deathManager.getParticle());
-            player.getWorld().spawnParticle(particle, player.getLocation(), deathManager.getNumberOfParticles());
+            if (deathManager.isParticlesEnabled()) {
+                try {
+                    Particle particle = Particle.valueOf(deathManager.getParticle());
+                    player.getWorld().spawnParticle(particle, player.getLocation(), deathManager.getNumberOfParticles());
+                } catch (IllegalArgumentException e) {
+                    plugin.getLogger().warning("Partícula configurada no válida: " + deathManager.getParticle());
+                }
+            }
         }
     }
 }
