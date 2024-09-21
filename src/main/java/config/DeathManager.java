@@ -71,8 +71,8 @@ public class DeathManager {
 
     public String getDeathMessage(String key) {
         DeathMessage deathMessage = deathMessages.get(key);
-        return (deathMessage != null && deathMessage.isEnabled())
-                ? deathMessage.getMessage()
+        return (deathMessage != null && deathMessage.enabled())
+                ? deathMessage.message()
                 : null;
     }
 
@@ -117,21 +117,6 @@ public class DeathManager {
         return numberOfParticles;
     }
 
-    public static class DeathMessage {
-        private final boolean enabled;
-        private final String message;
-
-        public DeathMessage(boolean enabled, String message) {
-            this.enabled = enabled;
-            this.message = message;
-        }
-
-        public boolean isEnabled() {
-            return enabled;
-        }
-
-        public String getMessage() {
-            return message;
-        }
+    public record DeathMessage(boolean enabled, String message) {
     }
 }

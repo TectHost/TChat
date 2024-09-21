@@ -5,10 +5,7 @@ import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import config.ChatGamesManager;
@@ -37,11 +34,7 @@ public class ChatGamesSender {
         String prefix = plugin.getMessagesManager().getPrefix();
         var games = plugin.getChatGamesManager().getGames();
 
-        if (games.isEmpty()) {
-            String message = plugin.getMessagesManager().getNoGames();
-            sendToAllPlayers(prefix + message);
-            return;
-        }
+        if (games.isEmpty()) { return; }
 
         do {
             currentGame = games.get(currentGameIndex);
@@ -67,6 +60,13 @@ public class ChatGamesSender {
         } else {
             String message = plugin.getMessagesManager().getNoMessages();
             sendToAllPlayers(prefix + message);
+        }
+
+        for (String keyword : currentGame.getKeywords()) {
+            if (keyword.startsWith("[BREAK]")) {
+                startBlockBreakGame(keyword);
+                break;
+            }
         }
 
         countdownTask = new BukkitRunnable() {
@@ -172,22 +172,58 @@ public class ChatGamesSender {
         if (currentGame == null || !gameActive) { return; }
         if (winners.contains(player.getName())) { return; }
 
-        if (currentGame.getKeywords() != null && currentGame.getKeywords().contains(message.toLowerCase())) {
-            String message1 = plugin.getMessagesManager().getGameWin();
-            message1 = message1.replace("%player%", player.getName());
-            String prefix = plugin.getMessagesManager().getPrefix();
-            sendToAllPlayers(prefix + message1);
-            winners.add(player.getName());
-            UUID playerId = player.getUniqueId();
-            int wins = plugin.getSaveManager().getChatGamesWins(playerId);
-            wins++;
-            plugin.getSaveManager().setChatGamesWins(playerId, wins);
-            executeRewards(player);
+        List<String> keywords = currentGame.getKeywords();
 
-            showEffects(currentGame.getWinnerEffects(), player);
-            showEffects(currentGame.getEndEffects(), null);
+        for (String keyword : keywords) {
+            if (keyword.startsWith("[WRITE]")) {
+                String cleanedKeyword = keyword.substring(7).trim();
+                if (cleanedKeyword.equalsIgnoreCase(message)) {
+                    notifyWinner(player);
+                    return;
+                }
+            }
+        }
+    }
 
-            endGame();
+    public void notifyWinner(@NotNull Player player) {
+        String winMessage = plugin.getMessagesManager().getGameWin();
+        winMessage = winMessage.replace("%player%", player.getName());
+        String prefix = plugin.getMessagesManager().getPrefix();
+        sendToAllPlayers(prefix + winMessage);
+        winners.add(player.getName());
+
+        UUID playerId = player.getUniqueId();
+        int wins = plugin.getSaveManager().getChatGamesWins(playerId);
+        wins++;
+        plugin.getSaveManager().setChatGamesWins(playerId, wins);
+        executeRewards(player);
+
+        showEffects(currentGame.getWinnerEffects(), player);
+        showEffects(currentGame.getEndEffects(), null);
+
+        endGame();
+    }
+
+    private void startBlockBreakGame(@NotNull String keyword) {
+        String[] parts = keyword.split(" ");
+        if (parts.length == 3) {
+            Material blockType = Material.matchMaterial(parts[1].toUpperCase());
+            int requiredAmount;
+
+            try {
+                requiredAmount = Integer.parseInt(parts[2]);
+            } catch (NumberFormatException e) {
+                plugin.getLogger().warning("Invalid amount specified in [BREAK] command.");
+                return;
+            }
+
+            if (blockType != null) {
+                new BlockBreakGame(plugin, blockType, requiredAmount);
+            } else {
+                plugin.getLogger().warning("Invalid block type specified in [BREAK] command.");
+            }
+        } else {
+            plugin.getLogger().warning("Invalid format for [BREAK] command. Expected: [BREAK] BLOCK_TYPE AMOUNT");
         }
     }
 
@@ -299,4 +335,6 @@ public class ChatGamesSender {
             component.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, command));
         }
     }
+
+    public boolean isGameActive() { return gameActive; }
 }

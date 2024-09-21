@@ -12,7 +12,8 @@ public class PlaceholdersConfig {
     private String coordsName;
 
     private boolean itemEnabled;
-    private String itemFormat;
+    private String itemPrefix;
+    private String itemSuffix;
     private String itemName;
 
     private boolean worldEnabled;
@@ -58,7 +59,8 @@ public class PlaceholdersConfig {
 
         itemEnabled = config.getBoolean("chat.item.enabled");
         if (itemEnabled) {
-            itemFormat = config.getString("chat.item.format");
+            itemPrefix = config.getString("chat.item.prefix", "%tchat_format%%before_item%&7[");
+            itemSuffix = config.getString("chat.item.suffix", "&7]%after_item%");
             itemName = config.getString("chat.item.name");
         }
 
@@ -139,7 +141,8 @@ public class PlaceholdersConfig {
     public String getWorldName() { return worldName; }
 
     public boolean isItemEnabled() { return itemEnabled; }
-    public String getItemFormat() { return itemFormat; }
+    public String getItemPrefix() {return itemPrefix;}
+    public String getItemSuffix() {return itemSuffix;}
     public String getItemName() { return itemName; }
 
     public String getCoordsName() { return coordsName; }

@@ -74,8 +74,13 @@ public class DeathsListener implements Listener {
                     }
                     yield deathManager.getDeathMessage("player-killed-by-falling-block");
                 }
-                default -> deathManager.getDeathMessage("player-killed-by-environment")
-                        .replace("%cause%", damageCause.toString());
+                default -> {
+                    String message = deathManager.getDeathMessage("player-killed-by-environment");
+                    if (message != null) {
+                        yield message.replace("%cause%", damageCause.toString());
+                    }
+                    yield null;
+                }
             };
         }
 

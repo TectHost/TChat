@@ -1,6 +1,7 @@
 package commands;
 
 import minealex.tchat.TChat;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -60,7 +61,12 @@ public class ChatColorCommand implements CommandExecutor {
 
         if (args.length == 0 && plugin.getConfigManager().isChatColorMenuEnabled()) {
             if (player.hasPermission("tchat.chatcolor.menu")) {
-                plugin.getChatColorInventoryManager().openInventory(player, plugin.getTranslateColors().translateColors(player, plugin.getChatColorManager().getTitle()));
+                String title = plugin.getTranslateColors().translateColors(player, plugin.getChatColorManager().getTitle());
+                if (title.contains("%center%")) {
+                    title = title.replace("%center%", "");
+                    title = centerText(title);
+                }
+                plugin.getChatColorInventoryManager().openInventory(player, title);
             } else {
                 String message = plugin.getTranslateColors().translateColors(player, plugin.getMessagesManager().getNoPermission());
                 player.sendMessage(prefix + message);
@@ -118,5 +124,19 @@ public class ChatColorCommand implements CommandExecutor {
         }
 
         return true;
+    }
+
+    private String centerText(String message) {
+        final int maxLength = 32;
+        String strippedMessage = ChatColor.stripColor(message);
+        int length = strippedMessage.length();
+
+        if (length >= maxLength) {
+            return message;
+        }
+
+        int spaces = (maxLength - length) / 2;
+
+        return " ".repeat(spaces) + message;
     }
 }

@@ -57,6 +57,30 @@ public class IgnoreCommand implements CommandExecutor {
                 return true;
             }
 
+            if (args[0].equalsIgnoreCase("all")) {
+                UUID senderId = player.getUniqueId();
+                List<String> ignoreList = plugin.getSaveManager().getIgnoreList(senderId);
+
+                if (ignoreList.contains("all")) {
+                    String message = plugin.getMessagesManager().getIgnoreAlready().replace("%player%", "all");
+                    sender.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + message));
+                    ignoreList.remove("all");
+                    plugin.getSaveManager().setIgnore(senderId, ignoreList);
+                    return true;
+                }
+
+                ignoreList.add("all");
+                plugin.getSaveManager().setIgnore(senderId, ignoreList);
+
+                if (plugin.getConfigManager().isIgnoreLogEnabled()) {
+                    plugin.getLogsManager().logIgnore(player.getName(), "all");
+                }
+
+                String addedMessage = plugin.getMessagesManager().getIgnoreMessage().replace("%player%", "all");
+                sender.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + addedMessage));
+                return true;
+            }
+
             String targetName = args[0];
             Player target = plugin.getServer().getPlayer(targetName);
 

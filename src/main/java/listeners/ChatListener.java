@@ -46,7 +46,7 @@ public class ChatListener implements Listener {
         plugin.getCheckPlayerMuted().checkMuted(event);
         plugin.getChatEnabledListener().checkChatEnabled(event);
         chatMuted(event);
-        plugin.getChatCooldownListener().chatCooldown(event, player);
+        plugin.getChatCooldownListener().chatCooldown(event);
         plugin.getAntiUnicodeListener().checkUnicode(event);
         plugin.getChatBotListener().chatBot(event);
         plugin.getAntiAdvertising().checkAdvertising(event);
@@ -72,7 +72,7 @@ public class ChatListener implements Listener {
         socialSpy(event, player, command);
         logs(player, command, 0);
         plugin.getAntiAdvertising().checkAdvertisingCommand(event, player, command);
-        plugin.getChatCooldownListener().commandCooldown(event, player);
+        plugin.getChatCooldownListener().commandCooldown(event);
         antiBot(null, player, event);
         new BannedCommands(plugin).onPlayerCommandPreprocess(event);
     }
@@ -121,18 +121,18 @@ public class ChatListener implements Listener {
                             broadcastNames.get(player),
                             broadcastEnabled.get(player),
                             messages,
-                            broadcast.isTitleEnabled(),
-                            broadcast.getTitle(),
-                            broadcast.getSubtitle(),
-                            broadcast.isSoundEnabled(),
-                            broadcast.getSound(),
-                            broadcast.isParticlesEnabled(),
-                            broadcast.getParticle(),
-                            broadcast.getParticleCount(),
-                            broadcast.isActionbarEnabled(),
-                            broadcast.getActionbar(),
-                            broadcast.getChannel(),
-                            broadcast.getPermission()
+                            broadcast.titleEnabled(),
+                            broadcast.title(),
+                            broadcast.subtitle(),
+                            broadcast.soundEnabled(),
+                            broadcast.sound(),
+                            broadcast.particlesEnabled(),
+                            broadcast.particle(),
+                            broadcast.particleCount(),
+                            broadcast.actionbarEnabled(),
+                            broadcast.actionbar(),
+                            broadcast.channel(),
+                            broadcast.permission()
                     );
                     plugin.getAutoBroadcastManager().reloadConfig();
 

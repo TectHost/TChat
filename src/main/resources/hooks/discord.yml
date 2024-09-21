@@ -38,3 +38,10 @@ discord:
     # https://www.colorhexa.com/
     color: 0
     avatar-enabled: true
+  banned-words:
+    # For disable and change webhook, check the banned_words.yml
+    title: "Banned Word Detected"
+    description: "Player %player% used a banned word: %word%\nMessage: \"%message%\""
+    # https://www.colorhexa.com/
+    color: 15158332
+    avatar-enabled: true

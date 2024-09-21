@@ -4,7 +4,10 @@ import minealex.tchat.TChat;
 import org.bukkit.configuration.file.FileConfiguration;
 
 public class DiscordManager {
+
     private final ConfigFile configFile;
+    private final TChat plugin;
+
     private boolean discordEnabled;
     private String discordHook;
 
@@ -26,7 +29,13 @@ public class DiscordManager {
     private int deathColor;
     private boolean deathAvatarEnabled;
 
+    private String bannedWordsTitle;
+    private String bannedWordsDescription;
+    private int bannedWordsColor;
+    private boolean bannedWordsAvatar;
+
     public DiscordManager(TChat plugin) {
+        this.plugin = plugin;
         this.configFile = new ConfigFile("discord.yml", "hooks", plugin);
         this.configFile.registerConfig();
         loadConfig();
@@ -62,7 +71,19 @@ public class DiscordManager {
                 deathAvatarEnabled = config.getBoolean("discord.death.avatar-enabled");
             }
         }
+
+        if (plugin.getBannedWordsManager().isDiscordEnabled()) {
+            bannedWordsTitle = config.getString("discord.banned-words.title", "Banned Word Detected");
+            bannedWordsDescription = config.getString("discord.banned-words.description", "Player %player% used a banned word: %word%\nMessage: \"%message%\"");
+            bannedWordsColor = config.getInt("discord.banned-words.color", 15158332);
+            bannedWordsAvatar = config.getBoolean("discord.banned-words.avatar-enabled", true);
+        }
     }
+
+    public boolean isBannedWordsAvatar() {return bannedWordsAvatar;}
+    public String getBannedWordsTitle() {return bannedWordsTitle;}
+    public String getBannedWordsDescription() {return bannedWordsDescription;}
+    public int getBannedWordsColor() {return bannedWordsColor;}
 
     public boolean isDeathEnabled() {
         return deathEnabled;

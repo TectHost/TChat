@@ -40,6 +40,10 @@ public class BannedWords implements Listener {
 
                 if (message.toLowerCase().contains(word.toLowerCase())) {
 
+                    if (bannedWordsManager.isDiscordEnabled()) {
+                        plugin.getDiscordHook().sendBannedWordEmbed(player.getName(), word, message, bannedWordsManager.getDiscordURL());
+                    }
+
                     if (plugin.getConfigManager().isLogBannedWordsEnabled()) {
                         plugin.getLogsManager().logBannedWords(player.getName(), word);
                     }

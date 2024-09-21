@@ -2,11 +2,10 @@ package config;
 
 import minealex.tchat.TChat;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.Objects;
+import java.util.*;
 
 public class AutoBroadcastManager {
 
@@ -14,6 +13,7 @@ public class AutoBroadcastManager {
     private int time;
     private boolean enabled;
     private final Map<String, Broadcast> broadcasts = new HashMap<>();
+    private final HashSet<UUID> toggledPlayers = new HashSet<>();
 
     public AutoBroadcastManager(TChat plugin){
         this.autoBroadcastFile = new ConfigFile("autobroadcast.yml", null, plugin);
@@ -116,96 +116,24 @@ public class AutoBroadcastManager {
         return broadcasts;
     }
 
-    public static class Broadcast {
-        private final boolean enabled;
-        private final List<String> message;
-        private final boolean titleEnabled;
-        private final String title;
-        private final String subtitle;
-        private final boolean soundEnabled;
-        private final String sound;
-        private final boolean particlesEnabled;
-        private final String particle;
-        private final int particleCount;
-        private final boolean actionbarEnabled;
-        private final String actionbar;
-        private final String channel;
-        private final String permission;
-
-        public Broadcast(boolean enabled, List<String> message,
-                         boolean titleEnabled, String title, String subtitle,
-                         boolean soundEnabled, String sound,
-                         boolean particlesEnabled, String particle, int particleCount,
-                         boolean actionbarEnabled, String actionbar, String channel,
-                         String permission) {
-            this.enabled = enabled;
-            this.message = message;
-            this.titleEnabled = titleEnabled;
-            this.title = title;
-            this.subtitle = subtitle;
-            this.soundEnabled = soundEnabled;
-            this.sound = sound;
-            this.particlesEnabled = particlesEnabled;
-            this.particle = particle;
-            this.particleCount = particleCount;
-            this.actionbarEnabled = actionbarEnabled;
-            this.actionbar = actionbar;
-            this.channel = channel;
-            this.permission = permission;
+    public boolean togglePlayerBroadcast(@NotNull Player player) {
+        UUID playerUUID = player.getUniqueId();
+        if (toggledPlayers.contains(playerUUID)) {
+            toggledPlayers.remove(playerUUID);
+            return false;
+        } else {
+            toggledPlayers.add(playerUUID);
+            return true;
         }
+    }
 
-        public String getPermission() {
-            return permission;
-        }
+    public boolean isPlayerToggled(@NotNull Player player) {
+        return toggledPlayers.contains(player.getUniqueId());
+    }
 
-        public boolean isEnabled() {
-            return enabled;
-        }
-
-        public String getChannel() {
-            return channel;
-        }
-
-        public List<String> getMessage() {
-            return message;
-        }
-
-        public boolean isTitleEnabled() {
-            return titleEnabled;
-        }
-
-        public String getTitle() {
-            return title;
-        }
-
-        public String getSubtitle() {
-            return subtitle;
-        }
-
-        public boolean isSoundEnabled() {
-            return soundEnabled;
-        }
-
-        public String getSound() {
-            return sound;
-        }
-
-        public boolean isParticlesEnabled() {
-            return particlesEnabled;
-        }
-
-        public String getParticle() { return particle; }
-
-        public int getParticleCount() {
-            return particleCount;
-        }
-
-        public boolean isActionbarEnabled() {
-            return actionbarEnabled;
-        }
-
-        public String getActionbar() {
-            return actionbar;
-        }
+    public record Broadcast(boolean enabled, List<String> message, boolean titleEnabled, String title, String subtitle,
+                            boolean soundEnabled, String sound, boolean particlesEnabled, String particle,
+                            int particleCount, boolean actionbarEnabled, String actionbar, String channel,
+                            String permission) {
     }
 }

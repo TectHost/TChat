@@ -205,6 +205,70 @@ public class DiscordHook {
         return embedBuilder.toString();
     }
 
+    public void sendBannedWordEmbed(String playerName, String word, String message, String URL) {
+        HttpURLConnection connection = null;
+        try {
+            URL url = new URL(URL);
+            connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("POST");
+            connection.setRequestProperty("Content-Type", "application/json; utf-8");
+            connection.setRequestProperty("Accept", "application/json");
+            connection.setDoOutput(true);
+
+            String jsonPayload = buildEmbedBannedWord(playerName, word, message);
+            try (OutputStream os = connection.getOutputStream()) {
+                byte[] input = jsonPayload.getBytes(StandardCharsets.UTF_8);
+                os.write(input, 0, input.length);
+            }
+
+            int code = connection.getResponseCode();
+            if (code != HttpURLConnection.HTTP_NO_CONTENT) {
+                plugin.getLogger().info("Failed to send message. HTTP error code: " + code);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (connection != null) {
+                connection.disconnect();
+            }
+        }
+    }
+
+    private @NotNull String buildEmbedBannedWord(String playerName, String word, String message) {
+        String title = plugin.getDiscordManager().getBannedWordsTitle();
+        String descriptionTemplate = plugin.getDiscordManager().getBannedWordsDescription();
+        int color = plugin.getDiscordManager().getBannedWordsColor();
+        boolean avatarEnabled = plugin.getDiscordManager().isBannedWordsAvatar();
+
+        String description = descriptionTemplate
+                .replace("%player%", escapeJson(playerName))
+                .replace("%word%", escapeJson(word))
+                .replace("%message%", escapeJson(message));
+
+        String avatarUrl = "https://mc-heads.net/avatar/" + playerName;
+
+        StringBuilder embedBuilder = new StringBuilder();
+        embedBuilder.append("{")
+                .append("\"embeds\": [{")
+                .append("\"title\": \"").append(escapeJson(title)).append("\",")
+                .append("\"description\": \"").append(escapeJson(description)).append("\",")
+                .append("\"color\": ").append(color);
+
+        if (avatarEnabled) {
+            embedBuilder.append(",")
+                    .append("\"thumbnail\": {")
+                    .append("\"url\": \"").append(escapeJson(avatarUrl)).append("\"")
+                    .append("}");
+        }
+
+        embedBuilder.append("}]")
+                .append("}");
+
+        return embedBuilder.toString();
+    }
+
+
     private @NotNull String escapeJson(@NotNull String message) {
         return message.replace("\\", "\\\\")
                 .replace("\"", "\\\"")

@@ -46,7 +46,6 @@ public class MessagesManager {
     private String antibotCommand;
     private String antibotJoin;
     private String antibotMoved;
-    private String noGames;
     private String noEnabledGames;
     private String noMessages;
     private String timeFinished;
@@ -212,6 +211,10 @@ public class MessagesManager {
     private String ignoreBlacklist;
     private String channelFull;
     private String pollFinish;
+    private String autoBroadcastToggleOn;
+    private String autoBroadcastToggleOff;
+    private String noItemInHand;
+    private String invalidItemMeta;
 
     public MessagesManager(TChat plugin){
         this.messagesFile = new ConfigFile(plugin.getConfigManager().getLangFile(), "lang", plugin);
@@ -376,6 +379,8 @@ public class MessagesManager {
         }
 
         // Messages
+        noItemInHand = config.getString("messages.no-item-in-hand", "&cYou do not have any items in hand.");
+        invalidItemMeta = config.getString("messages.invalid-item-meta", "&cThe item has no meta.");
         headerStaffList = config.getString("messages.stafflist.header");
         footerStaffList = config.getString("messages.stafflist.footer");
         noStaff = config.getString("messages.no-staff");
@@ -434,6 +439,8 @@ public class MessagesManager {
         autoBroadcastRestart = config.getString("messages.autobroadcast.restart");
         autoBroadcastRemove = config.getString("messages.autobroadcast.removed");
         autoBroadcastUsage = config.getString("messages.usage.usage-autobroadcast");
+        autoBroadcastToggleOff = config.getString("messages.autobroadcast.toggle-off", "&cThe messages has been disabled.");
+        autoBroadcastToggleOn = config.getString("messages.autobroadcast.toggle-on", "&aThe messages has been enabled.");
         chatDisabledWorld = config.getString("messages.chat-disabled-world");
         chatMessage = config.getStringList("messages.chat-help.message");
         updateProgressBar = config.getString("messages.poll.message.update.progress-bar");
@@ -461,7 +468,6 @@ public class MessagesManager {
         pollOptionsMessage = config.getString("messages.poll.join.message-options");
         pollMessage = config.getString("messages.poll.join.message");
         customCommandsCooldown = config.getString("messages.custom-commands-cooldown");
-        noGames = config.getString("messages.chatgames.no-games");
         noEnabledGames = config.getString("messages.chatgames.no-enabled-games");
         noMessages = config.getString("messages.chatgames.no-messages");
         timeFinished = config.getString("messages.chatgames.time-finished");
@@ -519,6 +525,10 @@ public class MessagesManager {
     }
 
     // Messages
+    public String getNoItemInHand() {return noItemInHand;}
+    public String getInvalidItemMeta() {return invalidItemMeta;}
+    public String getAutoBroadcastToggleOn() {return autoBroadcastToggleOn;}
+    public String getAutoBroadcastToggleOff() {return autoBroadcastToggleOff;}
     public String getPollFinish() {return pollFinish;}
     public String getChannelFull() {return channelFull;}
     public String getIgnoreBlacklist() {return ignoreBlacklist;}
@@ -681,7 +691,6 @@ public class MessagesManager {
     public String getGameWin() { return gameWin; }
     public String getTimeFinished() { return timeFinished; }
     public String getNoEnabledGames() { return noEnabledGames; }
-    public String getNoGames() { return noGames; }
     public String getNoMessages() { return noMessages; }
     public String getAntibotMoved() { return antibotMoved; }
     public String getAntibotJoin() { return antibotJoin; }

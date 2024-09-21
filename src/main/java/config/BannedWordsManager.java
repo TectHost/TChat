@@ -29,6 +29,8 @@ public class BannedWordsManager {
     private boolean particlesEnabled;
     private Particle particle;
     private int particles;
+    private boolean discordEnabled;
+    private String discordURL;
 
     public BannedWordsManager(@NotNull TChat plugin) {
         this.plugin = plugin;
@@ -48,27 +50,40 @@ public class BannedWordsManager {
         enabled = bannedWordsConfig.getBoolean("options.enabled", true);
         if (enabled) {
             bannedWords = bannedWordsConfig.getStringList("bannedWords");
+
             whitelist = bannedWordsConfig.getStringList("whitelist");
+
             type = bannedWordsConfig.getString("type");
+
             blockedMessages = bannedWordsConfig.getStringList("blockedMessage");
+
             titleEnabled = bannedWordsConfig.getBoolean("title.enabled");
             if (titleEnabled) {
                 title = bannedWordsConfig.getString("title.title");
                 subTitle = bannedWordsConfig.getString("title.subtitle");
             }
+
             actionBarEnabled = bannedWordsConfig.getBoolean("actionbar.enabled");
             if (actionBarEnabled) {
                 actionBar = bannedWordsConfig.getString("actionbar.bar");
             }
+
             soundEnabled = bannedWordsConfig.getBoolean("sound.enabled");
             if (soundEnabled) {
                 sound = bannedWordsConfig.getString("sound.sound");
             }
+
             bypassPermission = bannedWordsConfig.getString("bypass.permission");
+
             particlesEnabled = bannedWordsConfig.getBoolean("particles.enabled");
             if (particlesEnabled) {
                 particle = Particle.valueOf(bannedWordsConfig.getString("particles.particle"));
                 particles = bannedWordsConfig.getInt("particles.particles");
+            }
+
+            discordEnabled = bannedWordsConfig.getBoolean("discord.enabled", false);
+            if (discordEnabled) {
+                discordURL = bannedWordsConfig.getString("discord.webhook");
             }
         }
     }
@@ -85,6 +100,8 @@ public class BannedWordsManager {
         }
     }
 
+    public boolean isDiscordEnabled() {return discordEnabled;}
+    public String getDiscordURL() {return discordURL;}
     public List<String> getWhitelist() {return whitelist;}
     public boolean isEnabled() {return enabled;}
     public int getParticles() { return particles; }

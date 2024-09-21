@@ -50,6 +50,8 @@ messages:
   muted: "&cYou are muted!"
   cooldown-channel: "&cYou must wait %seconds% seconds before sending another message on this channel."
   mention-other: "&aYou mentioned &e%mentioned%&a!"
+  no-item-in-hand: "&cYou do not have any items in hand."
+  invalid-item-meta: "&cThe item has no meta."
   chat-help:
     message:
       - "&8--------- { &#c03afeT&#a72cf8C&#8e1ff1h&#7411eba&#5b03e4t &8} ---------"
@@ -100,19 +102,18 @@ messages:
       message-options: "&6[Poll Options] &f%options%"
   ignore:
     ignore-self: "&cYou can't ignore yourself."
-    already-ignored: "&aYou are no longer ignoring a: %player%"
+    already-ignored: "&aYou are no longer ignoring: %player%"
     ignore: "&aNow you are ignoring: &e%player%"
     ignore-list-message: "&7You are currently ignoring the following players: &a%players%"
     ignore-list-empty: "&cYou are not ignoring any players."
     blacklist: "&cThe player '&4%player%&c' is blacklisted. You cannot ignore him."
-  cooldown:
-    chat: "&cPlease wait %cooldown% seconds before sending another message."
-    command: "&cPlease wait %cooldown% seconds before executing another command."
+    cooldown:
+      chat: "&cPlease wait %cooldown% seconds before sending another message."
+      command: "&cPlease wait %cooldown% seconds before executing another command."
   stafflist:
     header: "&#9713FE======= [ Staff List (%staff%) ] ======="
     footer: "&#9713FE========================================"
   chatgames:
-    no-games: "&cThere are no games configured."
     no-enabled-games: "&cThere are no games enabled."
     no-messages: "&cThe game has no messages configured."
     time-finished: "&cThe game time is over."
@@ -198,6 +199,8 @@ messages:
     usage-remove: "&cUsage: /autobroadcast remove <broadcast name>"
     removed: "&aBroadcast &e%broadcast% &ahas been removed."
     usage-add: "&cUsage: /autobroadcast add <broadcast name>"
+    toggle-on: "&aThe messages has been enabled."
+    toggle-off: "&cThe messages has been disabled."
     create:
       enabled: "&fIs the broadcast enabled? (&ayes&f/&cno&f)"
       new-line: "&fEnter a line of message (or type '&adone&f' to finish):"

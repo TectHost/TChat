@@ -11,6 +11,7 @@
 menu:
   # Use legacy hex format, not compatible with &#rrggbb (only on the title)
   # https://hex.tect.host/
+  # You can use %center% placeholder for center the title
   title: "&x&f&f&0&0&0&0C&x&f&f&5&f&0&0h&x&f&f&b&f&0&0a&x&b&f&f&f&0&0t&x&0&0&f&f&0&0C&x&0&0&4&0&b&fo&x&2&6&0&0&c&0l&x&5&d&0&0&9&6o&x&9&4&0&0&d&3r"
   slots: 54
   # Clicking cooldown in ms (100 ms = 0.1 second)

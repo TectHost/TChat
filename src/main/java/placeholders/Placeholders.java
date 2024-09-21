@@ -7,12 +7,14 @@ import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import minealex.tchat.TChat;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class Placeholders extends PlaceholderExpansion {
 
@@ -85,8 +87,21 @@ public class Placeholders extends PlaceholderExpansion {
             case "group_format" -> getGroupFormat(player);
             case "tag" -> plugin.getSaveManager().getSelectedTag(playerId);
             case "tag_displayname" -> getTagDisplayName(playerId);
+            case "ignore_list" -> getIgnoreList(playerId);
             default -> null;
         };
+    }
+
+    private @NotNull String getIgnoreList(UUID playerId) {
+        List<String> ignoreList = plugin.getSaveManager().getIgnoreList(playerId);
+        if (ignoreList.isEmpty()) {
+            return "No players ignored";
+        } else {
+            return ignoreList.stream()
+                    .map(UUID::fromString)
+                    .map(uuid -> plugin.getServer().getOfflinePlayer(uuid).getName())
+                    .collect(Collectors.joining(", "));
+        }
     }
 
     private String getTagDisplayName(UUID playerId) {

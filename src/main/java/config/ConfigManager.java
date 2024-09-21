@@ -113,6 +113,9 @@ public class ConfigManager {
     private boolean sccEnabled;
     private String sccFormat;
     private List<String> blackLIgnore;
+    private boolean sicEnabled;
+    private String sicPrefix;
+    private String sicSuffix;
 
     public ConfigManager(TChat plugin) {
         this.plugin = plugin;
@@ -184,6 +187,12 @@ public class ConfigManager {
             if (socialSpyMode != 1) {
                 socialSpyCommands = config.getStringList("spy.commands.commands");
             }
+        }
+
+        sicEnabled = config.getBoolean("sic.enabled", false);
+        if (sicEnabled) {
+            sicPrefix = config.getString("sic.prefix", "&aThis is my item: &e");
+            sicSuffix = config.getString("sic.suffix", "&a!");
         }
 
         unicodeEnabled = config.getBoolean("unicode.enabled");
@@ -389,6 +398,9 @@ public class ConfigManager {
         return replyHoverConfigs.get(group);
     }
 
+    public boolean isSicEnabled() {return sicEnabled;}
+    public String getSicPrefix() {return sicPrefix;}
+    public String getSicSuffix() {return sicSuffix;}
     public List<String> getBlackLIgnore() {return blackLIgnore;}
     public boolean isSccEnabled() {return sccEnabled;}
     public String getSccFormat() {return sccFormat;}

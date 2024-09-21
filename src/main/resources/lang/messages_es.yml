@@ -44,6 +44,8 @@ messages:
   muted: "&c¡Estás muteado!"
   cooldown-channel: "&cDebes esperar %seconds% segundos antes de enviar otro mensaje en este canal."
   mention-other: "&a¡Has mencionado a &e%mentioned%&a!"
+  no-item-in-hand: "&cNo tienes items en la mano."
+  invalid-item-meta: "&cEl item no tiene meta."
   chat-help:
     message:
     - "&8--------- { &#c03afeT&#a72cf8C&#8e1ff1h&#7411eba&#5b03e4t &8} ---------"
@@ -106,7 +108,6 @@ messages:
     header: "&#9713FE======= [ Lista de Staff (%staff%) ] ======="
     footer: "&#9713FE========================================"
   chatgames:
-    no-games: "&cNo hay juegos configurados."
     no-enabled-games: "&cNo hay juegos habilitados."
     no-messages: "&cEl juego no tiene mensajes configurados."
     time-finished: "&cEl tiempo del juego ha terminado."
@@ -190,20 +191,22 @@ messages:
     usage-remove: "&cUso: /autobroadcast remove <nombre del broadcast>"
     removed: "&aEl broadcast &e%broadcast% &aha sido eliminado."
     usage-add: "&cUso: /autobroadcast add <nombre del broadcast>"
+    toggle-on: "&aLos mensajes fueron activados."
+    toggle-off: "&cLos mensajes fueron desactivados."
     create:
-    enabled: "&f¿El broadcast está habilitado? (&ayes&f/&cno&f)"
-    new-line: "&fIngresa una línea del mensaje (o escribe '&adone&f' para finalizar):"
-    one-line: "&cDebes ingresar al menos un mensaje."
-    added: "&aEl broadcast &e%broadcast% &aha sido añadido."
-    actions-prompt: |
-      &6Por favor, configura las acciones del auto-broadcast usando los siguientes comandos:
-      &e- Título: Escribe 'title [tu título]' para establecer el título.
-      &e- Subtítulo: Escribe 'subtitle [tu subtítulo]' para establecer el subtítulo.
-      &e- Sonido: Escribe 'sound [nombre del sonido]' para establecer el efecto de sonido.
-      &e- Partículas: Escribe 'particle [tipo de partícula]' para establecer el efecto de partículas.
-      &e- Número de Partículas: Escribe 'particles [número]' para establecer el número de partículas.
-      &e- Barra de Acción: Escribe 'actionbar [texto de tu barra de acción]' para establecer el texto de la barra de acción.
-      &eEscribe 'done' cuando hayas terminado de configurar todas las acciones.
+      enabled: "&f¿El broadcast está habilitado? (&ayes&f/&cno&f)"
+      new-line: "&fIngresa una línea del mensaje (o escribe '&adone&f' para finalizar):"
+      one-line: "&cDebes ingresar al menos un mensaje."
+      added: "&aEl broadcast &e%broadcast% &aha sido añadido."
+      actions-prompt: |
+        &6Por favor, configura las acciones del auto-broadcast usando los siguientes comandos:
+        &e- Título: Escribe 'title [tu título]' para establecer el título.
+        &e- Subtítulo: Escribe 'subtitle [tu subtítulo]' para establecer el subtítulo.
+        &e- Sonido: Escribe 'sound [nombre del sonido]' para establecer el efecto de sonido.
+        &e- Partículas: Escribe 'particle [tipo de partícula]' para establecer el efecto de partículas.
+        &e- Número de Partículas: Escribe 'particles [número]' para establecer el número de partículas.
+        &e- Barra de Acción: Escribe 'actionbar [texto de tu barra de acción]' para establecer el texto de la barra de acción.
+        &eEscribe 'done' cuando hayas terminado de configurar todas las acciones.
   usage:
     channel: "&cUso: /channel <join|leave> <channel>"
     join-channel: "&cUso: /channel join <channel>"

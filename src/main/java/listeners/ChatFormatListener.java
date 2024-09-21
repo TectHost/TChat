@@ -83,6 +83,8 @@ public class ChatFormatListener implements Listener {
             event.getRecipients().addAll(recipients);
         }
 
+        assert worldConfigData != null;
+        String chatrPrefix = worldConfigData.bpNone();
         if (chatRadiusEnabled) {
             int chatRadius = worldConfigData.chatr();
             String cRadius = worldConfigData.bcchatr();
@@ -97,6 +99,13 @@ public class ChatFormatListener implements Listener {
 
             event.getRecipients().clear();
             event.getRecipients().addAll(recipients);
+
+            boolean chatr = message.startsWith(worldConfigData.bcchatr());
+            if (chatr) {
+                chatrPrefix = worldConfigData.bpGlobal();
+            } else {
+                chatrPrefix = worldConfigData.bpLocal();
+            }
         }
 
         if (plugin.getConfigManager().isChatColorEnabled()) {
@@ -133,8 +142,17 @@ public class ChatFormatListener implements Listener {
         if (plugin.getMentionsManager().isEnabled()) { message = handleMentions(event, player, message); }
 
         if (plugin.getConfigManager().isIgnoreEnabled()) {
+            List<String> playerIgnoreList = plugin.getSaveManager().getIgnoreList(player.getUniqueId());
+
             List<Player> finalRecipients = event.getRecipients().stream()
-                    .filter(recipient -> !isIgnored(player, recipient))
+                    .filter(recipient -> {
+                        if (playerIgnoreList.contains("all")) {
+                            return recipient.equals(player);
+                        }
+
+                        List<String> recipientIgnoreList = plugin.getSaveManager().getIgnoreList(recipient.getUniqueId());
+                        return !recipientIgnoreList.contains("all") && !recipientIgnoreList.contains(player.getUniqueId().toString());
+                    })
                     .toList();
 
             event.getRecipients().clear();
@@ -186,7 +204,10 @@ public class ChatFormatListener implements Listener {
                 }
             }
 
-            format = format.replace("%player%", player.getName());
+            if (format.contains("%radius_mode%")) {
+                format = format.replace("%radius_mode%", chatrPrefix);
+            }
+
             format = PlaceholderAPI.setPlaceholders(player, format);
             format = TranslateHexColorCodes.translateHexColorCodes("&#", "", format);
             format = ChatColor.translateAlternateColorCodes('&', format);
@@ -233,7 +254,7 @@ public class ChatFormatListener implements Listener {
             }
 
             event.getRecipients().clear();
-            event.setFormat(mainComponent.toLegacyText());
+            event.setFormat(mainComponent.toPlainText().replace("%", "%%"));
 
             if (plugin.getDiscordManager().isDiscordEnabled()) {
                 if (channelName == null) {
@@ -303,18 +324,6 @@ public class ChatFormatListener implements Listener {
         }
 
         return new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(hoverComponent).create());
-    }
-
-    private boolean isIgnored(@NotNull Player sender, @NotNull Player recipient) {
-        UUID senderId = sender.getUniqueId();
-        UUID recipientId = recipient.getUniqueId();
-        List<String> ignoreList = plugin.getSaveManager().getIgnoreList(recipientId);
-
-        if (ignoreList.contains("all")) {
-            return true;
-        }
-
-        return ignoreList.contains(senderId.toString());
     }
 
     private String handleMentions(@NotNull AsyncPlayerChatEvent event, Player player, String message) {

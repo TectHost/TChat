@@ -11,7 +11,7 @@ chat:
   use-group-format: false
   # Global format (use only if the use-group-format option is false)
   # Use the "¡" character to split the format in the player and message part
-  format: "%tchat_prefix% &a%tchat_nick% &e>> ¡&7"
+  format: "%radius_mode%%tchat_prefix% &a%tchat_nick% &e>> ¡&7"
   # Select lang file (inside the lang folder)
   lang: "messages_en.yml"
 
@@ -605,3 +605,18 @@ scc:
   enabled: true
   # Message format
   format: "&7[&a%player_name%&7] &#3AFE09These are my coordinates: &#FEB322%x, %y, %z&#3AFE09!"
+
+# #################################################################
+# ┌─────────────────────────────────────────────────────────────┐ #
+# │                      Show Item command                      │ #
+# └─────────────────────────────────────────────────────────────┘ #
+# #################################################################
+
+# /showitem command
+sic:
+  # Enable/disable the command
+  enabled: true
+  # The text before the item name
+  prefix: "&aThis is my item: &e"
+  # The text after the item name
+  suffix: "&a!"

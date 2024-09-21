@@ -110,7 +110,7 @@ public class TChat extends JavaPlugin {
         chatEnabledListener = new ChatEnabledListener(this);
         this.checkPlayerMuted = new CheckPlayerMuted(this);
 
-        getServer().getPluginManager().registerEvents(new ChatPlaceholdersListener(this), this);
+        getServer().getPluginManager().registerEvents(new ChatPlaceholdersListener(this, new ShowItemCommand(this)), this);
         getServer().getPluginManager().registerEvents(new PollListener(this), this);
         getServer().getPluginManager().registerEvents(signListener, this);
         getServer().getPluginManager().registerEvents(chatListener, this);
@@ -212,7 +212,9 @@ public class TChat extends JavaPlugin {
         Objects.requireNonNull(getCommand("plugin")).setExecutor(new PluginCommand(this));
         Objects.requireNonNull(getCommand("bannedcommands")).setExecutor(new BannedCommandsCommand(bannedCommandsManager, this));
         Objects.requireNonNull(getCommand("helpop")).setExecutor(new HelpOpCommand(this));
-        Objects.requireNonNull(getCommand("showitem")).setExecutor(new ShowItemCommand(this));
+        if (getConfigManager().isSicEnabled()) {
+            Objects.requireNonNull(getCommand("showitem")).setExecutor(new ShowItemCommand(this));
+        }
         Objects.requireNonNull(getCommand("list")).setExecutor(new ListCommand(this));
         Objects.requireNonNull(getCommand("calculator")).setExecutor(new CalculatorCommand(this));
         Objects.requireNonNull(getCommand("player")).setExecutor(new PlayerCommand(this));

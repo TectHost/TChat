@@ -1,14 +1,15 @@
 package listeners;
 
+import commands.ShowItemCommand;
 import minealex.tchat.TChat;
 import net.md_5.bungee.api.chat.*;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 
@@ -20,9 +21,11 @@ import java.util.regex.Pattern;
 public class ChatPlaceholdersListener implements Listener {
 
     private final TChat plugin;
+    private final ShowItemCommand showItemCommand;
 
-    public ChatPlaceholdersListener(TChat plugin) {
+    public ChatPlaceholdersListener(TChat plugin, ShowItemCommand showItemCommand) {
         this.plugin = plugin;
+        this.showItemCommand = showItemCommand;
     }
 
     @EventHandler
@@ -55,24 +58,48 @@ public class ChatPlaceholdersListener implements Listener {
             }
         }
 
-        if (plugin.getPlaceholdersConfig().isItemEnabled() && message.contains(plugin.getPlaceholdersConfig().getItemName())) {
+        String itemName = plugin.getPlaceholdersConfig().getItemName();
+        if (plugin.getPlaceholdersConfig().isItemEnabled() && message.contains(itemName)) {
             if (player.hasPermission("tchat.admin") || player.hasPermission("tchat.placeholder.item")) {
-                ItemStack itemInHand = player.getInventory().getItemInMainHand();
-                String itemName = "None";
+                String[] parts = message.split(Pattern.quote(itemName), 2);
 
-                if (itemInHand.getType() != Material.AIR) {
-                    ItemMeta itemMeta = itemInHand.getItemMeta();
-                    if (itemMeta != null && itemMeta.hasDisplayName()) {
-                        itemName = itemMeta.getDisplayName();
-                    } else {
-                        itemName = itemInHand.getType().toString().replace('_', ' ').toLowerCase();
+                if (parts.length == 2) {
+                    String beforeItem = parts[0];
+                    String afterItem = parts[1];
+                    ItemStack itemInHand = player.getInventory().getItemInMainHand();
+                    String itemMetaName = "None";
+                    String itemJson = "{}";
+
+                    if (itemInHand.getType() != Material.AIR) {
+                        ItemMeta itemMeta = itemInHand.getItemMeta();
+                        if (itemMeta != null) {
+                            itemMetaName = itemMeta.hasDisplayName() ? itemMeta.getDisplayName() : itemInHand.getType().toString().replace('_', ' ').toLowerCase();
+
+                            itemJson = String.format(
+                                    "{\"id\":\"%s\",\"Count\":%d,\"tag\":%s,\"Damage\":%d}",
+                                    itemInHand.getType().getKey().getKey(),
+                                    itemInHand.getAmount(),
+                                    showItemCommand.getItemTagJson(itemMeta),
+                                    (itemMeta instanceof Damageable) ? ((Damageable) itemMeta).getDamage() : 0
+                            );
+                        }
+                    }
+
+                    String p = plugin.getPlaceholdersConfig().getItemPrefix();
+                    String s = plugin.getPlaceholdersConfig().getItemSuffix();
+                    p = p.replace("%before_item%", beforeItem);
+                    s = s.replace("%after_item%", afterItem);
+                    TextComponent beforeComponent = new TextComponent(plugin.getTranslateColors().translateColors(player, p));
+                    TextComponent afterComponent = new TextComponent(plugin.getTranslateColors().translateColors(player, s));
+
+                    TextComponent itemComponent = new TextComponent(itemMetaName);
+                    itemComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_ITEM, new ComponentBuilder(itemJson).create()));
+
+                    event.getRecipients().clear();
+                    for (Player onlinePlayer : plugin.getServer().getOnlinePlayers()) {
+                        onlinePlayer.spigot().sendMessage(beforeComponent, itemComponent, afterComponent);
                     }
                 }
-
-                String itemMessage = plugin.getTranslateColors().translateColors(player, plugin.getPlaceholdersConfig().getItemFormat());
-                itemMessage = itemMessage.replace("%item%", itemName);
-
-                message = message.replace(plugin.getPlaceholdersConfig().getItemName(), itemMessage);
             } else {
                 String error = plugin.getMessagesManager().getNoPermission();
                 player.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + error));

@@ -26,11 +26,12 @@ public class ChatCooldownListener implements Listener {
     }
 
     @EventHandler
-    public void chatCooldown(@NotNull AsyncPlayerChatEvent event, Player player) {
+    public void chatCooldown(@NotNull AsyncPlayerChatEvent event) {
+        Player player = event.getPlayer();
         if (event.isCancelled()) { return; }
 
         String channelName = plugin.getChannelsManager().getPlayerChannel(player);
-        if (channelName != null && plugin.getChannelsConfigManager().getChannel(channelName).cooldownEnabled()) {return;}
+        if (channelName != null && plugin.getChannelsConfigManager().getChannel(channelName).cooldownEnabled()) { return; }
 
         if (!player.hasPermission("tchat.admin") && !player.hasPermission("tchat.bypass.chatcooldown")) {
             if (plugin.getConfigManager().isCooldownChat()) {
@@ -41,17 +42,20 @@ public class ChatCooldownListener implements Listener {
                     long timeRemaining = timeRemainingMillis / 1000;
                     String prefix = plugin.getMessagesManager().getPrefix();
                     String message = plugin.getMessagesManager().getCooldownChat();
-                    String timeRemainingStr = String.valueOf(timeRemaining);
-                    message = message.replace("%cooldown%", timeRemainingStr);
+                    message = message.replace("%cooldown%", String.valueOf(timeRemaining));
                     player.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + message));
 
                     if (plugin.getConfigManager().isDepurationChatEnabled()) {
                         String message1 = plugin.getMessagesManager().getDepurationChatCooldown();
-                        message1 = message1.replace("%player%", player.getName());
-                        message1 = message1.replace("%time%", String.valueOf(timeRemaining));
-                        plugin.getLogger().warning(message1);
+                        if (message1 != null) {
+                            message1 = message1.replace("%player%", player.getName());
+                            message1 = message1.replace("%time%", String.valueOf(timeRemaining));
+                            plugin.getLogger().warning(message1);
+                        } else {
+                            plugin.getLogger().warning("Depuration message is null for chat cooldown.");
+                        }
                     }
-
+                    
                     event.setCancelled(true);
                     return;
                 }
@@ -62,7 +66,8 @@ public class ChatCooldownListener implements Listener {
     }
 
     @EventHandler
-    public void commandCooldown(@NotNull PlayerCommandPreprocessEvent event, Player player) {
+    public void commandCooldown(@NotNull PlayerCommandPreprocessEvent event) {
+        Player player = event.getPlayer();
         if (event.isCancelled()) { return; }
 
         if (!player.hasPermission("tchat.admin") && !player.hasPermission("tchat.bypass.commandcooldown")) {
@@ -74,15 +79,18 @@ public class ChatCooldownListener implements Listener {
                     long timeRemaining = timeRemainingMillis / 1000;
                     String prefix = plugin.getMessagesManager().getPrefix();
                     String message = plugin.getMessagesManager().getCooldownCommand();
-                    String timeRemainingStr = String.valueOf(timeRemaining);
-                    message = message.replace("%cooldown%", timeRemainingStr);
+                    message = message.replace("%cooldown%", String.valueOf(timeRemaining));
                     player.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + message));
 
                     if (plugin.getConfigManager().isDepurationCommandEnabled()) {
                         String message1 = plugin.getMessagesManager().getDepurationCommandCooldown();
-                        message1 = message1.replace("%player%", player.getName());
-                        message1 = message1.replace("%time%", String.valueOf(timeRemaining));
-                        plugin.getLogger().warning(message1);
+                        if (message1 != null) {
+                            message1 = message1.replace("%player%", player.getName());
+                            message1 = message1.replace("%time%", String.valueOf(timeRemaining));
+                            plugin.getLogger().warning(message1);
+                        }
+                    } else {
+                        plugin.getLogger().warning("Depuration message is null for chat cooldown.");
                     }
 
                     event.setCancelled(true);

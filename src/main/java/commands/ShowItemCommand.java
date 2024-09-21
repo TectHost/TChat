@@ -2,7 +2,9 @@ package commands;
 
 import minealex.tchat.TChat;
 import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
@@ -24,7 +26,7 @@ public class ShowItemCommand implements CommandExecutor {
     }
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull org.bukkit.command.Command command, @NotNull String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         String prefix = plugin.getMessagesManager().getPrefix();
 
         if (!(sender instanceof Player player)) {
@@ -34,61 +36,63 @@ public class ShowItemCommand implements CommandExecutor {
         }
 
         if (player.hasPermission("tchat.admin") || player.hasPermission("tchat.showitem")) {
-
-            ItemStack item = player.getInventory().getItemInMainHand();
-            plugin.getLogger().info("Player " + player.getName() + " is holding " + item.getType());
-
-            if (item.getType().isAir()) {
-                player.sendMessage("(BETA) You do not have any items in hand.");
-                return false;
-            }
-
-            ItemMeta meta = item.getItemMeta();
-            if (meta == null) {
-                player.sendMessage("(BETA) The item has no meta.");
-                return false;
-            }
-
-            String itemName = meta.hasDisplayName() ? meta.getDisplayName() : item.getType().toString();
-            plugin.getLogger().info("Item name " + itemName);
-
-            int durability = item.getType().getMaxDurability() - (meta instanceof Damageable ? ((Damageable) meta).getDamage() : 0);
-            plugin.getLogger().info("Item durability " + durability);
-
-            String itemTagJson = getItemTagJson(meta);
-            plugin.getLogger().info("Generated item tag JSON " + itemTagJson);
-
-            String itemJson = String.format(
-                    "{\"id\":\"%s\",\"Count\":1,\"tag\":%s,\"Damage\":%d}",
-                    item.getType().getKey().getKey(),
-                    itemTagJson,
-                    ((Damageable) meta).getDamage()
-            );
-
-            plugin.getLogger().info("Final item json: " + itemJson);
-
-            TextComponent itemComponent = new TextComponent(itemName);
-            itemComponent.setColor(net.md_5.bungee.api.ChatColor.WHITE);
-            itemComponent.setBold(true);
-
-            itemComponent.setHoverEvent(new net.md_5.bungee.api.chat.HoverEvent(
-                    net.md_5.bungee.api.chat.HoverEvent.Action.SHOW_ITEM,
-                    new ComponentBuilder(itemJson).create()
-            ));
-
-            player.spigot().sendMessage(itemComponent);
-            plugin.getLogger().info("Item json sent to player " + player.getName());
-
+            components(player, prefix);
         } else {
             String message = plugin.getMessagesManager().getNoPermission();
             player.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + message));
-            plugin.getLogger().warning("Player " + player.getName() + " does not have permission to use /showitem.");
         }
 
         return true;
     }
 
-    private String getItemTagJson(ItemMeta meta) {
+    private void components(@NotNull Player player, String prefix) {
+        ItemStack item = player.getInventory().getItemInMainHand();
+
+        if (item.getType().isAir()) {
+            String m = plugin.getMessagesManager().getNoItemInHand();
+            player.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + m));
+            return;
+        }
+
+        ItemMeta meta = item.getItemMeta();
+        if (meta == null) {
+            String m = plugin.getMessagesManager().getInvalidItemMeta();
+            player.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + m));
+            return;
+        }
+
+        String itemName = meta.hasDisplayName() ? meta.getDisplayName() : item.getType().toString();
+
+        String itemTagJson = getItemTagJson(meta);
+
+        assert meta instanceof Damageable;
+        String itemJson = String.format(
+                "{\"id\":\"%s\",\"Count\":%d,\"tag\":%s,\"Damage\":%d}",
+                item.getType().getKey().getKey(),
+                item.getAmount(),
+                itemTagJson,
+                ((Damageable) meta).getDamage()
+        );
+
+        TextComponent prefixComponent = new TextComponent(plugin.getTranslateColors().translateColors(player, plugin.getConfigManager().getSicPrefix()));
+        TextComponent suffixComponent = new TextComponent(plugin.getTranslateColors().translateColors(player, plugin.getConfigManager().getSicSuffix()));
+
+        TextComponent itemComponent = new TextComponent(itemName);
+        itemComponent.setHoverEvent(new HoverEvent(
+                HoverEvent.Action.SHOW_ITEM,
+                new ComponentBuilder(itemJson).create()
+        ));
+
+        TextComponent finalMessage = new TextComponent();
+        finalMessage.addExtra(prefixComponent);
+        finalMessage.addExtra(itemComponent);
+        finalMessage.addExtra(suffixComponent);
+
+        player.spigot().sendMessage(finalMessage);
+    }
+
+    @NotNull
+    public String getItemTagJson(@NotNull ItemMeta meta) {
         StringBuilder tagJson = new StringBuilder();
         tagJson.append("{");
 
@@ -98,8 +102,7 @@ public class ShowItemCommand implements CommandExecutor {
                     .append("\"},");
         }
 
-        if (meta instanceof EnchantmentStorageMeta) {
-            EnchantmentStorageMeta enchantmentMeta = (EnchantmentStorageMeta) meta;
+        if (meta instanceof EnchantmentStorageMeta enchantmentMeta) {
             tagJson.append("\"Enchantments\":[");
             boolean first = true;
             for (Map.Entry<Enchantment, Integer> entry : enchantmentMeta.getStoredEnchants().entrySet()) {
@@ -108,7 +111,7 @@ public class ShowItemCommand implements CommandExecutor {
                 }
                 first = false;
                 tagJson.append("{\"id\":\"")
-                        .append(entry.getKey().getKey().getKey())
+                        .append(entry.getKey().getKey())
                         .append("\",\"lvl\":")
                         .append(entry.getValue())
                         .append("}");
@@ -123,7 +126,7 @@ public class ShowItemCommand implements CommandExecutor {
                 }
                 first = false;
                 tagJson.append("{\"id\":\"")
-                        .append(entry.getKey().getKey().getKey())
+                        .append(entry.getKey().getKey())
                         .append("\",\"lvl\":")
                         .append(entry.getValue())
                         .append("}");
@@ -136,19 +139,16 @@ public class ShowItemCommand implements CommandExecutor {
         }
 
         tagJson.append("}");
-        plugin.getLogger().info("getItemTagJson result: " + tagJson);
         return tagJson.toString();
     }
 
-    private String escapeJson(String text) {
-        String escapedText = text.replace("\\", "\\\\")
+    private @NotNull String escapeJson(@NotNull String text) {
+        return text.replace("\\", "\\\\")
                 .replace("\"", "\\\"")
                 .replace("\b", "\\b")
                 .replace("\f", "\\f")
                 .replace("\n", "\\n")
                 .replace("\r", "\\r")
                 .replace("\t", "\\t");
-        plugin.getLogger().info("escapeJson result: " + escapedText);
-        return escapedText;
     }
 }

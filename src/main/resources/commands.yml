@@ -8,9 +8,11 @@
 
 # Tags:
 # [MESSAGE] - Sends a message | - "[MESSAGE] &7Test message"
+# [DEBUG] (INFO/WARNING/SEVERE/DEBUG/ERROR) - Sends a message in the console | - "[DEBUG] INFO This is a test message"
 # [GLOBAL] - Sends a message to all online players | - "[ALL] &7Test message &bfor all &#c03afeo&#ac2ff9n&#9824f4l&#8319eei&#6f0ee9n&#5b03e4e players (%player_name%)"
 # [BROADCAST] - Sends a message to all online players with broadcast format (works even if it is deactivated in config.yml) | - "[BROADCAST] Test message"
 # [WARNING] - Sends a message to all online players with warning format (works even if it is deactivated in config.yml) | - "[WARNING] Test message"
+# [ANNOUNCEMENT] - Sends a message to all online players with announcement format (works event if it is deactivated in config.yml) | - "[ANNOUNCEMENT] Test message"
 # [TITLE] - Sends a title | - "[TITLE] &aTitle;&bSubtitle"
 # [PLAYER_COMMAND] - The player will automatically execute a command | - "[PLAYER_COMMAND] spawn {player}"
 # [CONSOLE_COMMAND] - The console will automatically execute a command | - "[CONSOLE_COMMAND] give {player} diamond 1"
@@ -24,8 +26,7 @@
 # [POTION_EFFECT] - Adds/removes potion effects to the player | - "[POTION_EFFECT] ADD SPEED:120:1" | - "[POTION_EFFECT] REMOVE SPEED"
 # https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/potion/PotionEffectType.html
 # [BUNGEECORD] - Moves the player to another server | - "[BUNGEECORD] survival"
-# [CLICK_ACTION] (action) (executor) | (message) - Message with Text Component | - "[CLICK_ACTION] OPEN https://tect.host/ | Click here to go to tect.host"
-# [CLICK_ACTION] OPEN/SUGGEST/EXECUTE
+# [CLICK_ACTION] (OPEN/SUGGEST/EXECUTE) (executor) | (message) - Message with Text Component | - "[CLICK_ACTION] OPEN https://tect.host/ | Click here to go to tect.host"
 # [CHATCOLOR] (COLOR/FORMAT) - Sets the color or format of the player | - "[CHATCOLOR] COLOR &2"
 # [XP] (ADD/REMOVE/SET) - Change the chat XP (levels.yml) | - "[XP] ADD 3" - "[XP] REMOVE 5" - "[XP] SET 47"
 # [LEVEL] (ADD/REMOVE/SET) - Change the chat Level (levels.yml) | - "[LEVEL] ADD 3" - "[LEVEL] REMOVE 5" - "[LEVEL] SET 47"

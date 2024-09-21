@@ -15,21 +15,37 @@ worlds:
     chat-radius:
       enabled: false
       radius: 10
-      bypass-character: "!"
+      bypass:
+        char: "!"
+        # For %radius_mode% placeholder
+        prefixes:
+          global: "&7[&6Global&7] "
+          local: "&7[&9Local&7] "
+          none: ""
   world_nether:
     chat-enabled: true
     pwc: false
     chat-radius:
       enabled: false
       radius: 10
-      bypass-character: "!"
+      bypass:
+        char: "!"
+        prefixes:
+          global: "&7[&6Global&7] "
+          local: "&7[&9Local&7] "
+          none: ""
   world_the_end:
     chat-enabled: true
     pwc: false
     chat-radius:
       enabled: false
       radius: 10
-      bypass-character: "!"
+      bypass:
+        char: "!"
+        prefixes:
+          global: "&7[&6Global&7] "
+          local: "&7[&9Local&7] "
+          none: ""
   # Add more worlds
   #survival:
     #chat-enabled: false

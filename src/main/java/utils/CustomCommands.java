@@ -542,6 +542,39 @@ public class CustomCommands implements Listener {
             case "[MUTE]":
                 handleMuteAction(player, data);
                 break;
+            case "[DEBUG]":
+                String[] parts1 = data.split(" ", 2);
+                if (parts1.length < 2) { return; }
+
+                String debugMode = parts1[0].trim();
+                String debugData = parts1[1].trim();
+                debugData = plugin.getTranslateColors().translateColors(player, debugData);
+
+                switch (debugMode.toUpperCase()) {
+                    case "WARNING":
+                        plugin.getLogger().warning(debugData);
+                        break;
+                    case "INFO":
+                        plugin.getLogger().info(debugData);
+                        break;
+                    case "SEVERE":
+                        plugin.getLogger().severe(debugData);
+                        break;
+                    case "DEBUG":
+                        plugin.getLogger().fine(debugData);
+                        break;
+                    case "ERROR":
+                        plugin.getLogger().severe("ERROR: " + debugData);
+                        break;
+                    default:
+                        plugin.getLogger().info("DEFAULT: " + debugData);
+                        break;
+                }
+            case "[ANNOUNCEMENT]":
+                String format2 = plugin.getConfigManager().getAnnouncementFormat();
+                format2 = format2.replace("%message%", data);
+                Bukkit.broadcastMessage(plugin.getTranslateColors().translateColors(player, format2));
+                break;
             default:
                 plugin.getLogger().warning("Unknown action type: " + type);
                 plugin.getLogger().warning("Action: " + data);

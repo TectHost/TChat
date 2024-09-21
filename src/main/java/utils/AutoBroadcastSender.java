@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import config.AutoBroadcastManager;
+import org.jetbrains.annotations.NotNull;
 
 public class AutoBroadcastSender {
     private final TChat plugin;
@@ -16,7 +17,7 @@ public class AutoBroadcastSender {
     private int currentBroadcastIndex;
     private BukkitTask broadcastTask;
 
-    public AutoBroadcastSender(TChat plugin) {
+    public AutoBroadcastSender(@NotNull TChat plugin) {
         this.plugin = plugin;
         this.autoBroadcastManager = plugin.getAutoBroadcastManager();
         this.currentBroadcastIndex = 0;
@@ -41,10 +42,10 @@ public class AutoBroadcastSender {
 
                     AutoBroadcastManager.Broadcast currentBroadcast = broadcasts[currentBroadcastIndex];
 
-                    if (currentBroadcast.isEnabled()) {
-                        String channelName = currentBroadcast.getChannel();
+                    if (currentBroadcast.enabled()) {
+                        String channelName = currentBroadcast.channel();
 
-                        if (currentBroadcast.getChannel().equalsIgnoreCase("none")) {
+                        if (currentBroadcast.channel().equalsIgnoreCase("none")) {
                             sendMessageToPlayers(Bukkit.getOnlinePlayers(), currentBroadcast);
                         } else {
                             int messageMode = plugin.getChannelsConfigManager().getChannel(channelName).messageMode();
@@ -97,14 +98,18 @@ public class AutoBroadcastSender {
         startBroadcastTask();
     }
 
-    private void sendMessageToPlayers(Iterable<? extends Player> players, AutoBroadcastManager.Broadcast broadcast) {
+    private void sendMessageToPlayers(@NotNull Iterable<? extends Player> players, AutoBroadcastManager.Broadcast broadcast) {
         for (Player player : players) {
             sendMessageToPlayer(player, broadcast);
         }
     }
 
-    private void sendMessageToPlayer(Player player, AutoBroadcastManager.Broadcast broadcast) {
-        String broadcastPermission = broadcast.getPermission();
+    private void sendMessageToPlayer(Player player, AutoBroadcastManager.@NotNull Broadcast broadcast) {
+        if (plugin.getAutoBroadcastManager().isPlayerToggled(player)) {
+            return;
+        }
+
+        String broadcastPermission = broadcast.permission();
 
         if (broadcastPermission != null && !broadcastPermission.equalsIgnoreCase("none") && !broadcastPermission.isEmpty()) {
             if (!player.hasPermission(broadcastPermission)) {
@@ -112,7 +117,7 @@ public class AutoBroadcastSender {
             }
         }
 
-        for (String line : broadcast.getMessage()) {
+        for (String line : broadcast.message()) {
             String translatedMessage = plugin.getTranslateColors().translateColors(player, line);
             if (translatedMessage.contains("%center%")) {
                 translatedMessage = translatedMessage.replace("%center%", "");
@@ -121,36 +126,36 @@ public class AutoBroadcastSender {
             player.sendMessage(translatedMessage);
         }
 
-        if (broadcast.isTitleEnabled()) {
+        if (broadcast.titleEnabled()) {
             player.sendTitle(
-                    plugin.getTranslateColors().translateColors(player, broadcast.getTitle()),
-                    plugin.getTranslateColors().translateColors(player, broadcast.getSubtitle()),
+                    plugin.getTranslateColors().translateColors(player, broadcast.title()),
+                    plugin.getTranslateColors().translateColors(player, broadcast.subtitle()),
                     10, 70, 20
             );
         }
 
-        if (broadcast.isActionbarEnabled()) {
+        if (broadcast.actionbarEnabled()) {
             player.spigot().sendMessage(
                     net.md_5.bungee.api.ChatMessageType.ACTION_BAR,
-                    net.md_5.bungee.api.chat.TextComponent.fromLegacyText(plugin.getTranslateColors().translateColors(player, broadcast.getActionbar()))
+                    net.md_5.bungee.api.chat.TextComponent.fromLegacyText(plugin.getTranslateColors().translateColors(player, broadcast.actionbar()))
             );
         }
 
-        if (broadcast.isSoundEnabled()) {
+        if (broadcast.soundEnabled()) {
             try {
-                Sound sound = Sound.valueOf(broadcast.getSound().toUpperCase());
+                Sound sound = Sound.valueOf(broadcast.sound().toUpperCase());
                 player.playSound(player.getLocation(), sound, 1.0F, 1.0F);
             } catch (IllegalArgumentException e) {
-                plugin.getLogger().warning("Invalid sound type: " + broadcast.getSound());
+                plugin.getLogger().warning("Invalid sound type: " + broadcast.sound());
             }
         }
 
-        if (broadcast.isParticlesEnabled()) {
+        if (broadcast.particlesEnabled()) {
             try {
-                Particle particle = Particle.valueOf(broadcast.getParticle().toUpperCase());
-                player.getWorld().spawnParticle(particle, player.getLocation(), broadcast.getParticleCount());
+                Particle particle = Particle.valueOf(broadcast.particle().toUpperCase());
+                player.getWorld().spawnParticle(particle, player.getLocation(), broadcast.particleCount());
             } catch (IllegalArgumentException e) {
-                plugin.getLogger().warning("Invalid particle type: " + broadcast.getParticle());
+                plugin.getLogger().warning("Invalid particle type: " + broadcast.particle());
             }
         }
     }

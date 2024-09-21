@@ -7,6 +7,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.conversations.*;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -20,9 +21,9 @@ public class AutoBroadcastCommand implements CommandExecutor {
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         String prefix = plugin.getMessagesManager().getPrefix();
-        if (!sender.hasPermission("tchat.admin.autobroadcast")) {
+        if (!sender.hasPermission("tchat.admin.autobroadcast") && !sender.hasPermission("tchat.command.autobroadcast.toggle")) {
             String message = plugin.getMessagesManager().getNoPermission();
             sender.sendMessage(plugin.getTranslateColors().translateColors(null, prefix + message));
             return false;
@@ -83,6 +84,26 @@ public class AutoBroadcastCommand implements CommandExecutor {
                 startAddBroadcastConversation(player, newBroadcastKey);
                 break;
 
+            case "toggle":
+                if (!(sender instanceof Player player)) {
+                    String noPlayerMessage = plugin.getMessagesManager().getNoPlayer();
+                    sender.sendMessage(plugin.getTranslateColors().translateColors(null, prefix + noPlayerMessage));
+                    return false;
+                }
+
+                if (!player.hasPermission("tchat.admin") && !player.hasPermission("tchat.command.autobroadcast.toggle")) {
+                    String m = plugin.getMessagesManager().getNoPermission();
+                    sender.sendMessage(plugin.getTranslateColors().translateColors(null, prefix + m));
+                    return false;
+                }
+
+                boolean isToggled = plugin.getAutoBroadcastManager().togglePlayerBroadcast(player);
+                String toggleMessage = isToggled
+                        ? plugin.getMessagesManager().getAutoBroadcastToggleOff()
+                        : plugin.getMessagesManager().getAutoBroadcastToggleOn();
+                sender.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + toggleMessage));
+                break;
+
             default:
                 String usageMessage = plugin.getMessagesManager().getAutoBroadcastUsage();
                 sender.sendMessage(plugin.getTranslateColors().translateColors(null, prefix + usageMessage));
@@ -118,8 +139,9 @@ public class AutoBroadcastCommand implements CommandExecutor {
             return plugin.getTranslateColors().translateColors(null, prefix + message);
         }
 
+        @Contract("_, _ -> new")
         @Override
-        public Prompt acceptInput(ConversationContext context, String input) {
+        public @NotNull Prompt acceptInput(@NotNull ConversationContext context, String input) {
             assert input != null;
             boolean enabled = input.equalsIgnoreCase("yes");
             context.setSessionData("enabled", enabled);

@@ -592,3 +592,10 @@ particles:
   particle: ANGRY_VILLAGER
   # Number of particles
   particles: 4
+
+# Discord module
+discord:
+  # Enable/disable the module
+  enabled: false
+  # Discord webhook
+  webhook: "https://discord.com/channels/..."

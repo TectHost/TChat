@@ -24,8 +24,9 @@ games:
       enabled: true
       action: "[OPEN] https://tect.host/"
     keywords:
-      - "4"
-      - "four"
+      - "[WRITE] 4"
+      - "[WRITE] four"
+      - "[BREAK] STONE 2"
     rewards:
       - "give %winner% diamond 1"
     options:
@@ -110,8 +111,8 @@ games:
       enabled: true
       action: "[OPEN] https://tect.host/"
     keywords:
-      - "8"
-      - "eight"
+      - "[WRITE] 8"
+      - "[WRITE] eight"
     rewards:
       - "give %winner% dirt 10"
     options:
