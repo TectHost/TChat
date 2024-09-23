@@ -4,6 +4,7 @@ import commands.*;
 import config.*;
 import hook.DiscordHook;
 import listeners.*;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -14,6 +15,7 @@ import blocked.*;
 import java.util.Objects;
 
 public class TChat extends JavaPlugin {
+
     private ConfigManager configManager;
     private MessagesManager messagesManager;
     private GroupManager groupManager;
