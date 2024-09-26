@@ -14,16 +14,18 @@ import java.util.Set;
 
 public class GroupManager {
 
+    private final TChat plugin;
     private final ConfigFile groupsFile;
     private Map<String, Group> groups;
 
-    public GroupManager(TChat plugin){
+    public GroupManager(TChat plugin) {
+        this.plugin = plugin;
         this.groupsFile = new ConfigFile("groups.yml", null, plugin);
         this.groupsFile.registerConfig();
         loadGroups();
     }
 
-    public void loadGroups(){
+    public void loadGroups() {
         groups = new HashMap<>();
         FileConfiguration config = groupsFile.getConfig();
         Set<String> groupKeys = Objects.requireNonNull(config.getConfigurationSection("groups")).getKeys(false);
@@ -34,9 +36,10 @@ public class GroupManager {
             String suffix = config.getString("groups." + key + ".suffix", "");
             boolean formatEnabled = config.getBoolean("groups." + key + ".format-enabled", false);
             String format = config.getString("groups." + key + ".format", "");
+            int priority = config.getInt("groups." + key + ".priority", Integer.MAX_VALUE);
             HoverClickAction playerHoverClick = getHoverClickAction(config, "groups." + key + ".hover.player");
             HoverClickAction messageHoverClick = getHoverClickAction(config, "groups." + key + ".hover.message");
-            groups.put(key, new Group(permission, prefix, suffix, formatEnabled, format, playerHoverClick, messageHoverClick));
+            groups.put(key, new Group(permission, prefix, suffix, formatEnabled, format, priority, playerHoverClick, messageHoverClick));
         }
     }
 
@@ -51,25 +54,36 @@ public class GroupManager {
         return new HoverClickAction(false, null, false, null);
     }
 
-    public void reloadGroups(){
+    public void reloadGroups() {
         groupsFile.reloadConfig();
         loadGroups();
     }
 
     public String getGroup(@NotNull Player player) {
         FileConfiguration config = groupsFile.getConfig();
-        if (player.isOp()) {
-            return config.getString("config.op-group");
-        }
+        String opGroup = config.getString("config.op-group");
+
+        String assignedGroup = config.getString("config.default-group");
+        int highestPriority = Integer.MAX_VALUE;
 
         for (Map.Entry<String, Group> entry : groups.entrySet()) {
             String permission = entry.getValue().getPermission();
-            if (permission != null && !permission.isEmpty() && player.hasPermission(permission)) {
-                return entry.getKey();
+            int priority = entry.getValue().getPriority();
+
+            if (permission != null && !permission.isEmpty()) {
+                if (player.hasPermission(permission) && priority < highestPriority) {
+                    assignedGroup = entry.getKey();
+                    highestPriority = priority;
+                }
             }
         }
 
-        return config.getString("config.default-group");
+        if (player.isOp() && opGroup != null && !opGroup.equals("none") && highestPriority == Integer.MAX_VALUE) {
+            plugin.getLogger().info("Player " + player.getName() + " is OP, assigning OP group: " + opGroup);
+            return opGroup;
+        }
+
+        return assignedGroup;
     }
 
     public String getGroupFormat(String groupName) {
@@ -112,15 +126,17 @@ public class GroupManager {
         private final String suffix;
         private final boolean formatEnabled;
         private final String format;
+        private final int priority;
         private final HoverClickAction playerHoverClick;
         private final HoverClickAction messageHoverClick;
 
-        public Group(String permission, String prefix, String suffix, boolean formatEnabled, String format, HoverClickAction playerHoverClick, HoverClickAction messageHoverClick) {
+        public Group(String permission, String prefix, String suffix, boolean formatEnabled, String format, int priority, HoverClickAction playerHoverClick, HoverClickAction messageHoverClick) {
             this.permission = permission;
             this.prefix = prefix;
             this.suffix = suffix;
             this.formatEnabled = formatEnabled;
             this.format = format;
+            this.priority = priority;
             this.playerHoverClick = playerHoverClick;
             this.messageHoverClick = messageHoverClick;
         }
@@ -143,6 +159,10 @@ public class GroupManager {
 
         public String getFormat() {
             return format;
+        }
+
+        public int getPriority() { // Método para obtener la prioridad
+            return priority;
         }
 
         public HoverClickAction getPlayerHoverClick() {

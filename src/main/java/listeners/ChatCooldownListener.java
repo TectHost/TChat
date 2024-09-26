@@ -88,9 +88,9 @@ public class ChatCooldownListener implements Listener {
                             message1 = message1.replace("%player%", player.getName());
                             message1 = message1.replace("%time%", String.valueOf(timeRemaining));
                             plugin.getLogger().warning(message1);
+                        } else {
+                            plugin.getLogger().warning("Depuration message is null for chat cooldown.");
                         }
-                    } else {
-                        plugin.getLogger().warning("Depuration message is null for chat cooldown.");
                     }
 
                     event.setCancelled(true);

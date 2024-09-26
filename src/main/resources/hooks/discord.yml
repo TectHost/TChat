@@ -40,8 +40,23 @@ discord:
     avatar-enabled: true
   banned-words:
     # For disable and change webhook, check the banned_words.yml
-    title: "Banned Word Detected"
+    title: "Banned Word Detected!"
     description: "Player %player% used a banned word: %word%\nMessage: \"%message%\""
+    # https://www.colorhexa.com/
+    color: 15158332
+    avatar-enabled: true
+  mute:
+    enabled: false
+    webhook: "https://discord.com/api/webhooks/..."
+    title: "Player muted!"
+    description: "Player %player% has muted by %admin%"
+    # https://www.colorhexa.com/
+    color: 15158332
+    avatar-enabled: true
+  banned-commands:
+    # For disable and change webhook, check the banned_commands.yml
+    title: "Banned Command Detected!"
+    description: "Player %player% used a banned command: %word%\nMessage: \"%message%\""
     # https://www.colorhexa.com/
     color: 15158332
     avatar-enabled: true

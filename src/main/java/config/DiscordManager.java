@@ -34,6 +34,18 @@ public class DiscordManager {
     private int bannedWordsColor;
     private boolean bannedWordsAvatar;
 
+    private boolean muteEnabled;
+    private String muteWebhook;
+    private String muteTitle;
+    private String muteDescription;
+    private int muteColor;
+    private boolean muteAvatar;
+
+    private String bannedCommandsTitle;
+    private String bannedCommandsDescription;
+    private int bannedCommandsColor;
+    private boolean bannedCommandsAvatar;
+
     public DiscordManager(TChat plugin) {
         this.plugin = plugin;
         this.configFile = new ConfigFile("discord.yml", "hooks", plugin);
@@ -73,36 +85,27 @@ public class DiscordManager {
         }
 
         if (plugin.getBannedWordsManager().isDiscordEnabled()) {
-            bannedWordsTitle = config.getString("discord.banned-words.title", "Banned Word Detected");
+            bannedWordsTitle = config.getString("discord.banned-words.title", "Banned Word Detected!");
             bannedWordsDescription = config.getString("discord.banned-words.description", "Player %player% used a banned word: %word%\nMessage: \"%message%\"");
             bannedWordsColor = config.getInt("discord.banned-words.color", 15158332);
             bannedWordsAvatar = config.getBoolean("discord.banned-words.avatar-enabled", true);
         }
-    }
 
-    public boolean isBannedWordsAvatar() {return bannedWordsAvatar;}
-    public String getBannedWordsTitle() {return bannedWordsTitle;}
-    public String getBannedWordsDescription() {return bannedWordsDescription;}
-    public int getBannedWordsColor() {return bannedWordsColor;}
+        muteEnabled = config.getBoolean("discord.mute.enabled", false);
+        if (muteEnabled) {
+            muteWebhook = config.getString("discord.mute.webhook");
+            muteTitle = config.getString("discord.mute.title", "Player muted!");
+            muteDescription = config.getString("discord.mute.description", "Player %player% has muted by %admin%");
+            muteColor = config.getInt("discord.mute.color", 15158332);
+            muteAvatar = config.getBoolean("discord.mute.avatar-enabled", true);
+        }
 
-    public boolean isDeathEnabled() {
-        return deathEnabled;
-    }
-
-    public boolean isDeathAvatarEnabled() {
-        return deathAvatarEnabled;
-    }
-
-    public int getDeathColor() {
-        return deathColor;
-    }
-
-    public String getDeathDescription() {
-        return deathDescription;
-    }
-
-    public String getDeathTitle() {
-        return deathTitle;
+        if (plugin.getBannedWordsManager().isDiscordEnabled()) {
+            bannedCommandsTitle = config.getString("discord.banned-commands.title", "Banned Command Detected!");
+            bannedCommandsDescription = config.getString("discord.banned-commands.description", "Player %player% used a banned command: %word%\nMessage: \"%message%\"");
+            bannedCommandsColor = config.getInt("discord.banned-commands.color", 15158332);
+            bannedCommandsAvatar = config.getBoolean("discord.banned-commands.avatar-enabled", true);
+        }
     }
 
     public void reloadConfig() {
@@ -110,51 +113,41 @@ public class DiscordManager {
         loadConfig();
     }
 
-    public String getDiscordHook() {
-        return discordHook;
-    }
+    public String getBannedCommandsTitle() {return bannedCommandsTitle;}
+    public String getBannedCommandsDescription() {return bannedCommandsDescription;}
+    public int getBannedCommandsColor() {return bannedCommandsColor;}
+    public boolean isBannedCommandsAvatar() {return bannedCommandsAvatar;}
 
-    public boolean isDiscordEnabled() {
-        return discordEnabled;
-    }
+    public boolean isBannedWordsAvatar() {return bannedWordsAvatar;}
+    public String getBannedWordsTitle() {return bannedWordsTitle;}
+    public String getBannedWordsDescription() {return bannedWordsDescription;}
+    public int getBannedWordsColor() {return bannedWordsColor;}
 
-    public boolean isJoinEnabled() {
-        return joinEnabled;
-    }
+    public boolean isMuteEnabled() {return muteEnabled;}
+    public String getMuteWebhook() {return muteWebhook;}
+    public String getMuteTitle() {return muteTitle;}
+    public String getMuteDescription() {return muteDescription;}
+    public int getMuteColor() {return muteColor;}
+    public boolean isMuteAvatar() {return muteAvatar;}
 
-    public String getJoinTitle() {
-        return joinTitle;
-    }
+    public boolean isDiscordEnabled() {return discordEnabled;}
+    public String getDiscordHook() {return discordHook;}
 
-    public String getJoinDescription() {
-        return joinDescription;
-    }
+    public boolean isJoinEnabled() {return joinEnabled;}
+    public String getJoinTitle() {return joinTitle;}
+    public String getJoinDescription() {return joinDescription;}
+    public int getJoinColor() {return joinColor;}
+    public boolean isJoinAvatarEnabled() {return joinAvatarEnabled;}
 
-    public int getJoinColor() {
-        return joinColor;
-    }
+    public boolean isQuitEnabled() {return quitEnabled;}
+    public String getQuitTitle() {return quitTitle;}
+    public String getQuitDescription() {return quitDescription;}
+    public int getQuitColor() {return quitColor;}
+    public boolean isQuitAvatarEnabled() {return quitAvatarEnabled;}
 
-    public boolean isJoinAvatarEnabled() {
-        return joinAvatarEnabled;
-    }
-
-    public boolean isQuitEnabled() {
-        return quitEnabled;
-    }
-
-    public String getQuitTitle() {
-        return quitTitle;
-    }
-
-    public String getQuitDescription() {
-        return quitDescription;
-    }
-
-    public int getQuitColor() {
-        return quitColor;
-    }
-
-    public boolean isQuitAvatarEnabled() {
-        return quitAvatarEnabled;
-    }
+    public boolean isDeathEnabled() {return deathEnabled;}
+    public String getDeathTitle() {return deathTitle;}
+    public String getDeathDescription() {return deathDescription;}
+    public int getDeathColor() {return deathColor;}
+    public boolean isDeathAvatarEnabled() {return deathAvatarEnabled;}
 }

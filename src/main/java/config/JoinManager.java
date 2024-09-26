@@ -58,6 +58,8 @@ public class JoinManager {
             if (soundSection != null) {
                 eventConfig.setSoundEnabled(soundSection.getBoolean("enabled", false));
                 eventConfig.setSound(soundSection.getString("sound", ""));
+                eventConfig.setVolume((float) soundSection.getDouble("volume", 1.0));
+                eventConfig.setPitch((float) soundSection.getDouble("pitch", 1.0));
             }
 
             ConfigurationSection particlesSection = eventSection.getConfigurationSection("particles");
@@ -127,12 +129,18 @@ public class JoinManager {
         private String subtitle;
         private boolean soundEnabled;
         private String sound;
+        private float volume;
+        private float pitch;
         private boolean particlesEnabled;
         private String particle;
         private boolean actionbarEnabled;
         private String actionbarMessage;
         private boolean cancelJoinMessage;
         private boolean cancelLeftMessage;
+
+        public float getVolume() {return volume;}
+
+        public float getPitch() {return pitch;}
 
         public boolean isCancelJoinMessage() {
             return cancelJoinMessage;
@@ -180,6 +188,14 @@ public class JoinManager {
 
         public void setTitle(String title) {
             this.title = title;
+        }
+
+        public void setVolume(float volume) {
+            this.volume = volume;
+        }
+
+        public void setPitch(float pitch) {
+            this.pitch = pitch;
         }
 
         public String getSubtitle() {

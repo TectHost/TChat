@@ -8,7 +8,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -29,15 +28,16 @@ public class BannedCommands implements Listener {
         if (event.isCancelled()) { return; }
 
         Player player = event.getPlayer();
+        String message = event.getMessage();
 
         if (!event.getPlayer().hasPermission(bannedCommandsManager.getBypassPermissionCommand()) && !event.getPlayer().hasPermission("tchat.admin")) {
-            String command = event.getMessage().split(" ")[0].substring(1).toLowerCase();
+            String command = message.split(" ")[0].substring(1).toLowerCase();
             List<String> bannedCommands = bannedCommandsManager.getBannedCommands();
 
             if (bannedCommands.contains(command)) {
                 List<String> blockedMessages = bannedCommandsManager.getBlockedMessage();
-                for (String message : blockedMessages) {
-                    event.getPlayer().sendMessage(plugin.getTranslateColors().translateColors(player, message));
+                for (String blockedMessage : blockedMessages) {
+                    event.getPlayer().sendMessage(plugin.getTranslateColors().translateColors(player, blockedMessage));
                 }
 
                 if (bannedCommandsManager.getTitleEnabled()) {
@@ -62,6 +62,10 @@ public class BannedCommands implements Listener {
 
                 if (plugin.getConfigManager().isLogBannedCommandsEnabled()) {
                     plugin.getLogsManager().logBannedCommand(event.getPlayer().getName(), command);
+                }
+
+                if (bannedCommandsManager.isDiscordEnabled()) {
+                    plugin.getDiscordHook().sendBannedCommandEmbed(player.getName(), command, message, bannedCommandsManager.getDiscordWebhook());
                 }
 
                 event.setCancelled(true);

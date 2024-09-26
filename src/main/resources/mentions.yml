@@ -19,7 +19,7 @@ groups:
       message:
         enabled: true
         text:
-          - "&aYou were mentioned!"
+          - "&aYou were mentioned by %mentioned%!"
       title:
         enabled: true
         main: "&6Hey %player_name%!"

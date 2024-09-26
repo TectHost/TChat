@@ -124,11 +124,13 @@ public class ChannelCommand implements CommandExecutor {
         int playerCount = channelsManager.getChannelPlayerCount(channelName);
         int playerLimit = channel.pLimit();
 
-        if (playerLimit > 0 && playerCount >= playerLimit) {
-            String message = plugin.getMessagesManager().getChannelFull().replace("%channel%", channelName);
-            message = message.replace("%players%", String.valueOf(playerCount)).replace("%limit%", String.valueOf(playerLimit));
-            sendMessage(player, message, prefix);
-            return;
+        if (!player.hasPermission("tchat.admin") && !player.hasPermission("tchat.bypass.channel.limit")) {
+            if (playerLimit > 0 && playerCount >= playerLimit) {
+                String message = plugin.getMessagesManager().getChannelFull().replace("%channel%", channelName);
+                message = message.replace("%players%", String.valueOf(playerCount)).replace("%limit%", String.valueOf(playerLimit));
+                sendMessage(player, message, prefix);
+                return;
+            }
         }
 
         if (hasPermission(player, channel.permission())) {

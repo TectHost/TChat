@@ -16,9 +16,9 @@ import java.util.List;
 public class TabCompleteListener implements Listener {
 
     private final TChat plugin;
-    private final BannedCommandsManager bannedCommandsManager;
-    private final List<String> remove;
-    private final List<String> add;
+    private BannedCommandsManager bannedCommandsManager;
+    private List<String> remove;
+    private List<String> add;
 
     public TabCompleteListener(@NotNull TChat plugin) {
         this.plugin = plugin;
@@ -65,5 +65,12 @@ public class TabCompleteListener implements Listener {
         } catch (NoSuchFieldException | IllegalAccessException e) {
             return null;
         }
+    }
+
+    public void reloadConfig() {
+        this.bannedCommandsManager = plugin.getBannedCommandsManager();
+        this.remove = bannedCommandsManager.getNoTabCompleteCommands();
+        this.add = bannedCommandsManager.getAddTabCommands();
+        registerCommands();
     }
 }

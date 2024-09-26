@@ -59,7 +59,7 @@ public class ChatListener implements Listener {
 
         chatFormatListener.playerFormat(event);
         plugin.getChatGamesSender().checkPlayerResponse(player, message);
-        logs(player, message, 1);
+        if (plugin.getConfigManager().isLogsChatEnabled()) { plugin.getLogsManager().logChatMessage(player.getName(), message); }
         plugin.getLevelListener().addXp(event);
         handleBroadcastAddition(player, message);
     }
@@ -69,10 +69,11 @@ public class ChatListener implements Listener {
         Player player = event.getPlayer();
         String command = event.getMessage();
 
-        socialSpy(event, player, command);
-        logs(player, command, 0);
+        if (plugin.getConfigManager().isSpyEnabled() && !player.hasPermission("tchat.admin")) { plugin.getSocialSpyListener().spy(event, player, command); }
+        if (plugin.getConfigManager().isLogsCommandEnabled()) { plugin.getLogsManager().logCommand(player.getName(), command); }
         plugin.getAntiAdvertising().checkAdvertisingCommand(event, player, command);
         plugin.getChatCooldownListener().commandCooldown(event);
+        if (plugin.getConfigManager().isRepeatCommandsEnabled() && !player.hasPermission("tchat.admin") && !player.hasPermission("tchat.bypass.repeat-commands")) { plugin.getRepeatCommandsListener().checkRepeatCommand(event); }
         antiBot(null, player, event);
         new BannedCommands(plugin).onPlayerCommandPreprocess(event);
     }
@@ -157,20 +158,6 @@ public class ChatListener implements Listener {
         }
     }
 
-    public void socialSpy(PlayerCommandPreprocessEvent e, Player sender, String command) {
-        if (plugin.getConfigManager().isSpyEnabled() && !sender.hasPermission("tchat.admin")) {
-            plugin.getSocialSpyListener().spy(e, sender, command);
-        }
-    }
-
-    public void logs(Player player, String message, int action) {
-        if (plugin.getConfigManager().isLogsCommandEnabled() && action == 0) {
-            plugin.getLogsManager().logCommand(player.getName(), message);
-        } else if (plugin.getConfigManager().isLogsChatEnabled()) {
-            plugin.getLogsManager().logChatMessage(player.getName(), message);
-        }
-    }
-
     public void antiBot(AsyncPlayerChatEvent chatEvent, Player player, PlayerCommandPreprocessEvent commandEvent) {
         if (chatEvent != null) {
             if (chatEvent.isCancelled()) { return; }
@@ -207,7 +194,7 @@ public class ChatListener implements Listener {
         }
     }
 
-    public void chatMuted(AsyncPlayerChatEvent event) {
+    public void chatMuted(@NotNull AsyncPlayerChatEvent event) {
         Player player = event.getPlayer();
         if (MuteChatCommand.isChatMuted() && !player.hasPermission(plugin.getConfigManager().getBypassMuteChatPermission())) {
             String prefix = plugin.getMessagesManager().getPrefix();

@@ -215,6 +215,23 @@ public class MessagesManager {
     private String autoBroadcastToggleOff;
     private String noItemInHand;
     private String invalidItemMeta;
+    private String repeatCommands;
+    private String usageReplacer;
+    private String usageReplacerAdd;
+    private String usageReplacerRemove;
+    private String replacerHeader;
+    private String replacerNoReplacements;
+    private String replacerOriginal;
+    private String replacerReplace;
+    private String replacerPermission;
+    private String replacerPermissionEnd;
+    private String replacerAdded;
+    private String replacerRemoved;
+    private String replacerEnabled;
+    private String replacerDisabled;
+    private String usagePremade;
+    private String broadcastPremadeNull;
+    private String broadcastSent;
 
     public MessagesManager(TChat plugin){
         this.messagesFile = new ConfigFile(plugin.getConfigManager().getLangFile(), "lang", plugin);
@@ -230,8 +247,8 @@ public class MessagesManager {
         if (prefixEnabled) { prefix = config.getString("prefix.prefix"); } else { prefix = ""; }
 
         if (plugin.getConfigManager().isCooldownChat()) {
-            cooldownChat = config.getString("messages.cooldown.chat");
-            depurationChatCooldown = config.getString("messages.debug.chat-cooldown");
+            cooldownChat = config.getString("messages.cooldown.chat", "&cPlease wait %cooldown% seconds before sending another message.");
+            depurationChatCooldown = config.getString("messages.debug.chat-cooldown", "&cPlease wait %cooldown% seconds before executing another command.");
         }
         if (plugin.getConfigManager().isCooldownCommand()) {
             cooldownCommand = config.getString("messages.cooldown.command");
@@ -255,6 +272,26 @@ public class MessagesManager {
 
         if (plugin.getConfigManager().isUnicodeEnabled()) {
             antiUnicode = config.getString("messages.unicode");
+        }
+
+        usagePremade = config.getString("messages.usage.premade", "&cUsage: /premade broadcast <broadcast>");
+        broadcastPremadeNull = config.getString("messages.broadcast-null", "&cBroadcast not found or is disabled.");
+        broadcastSent = config.getString("messages.broadcast-sent", "&aBroadcast '%broadcast%' sent to all players.");
+
+        if (plugin.getReplacerManager().getReplacerEnabled()) {
+            replacerNoReplacements = config.getString("messages.replacer.no-replacements", "&cNo replacements found.");
+            usageReplacer = config.getString("messages.usage.replacer", "&cUsage: /replacer <list/add/remove/enable/disable>");
+            usageReplacerAdd = config.getString("messages.usage.replacer-add", "&cUsage: /replacer add <original> <replace> <permission>");
+            usageReplacerRemove = config.getString("messages.usage.replacer-remove", "&cUsage: /replacer remove <original>");
+            replacerAdded = config.getString("messages.replacer.added", "&aReplacement added: &e%original% &a-> &e%replacement%");
+            replacerRemoved = config.getString("messages.replacer.removed", "&cReplacement removed: %original%");
+            replacerEnabled = config.getString("messages.replacer.enabled", "&aReplacer enabled.");
+            replacerDisabled = config.getString("messages.replacer.disabled", "&aReplacer disabled.");
+            replacerHeader = config.getString("messages.replacer.replacements.header", "&aReplacements:");
+            replacerOriginal = config.getString("messages.replacer.replacements.original", "&eOriginal: &f");
+            replacerReplace = config.getString("messages.replacer.replacements.replace", "&e-> Replace: &f");
+            replacerPermission = config.getString("messages.replacer.replacements.permission", "&e[Permission: §f");
+            replacerPermissionEnd = config.getString("messages.replacer.replacements.permission-end", "&e]");
         }
 
         tagsUsage = config.getString("messages.usage.tags", "&cUsage: /tags list or /tags select <tag>");
@@ -376,6 +413,10 @@ public class MessagesManager {
 
         if (plugin.getLevelsManager().isEnabled()) {
             levelUp = config.getString("messages.level-up");
+        }
+
+        if (plugin.getConfigManager().isRepeatCommandsEnabled()) {
+            repeatCommands = config.getString("messages.repeat-commands", "&cYou cannot send the same command.");
         }
 
         // Messages
@@ -525,6 +566,23 @@ public class MessagesManager {
     }
 
     // Messages
+    public String getUsagePremade() {return usagePremade;}
+    public String getBroadcastPremadeNull() {return broadcastPremadeNull;}
+    public String getBroadcastSent() {return broadcastSent;}
+    public String getUsageReplacer() {return usageReplacer;}
+    public String getUsageReplacerAdd() {return usageReplacerAdd;}
+    public String getUsageReplacerRemove() {return usageReplacerRemove;}
+    public String getReplacerHeader() {return replacerHeader;}
+    public String getReplacerNoReplacements() {return replacerNoReplacements;}
+    public String getReplacerOriginal() {return replacerOriginal;}
+    public String getReplacerReplace() {return replacerReplace;}
+    public String getReplacerPermission() {return replacerPermission;}
+    public String getReplacerPermissionEnd() {return replacerPermissionEnd;}
+    public String getReplacerAdded() {return replacerAdded;}
+    public String getReplacerRemoved() {return replacerRemoved;}
+    public String getReplacerEnabled() {return replacerEnabled;}
+    public String getReplacerDisabled() {return replacerDisabled;}
+    public String getRepeatCommands() {return repeatCommands;}
     public String getNoItemInHand() {return noItemInHand;}
     public String getInvalidItemMeta() {return invalidItemMeta;}
     public String getAutoBroadcastToggleOn() {return autoBroadcastToggleOn;}

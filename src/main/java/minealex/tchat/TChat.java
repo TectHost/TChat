@@ -66,6 +66,9 @@ public class TChat extends JavaPlugin {
     private TagsManager tagsManager;
     private TagsMenuConfigManager tagsMenuConfigManager;
     private TagsInventoryManager tagsInventoryManager;
+    private TabCompleteListener tabCompleteListener;
+    private RepeatCommandsListener repeatCommandsListener;
+    private BroadcastPremadeManager broadcastPremadeManager;
 
     @Override
     public void onEnable() {
@@ -109,13 +112,15 @@ public class TChat extends JavaPlugin {
         levelListener = new LevelListener(this);
         chatEnabledListener = new ChatEnabledListener(this);
         this.checkPlayerMuted = new CheckPlayerMuted(this);
+        tabCompleteListener = new TabCompleteListener(this);
+        repeatCommandsListener = new RepeatCommandsListener(this);
 
         getServer().getPluginManager().registerEvents(new ChatPlaceholdersListener(this, new ShowItemCommand(this)), this);
         getServer().getPluginManager().registerEvents(new PollListener(this), this);
         getServer().getPluginManager().registerEvents(signListener, this);
         getServer().getPluginManager().registerEvents(chatListener, this);
         getServer().getPluginManager().registerEvents(bannedWords, this);
-        getServer().getPluginManager().registerEvents(new TabCompleteListener(this), this);
+        getServer().getPluginManager().registerEvents(tabCompleteListener, this);
         getServer().getPluginManager().registerEvents(playerJoinListener, this);
         getServer().getPluginManager().registerEvents(playerLeftListener, this);
         getServer().getPluginManager().registerEvents(playerMoveListener, this);
@@ -125,13 +130,13 @@ public class TChat extends JavaPlugin {
     }
 
     public void registerConfigFiles() {
+        replacerManager = new ReplacerManager(this);
         bannedWordsManager = new BannedWordsManager(this);
         commandTimerManager = new CommandTimerManager(this);
         configManager = new ConfigManager(this);
         levelsManager = new LevelsManager(this);
         messagesManager = new MessagesManager(this);
         bannedCommandsManager = new BannedCommandsManager(this);
-        replacerManager = new ReplacerManager(this);
         saveManager = new SaveManager(this);
         chatColorManager = new ChatColorManager(this);
         channelsConfigManager = new ChannelsConfigManager(this);
@@ -152,6 +157,7 @@ public class TChat extends JavaPlugin {
         showEnderChestConfigManager = new ShowEnderChestConfigManager(this);
         tagsManager = new TagsManager(this);
         tagsMenuConfigManager = new TagsMenuConfigManager(this);
+        broadcastPremadeManager = new BroadcastPremadeManager(this);
     }
 
     public void initializeManagers() {
@@ -159,7 +165,7 @@ public class TChat extends JavaPlugin {
         chatColorInventoryManager = new ChatColorInventoryManager(this);
         translateColors = new TranslateColors();
         channelsManager = new ChannelsManager();
-        new Metrics(this, 23305);
+        new org.bstats.bukkit.Metrics(this, 23305);
         tagsInventoryManager = new TagsInventoryManager(this, tagsMenuConfigManager);
     }
 
@@ -245,6 +251,10 @@ public class TChat extends JavaPlugin {
         }
         Objects.requireNonNull(getCommand("chatgames")).setExecutor(new ChatGamesCommand(this, chatGamesSender, chatGamesManager));
         new TagsCommand(this, tagsManager, tagsInventoryManager);
+        if (replacerManager.getReplacerEnabled()) {
+            Objects.requireNonNull(getCommand("replacer")).setExecutor(new ReplacerCommand(this));
+        }
+        Objects.requireNonNull(getCommand("premade")).setExecutor(new PremadeCommand(this));
     }
 
     public void registerPlaceholders() {
@@ -253,6 +263,9 @@ public class TChat extends JavaPlugin {
 
     // ------------------------------------------------------------------------------
 
+    public BroadcastPremadeManager getBroadcastPremadeManager() {return broadcastPremadeManager;}
+    public RepeatCommandsListener getRepeatCommandsListener() {return repeatCommandsListener;}
+    public TabCompleteListener getTabCompleteListener() {return tabCompleteListener;}
     public TagsMenuConfigManager getTagsMenuConfigManager() {return tagsMenuConfigManager;}
     public TagsManager getTagsManager() {return tagsManager;}
     public ShowEnderChestConfigManager getShowEnderChestConfigManager() {return showEnderChestConfigManager;}

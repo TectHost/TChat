@@ -1,5 +1,6 @@
 package commands;
 
+import listeners.TabCompleteListener;
 import minealex.tchat.TChat;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -54,6 +55,7 @@ public class Commands implements CommandExecutor, TabCompleter {
                         plugin.getAutoBroadcastSender().restartBroadcasts();
                         plugin.getTagsManager().reloadConfig();
                         plugin.getTagsMenuConfigManager().reloadConfig();
+                        plugin.getTabCompleteListener().reloadConfig();
                         String message = plugin.getMessagesManager().getReloadMessage();
                         String prefix = plugin.getMessagesManager().getPrefix();
                         if (!(sender instanceof Player)) {

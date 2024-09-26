@@ -27,6 +27,8 @@ public class BannedCommandsManager {
     private Particle particle;
     private int particles;
     private List<String> addTabCommands;
+    private boolean discordEnabled;
+    private String discordWebhook;
 
     public BannedCommandsManager(TChat plugin) {
         this.plugin = plugin;
@@ -63,6 +65,11 @@ public class BannedCommandsManager {
             particle = Particle.valueOf(config.getString("particles.particle"));
             particles = config.getInt("particles.particles");
         }
+
+        discordEnabled = config.getBoolean("discord.enabled", false);
+        if (discordEnabled) {
+            discordWebhook = config.getString("discord.webhook");
+        }
     }
 
     public void reloadConfig() {
@@ -78,6 +85,8 @@ public class BannedCommandsManager {
         return configFile;
     }
 
+    public boolean isDiscordEnabled() {return discordEnabled;}
+    public String getDiscordWebhook() {return discordWebhook;}
     public List<String> getAddTabCommands() {return addTabCommands;}
     public int getParticles() { return particles;}
     public Particle getParticle() { return particle; }

@@ -116,6 +116,9 @@ public class ConfigManager {
     private boolean sicEnabled;
     private String sicPrefix;
     private String sicSuffix;
+    private int unicodeMode;
+    private String unicodeCensor;
+    private boolean repeatCommandsEnabled;
 
     public ConfigManager(TChat plugin) {
         this.plugin = plugin;
@@ -195,10 +198,14 @@ public class ConfigManager {
             sicSuffix = config.getString("sic.suffix", "&a!");
         }
 
-        unicodeEnabled = config.getBoolean("unicode.enabled");
+        unicodeEnabled = config.getBoolean("unicode.enabled", false);
         if (unicodeEnabled) {
             unicodeBlockAll = config.getBoolean("unicode.blockAllNonLatin");
             unicodeMatch = config.getString("unicode.match");
+            unicodeMode = config.getInt("unicode.mode", 1);
+            if (unicodeMode == 2) {
+                unicodeCensor = config.getString("unicode.censor-char", "*");
+            }
         }
 
         floodPercentEnabled = config.getBoolean("flood.percent.enabled");
@@ -264,6 +271,8 @@ public class ConfigManager {
             replyFormatSender = config.getString("pm.reply.formats.sender");
             replyFormatReceiver = config.getString("pm.reply.formats.receiver");
         }
+
+        repeatCommandsEnabled = config.getBoolean("repeat-commands.enabled", false);
 
         chatClearEnabled = config.getBoolean("chat-clear.enabled");
         if (chatClearEnabled) {
@@ -398,6 +407,9 @@ public class ConfigManager {
         return replyHoverConfigs.get(group);
     }
 
+    public boolean isRepeatCommandsEnabled() {return repeatCommandsEnabled;}
+    public int getUnicodeMode() {return unicodeMode;}
+    public String getUnicodeCensor() {return unicodeCensor;}
     public boolean isSicEnabled() {return sicEnabled;}
     public String getSicPrefix() {return sicPrefix;}
     public String getSicSuffix() {return sicSuffix;}

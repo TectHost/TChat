@@ -1,5 +1,5 @@
 main: minealex.tchat.TChat
-version: 4.2.2
+version: 4.2.3
 name: TChat
 author: Mine_Alex
 api-version: 1.13
@@ -89,8 +89,22 @@ commands:
     description: Configure chatgames inside the server
   tags:
     description: Select a tag
+  replacer:
+    description: Configure replacer system inside the server
+  premade:
+    description: Sends premade broadcasts
 
 permissions:
+  tchat.admin.command.replacer.enable:
+    description: Permission to enable replacer
+  tchat.admin.command.replacer.disable:
+    description: Permission to disable replacer
+  tchat.admin.command.replacer.list:
+    description: Permission to list replacer
+  tchat.admin.command.replacer.add:
+    description: Permission to add replacer
+  tchat.admin.command.replacer.remove:
+    description: Permission to remove replacer
   tchat.tags.all:
     description: Permission to use all tags
   tchat.admin.chatgames:

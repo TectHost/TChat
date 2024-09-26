@@ -46,6 +46,9 @@ messages:
   mention-other: "&a¡Has mencionado a &e%mentioned%&a!"
   no-item-in-hand: "&cNo tienes items en la mano."
   invalid-item-meta: "&cEl item no tiene meta."
+  repeat-commands: "&cNo puedes enviar el mismo mensaje."
+  broadcast-null: "&cBroadcast no encontrado o desactivado."
+  broadcast-sent: "&aEl broadcast '%broadcast%' fue enviado a todos los jugadores."
   chat-help:
     message:
     - "&8--------- { &#c03afeT&#a72cf8C&#8e1ff1h&#7411eba&#5b03e4t &8} ---------"
@@ -184,6 +187,18 @@ messages:
     list: "&aLista de tags disponibles:"
     selected: "&aHas seleccionado el tag: &e%tag%"
     unknown: "&cEl tag '&e%tag%&c' no existe."
+  replacer:
+    no-replacements: "&cNo se encontraron reemplazos."
+    added: "&aReemplazo añadido: &e%original% &a-> &e%replacement%"
+    removed: "&cReemplazo eliminado: %original%"
+    enabled: "&aReemplazador activado."
+    disabled: "&aReemplazador desactivado."
+    replacements:
+      header: "&aReemplazos:"
+      original: "&eOriginal: &f"
+      replace: "&e-> Reemplazar: &f"
+      permission: "&e[Permiso: §f"
+      permission-end: "&e]"
   autobroadcast:
     start: "&aEl AutoBroadcast ha comenzado."
     stop: "&cEl AutoBroadcast ha sido detenido."
@@ -252,6 +267,10 @@ messages:
     cg-remove: "&cUso: /chatgames remove <nombre>"
     tags: "&cUso: /tags list o /tags select <tag>"
     tags-selected: "&cUso: /tags select <tag>"
+    replacer: "&cUso: /replacer <list/add/remove/enable/disable>"
+    replacer-add: "&cUso: /replacer add <original> <replace> <permission>"
+    replacer-remove: "&cUso: /replacer remove <original>"
+    premade: "&cUso: /premade broadcast <broadcast>"
     # Mensajes de depuración solo visibles en la consola
   debug:
     no-format-group: "&cError en groups.yml - No se encontró formato para el grupo: %group%"

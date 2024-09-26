@@ -61,6 +61,10 @@ public class MuteCommand implements CommandExecutor {
             }
         }
 
+        if (plugin.getDiscordManager().isMuteEnabled()) {
+            plugin.getDiscordHook().sendMuteEmbed(target.getName(), sender.getName(), plugin.getDiscordManager().getMuteWebhook());
+        }
+
         return true;
     }
 

@@ -27,6 +27,30 @@ tab:
     - ver
   add-tab-complete-commands:
     - r
+    - bc
+    - ts3
+    - teamspeak
+    - tw
+    - twitter
+    - web
+    - website
+    - fb
+    - facebook
+    - tt
+    - tiktok
+    - yt
+    - youtube
+    - instagram
+    - ig
+    - dc
+    - discord
+    - whisper
+    - ewhisper
+    - pm
+    - emsg
+    - mc
+    - chatmute
+    - cc
 
 # Message displayed when someone executes a banned command
 blockedMessage:
@@ -71,3 +95,10 @@ particles:
   particle: ANGRY_VILLAGER
   # Number of particles
   particles: 4
+
+# Discord module
+discord:
+  # Enable/disable this module
+  enabled: true
+  # Discord webhook link
+  webhook: "https://discord.com/api/webhooks/..."

@@ -412,6 +412,12 @@ unicode:
   # true -> Block all no latin characters
   # false -> Block only match characters (unicode.match)
   blockAllNonLatin: false
+  # Modes:
+  # 1 -> Blocks the message
+  # 2 -> Censors the message (replaces characters with the censor-char)
+  mode: 1
+  # The character used to replace in the censor mode
+  censor-char: "*"
 
 # #################################################################
 # ┌─────────────────────────────────────────────────────────────┐ #
@@ -620,3 +626,13 @@ sic:
   prefix: "&aThis is my item: &e"
   # The text after the item name
   suffix: "&a!"
+
+# #################################################################
+# ┌─────────────────────────────────────────────────────────────┐ #
+# │                       Repeat Commands                       │ #
+# └─────────────────────────────────────────────────────────────┘ #
+# #################################################################
+
+repeat-commands:
+  # Enable/disable this module
+  enabled: true

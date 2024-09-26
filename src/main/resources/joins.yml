@@ -38,6 +38,10 @@ groups:
           enabled: true
           # The sound that will be played (must be a valid sound identifier).
           sound: "entity_player_levelup"
+          # The sound volume
+          volume: 1.0
+          # The sound pitch
+          pitch: 1.0
         # Particle effects configuration for when the player joins.
         particles:
           # If true, particles will be displayed when the player joins.
@@ -71,6 +75,8 @@ groups:
         sound:
           enabled: true
           sound: "block_bell_use"
+          volume: 1.0
+          pitch: 1.0
         # Particle effects configuration for the global join event.
         particles:
           enabled: false
@@ -99,6 +105,8 @@ groups:
       sound:
         enabled: false
         sound: "entity_ender_dragon_flap"
+        volume: 1.0
+        pitch: 1.0
       # Particle effects configuration for the quit event.
       particles:
         enabled: false

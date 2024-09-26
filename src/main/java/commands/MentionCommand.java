@@ -40,29 +40,35 @@ public class MentionCommand implements CommandExecutor {
             return true;
         }
 
-        executeActions(target);
+        executeActions(target, sender);
 
         String m = plugin.getMessagesManager().getMentionOther();
-        m = m.replace("%mentioned%", target.getName());
+        if (m.contains("%mentioned%")) {
+            m = m.replace("%mentioned%", target.getName());
+        }
         sender.sendMessage(plugin.getTranslateColors().translateColors(null, prefix + m));
 
         return true;
     }
 
-    public void executeActions(Player player) {
+    public void executeActions(Player player, @NotNull CommandSender sender) {
         String groupName = plugin.getGroupManager().getGroup(player);
         MentionsManager.EventConfig personalConfig = plugin.getMentionsManager().getPersonalEventConfig(groupName);
 
+        String senderName = sender.getName();
+
         if (personalConfig.isMessageEnabled()) {
-            player.sendMessage(plugin.getTranslateColors().translateColors(player, String.join("\n", personalConfig.getMessage())));
+            String message = String.join("\n", personalConfig.getMessage())
+                    .replace("%mentioned%", senderName);
+            player.sendMessage(plugin.getTranslateColors().translateColors(player, message));
         }
 
         if (personalConfig.isTitleEnabled() || personalConfig.isSubtitleEnabled()) {
             String title = personalConfig.isTitleEnabled()
-                    ? plugin.getTranslateColors().translateColors(player, personalConfig.getTitle())
+                    ? plugin.getTranslateColors().translateColors(player, personalConfig.getTitle().replace("%mentioned%", senderName))
                     : "";
             String subtitle = personalConfig.isSubtitleEnabled()
-                    ? plugin.getTranslateColors().translateColors(player, personalConfig.getSubtitle())
+                    ? plugin.getTranslateColors().translateColors(player, personalConfig.getSubtitle().replace("%mentioned%", senderName))
                     : "";
 
             player.sendTitle(title, subtitle, 10, 70, 20);
@@ -79,7 +85,7 @@ public class MentionCommand implements CommandExecutor {
         }
 
         if (personalConfig.isActionbarEnabled()) {
-            player.spigot().sendMessage(net.md_5.bungee.api.ChatMessageType.ACTION_BAR, new TextComponent(plugin.getTranslateColors().translateColors(player, personalConfig.getActionbarMessage())));
+            player.spigot().sendMessage(net.md_5.bungee.api.ChatMessageType.ACTION_BAR, new TextComponent(plugin.getTranslateColors().translateColors(player, personalConfig.getActionbarMessage().replace("%mentioned%", senderName))));
         }
     }
 }

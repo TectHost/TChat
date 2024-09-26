@@ -6,6 +6,7 @@
 
 # Original is the word detected by Replacer, when detected, it replaces it with replace
 replacer_enabled: true
+
 words:
   example1:
     original: "hello"

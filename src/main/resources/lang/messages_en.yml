@@ -52,6 +52,9 @@ messages:
   mention-other: "&aYou mentioned &e%mentioned%&a!"
   no-item-in-hand: "&cYou do not have any items in hand."
   invalid-item-meta: "&cThe item has no meta."
+  repeat-commands: "&cYou cannot send the same command."
+  broadcast-null: "&cBroadcast not found or is disabled."
+  broadcast-sent: "&aBroadcast '%broadcast%' sent to all players."
   chat-help:
     message:
       - "&8--------- { &#c03afeT&#a72cf8C&#8e1ff1h&#7411eba&#5b03e4t &8} ---------"
@@ -107,9 +110,9 @@ messages:
     ignore-list-message: "&7You are currently ignoring the following players: &a%players%"
     ignore-list-empty: "&cYou are not ignoring any players."
     blacklist: "&cThe player '&4%player%&c' is blacklisted. You cannot ignore him."
-    cooldown:
-      chat: "&cPlease wait %cooldown% seconds before sending another message."
-      command: "&cPlease wait %cooldown% seconds before executing another command."
+  cooldown:
+    chat: "&cPlease wait %cooldown% seconds before sending another message."
+    command: "&cPlease wait %cooldown% seconds before executing another command."
   stafflist:
     header: "&#9713FE======= [ Staff List (%staff%) ] ======="
     footer: "&#9713FE========================================"
@@ -192,6 +195,18 @@ messages:
     list: "&aList of available tags:"
     selected: "&aYou have selected the tag: &e%tag%"
     unknown: "&cThe tag '&e%tag%&c' does not exist."
+  replacer:
+    no-replacements: "&cNo replacements found."
+    added: "&aReplacement added: &e%original% &a-> &e%replacement%"
+    removed: "&cReplacement removed: %original%"
+    enabled: "&aReplacer enabled."
+    disabled: "&aReplacer disabled."
+    replacements:
+      header: "&aReplacements:"
+      original: "&eOriginal: &f"
+      replace: "&e-> Replace: &f"
+      permission: "&e[Permission: §f"
+      permission-end: "&e]"
   autobroadcast:
     start: "&aAutoBroadcast has been started."
     stop: "&cAutoBroadcast has been stopped."
@@ -260,6 +275,10 @@ messages:
     cg-remove: "&cUsage: /chatgames remove <name>"
     tags: "&cUsage: /tags list or /tags select <tag>"
     tags-selected: "&cUsage: /tags select <tag>"
+    replacer: "&cUsage: /replacer <list/add/remove/enable/disable>"
+    replacer-add: "&cUsage: /replacer add <original> <replace> <permission>"
+    replacer-remove: "&cUsage: /replacer remove <original>"
+    premade: "&cUsage: /premade broadcast <broadcast>"
   # Debug messages are only seen in the console
   debug:
     no-format-group: "&cError in groups.yml - No format found for group: %group%"

@@ -7,19 +7,20 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.jetbrains.annotations.NotNull;
 
 public class PlayerLeftListener implements Listener {
 
     private final TChat plugin;
     private final JoinManager joinManager;
 
-    public PlayerLeftListener(TChat plugin) {
+    public PlayerLeftListener(@NotNull TChat plugin) {
         this.plugin = plugin;
         this.joinManager = plugin.getJoinManager();
     }
 
     @EventHandler
-    public void onPlayerLeft(PlayerQuitEvent event) {
+    public void onPlayerLeft(@NotNull PlayerQuitEvent event) {
         Player player = event.getPlayer();
         String username = player.getName();
 
@@ -53,7 +54,7 @@ public class PlayerLeftListener implements Listener {
             if (quitConfig.isSoundEnabled()) {
                 String soundName = quitConfig.getSound();
                 for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
-                    onlinePlayer.playSound(onlinePlayer.getLocation(), soundName, 1.0f, 1.0f);
+                    onlinePlayer.playSound(onlinePlayer.getLocation(), soundName, quitConfig.getVolume(), quitConfig.getPitch());
                 }
             }
 

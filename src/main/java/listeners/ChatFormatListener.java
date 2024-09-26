@@ -350,7 +350,11 @@ public class ChatFormatListener implements Listener {
             MentionsManager.EventConfig personalConfig = mentionsManager.getPersonalEventConfig(groupName);
 
             if (personalConfig.isMessageEnabled()) {
-                mentionedPlayer.sendMessage(ChatColor.translateAlternateColorCodes('&', String.join("\n", personalConfig.getMessage())));
+                String[] messages = personalConfig.getMessage().stream()
+                        .map(msg -> msg.replace("%mentioned%", mentionedPlayer.getName()))
+                        .toArray(String[]::new);
+
+                mentionedPlayer.sendMessage(plugin.getTranslateColors().translateColors(mentionedPlayer, String.join("\n", messages)));
             }
 
             if (personalConfig.isTitleEnabled() || personalConfig.isSubtitleEnabled()) {

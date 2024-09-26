@@ -62,6 +62,30 @@ public class ReplacerManager {
         return replacerEnabled;
     }
 
+    public void addReplacement(String original, String replace, String permission) {
+        replacements.put(original, new Replacement(original, replace, permission));
+        replacerConfig.getConfig().set("words." + original + ".original", original);
+        replacerConfig.getConfig().set("words." + original + ".replace", replace);
+        replacerConfig.getConfig().set("words." + original + ".permission", permission);
+        replacerConfig.saveConfig();
+    }
+
+    public void removeReplacement(String original) {
+        replacements.remove(original);
+        replacerConfig.getConfig().set("words." + original, null);
+        replacerConfig.saveConfig();
+    }
+
+    public Map<String, Replacement> getReplacements() {
+        return replacements;
+    }
+
+    public void setReplacerEnabled(boolean enabled) {
+        replacerEnabled = enabled;
+        replacerConfig.getConfig().set("replacer_enabled", enabled);
+        replacerConfig.saveConfig();
+    }
+
     public static class Replacement {
         private final String original;
         private final String replace;

@@ -3,10 +3,12 @@ package listeners;
 import config.JoinManager;
 import minealex.tchat.TChat;
 import org.bukkit.Bukkit;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -17,13 +19,13 @@ public class PlayerJoinListener implements Listener {
     private final JoinManager joinManager;
     private final Set<Player> unverifiedPlayers = new HashSet<>();
 
-    public PlayerJoinListener(TChat plugin) {
+    public PlayerJoinListener(@NotNull TChat plugin) {
         this.plugin = plugin;
         this.joinManager = plugin.getJoinManager();
     }
 
     @EventHandler
-    public void onPlayerJoin(PlayerJoinEvent event) {
+    public void onPlayerJoin(@NotNull PlayerJoinEvent event) {
         Player player = event.getPlayer();
         String username = player.getName();
 
@@ -73,7 +75,7 @@ public class PlayerJoinListener implements Listener {
                 org.bukkit.Sound sound = org.bukkit.Sound.valueOf(globalConfig.getSound().toUpperCase());
                 for (Player p : Bukkit.getOnlinePlayers()) {
                     if (p.equals(player)) continue;
-                    p.playSound(p.getLocation(), sound, 1.0f, 1.0f);
+                    p.playSound(p.getLocation(), sound, globalConfig.getVolume(), globalConfig.getPitch());
                 }
             }
 
@@ -116,7 +118,7 @@ public class PlayerJoinListener implements Listener {
             }
 
             if (personalConfig.isSoundEnabled()) {
-                player.playSound(player.getLocation(), personalConfig.getSound(), 1.0f, 1.0f);
+                player.playSound(player.getLocation(), Sound.valueOf(personalConfig.getSound()), personalConfig.getVolume(), personalConfig.getPitch());
             }
 
             if (personalConfig.isParticlesEnabled()) {
