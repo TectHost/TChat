@@ -207,6 +207,9 @@ messages:
       replace: "&e-> Replace: &f"
       permission: "&e[Permission: §f"
       permission-end: "&e]"
+  groups:
+    assigned: "&aGroup assigned correctly."
+    unknown: "&cThe group could not be assigned. Verify that the group exists."
   autobroadcast:
     start: "&aAutoBroadcast has been started."
     stop: "&cAutoBroadcast has been stopped."
@@ -279,6 +282,7 @@ messages:
     replacer-add: "&cUsage: /replacer add <original> <replace> <permission>"
     replacer-remove: "&cUsage: /replacer remove <original>"
     premade: "&cUsage: /premade broadcast <broadcast>"
+    group: "&cUsage: /chat group (user) (group)"
   # Debug messages are only seen in the console
   debug:
     no-format-group: "&cError in groups.yml - No format found for group: %group%"

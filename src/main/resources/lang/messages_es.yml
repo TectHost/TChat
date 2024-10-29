@@ -199,6 +199,9 @@ messages:
       replace: "&e-> Reemplazar: &f"
       permission: "&e[Permiso: §f"
       permission-end: "&e]"
+  groups:
+    assigned: "&aGrupo asignado correctamente."
+    unknown: "&cNo se pudo asignar el grupo. Verifica que el grupo existe."
   autobroadcast:
     start: "&aEl AutoBroadcast ha comenzado."
     stop: "&cEl AutoBroadcast ha sido detenido."
@@ -271,6 +274,7 @@ messages:
     replacer-add: "&cUso: /replacer add <original> <replace> <permission>"
     replacer-remove: "&cUso: /replacer remove <original>"
     premade: "&cUso: /premade broadcast <broadcast>"
+    group: "&cUso: /chat group (usuario) (grupo)"
     # Mensajes de depuración solo visibles en la consola
   debug:
     no-format-group: "&cError en groups.yml - No se encontró formato para el grupo: %group%"

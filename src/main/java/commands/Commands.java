@@ -1,12 +1,10 @@
 package commands;
 
-import listeners.TabCompleteListener;
 import minealex.tchat.TChat;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -24,7 +22,8 @@ public class Commands implements CommandExecutor, TabCompleter {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, String[] args) {
-        Player Player = null;
+        String prefix = plugin.getMessagesManager().getPrefix();
+        String noPerm = plugin.getMessagesManager().getNoPermission();
         if (sender.hasPermission("tchat.admin") || sender.hasPermission("tchat.admin.version") || sender.hasPermission("tchat.admin.reload")) {
             if (args.length >= 1) {
                 if (args[0].equalsIgnoreCase("reload")) {
@@ -57,52 +56,45 @@ public class Commands implements CommandExecutor, TabCompleter {
                         plugin.getTagsMenuConfigManager().reloadConfig();
                         plugin.getTabCompleteListener().reloadConfig();
                         String message = plugin.getMessagesManager().getReloadMessage();
-                        String prefix = plugin.getMessagesManager().getPrefix();
-                        if (!(sender instanceof Player)) {
-                            sender.sendMessage(plugin.getTranslateColors().translateColors(null, prefix + message));
-                        } else {
-                            Player = ((Player) sender).getPlayer();
-                            sender.sendMessage(plugin.getTranslateColors().translateColors(Player, prefix + message));
-                        }
+                        sender.sendMessage(plugin.getTranslateColors().translateColors(null, prefix + message));
                     } else {
-                        String message = plugin.getMessagesManager().getNoPermission();
-                        String prefix = plugin.getMessagesManager().getPrefix();
-                        sender.sendMessage(plugin.getTranslateColors().translateColors(Player, prefix + message));
+                        sender.sendMessage(plugin.getTranslateColors().translateColors(null, prefix + noPerm));
                     }
                 } else if (args[0].equalsIgnoreCase("version")) {
                     if (sender.hasPermission("tchat.admin") || sender.hasPermission("tchat.admin.version")) {
                         String version = plugin.getDescription().getVersion();
                         String message = plugin.getMessagesManager().getVersionMessage().replace("%version%", version);
-                        String prefix = plugin.getMessagesManager().getPrefix();
-                        if (!(sender instanceof Player)) {
-                            sender.sendMessage(plugin.getTranslateColors().translateColors(null, prefix + message));
-                        } else {
-                            Player = ((Player) sender).getPlayer();
-                            sender.sendMessage(plugin.getTranslateColors().translateColors(Player, prefix + message));
-                        }
+                        sender.sendMessage(plugin.getTranslateColors().translateColors(null, prefix + message));
                     } else {
-                        String message = plugin.getMessagesManager().getNoPermission();
-                        String prefix = plugin.getMessagesManager().getPrefix();
-                        if (!(sender instanceof Player)) {
-                            sender.sendMessage(plugin.getTranslateColors().translateColors(null, prefix + message));
-                        } else {
-                            Player = ((Player) sender).getPlayer();
-                            sender.sendMessage(plugin.getTranslateColors().translateColors(Player, prefix + message));
-                        }
+                        sender.sendMessage(plugin.getTranslateColors().translateColors(null, prefix + noPerm));
                     }
                 } else if (args[0].equalsIgnoreCase("clear")) {
                     plugin.getChatClearCommand().onCommand(sender, command, alias, args);
                 } else if (args[0].equalsIgnoreCase("mute")) {
                     plugin.getMuteChatCommand().onCommand(sender, command, alias, args);
+                } else if (args[0].equalsIgnoreCase("group")) {
+                    if (sender.hasPermission("tchat.admin.user-group") || sender.hasPermission("tchat.admin")) {
+                        if (args.length == 3) {
+                            String targetPlayerName = args[1];
+                            String targetGroupName = args[2];
+
+                            if (plugin.getGroupManager().assignGroupToUser(targetPlayerName, targetGroupName)) {
+                                String m = plugin.getMessagesManager().getGroupAssigned();
+                                sender.sendMessage(plugin.getTranslateColors().translateColors(null, prefix + m));
+                            } else {
+                                String m = plugin.getMessagesManager().getUnknownGroup();
+                                sender.sendMessage(plugin.getTranslateColors().translateColors(null, prefix + m));
+                            }
+                        } else {
+                            String m = plugin.getMessagesManager().getUsageGroup();
+                            sender.sendMessage(plugin.getTranslateColors().translateColors(null, prefix + m));
+                        }
+                    } else {
+                        sender.sendMessage(plugin.getTranslateColors().translateColors(null, prefix + noPerm));
+                    }
                 } else {
                     String message = plugin.getMessagesManager().getUnknownMessage();
-                    String prefix = plugin.getMessagesManager().getPrefix();
-                    if (!(sender instanceof Player)) {
-                        sender.sendMessage(plugin.getTranslateColors().translateColors(null, prefix + message));
-                    } else {
-                        Player = ((Player) sender).getPlayer();
-                        sender.sendMessage(plugin.getTranslateColors().translateColors(Player, prefix + message));
-                    }
+                    sender.sendMessage(plugin.getTranslateColors().translateColors(null, prefix + message));
                 }
             } else {
                 List<String> helpMessage = plugin.getMessagesManager().getChatMessage();
@@ -111,14 +103,7 @@ public class Commands implements CommandExecutor, TabCompleter {
                 }
             }
         } else {
-            String message = plugin.getMessagesManager().getNoPermission();
-            String prefix = plugin.getMessagesManager().getPrefix();
-            if (!(sender instanceof Player)) {
-                sender.sendMessage(plugin.getTranslateColors().translateColors(null, prefix + message));
-            } else {
-                Player = ((Player) sender).getPlayer();
-                sender.sendMessage(plugin.getTranslateColors().translateColors(Player, prefix + message));
-            }
+            sender.sendMessage(plugin.getTranslateColors().translateColors(null, prefix + noPerm));
         }
         return true;
     }
@@ -139,6 +124,9 @@ public class Commands implements CommandExecutor, TabCompleter {
             }
             if (sender.hasPermission("tchat.admin.mutechat") || sender.hasPermission("tchat.admin")) {
                 completions.add("mute");
+            }
+            if (sender.hasPermission("tchat.admin.user-group") || sender.hasPermission("tchat.admin")) {
+                completions.add("group");
             }
         }
 

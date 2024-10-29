@@ -63,7 +63,12 @@ public class GroupManager {
         FileConfiguration config = groupsFile.getConfig();
         String opGroup = config.getString("config.op-group");
 
-        String assignedGroup = config.getString("config.default-group");
+        String assignedGroup = config.getString("users." + player.getName().toLowerCase());
+        if (assignedGroup != null && groups.containsKey(assignedGroup)) {
+            return assignedGroup;
+        }
+
+        assignedGroup = config.getString("config.default-group");
         int highestPriority = Integer.MAX_VALUE;
 
         for (Map.Entry<String, Group> entry : groups.entrySet()) {
@@ -84,6 +89,18 @@ public class GroupManager {
         }
 
         return assignedGroup;
+    }
+
+    public boolean assignGroupToUser(String username, String groupName) {
+        FileConfiguration config = groupsFile.getConfig();
+
+        if (!groups.containsKey(groupName)) {
+            return false;
+        }
+
+        config.set("users." + username.toLowerCase(), groupName);
+        groupsFile.saveConfig();
+        return true;
     }
 
     public String getGroupFormat(String groupName) {

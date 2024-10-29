@@ -160,3 +160,18 @@ groups:
         click:
           enabled: true
           action: "[SUGGEST] /msg %player% "
+
+# #################################################################
+# ┌─────────────────────────────────────────────────────────────┐ #
+# │                            Users                            │ #
+# └─────────────────────────────────────────────────────────────┘ #
+# #################################################################
+
+# What is this section for?
+# This section is for op users or to assign specific groups to certain users, if the user is in this list,
+# his permissions will be ignored (but he will have to have permission to access the selected group)
+# and the group he has in this list will be assigned.
+users:
+  # (User name): (group)
+  TectHost: op
+  # You can add more users here

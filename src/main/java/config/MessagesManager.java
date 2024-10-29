@@ -232,6 +232,9 @@ public class MessagesManager {
     private String usagePremade;
     private String broadcastPremadeNull;
     private String broadcastSent;
+    private String groupAssigned;
+    private String unknownGroup;
+    private String usageGroup;
 
     public MessagesManager(TChat plugin){
         this.messagesFile = new ConfigFile(plugin.getConfigManager().getLangFile(), "lang", plugin);
@@ -420,6 +423,9 @@ public class MessagesManager {
         }
 
         // Messages
+        unknownGroup = config.getString("messages.groups.unknown", "&cThe group could not be assigned. Verify that the group exists.");
+        groupAssigned = config.getString("messages.groups.assigned", "&aGroup assigned correctly.");
+        usageGroup = config.getString("messages.usage.group", "&cUsage: /chat group (user) (group)");
         noItemInHand = config.getString("messages.no-item-in-hand", "&cYou do not have any items in hand.");
         invalidItemMeta = config.getString("messages.invalid-item-meta", "&cThe item has no meta.");
         headerStaffList = config.getString("messages.stafflist.header");
@@ -566,6 +572,9 @@ public class MessagesManager {
     }
 
     // Messages
+    public String getGroupAssigned() {return groupAssigned;}
+    public String getUnknownGroup() {return unknownGroup;}
+    public String getUsageGroup() {return usageGroup;}
     public String getUsagePremade() {return usagePremade;}
     public String getBroadcastPremadeNull() {return broadcastPremadeNull;}
     public String getBroadcastSent() {return broadcastSent;}

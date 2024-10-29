@@ -1,5 +1,5 @@
 main: minealex.tchat.TChat
-version: 4.2.3
+version: ${project.version}
 name: TChat
 author: Mine_Alex
 api-version: 1.13
