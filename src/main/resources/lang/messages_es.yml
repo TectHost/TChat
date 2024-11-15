@@ -13,7 +13,6 @@ messages:
   invalid-id: "&cID de ítem inválido."
   player-not-found: "&cJugador no encontrado."
   no-reply: "&cNo tienes a nadie a quien responder."
-  chat-clear: "&aEl chat ha sido limpiado por un administrador."
   chat-muted: "&cEl chat está actualmente silenciado."
   chat-mute: "&cEl chat ha sido silenciado."
   chat-unmute: "&aEl chat ha sido des-silenciado."
@@ -47,8 +46,6 @@ messages:
   no-item-in-hand: "&cNo tienes items en la mano."
   invalid-item-meta: "&cEl item no tiene meta."
   repeat-commands: "&cNo puedes enviar el mismo mensaje."
-  broadcast-null: "&cBroadcast no encontrado o desactivado."
-  broadcast-sent: "&aEl broadcast '%broadcast%' fue enviado a todos los jugadores."
   chat-help:
     message:
     - "&8--------- { &#c03afeT&#a72cf8C&#8e1ff1h&#7411eba&#5b03e4t &8} ---------"
@@ -56,7 +53,7 @@ messages:
     - "&5/broadcast &6- &bHacer una transmisión"
     - "&5/chatcolor &6- &bCambiar tu color en el chat"
     - "&5/clearchat &6- &bLimpiar el chat"
-    - "&5/chat [reload|mute|clear|version] &6- &bMuestra este mensaje, recarga los archivos de configuración, muestra la versión de TChat..."
+    - "&5/chat [reload|mute|version] &6- &bMuestra este mensaje, recarga los archivos de configuración, muestra la versión de TChat..."
     - "&5/discord &6- &bMuestra el Discord del servidor"
     - "&5/facebook &6- &bMuestra el Facebook del servidor"
     - "&5/help &6- &bMuestra ayuda"
@@ -163,10 +160,6 @@ messages:
     set: "&aTu apodo ha sido cambiado a &e%nick%"
     remove: "&aTu apodo ha sido eliminado."
   socialspy:
-    already-enabled: "&cEl socialspy ya está activado."
-    already-disabled: "&cEl socialspy ya está desactivado."
-    enabled: "&aEl socialspy ahora está activado."
-    disabled: "&aEl socialspy ahora está desactivado."
     invalid-mode: "&cModo inválido, usa: /socialspy mode <1-3>"
     mode: "&aModo establecido a: &#109AFE%mode%"
   realname:
@@ -191,8 +184,6 @@ messages:
     no-replacements: "&cNo se encontraron reemplazos."
     added: "&aReemplazo añadido: &e%original% &a-> &e%replacement%"
     removed: "&cReemplazo eliminado: %original%"
-    enabled: "&aReemplazador activado."
-    disabled: "&aReemplazador desactivado."
     replacements:
       header: "&aReemplazos:"
       original: "&eOriginal: &f"
@@ -235,7 +226,6 @@ messages:
     usage-poll: "&cUso: /poll <create|vote> [argumentos]"
     usage-poll-create: "&cUso: /poll create <duración> <título | 'opciones' | Min jugadores | Max jugadores>"
     usage-poll-vote: "&cUso: /poll vote <opción>"
-    usage-print: "&cUso: /print <mensaje>"
     usage-warning: "&cUso: /warning <mensaje>"
     usage-announcement: "&cUso: /announcement <mensaje>"
     usage-autobroadcast: "&cUso: /autobroadcast <start|stop|restart|remove|add>"
@@ -249,7 +239,7 @@ messages:
     usage-helpop: "&cUso: /helpop <mensaje>"
     usage-calculator: "&cUso: /calculator <número1> <operador> <número2>"
     usage-player: "&cUso: /player <jugador>"
-    usage-socialspy: "&cUso: /socialspy <enable|disable|mode>"
+    usage-socialspy: "&cUso: /socialspy <mode>"
     usage-commandtimer: "&cUso: /commandtimer <create|remove> <nombre> [tiempo] | [comando 1] | [comando 2] | ..."
     usage-commandtimer-add: "&cUso: /commandtimer create <nombre> <tiempo> | <comando 1> | <comando 2> | ..."
     usage-commandtimer-remove: "&cUso: /commandtimer remove <nombre>"
@@ -264,7 +254,6 @@ messages:
     logs: "&cUso: /logs <chat|bannedwords|...> [jugador] [filtro]"
     invsee: "&cUso: /invsee <jugador>"
     mention: "&cUso: /mention <jugador>"
-    me: "&cUso: /me <jugador>"
     cg: "&cUsa: /chatgames <start|stop|restart|add|remove>"
     cg-add: "&cUsa: /chatgames add <nombre> <mensaje1,mensaje2,...> <keyword1,keyword2,...> <reward1,reward2,...>"
     cg-remove: "&cUso: /chatgames remove <nombre>"
@@ -273,7 +262,6 @@ messages:
     replacer: "&cUso: /replacer <list/add/remove/enable/disable>"
     replacer-add: "&cUso: /replacer add <original> <replace> <permission>"
     replacer-remove: "&cUso: /replacer remove <original>"
-    premade: "&cUso: /premade broadcast <broadcast>"
     group: "&cUso: /chat group (usuario) (grupo)"
     # Mensajes de depuración solo visibles en la consola
   debug:

@@ -93,7 +93,7 @@ public class Poll {
         resultsMessage.append(plugin.getTranslateColors().translateColors(null, endTextTitle)).append(getTitle()).append("\n");
 
         int totalVotes = results.values().stream().mapToInt(Integer::intValue).sum();
-        final int BAR_LENGTH = plugin.getConfigManager().getPollBar();
+        final int BAR_LENGTH = plugin.getPollsConfig().getPollBar();
 
         for (Map.Entry<String, Integer> entry : results.entrySet()) {
             String option = entry.getKey();
@@ -103,8 +103,8 @@ public class Poll {
             int emptyBlocks = BAR_LENGTH - filledBlocks;
 
             String progressBar = ChatColor.translateAlternateColorCodes('&',
-                    progressBarFormat.replace("%filled%", String.valueOf(plugin.getConfigManager().getPollFill()).repeat(filledBlocks))
-                            .replace("%empty%", String.valueOf(plugin.getConfigManager().getPollEmpty()).repeat(emptyBlocks)));
+                    progressBarFormat.replace("%filled%", String.valueOf(plugin.getPollsConfig().getPollFill()).repeat(filledBlocks))
+                            .replace("%empty%", String.valueOf(plugin.getPollsConfig().getPollEmpty()).repeat(emptyBlocks)));
 
             String formattedOptionLine = ChatColor.translateAlternateColorCodes('&',
                     optionLine.replace("%option%", option)

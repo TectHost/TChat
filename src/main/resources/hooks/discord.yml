@@ -5,8 +5,6 @@
 # #################################################################
 
 discord:
-  # Enable/disable
-  enabled: false
   # https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks
   # (Change the link)
   webhook: "https://discord.com/api/webhooks/..."

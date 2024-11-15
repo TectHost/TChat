@@ -24,9 +24,9 @@ public class PlayerLeftListener implements Listener {
         Player player = event.getPlayer();
         String username = player.getName();
 
-        plugin.getDiscordHook().sendLeftMessage(username);
+        if (plugin.getConfigManager().isDiscordEnabled()) { plugin.getDiscordHook().sendLeftMessage(username); }
 
-        playerQuitActions(player, event);
+        if (plugin.getConfigManager().isJoinsEnabled()) { playerQuitActions(player, event); }
     }
 
     public void playerQuitActions(Player player, PlayerQuitEvent event) {

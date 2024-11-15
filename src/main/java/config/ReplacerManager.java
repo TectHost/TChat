@@ -13,10 +13,9 @@ public class ReplacerManager {
 
     private final ConfigFile replacerConfig;
     private Map<String, Replacement> replacements;
-    private static boolean replacerEnabled;
 
     public ReplacerManager(TChat plugin) {
-        this.replacerConfig = new ConfigFile("replacer.yml", null, plugin);
+        this.replacerConfig = new ConfigFile("replacer.yml", "modules", plugin);
         this.replacerConfig.registerConfig();
         loadConfig();
     }
@@ -33,7 +32,6 @@ public class ReplacerManager {
 
     private void loadReplacements(@NotNull FileConfiguration config) {
         replacements = new HashMap<>();
-        replacerEnabled = config.getBoolean("replacer_enabled", false);
 
         if (config.getConfigurationSection("words") == null) {
             return;
@@ -58,10 +56,6 @@ public class ReplacerManager {
         return message;
     }
 
-    public boolean getReplacerEnabled() {
-        return replacerEnabled;
-    }
-
     public void addReplacement(String original, String replace, String permission) {
         replacements.put(original, new Replacement(original, replace, permission));
         replacerConfig.getConfig().set("words." + original + ".original", original);
@@ -78,12 +72,6 @@ public class ReplacerManager {
 
     public Map<String, Replacement> getReplacements() {
         return replacements;
-    }
-
-    public void setReplacerEnabled(boolean enabled) {
-        replacerEnabled = enabled;
-        replacerConfig.getConfig().set("replacer_enabled", enabled);
-        replacerConfig.saveConfig();
     }
 
     public static class Replacement {

@@ -20,7 +20,7 @@ public class AntiBotListener implements Listener {
 
     @EventHandler
     public void playerChat(AsyncPlayerChatEvent event, Player player) {
-        if (plugin.getConfigManager().isAntibotChat()) {
+        if (plugin.getAntiBotConfigManager().isAntibotChat()) {
             event.setCancelled(true);
             String prefix = plugin.getMessagesManager().getPrefix();
             String message = plugin.getMessagesManager().getAntibotChat();
@@ -30,11 +30,11 @@ public class AntiBotListener implements Listener {
 
     @EventHandler
     public void playerCommand(@NotNull PlayerCommandPreprocessEvent event) {
-        if (plugin.getConfigManager().isAntibotCommand()) {
+        if (plugin.getAntiBotConfigManager().isAntibotCommand()) {
             Player player = event.getPlayer();
 
             String command = event.getMessage().split(" ")[0].toLowerCase();
-            List<String> whitelist = plugin.getConfigManager().getWhitelistCommandsAntiBot();
+            List<String> whitelist = plugin.getAntiBotConfigManager().getWhitelistCommandsAntiBot();
             if (whitelist.contains(command)) { return; }
 
             event.setCancelled(true);

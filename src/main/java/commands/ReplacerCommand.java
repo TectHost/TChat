@@ -34,10 +34,6 @@ public class ReplacerCommand implements CommandExecutor {
             handleAddCommand(sender, args);
         } else if (args[0].equalsIgnoreCase("remove")) {
             handleRemoveCommand(sender, args);
-        } else if (args[0].equalsIgnoreCase("enable")) {
-            handleEnableCommand(sender);
-        } else if (args[0].equalsIgnoreCase("disable")) {
-            handleDisableCommand(sender);
         } else {
             sender.sendMessage(plugin.getTranslateColors().translateColors(null, prefix + m));
         }
@@ -109,26 +105,6 @@ public class ReplacerCommand implements CommandExecutor {
         } else {
             String m = plugin.getMessagesManager().getNoPermission();
             sender.sendMessage(plugin.getTranslateColors().translateColors(null, prefix + m));
-        }
-    }
-
-    private void handleEnableCommand(CommandSender sender) {
-        if (!(sender instanceof Player) || sender.hasPermission("tchat.admin.command.replacer.enable") || sender.hasPermission("tchat.admin")) {
-            replacerManager.setReplacerEnabled(true);
-            String m = plugin.getMessagesManager().getReplacerEnabled();
-            sender.sendMessage(plugin.getTranslateColors().translateColors(null, prefix + m));
-        } else {
-            sender.sendMessage("§cYou don't have permission to use this command.");
-        }
-    }
-
-    private void handleDisableCommand(CommandSender sender) {
-        if (!(sender instanceof Player) || sender.hasPermission("tchat.admin.command.replacer.disable") || sender.hasPermission("tchat.admin")) {
-            replacerManager.setReplacerEnabled(false);
-            String m = plugin.getMessagesManager().getReplacerDisabled();
-            sender.sendMessage(plugin.getTranslateColors().translateColors(null, prefix + m));
-        } else {
-            sender.sendMessage("§cYou don't have permission to use this command.");
         }
     }
 }

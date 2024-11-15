@@ -1,0 +1,23 @@
+# #################################################################
+# ┌─────────────────────────────────────────────────────────────┐ #
+# │                           Anti bot                          │ #
+# └─────────────────────────────────────────────────────────────┘ #
+# #################################################################
+
+antibot:
+  # Enable/disable disable chat on join (true = disabled)
+  chat: true
+  # Enable/disable disable commands on join (true = disabled)
+  command: true
+  commands:
+    # Whitelisted commands
+    whitelist:
+      - "/login"
+      - "/register"
+      - "/premium"
+  # Enable/disable messages
+  messages:
+    # Enable/disable on join message
+    antibot-join: true
+    # Enable/disable on move message
+    antibot-moved: true

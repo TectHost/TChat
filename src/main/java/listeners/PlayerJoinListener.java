@@ -29,21 +29,23 @@ public class PlayerJoinListener implements Listener {
         Player player = event.getPlayer();
         String username = player.getName();
 
-        if (!unverifiedPlayers.contains(player) && plugin.getConfigManager().isAntibotEnabled() &&
-                !player.hasPermission(plugin.getConfigManager().getAntibotBypass()) &&
+        if (!unverifiedPlayers.contains(player) && plugin.getConfigManager().isAntiBotEnabled() &&
+                !player.hasPermission("tchat.bypass.antibot") &&
                 !player.hasPermission("tchat.admin")) {
             unverifiedPlayers.add(player);
-            if (plugin.getConfigManager().isAntibotJoin()) {
+            if (plugin.getAntiBotConfigManager().isAntibotJoin()) {
                 String prefix = plugin.getMessagesManager().getPrefix();
                 String message = plugin.getMessagesManager().getAntibotJoin();
                 player.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + message));
             }
         }
 
-        joinPersonalActions(player, event);
-        joinGlobalActions(player);
+        if (plugin.getConfigManager().isJoinsEnabled()) {
+            joinPersonalActions(player, event);
+            joinGlobalActions(player);
+        }
 
-        plugin.getDiscordHook().sendJoinMessage(username);
+        if (plugin.getConfigManager().isDiscordEnabled()) { plugin.getDiscordHook().sendJoinMessage(username); }
     }
 
     private void joinGlobalActions(Player player) {

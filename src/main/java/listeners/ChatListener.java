@@ -43,25 +43,25 @@ public class ChatListener implements Listener {
         Player player = event.getPlayer();
         String message = event.getMessage();
 
-        plugin.getCheckPlayerMuted().checkMuted(event);
-        plugin.getChatEnabledListener().checkChatEnabled(event);
-        chatMuted(event);
-        plugin.getChatCooldownListener().chatCooldown(event);
-        plugin.getAntiUnicodeListener().checkUnicode(event);
-        plugin.getChatBotListener().chatBot(event);
-        plugin.getAntiAdvertising().checkAdvertising(event);
-        plugin.getCapListener().playerAntiCap(event);
-        antiBot(event, player, null);
-        plugin.getAntiFloodListener().checkFlood(event);
-        plugin.getBannedWords().playerBannedWords(event);
-        replacer(event);
-        grammar(event);
+        if (plugin.getConfigManager().isMuteEnabled()) { plugin.getCheckPlayerMuted().checkMuted(event); }
+        if (plugin.getConfigManager().isWorldsEnabled()) { plugin.getChatEnabledListener().checkChatEnabled(event); }
+        if (plugin.getConfigManager().isMuteChatEnabled()) { chatMuted(event); }
+        if (plugin.getConfigManager().isCooldownsEnabled()) { plugin.getChatCooldownListener().chatCooldown(event); }
+        if (plugin.getConfigManager().isAntiUnicodeEnabled()) { plugin.getAntiUnicodeListener().checkUnicode(event); }
+        if (plugin.getConfigManager().isChatBotEnabled()) { plugin.getChatBotListener().chatBot(event); }
+        if (plugin.getConfigManager().isAntiAdvertisingEnabled()) { plugin.getAntiAdvertising().checkAdvertising(event); }
+        if (plugin.getConfigManager().isAntiCapEnabled()) { plugin.getCapListener().playerAntiCap(event); }
+        if (plugin.getConfigManager().isAntiBotEnabled()) { antiBot(event, player, null); }
+        if (plugin.getConfigManager().isAntiFloodEnabled()) { plugin.getAntiFloodListener().checkFlood(event); }
+        if (plugin.getConfigManager().isBannedWordsEnabled()) { plugin.getBannedWords().playerBannedWords(event); }
+        if (plugin.getConfigManager().isReplacerEnabled()) { replacer(event); }
+        if (plugin.getConfigManager().isGrammarEnabled()) { grammar(event); }
 
         chatFormatListener.playerFormat(event);
-        plugin.getChatGamesSender().checkPlayerResponse(player, message);
-        if (plugin.getConfigManager().isLogsChatEnabled()) { plugin.getLogsManager().logChatMessage(player.getName(), message); }
-        plugin.getLevelListener().addXp(event);
-        handleBroadcastAddition(player, message);
+        if (plugin.getConfigManager().isChatGamesEnabled()) { plugin.getChatGamesSender().checkPlayerResponse(player, message); }
+        if (plugin.getConfigManager().isLoggerEnabled()) { if (plugin.getLoggerConfigManager().isLogsChatEnabled()) { plugin.getLogsManager().logChatMessage(player.getName(), message); } }
+        if (plugin.getConfigManager().isLevelsEnabled()) { plugin.getLevelListener().addXp(event); }
+        if (plugin.getConfigManager().isAutoBroadcastEnabled()) { handleBroadcastAddition(player, message); }
     }
 
     @EventHandler
@@ -69,13 +69,13 @@ public class ChatListener implements Listener {
         Player player = event.getPlayer();
         String command = event.getMessage();
 
-        if (plugin.getConfigManager().isSpyEnabled() && !player.hasPermission("tchat.admin")) { plugin.getSocialSpyListener().spy(event, player, command); }
-        if (plugin.getConfigManager().isLogsCommandEnabled()) { plugin.getLogsManager().logCommand(player.getName(), command); }
-        plugin.getAntiAdvertising().checkAdvertisingCommand(event, player, command);
-        plugin.getChatCooldownListener().commandCooldown(event);
+        if (plugin.getConfigManager().isSocialSpyEnabled() && !player.hasPermission("tchat.admin")) { plugin.getSocialSpyListener().spy(event, player, command); }
+        if (plugin.getConfigManager().isLoggerEnabled()) { if (plugin.getLoggerConfigManager().isLogsCommandEnabled()) { plugin.getLogsManager().logCommand(player.getName(), command); } }
+        if (plugin.getConfigManager().isAntiAdvertisingEnabled()) { plugin.getAntiAdvertising().checkAdvertisingCommand(event, player, command); }
+        if (plugin.getConfigManager().isCooldownsEnabled()) { plugin.getChatCooldownListener().commandCooldown(event); }
         if (plugin.getConfigManager().isRepeatCommandsEnabled() && !player.hasPermission("tchat.admin") && !player.hasPermission("tchat.bypass.repeat-commands")) { plugin.getRepeatCommandsListener().checkRepeatCommand(event); }
-        antiBot(null, player, event);
-        new BannedCommands(plugin).onPlayerCommandPreprocess(event);
+        if (plugin.getConfigManager().isAntiBotEnabled()) { antiBot(null, player, event); }
+        if (plugin.getConfigManager().isBannedCommandsEnabled()) { new BannedCommands(plugin).onPlayerCommandPreprocess(event); }
     }
 
     private void handleBroadcastAddition(Player player, String message) {
@@ -165,7 +165,7 @@ public class ChatListener implements Listener {
             if (commandEvent.isCancelled()) { return; }
         }
 
-        if (plugin.getPlayerJoinListener().isUnverified(player) && plugin.getConfigManager().isAntibotEnabled() && !player.hasPermission(plugin.getConfigManager().getAntibotBypass()) && !player.hasPermission("tchat.admin")) {
+        if (plugin.getPlayerJoinListener().isUnverified(player) && plugin.getConfigManager().isAntiBotEnabled() && !player.hasPermission("tchat.bypass.antibot") && !player.hasPermission("tchat.admin")) {
             if (chatEvent != null) {
                 plugin.getAntiBotListener().playerChat(chatEvent, player);
             } else if (commandEvent != null) {
@@ -177,26 +177,23 @@ public class ChatListener implements Listener {
     public void replacer(@NotNull AsyncPlayerChatEvent event) {
         if (event.isCancelled()) { return; }
 
-        if (plugin.getReplacerManager().getReplacerEnabled()) {
-            String message = event.getMessage();
-            message = plugin.getReplacerManager().replaceWords(message, event.getPlayer());
-            event.setMessage(message);
-        }
+        String message = event.getMessage();
+        message = plugin.getReplacerManager().replaceWords(message, event.getPlayer());
+        event.setMessage(message);
     }
 
-    public void grammar(AsyncPlayerChatEvent event) {
-        if (plugin.getConfigManager().isGrammarEnabled()) {
-            Player player = event.getPlayer();
-            String message = event.getMessage();
-            plugin.getGrammarListener().checkGrammar(event, player, message);
-            message = event.getMessage();
-            event.setMessage(message);
-        }
+    public void grammar(@NotNull AsyncPlayerChatEvent event) {
+        Player player = event.getPlayer();
+        String message = event.getMessage();
+        plugin.getGrammarListener().checkGrammar(event, player, message);
+        message = event.getMessage();
+        event.setMessage(message);
     }
 
     public void chatMuted(@NotNull AsyncPlayerChatEvent event) {
         Player player = event.getPlayer();
-        if (MuteChatCommand.isChatMuted() && !player.hasPermission(plugin.getConfigManager().getBypassMuteChatPermission())) {
+
+        if (MuteChatCommand.isChatMuted() && !player.hasPermission("tchat.bypass.mutechat")) {
             String prefix = plugin.getMessagesManager().getPrefix();
             String message = plugin.getMessagesManager().getChatMuted();
             player.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + message));

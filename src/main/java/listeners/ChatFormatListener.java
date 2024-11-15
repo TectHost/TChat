@@ -44,67 +44,70 @@ public class ChatFormatListener implements Listener {
         String message = event.getMessage();
         String format;
 
-        String worldName = player.getWorld().getName();
-        WorldsManager.WorldConfigData worldConfigData = plugin.getWorldsManager().getWorldsConfig().get(worldName);
+        String chatrPrefix = "";
+        if (plugin.getConfigManager().isWorldsEnabled()) {
+            String worldName = player.getWorld().getName();
+            WorldsManager.WorldConfigData worldConfigData = plugin.getWorldsManager().getWorldsConfig().get(worldName);
 
-        boolean perWorldChat = worldConfigData != null && worldConfigData.pwc();
+            boolean perWorldChat = worldConfigData != null && worldConfigData.pwc();
 
-        boolean chatRadiusEnabled = worldConfigData != null && worldConfigData.chatrEnabled();
+            boolean chatRadiusEnabled = worldConfigData != null && worldConfigData.chatrEnabled();
 
-        if (perWorldChat) {
-            Set<Player> recipients = event.getRecipients().stream()
-                    .filter(recipient -> recipient.hasPermission("tchat.admin") ||
-                            recipient.hasPermission("tchat.bypass.pwc") ||
-                            recipient.getWorld().getName().equals(worldName))
-                    .collect(Collectors.toSet());
+            if (perWorldChat) {
+                Set<Player> recipients = event.getRecipients().stream()
+                        .filter(recipient -> recipient.hasPermission("tchat.admin") ||
+                                recipient.hasPermission("tchat.bypass.pwc") ||
+                                recipient.getWorld().getName().equals(worldName))
+                        .collect(Collectors.toSet());
 
-            event.getRecipients().clear();
-            event.getRecipients().addAll(recipients);
+                event.getRecipients().clear();
+                event.getRecipients().addAll(recipients);
 
-        } else if (plugin.getWorldsManager().getBridgesConfig().values().stream()
-                .anyMatch(bridge -> bridge.enabled() && bridge.worlds().contains(worldName))) {
+            } else if (plugin.getWorldsManager().getBridgesConfig().values().stream()
+                    .anyMatch(bridge -> bridge.enabled() && bridge.worlds().contains(worldName))) {
 
-            Set<String> worldsToInclude = new HashSet<>();
-            worldsToInclude.add(worldName);
+                Set<String> worldsToInclude = new HashSet<>();
+                worldsToInclude.add(worldName);
 
-            for (WorldsManager.BridgeConfigData bridge : plugin.getWorldsManager().getBridgesConfig().values()) {
-                if (bridge.enabled() && bridge.worlds().contains(worldName)) {
-                    worldsToInclude.addAll(bridge.worlds());
+                for (WorldsManager.BridgeConfigData bridge : plugin.getWorldsManager().getBridgesConfig().values()) {
+                    if (bridge.enabled() && bridge.worlds().contains(worldName)) {
+                        worldsToInclude.addAll(bridge.worlds());
+                    }
                 }
+
+                Set<Player> recipients = Bukkit.getOnlinePlayers().stream()
+                        .filter(recipient -> recipient.hasPermission("tchat.admin") ||
+                                recipient.hasPermission("tchat.bypass.bridge") ||
+                                worldsToInclude.contains(recipient.getWorld().getName()))
+                        .collect(Collectors.toSet());
+
+                event.getRecipients().clear();
+                event.getRecipients().addAll(recipients);
             }
 
-            Set<Player> recipients = Bukkit.getOnlinePlayers().stream()
-                    .filter(recipient -> recipient.hasPermission("tchat.admin") ||
-                            recipient.hasPermission("tchat.bypass.bridge") ||
-                            worldsToInclude.contains(recipient.getWorld().getName()))
-                    .collect(Collectors.toSet());
+            assert worldConfigData != null;
+            chatrPrefix = worldConfigData.bpNone();
+            if (chatRadiusEnabled) {
+                int chatRadius = worldConfigData.chatr();
+                String cRadius = worldConfigData.bcchatr();
 
-            event.getRecipients().clear();
-            event.getRecipients().addAll(recipients);
-        }
+                Set<Player> recipients = event.getRecipients().stream()
+                        .filter(recipient -> recipient.hasPermission("tchat.admin") ||
+                                recipient.hasPermission("tchat.bypass.chat-radius") ||
+                                (event.getMessage().startsWith(cRadius) && recipient.hasPermission("tchat.bypass.chat-radius.character")) ||
+                                (recipient.getWorld().getName().equals(worldName) &&
+                                        recipient.getLocation().distance(player.getLocation()) <= chatRadius))
+                        .collect(Collectors.toSet());
 
-        assert worldConfigData != null;
-        String chatrPrefix = worldConfigData.bpNone();
-        if (chatRadiusEnabled) {
-            int chatRadius = worldConfigData.chatr();
-            String cRadius = worldConfigData.bcchatr();
+                event.getRecipients().clear();
+                event.getRecipients().addAll(recipients);
 
-            Set<Player> recipients = event.getRecipients().stream()
-                    .filter(recipient -> recipient.hasPermission("tchat.admin") ||
-                            recipient.hasPermission("tchat.bypass.chat-radius") ||
-                            (event.getMessage().startsWith(cRadius) && recipient.hasPermission("tchat.bypass.chat-radius.character")) ||
-                            (recipient.getWorld().getName().equals(worldName) &&
-                                    recipient.getLocation().distance(player.getLocation()) <= chatRadius))
-                    .collect(Collectors.toSet());
-
-            event.getRecipients().clear();
-            event.getRecipients().addAll(recipients);
-
-            boolean chatr = message.startsWith(worldConfigData.bcchatr());
-            if (chatr) {
-                chatrPrefix = worldConfigData.bpGlobal();
-            } else {
-                chatrPrefix = worldConfigData.bpLocal();
+                boolean chatr = message.startsWith(worldConfigData.bcchatr());
+                if (chatr) {
+                    chatrPrefix = worldConfigData.bpGlobal();
+                } else {
+                    chatrPrefix = worldConfigData.bpLocal();
+                }
             }
         }
 
@@ -139,7 +142,7 @@ public class ChatFormatListener implements Listener {
             }
         }
 
-        if (plugin.getMentionsManager().isEnabled()) { message = handleMentions(event, player, message); }
+        if (plugin.getConfigManager().isMentionsEnabled()) { message = handleMentions(event, player, message); }
 
         if (plugin.getConfigManager().isIgnoreEnabled()) {
             List<String> playerIgnoreList = plugin.getSaveManager().getIgnoreList(player.getUniqueId());
@@ -159,8 +162,13 @@ public class ChatFormatListener implements Listener {
             event.getRecipients().addAll(finalRecipients);
         }
 
-        String channelName = plugin.getChannelsManager().getPlayerChannel(player);
-        ChannelsConfigManager.Channel channel = channelsConfigManager.getChannel(channelName);
+        ChannelsConfigManager.Channel channel = null;
+        String channelName = "";
+
+        if (plugin.getConfigManager().isChannelsEnabled()) {
+            channelName = plugin.getChannelsManager().getPlayerChannel(player);
+            channel = channelsConfigManager.getChannel(channelName);
+        }
 
         if (plugin.getConfigManager().isFormatEnabled() && groupManager.isFormatEnabled(player)) {
             if (channel != null && channel.cooldownEnabled()) {
@@ -184,6 +192,7 @@ public class ChatFormatListener implements Listener {
 
                 setLastMessageTime(player, channelName);
             }
+
             if (channel != null && channel.formatEnabled() && channel.enabled() &&
                     (player.hasPermission(channel.permission()) || player.hasPermission("tchat.admin") || player.hasPermission("tchat.channel.all"))) {
                 format = channel.format();
@@ -256,7 +265,7 @@ public class ChatFormatListener implements Listener {
             event.getRecipients().clear();
             event.setFormat(mainComponent.toPlainText().replace("%", "%%"));
 
-            if (plugin.getDiscordManager().isDiscordEnabled()) {
+            if (plugin.getConfigManager().isDiscordEnabled()) {
                 if (channelName == null) {
                     String discordMessage = removeMinecraftColorCodes(mainComponent.toLegacyText());
                     plugin.getDiscordHook().sendMessage(discordMessage, plugin.getDiscordManager().getDiscordHook());
@@ -267,7 +276,7 @@ public class ChatFormatListener implements Listener {
                 }
             }
         } else {
-            if (plugin.getDiscordManager().isDiscordEnabled()) {
+            if (plugin.getConfigManager().isDiscordEnabled()) {
                 if (channelName == null) {
                     String discordMessage = removeMinecraftColorCodes(message);
                     plugin.getDiscordHook().sendMessage(discordMessage, plugin.getDiscordManager().getDiscordHook());
@@ -359,10 +368,10 @@ public class ChatFormatListener implements Listener {
 
             if (personalConfig.isTitleEnabled() || personalConfig.isSubtitleEnabled()) {
                 String title = personalConfig.isTitleEnabled()
-                        ? plugin.getTranslateColors().translateColors(mentionedPlayer, personalConfig.getTitle())
+                        ? plugin.getTranslateColors().translateColors(mentionedPlayer, personalConfig.getTitle().replace("%mentioned%", mentionedPlayer.getName()))
                         : "";
                 String subtitle = personalConfig.isSubtitleEnabled()
-                        ? plugin.getTranslateColors().translateColors(mentionedPlayer, personalConfig.getSubtitle())
+                        ? plugin.getTranslateColors().translateColors(mentionedPlayer, personalConfig.getSubtitle().replace("%mentioned%", mentionedPlayer.getName()))
                         : "";
 
                 mentionedPlayer.sendTitle(title, subtitle, 10, 70, 20);
@@ -379,7 +388,7 @@ public class ChatFormatListener implements Listener {
             }
 
             if (personalConfig.isActionbarEnabled()) {
-                mentionedPlayer.spigot().sendMessage(net.md_5.bungee.api.ChatMessageType.ACTION_BAR, new TextComponent(plugin.getTranslateColors().translateColors(player, personalConfig.getActionbarMessage())));
+                mentionedPlayer.spigot().sendMessage(net.md_5.bungee.api.ChatMessageType.ACTION_BAR, new TextComponent(plugin.getTranslateColors().translateColors(player, personalConfig.getActionbarMessage().replace("%mentioned%", mentionedPlayer.getName()))));
             }
         }
 
@@ -390,15 +399,19 @@ public class ChatFormatListener implements Listener {
             for (Player recipient : Bukkit.getOnlinePlayers()) {
 
                 if (globalConfig.isMessageEnabled()) {
-                    recipient.sendMessage(ChatColor.translateAlternateColorCodes('&', String.join("\n", globalConfig.getMessage())));
+                    String[] globalMessages = globalConfig.getMessage().stream()
+                            .map(msg -> msg.replace("%mentioned%", player.getName()))
+                            .toArray(String[]::new);
+
+                    recipient.sendMessage(ChatColor.translateAlternateColorCodes('&', String.join("\n", globalMessages)));
                 }
 
                 if (globalConfig.isTitleEnabled() || globalConfig.isSubtitleEnabled()) {
                     String title = globalConfig.isTitleEnabled()
-                            ? plugin.getTranslateColors().translateColors(player, globalConfig.getTitle())
+                            ? plugin.getTranslateColors().translateColors(player, globalConfig.getTitle().replace("%mentioned%", player.getName()))
                             : " ";
                     String subtitle = globalConfig.isSubtitleEnabled()
-                            ? plugin.getTranslateColors().translateColors(player, globalConfig.getSubtitle())
+                            ? plugin.getTranslateColors().translateColors(player, globalConfig.getSubtitle().replace("%mentioned%", player.getName()))
                             : " ";
 
                     recipient.sendTitle(title, subtitle, 10, 70, 20);
@@ -415,7 +428,7 @@ public class ChatFormatListener implements Listener {
                 }
 
                 if (globalConfig.isActionbarEnabled()) {
-                    recipient.spigot().sendMessage(net.md_5.bungee.api.ChatMessageType.ACTION_BAR, new TextComponent(plugin.getTranslateColors().translateColors(player, globalConfig.getActionbarMessage())));
+                    recipient.spigot().sendMessage(net.md_5.bungee.api.ChatMessageType.ACTION_BAR, new TextComponent(plugin.getTranslateColors().translateColors(player, globalConfig.getActionbarMessage().replace("%mentioned%", player.getName()))));
                 }
             }
         }

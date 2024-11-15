@@ -8,12 +8,12 @@ import java.util.*;
 public class CommandTimerManager {
 
     private final ConfigFile commandTimerFile;
-    private boolean enabled;
+
     private int time;
     private final Map<String, CommandConfig> commands = new HashMap<>();
 
     public CommandTimerManager(TChat plugin) {
-        this.commandTimerFile = new ConfigFile("command_timer.yml", null, plugin);
+        this.commandTimerFile = new ConfigFile("command_timer.yml", "modules", plugin);
         this.commandTimerFile.registerConfig();
         loadConfig();
     }
@@ -22,7 +22,6 @@ public class CommandTimerManager {
         FileConfiguration config = commandTimerFile.getConfig();
 
         // Load general options
-        enabled = config.getBoolean("options.enabled");
         time = config.getInt("options.time");
 
         // Load commands
@@ -38,10 +37,6 @@ public class CommandTimerManager {
     public void reloadConfig() {
         commandTimerFile.reloadConfig();
         loadConfig();
-    }
-
-    public boolean isEnabled() {
-        return enabled;
     }
 
     public int getTime() {

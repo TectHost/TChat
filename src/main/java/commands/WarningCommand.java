@@ -27,7 +27,7 @@ public class WarningCommand implements CommandExecutor {
 
             String message = String.join(" ", args);
 
-            String format = plugin.getConfigManager().getWarningFormat();
+            String format = plugin.getBroadcastConfig().getWarningFormat();
 
             format = format.replace("%message%", message);
 

@@ -9,11 +9,12 @@ public class CommandsManager {
 
     private final TChat plugin;
     private final ConfigFile configFile;
+
     private final Map<String, Command> commands;
 
     public CommandsManager(TChat plugin) {
         this.plugin = plugin;
-        this.configFile = new ConfigFile("commands.yml", null, plugin);
+        this.configFile = new ConfigFile("commands.yml", "modules", plugin);
         this.configFile.registerConfig();
         this.commands = new HashMap<>();
         loadConfig();
@@ -21,6 +22,7 @@ public class CommandsManager {
 
     public void loadConfig() {
         FileConfiguration config = configFile.getConfig();
+
         commands.clear();
 
         if (config.contains("commands")) {

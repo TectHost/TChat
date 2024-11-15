@@ -14,19 +14,15 @@ public class MentionsManager {
     private Map<String, GroupConfig> groupsConfig;
     private Map<String, EventConfig> personalEvents;
     private Map<String, EventConfig> globalEvents;
-    private boolean enabled;
 
     public MentionsManager(TChat plugin) {
-        this.configFile = new ConfigFile("mentions.yml", null, plugin);
+        this.configFile = new ConfigFile("mentions.yml", "modules", plugin);
         this.configFile.registerConfig();
         loadConfig();
     }
 
     public void loadConfig() {
         FileConfiguration config = configFile.getConfig();
-
-        enabled = config.getBoolean("enabled", false);
-        if (!enabled) { return; }
 
         ConfigurationSection groupsSection = config.getConfigurationSection("groups");
 
@@ -101,10 +97,6 @@ public class MentionsManager {
     public void reloadConfig() {
         configFile.reloadConfig();
         loadConfig();
-    }
-
-    public boolean isEnabled() {
-        return enabled;
     }
 
     public GroupConfig getGroupConfig(String group) {

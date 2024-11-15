@@ -13,7 +13,6 @@ public class TagsMenuConfigManager {
 
     private final ConfigFile configFile;
     private final Map<String, MenuConfig> menus = new HashMap<>();
-    private boolean enabled;
     private String dmenu;
 
     public TagsMenuConfigManager(TChat plugin) {
@@ -23,45 +22,43 @@ public class TagsMenuConfigManager {
     }
 
     public void loadConfig() {
-        menus.clear();
         FileConfiguration config = configFile.getConfig();
 
-        enabled = config.getBoolean("options.enabled", false);
-        if (enabled) {
-            dmenu = config.getString("options.default_menu", "menu1");
+        menus.clear();
 
-            ConfigurationSection menusSection = config.getConfigurationSection("menus");
-            if (menusSection != null) {
-                for (String menuName : menusSection.getKeys(false)) {
-                    ConfigurationSection menuSection = menusSection.getConfigurationSection(menuName);
+        dmenu = config.getString("options.default_menu", "menu1");
 
-                    if (menuSection != null) {
-                        String title = menuSection.getString("title", "Menu");
-                        int size = menuSection.getInt("size", 27);
-                        Map<Integer, MenuItem> items = new HashMap<>();
+        ConfigurationSection menusSection = config.getConfigurationSection("menus");
+        if (menusSection != null) {
+            for (String menuName : menusSection.getKeys(false)) {
+                ConfigurationSection menuSection = menusSection.getConfigurationSection(menuName);
 
-                        ConfigurationSection itemsSection = menuSection.getConfigurationSection("items");
-                        if (itemsSection != null) {
-                            for (String slotKey : itemsSection.getKeys(false)) {
-                                int slot = Integer.parseInt(slotKey);
-                                ConfigurationSection itemSection = itemsSection.getConfigurationSection(slotKey);
+                if (menuSection != null) {
+                    String title = menuSection.getString("title", "Menu");
+                    int size = menuSection.getInt("size", 27);
+                    Map<Integer, MenuItem> items = new HashMap<>();
 
-                                if (itemSection != null) {
-                                    String material = itemSection.getString("material", "STONE");
-                                    String name = itemSection.getString("name", "");
-                                    List<String> lore = itemSection.getStringList("lore");
-                                    List<String> commands = itemSection.getStringList("commands");
-                                    String nextMenu = itemSection.getString("open_menu", null);
+                    ConfigurationSection itemsSection = menuSection.getConfigurationSection("items");
+                    if (itemsSection != null) {
+                        for (String slotKey : itemsSection.getKeys(false)) {
+                            int slot = Integer.parseInt(slotKey);
+                            ConfigurationSection itemSection = itemsSection.getConfigurationSection(slotKey);
 
-                                    MenuItem menuItem = new MenuItem(material, name, lore, commands, nextMenu);
-                                    items.put(slot, menuItem);
-                                }
+                            if (itemSection != null) {
+                                String material = itemSection.getString("material", "STONE");
+                                String name = itemSection.getString("name", "");
+                                List<String> lore = itemSection.getStringList("lore");
+                                List<String> commands = itemSection.getStringList("commands");
+                                String nextMenu = itemSection.getString("open_menu", null);
+
+                                MenuItem menuItem = new MenuItem(material, name, lore, commands, nextMenu);
+                                items.put(slot, menuItem);
                             }
                         }
-
-                        MenuConfig menuConfig = new MenuConfig(title, size, items);
-                        menus.put(menuName, menuConfig);
                     }
+
+                    MenuConfig menuConfig = new MenuConfig(title, size, items);
+                    menus.put(menuName, menuConfig);
                 }
             }
         }
@@ -72,7 +69,6 @@ public class TagsMenuConfigManager {
         loadConfig();
     }
 
-    public boolean isEnabled() {return enabled;}
     public String getDmenu() {return dmenu;}
 
     @Nullable

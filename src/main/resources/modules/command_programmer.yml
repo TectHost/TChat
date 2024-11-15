@@ -1,0 +1,47 @@
+# #################################################################
+# ┌─────────────────────────────────────────────────────────────┐ #
+# │                      Command Programmer                     │ #
+# └─────────────────────────────────────────────────────────────┘ #
+# #################################################################
+
+# Programmed commands
+commands:
+  command0:
+    type: HOURLY
+    players: 0
+    minute: 42
+    commands:
+      - "say [TChat] Command 0"
+  command1:
+    type: DAILY
+    players: 0
+    hour: 18
+    minute: 0
+    commands:
+      - "say [TChat]  1"
+  command2:
+    type: WEEKLY
+    players: 0
+    # In weekly, days are 1-7 (monday = 1, sunday = 7)
+    day: 1
+    hour: 15
+    minute: 30
+    commands:
+      - "say [TChat] Command 2"
+  command3:
+    type: MONTHLY
+    players: 0
+    day: 14
+    hour: 12
+    minute: 1
+    commands:
+      - "say [TChat] Command 3"
+  command4:
+    type: YEARLY
+    players: 0
+    month: JANUARY
+    day: 1
+    hour: 0
+    minute: 0
+    commands:
+      - "say [TChat] Command 4"

@@ -78,8 +78,8 @@ public class Placeholders extends PlaceholderExpansion {
             case "xp" -> String.valueOf(plugin.getSaveManager().getXp(playerId));
             case "level" -> String.valueOf(plugin.getSaveManager().getLevel(playerId));
             case "chatgames_wins" -> String.valueOf(plugin.getSaveManager().getChatGamesWins(playerId));
-            case "ping" -> plugin.getConfigManager().getColorForPing(player.getPing()) + player.getPing();
-            case "ping_color" -> plugin.getConfigManager().getColorForPing(player.getPing());
+            case "ping" -> plugin.getPingConfig().getColorForPing(player.getPing()) + player.getPing();
+            case "ping_color" -> plugin.getPingConfig().getColorForPing(player.getPing());
             case "nick" -> plugin.getSaveManager().getNick(playerId, player);
             case "staff_number" -> String.valueOf(getStaffNumber());
             case "staff_list" -> getStaffList();
@@ -107,6 +107,9 @@ public class Placeholders extends PlaceholderExpansion {
     private String getTagDisplayName(UUID playerId) {
         String tagName = plugin.getSaveManager().getSelectedTag(playerId);
         TagsManager.Tag tag = plugin.getTagsManager().getTags().get(tagName);
+
+        if (tag == null) { return "No tag"; }
+
         return tag.getDisplay();
     }
 

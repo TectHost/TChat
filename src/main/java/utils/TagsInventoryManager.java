@@ -73,8 +73,6 @@ public class TagsInventoryManager implements Listener {
 
     @EventHandler
     public void onInventoryClick(@NotNull InventoryClickEvent event) {
-        if (!tagsMenuConfigManager.isEnabled()) { return; }
-
         if (!(event.getWhoClicked() instanceof Player player)) { return; }
 
         Inventory clickedInventory = event.getClickedInventory();

@@ -1,0 +1,30 @@
+# #################################################################
+# ┌─────────────────────────────────────────────────────────────┐ #
+# │                         Chat levels                         │ #
+# └─────────────────────────────────────────────────────────────┘ #
+# #################################################################
+
+options:
+  # Min XP per message
+  min: 3
+  # Max XP per message
+  max: 7
+
+# Per group multiplier (you can use two decimals)
+multiplier:
+  # (Group): (multiplier)
+  op: 2.0
+  # Add more groups
+  #default: 2.0
+
+levels:
+  1:
+    xp: 200
+    rewards:
+      - "give %player% dirt 1"
+      - "say %player% raised to level 1"
+  2:
+    xp: 500
+    rewards:
+      - "give %player% dirt 2"
+      - "say %player% raised to level 2"

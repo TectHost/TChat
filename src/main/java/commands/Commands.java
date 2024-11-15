@@ -29,32 +29,54 @@ public class Commands implements CommandExecutor, TabCompleter {
                 if (args[0].equalsIgnoreCase("reload")) {
                     if (sender.hasPermission("tchat.admin") || sender.hasPermission("tchat.admin.reload")) {
                         plugin.getConfigManager().reloadConfig();
-                        plugin.getMessagesManager().reloadConfig();
+
+                        if (plugin.getConfigManager().isAntiAdvertisingEnabled()) plugin.getAntiAdvertisingManager().reloadConfig();
+                        if (plugin.getConfigManager().isAntiBotEnabled()) plugin.getAntiBotConfigManager().reloadConfig();
+                        if (plugin.getConfigManager().isAntiCapEnabled()) plugin.getAntiCapManager().reloadConfig();
+                        if (plugin.getConfigManager().isAntiFloodEnabled()) plugin.getAntiFloodConfig().reloadConfig();
+                        if (plugin.getConfigManager().isAntiUnicodeEnabled()) plugin.getAntiUnicodeConfig().reloadConfig();
+                        if (plugin.getConfigManager().isAutoBroadcastEnabled()) plugin.getAutoBroadcastManager().reloadConfig();
+                        if (plugin.getConfigManager().isBannedCommandsEnabled()) {
+                            plugin.getBannedCommandsManager().reloadConfig();
+                            plugin.getTabCompleteListener().reloadConfig();
+                        }
+                        if (plugin.getConfigManager().isBannedWordsEnabled()) plugin.getBannedWordsManager().reloadBannedWords();
+                        if (plugin.getConfigManager().isBroadcastEnabled()) plugin.getBroadcastConfig().reloadConfig();
+                        if (plugin.getConfigManager().isChannelsEnabled()) plugin.getChannelsConfigManager().reloadConfig();
+                        if (plugin.getConfigManager().isChatBotEnabled()) plugin.getChatBotManager().reloadConfig();
+                        if (plugin.getConfigManager().isChatColorEnabled()) plugin.getChatColorConfig().reloadConfig();
+                        if (plugin.getChatColorConfig().isChatColorMenuEnabled()) plugin.getChatColorManager().reloadConfig();
+                        if (plugin.getConfigManager().isChatGamesEnabled()) plugin.getChatGamesManager().reloadConfig();
+                        if (plugin.getConfigManager().isCommandProgrammerEnabled()) plugin.getCommandProgrammerManager().reloadConfig();
+                        if (plugin.getConfigManager().isCustomCommandsEnabled()) plugin.getCommandsManager().reloadConfig();
+                        if (plugin.getConfigManager().isCommandTimerEnabled()) plugin.getCommandTimerManager().reloadConfig();
+                        if (plugin.getConfigManager().isCooldownsEnabled()) plugin.getCooldownsConfig().reloadConfig();
+                        if (plugin.getConfigManager().isDeathEnabled()) plugin.getDeathManager().reloadConfig();
+                        if (plugin.getConfigManager().isDiscordEnabled()) plugin.getDiscordManager().reloadConfig();
+                        if (plugin.getConfigManager().isGrammarEnabled()) plugin.getGrammarManager().reloadConfig();
+                        if (plugin.getConfigManager().isHelpOpEnabled()) plugin.getHelpOpConfig().reloadConfig();
+                        if (plugin.getConfigManager().isIgnoreEnabled()) plugin.getIgnoreConfig().reloadConfig();
+                        if (plugin.getConfigManager().isInvseeEnabled()) plugin.getInvseeConfigManager().reloadConfig();
+                        if (plugin.getConfigManager().isJoinsEnabled()) plugin.getJoinManager().reloadConfig();
+                        if (plugin.getConfigManager().isLevelsEnabled()) plugin.getLevelsManager().reloadConfig();
+                        if (plugin.getConfigManager().isListEnabled()) plugin.getListConfig().reloadConfig();
+                        if (plugin.getConfigManager().isLoggerEnabled()) plugin.getLoggerConfigManager().reloadConfig();
+                        if (plugin.getConfigManager().isMentionsEnabled()) plugin.getMentionsManager().reloadConfig();
+                        if (plugin.getConfigManager().isPingEnabled()) plugin.getPingConfig().reloadConfig();
+                        if (plugin.getConfigManager().isPlaceholdersEnabled()) plugin.getPlaceholdersConfig().reloadConfig();
+                        if (plugin.getConfigManager().isPollsEnabled()) plugin.getPollsConfig().reloadConfig();
+                        if (plugin.getConfigManager().isMsgEnabled()) plugin.getPrivateMessagesConfigManager().reloadConfig();
+                        if (plugin.getConfigManager().isReplacerEnabled()) plugin.getReplacerManager().reloadConfig();
+                        if (plugin.getConfigManager().isSecEnabled()) plugin.getShowEnderChestConfigManager().reloadConfig();
+                        if (plugin.getConfigManager().isSicEnabled()) plugin.getSicConfig().reloadConfig();
+                        if (plugin.getConfigManager().isSocialSpyEnabled()) plugin.getSocialSpyConfig().reloadConfig();
+                        if (plugin.getConfigManager().isTagsEnabled()) plugin.getTagsManager().reloadConfig();
+                        if (plugin.getConfigManager().isTagsEnabled()) plugin.getTagsMenuConfigManager().reloadConfig();
+                        if (plugin.getConfigManager().isWorldsEnabled()) plugin.getWorldsManager().reloadConfig();
+
                         plugin.getGroupManager().reloadGroups();
-                        plugin.getBannedWordsManager().reloadBannedWords();
-                        plugin.getBannedCommandsManager().reloadConfig();
-                        plugin.getReplacerManager().reloadConfig();
                         plugin.getSaveManager().reloadConfig();
-                        plugin.getChatColorManager().reloadConfig();
-                        plugin.getChannelsConfigManager().reloadConfig();
-                        plugin.getAutoBroadcastManager().reloadConfig();
-                        plugin.getChatBotManager().reloadConfig();
-                        plugin.getCommandTimerManager().reloadConfig();
-                        plugin.getChatGamesManager().reloadConfig();
-                        plugin.getCommandProgrammerManager().reloadConfig();
-                        plugin.getCommandsManager().reloadConfig();
-                        plugin.getDiscordManager().reloadConfig();
-                        plugin.getLevelsManager().reloadConfig();
-                        plugin.getWorldsManager().reloadConfig();
-                        plugin.getPlaceholdersConfig().reloadConfig();
-                        plugin.getJoinManager().reloadConfig();
-                        plugin.getMentionsManager().reloadConfig();
-                        plugin.getInvseeConfigManager().reloadConfig();
-                        plugin.getChatGamesSender().restartGame();
-                        plugin.getAutoBroadcastSender().restartBroadcasts();
-                        plugin.getTagsManager().reloadConfig();
-                        plugin.getTagsMenuConfigManager().reloadConfig();
-                        plugin.getTabCompleteListener().reloadConfig();
+                        plugin.getMessagesManager().reloadConfig();
                         String message = plugin.getMessagesManager().getReloadMessage();
                         sender.sendMessage(plugin.getTranslateColors().translateColors(null, prefix + message));
                     } else {
@@ -68,8 +90,6 @@ public class Commands implements CommandExecutor, TabCompleter {
                     } else {
                         sender.sendMessage(plugin.getTranslateColors().translateColors(null, prefix + noPerm));
                     }
-                } else if (args[0].equalsIgnoreCase("clear")) {
-                    plugin.getChatClearCommand().onCommand(sender, command, alias, args);
                 } else if (args[0].equalsIgnoreCase("mute")) {
                     plugin.getMuteChatCommand().onCommand(sender, command, alias, args);
                 } else if (args[0].equalsIgnoreCase("group")) {
@@ -118,9 +138,6 @@ public class Commands implements CommandExecutor, TabCompleter {
             }
             if (sender.hasPermission("tchat.admin.version") || sender.hasPermission("tchat.admin")) {
                 completions.add("version");
-            }
-            if (sender.hasPermission("tchat.admin.chatclear") || sender.hasPermission("tchat.admin")) {
-                completions.add("clear");
             }
             if (sender.hasPermission("tchat.admin.mutechat") || sender.hasPermission("tchat.admin")) {
                 completions.add("mute");

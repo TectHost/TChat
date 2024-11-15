@@ -19,7 +19,6 @@ messages:
   invalid-id: "&cInvalid item ID."
   player-not-found: "&cPlayer not found."
   no-reply: "&cYou have no one to reply to."
-  chat-clear: "&aChat has been cleared by an administrator."
   chat-muted: "&cChat is currently muted."
   chat-mute: "&cChat has been muted."
   chat-unmute: "&aChat has been unmuted."
@@ -53,8 +52,6 @@ messages:
   no-item-in-hand: "&cYou do not have any items in hand."
   invalid-item-meta: "&cThe item has no meta."
   repeat-commands: "&cYou cannot send the same command."
-  broadcast-null: "&cBroadcast not found or is disabled."
-  broadcast-sent: "&aBroadcast '%broadcast%' sent to all players."
   chat-help:
     message:
       - "&8--------- { &#c03afeT&#a72cf8C&#8e1ff1h&#7411eba&#5b03e4t &8} ---------"
@@ -62,7 +59,7 @@ messages:
       - "&5/broadcast &6- &bMake a broadcast"
       - "&5/chatcolor &6- &bChange your color in the chat"
       - "&5/clearchat &6- &bClears the chat"
-      - "&5/chat [reload|mute|clear|version] &6- &bDisplays this message, reload the config files, displays the version of TChat..."
+      - "&5/chat [reload|mute|version] &6- &bDisplays this message, reload the config files, displays the version of TChat..."
       - "&5/discord &6- &bDisplays the server's discord"
       - "&5/facebook &6- &bDisplays the server's facebook"
       - "&5/help &6- &bDisplays some help"
@@ -171,10 +168,6 @@ messages:
     set: "&aYour nick has been changed to &e%nick%"
     remove: "&aYour nick has been deleted."
   socialspy:
-    already-enabled: "&cThe socialspy is already enabled."
-    already-disabled: "&cThe socialspy is already disabled."
-    enabled: "&aSocialspy is now enabled."
-    disabled: "&aSocialspy is now disabled."
     invalid-mode: "&cInvalid mode, use: /socialspy mode <1-3>"
     mode: "&aMode set to: &#109AFE%mode%"
   realname:
@@ -199,8 +192,6 @@ messages:
     no-replacements: "&cNo replacements found."
     added: "&aReplacement added: &e%original% &a-> &e%replacement%"
     removed: "&cReplacement removed: %original%"
-    enabled: "&aReplacer enabled."
-    disabled: "&aReplacer disabled."
     replacements:
       header: "&aReplacements:"
       original: "&eOriginal: &f"
@@ -243,7 +234,6 @@ messages:
     usage-poll: "&cUsage: /poll <create|vote> [arguments]"
     usage-poll-create: "&cUsage: /poll create <duration> <title | 'options' | Min players | Max players>"
     usage-poll-vote: "&cUsage: /poll vote <option>"
-    usage-print: "&cUsage: /print <message>"
     usage-warning: "&cUsage: /warning <message>"
     usage-announcement: "&cUsage: /announcement <message>"
     usage-autobroadcast: "&cUsage: /autobroadcast <start|stop|restart|remove|add>"
@@ -257,7 +247,7 @@ messages:
     usage-helpop: "&cUsage: /helpop <message>"
     usage-calculator: "&cUsage: /calculator <number1> <operator> <number2>"
     usage-player: "&cUsage: /player <player>"
-    usage-socialspy: "&cUsage: /socialspy <enable|disable|mode>"
+    usage-socialspy: "&cUsage: /socialspy <mode>"
     usage-commandtimer: "&cUsage: /commandtimer <create|remove> <name> [time] | [command 1] | [command 2] | ..."
     usage-commandtimer-add: "&cUsage: /commandtimer create <name> <time> | <command 1> | <command 2> | ..."
     usage-commandtimer-remove: "&cUsage: /commandtimer remove <name>"
@@ -272,7 +262,6 @@ messages:
     logs: "&cUsage: /logs <chat|bannedwords|...> [player] [filter]"
     invsee: "&cUsage: /invsee <player>"
     mention: "&cUsage: /mention <player>"
-    me: "&cUsage: /me <player>"
     cg: "&cUsage: /chatgames <start|stop|restart|add|remove>"
     cg-add: "&cUsage: /chatgames add <name> <message1,message1,...> <keyword1,keyword2,...> <reward1,reward2,...>"
     cg-remove: "&cUsage: /chatgames remove <name>"
@@ -281,7 +270,6 @@ messages:
     replacer: "&cUsage: /replacer <list/add/remove/enable/disable>"
     replacer-add: "&cUsage: /replacer add <original> <replace> <permission>"
     replacer-remove: "&cUsage: /replacer remove <original>"
-    premade: "&cUsage: /premade broadcast <broadcast>"
     group: "&cUsage: /chat group (user) (group)"
   # Debug messages are only seen in the console
   debug:

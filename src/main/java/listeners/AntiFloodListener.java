@@ -26,13 +26,13 @@ public class AntiFloodListener implements Listener {
         String message = event.getMessage();
 
         if (!player.hasPermission("tchat.bypass.antiflood") && !player.hasPermission("tchat.admin")) {
-            if (plugin.getConfigManager().isFloodRepeatEnabled() && containsFlood(message) || plugin.getConfigManager().isFloodPercentEnabled() && containsHighPercentageOfSameChar(message)) {
+            if (plugin.getAntiFloodConfig().isFloodRepeatEnabled() && containsFlood(message) || plugin.getAntiFloodConfig().isFloodPercentEnabled() && containsHighPercentageOfSameChar(message)) {
                 String message1 = plugin.getMessagesManager().getAntiFlood();
                 String prefix = plugin.getMessagesManager().getPrefix();
                 player.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + message1));
                 event.setCancelled(true);
 
-                if (plugin.getConfigManager().isDepurationAntiFloodEnabled()) {
+                if (plugin.getAntiFloodConfig().isDepurationAntiFloodEnabled()) {
                     String message2 = plugin.getMessagesManager().getDepurationAntiFlood();
                     message2 = message2.replace("%player%", player.getName());
                     message2 = message2.replace("%message%", message);
@@ -42,14 +42,14 @@ public class AntiFloodListener implements Listener {
         }
     }
 
-    private boolean containsFlood(String message) {
+    private boolean containsFlood(@NotNull String message) {
         char[] chars = message.toCharArray();
         int count = 1;
 
         for (int i = 1; i < chars.length; i++) {
             if (chars[i] == chars[i - 1]) {
                 count++;
-                if (count >= plugin.getConfigManager().getCharactersFlood()) {
+                if (count >= plugin.getAntiFloodConfig().getCharactersFlood()) {
                     return true;
                 }
             } else {
@@ -59,7 +59,7 @@ public class AntiFloodListener implements Listener {
         return false;
     }
 
-    private boolean containsHighPercentageOfSameChar(String message) {
+    private boolean containsHighPercentageOfSameChar(@NotNull String message) {
         if (message.isEmpty()) return false;
 
         Map<Character, Integer> charCount = new HashMap<>();
@@ -76,7 +76,7 @@ public class AntiFloodListener implements Listener {
 
         for (int count : charCount.values()) {
             double percentage = (double) count / totalChars;
-            if (percentage >= plugin.getConfigManager().getPercentageFlood()) {
+            if (percentage >= plugin.getAntiFloodConfig().getPercentageFlood()) {
                 return true;
             }
         }

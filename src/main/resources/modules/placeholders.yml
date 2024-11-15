@@ -1,0 +1,97 @@
+# #################################################################
+# ┌─────────────────────────────────────────────────────────────┐ #
+# │                      Chat Placeholders                      │ #
+# └─────────────────────────────────────────────────────────────┘ #
+# #################################################################
+
+# Chat placeholders
+chat:
+  # [coords] placeholder
+  coords:
+    # Enable/disable this placeholder
+    enabled: true
+    # The name of the placeholder to be detected and replaced in chat
+    name: "[coords]"
+    # Replace format
+    format: "&7X: %x%, Y: %y%, Z: %z%"
+  # [item] placeholder
+  item:
+    # Enable/disable this placeholder
+    enabled: true
+    # The name of the placeholder to be detected and replaced in chat
+    name: "[item]"
+    # Prefix for the message (before the [item])
+    prefix: "%tchat_format%%before_item%&7["
+    # Suffix for the message (after the [item])
+    suffix: "&7]%after_item%"
+  # [world] placeholder
+  world:
+    # Enable/disable this placeholder
+    enabled: true
+    # The name of the placeholder to be detected and replaced in chat
+    name: "[world]"
+    # Replace format
+    format: "&7[&9%world%&7]"
+  # [inventory] placeholder
+  inventory:
+    # Enable/disable this placeholder
+    enabled: true
+    # The name of the placeholder to be detected and replaced in chat
+    name: "[inventory]"
+    # Replace format
+    format: "%tchat_format%%before_inv%&7[&aSee my inventory!&7]%after_inv%"
+    # Hover configuration
+    hover:
+      text:
+        enabled: true
+        lines:
+          - "&aClick here to view my inventory!"
+          - "&bThis will show you the contents of my inventory."
+          - "&cOnly players with the correct permissions can view it."
+      action:
+        enabled: true
+        # Executed command
+        command: "/invsee %player%"
+  # [ender] placeholder
+  ender:
+    # Enable/disable this placeholder
+    enabled: true
+    # The name of the placeholder to be detected and replaced in chat
+    name: "[ender]"
+    # Replace format
+    format: "%tchat_format%%before_ender%&7[&aSee my enderchest!&7]%after_ender%"
+    # Hover configuration
+    hover:
+      text:
+        enabled: true
+        lines:
+          - "&aClick here to view my enderchest!"
+          - "&bThis will show you the contents of my enderchest."
+          - "&cOnly players with the correct permissions can view it."
+      action:
+        enabled: true
+        # Executed command
+        command: "/showenderchest %player%"
+  # [/command] placeholder
+  command:
+    # Enable/disable this placeholder
+    enabled: true
+    # The regex to identify the placeholder
+    name: "\\[/([^]]+)]"
+    # Replace format (you can use %command% to replace it with the placeholder command without "/")
+    format: "%tchat_format%%before_command%&7[&a/%command%&7]%after_command%"
+    # Hover configuration
+    hover:
+      enabled: true
+      # You can use %command% to replace it with the placeholder command without "/"
+      lines:
+        - "&aClick to run &e/%command%"
+        - "&7Line 2 of hover text"
+
+# #################################################################
+# ┌─────────────────────────────────────────────────────────────┐ #
+# │                      TChat Placeholders                     │ #
+# └─────────────────────────────────────────────────────────────┘ #
+# #################################################################
+
+# Coming soon...

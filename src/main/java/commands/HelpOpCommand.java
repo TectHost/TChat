@@ -39,7 +39,7 @@ public class HelpOpCommand implements CommandExecutor {
         }
 
         String message = String.join(" ", args);
-        String formattedMessage = plugin.getConfigManager().getHelpOpFormat();
+        String formattedMessage = plugin.getHelpOpConfig().getHelpOpFormat();
         formattedMessage = formattedMessage.replace("%player%", player.getName());
         formattedMessage = formattedMessage.replace("%message%", message);
 

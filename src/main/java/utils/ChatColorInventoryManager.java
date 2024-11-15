@@ -102,7 +102,7 @@ public class ChatColorInventoryManager implements Listener {
 
     @EventHandler
     public void onInventoryClick(@NotNull InventoryClickEvent event) {
-        if (!plugin.getConfigManager().isChatColorMenuEnabled()) { return; }
+        if (!plugin.getChatColorConfig().isChatColorMenuEnabled()) { return; }
 
         String inventory = event.getView().getTitle().replace("§", "&");
         if (inventory.equals(plugin.getChatColorManager().getTitle())) {

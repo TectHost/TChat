@@ -1,0 +1,17 @@
+# #################################################################
+# ┌─────────────────────────────────────────────────────────────┐ #
+# │                        AntiCap config                       │ #
+# └─────────────────────────────────────────────────────────────┘ #
+# #################################################################
+
+cap:
+  # Enable/disable the message (for BLOCK mode)
+  message-enabled: true
+  # Modes:
+  # - ToLowerCase | Converts all uppercase letters to lowercase letters (recommended)
+  # - BLOCK | Block's the message
+  # - CENSOR | Converts all uppercase letters to asterisks
+  mode: "ToLowerCase"
+  # Percentage of letters to detect uppercase letters
+  # 0.75 = 75% | 1 = 100% (Not recommended)
+  percent: 0.75

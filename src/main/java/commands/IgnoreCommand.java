@@ -27,7 +27,7 @@ public class IgnoreCommand implements CommandExecutor {
             return true;
         }
 
-        List<String> blacklist = plugin.getConfigManager().getBlackLIgnore();
+        List<String> blacklist = plugin.getIgnoreConfig().getBlackLIgnore();
 
         if (sender.hasPermission("tchat.ignore") || sender.hasPermission("tchat.admin")) {
             if (args.length == 0) {
@@ -72,7 +72,7 @@ public class IgnoreCommand implements CommandExecutor {
                 ignoreList.add("all");
                 plugin.getSaveManager().setIgnore(senderId, ignoreList);
 
-                if (plugin.getConfigManager().isIgnoreLogEnabled()) {
+                if (plugin.getLoggerConfigManager().isIgnoreLogEnabled()) {
                     plugin.getLogsManager().logIgnore(player.getName(), "all");
                 }
 
@@ -116,7 +116,7 @@ public class IgnoreCommand implements CommandExecutor {
             ignoreList.add(targetId.toString());
             plugin.getSaveManager().setIgnore(senderId, ignoreList);
 
-            if (plugin.getConfigManager().isIgnoreLogEnabled()) {
+            if (plugin.getLoggerConfigManager().isIgnoreLogEnabled()) {
                 plugin.getLogsManager().logIgnore(player.getName(), target.getName());
             }
 

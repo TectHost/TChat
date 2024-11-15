@@ -1,0 +1,35 @@
+# #################################################################
+# ┌─────────────────────────────────────────────────────────────┐ #
+# │                             Logs                            │ #
+# └─────────────────────────────────────────────────────────────┘ #
+# #################################################################
+
+logs:
+  # Chat log
+  chat:
+    # Enable/disable logging chat messages
+    enabled: true
+  # Command log
+  command:
+    # Enable/disable logging commands
+    enabled: true
+  # Banned commands log (when someone use a banned command)
+  banned-commands:
+    # Enable/disable logging banned commands usage
+    enabled: true
+  # Banned words log (when someone use a banned word)
+  banned-words:
+    # Enable/disable logging banned words usage
+    enabled: true
+  # Ignore log (when someone ignores someone else)
+  ignore:
+    # Enable/disable logging ignore usage
+    enabled: true
+  # Anti advertising log (when someone uses anti advertising)
+  anti-advertising:
+    # Enable/disable logging anti advertising usage
+    enabled: true
+  # Deaths log (when someone dies)
+  death:
+    # Enable/disable logging deaths
+    enabled: true

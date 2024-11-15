@@ -19,7 +19,7 @@ public class MuteChatCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         String prefix = plugin.getMessagesManager().getPrefix();
-        if (sender.hasPermission(plugin.getConfigManager().getMuteChatPermission())) {
+        if (sender.hasPermission("tchat.bypass.mutechat")) {
             chatMuted = !chatMuted;
 
             String message;

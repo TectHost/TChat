@@ -16,37 +16,37 @@ public class GrammarListener {
     public void checkGrammar(@NotNull AsyncPlayerChatEvent event, Player player, String message) {
         if (event.isCancelled()) { return; }
 
-        if (plugin.getConfigManager().isGrammarCapEnabled()) {
-            if (!player.hasPermission(plugin.getConfigManager().getPermissionBypassCap()) && !player.hasPermission("tchat.admin")) {
+        if (plugin.getGrammarManager().isGrammarCapEnabled()) {
+            if (!player.hasPermission("tchat.bypass.grammar.cap") && !player.hasPermission("tchat.admin")) {
                 message = checkCap(message);
             }
         }
 
-        if (plugin.getConfigManager().isGrammarDotEnabled()) {
-            if (!player.hasPermission(plugin.getConfigManager().getPermissionBypassFinalDot()) && !player.hasPermission("tchat.admin")) {
+        if (plugin.getGrammarManager().isGrammarDotEnabled()) {
+            if (!player.hasPermission("tchat.bypass.grammar.finaldot") && !player.hasPermission("tchat.admin")) {
                 message = checkDot(message);
             }
         }
 
         event.setMessage(message);
 
-        if (plugin.getConfigManager().isRepeatMessagesEnabled()) {
-            if (!player.hasPermission(plugin.getConfigManager().getBypassRepeatMessages()) && !player.hasPermission("tchat.admin")) {
+        if (plugin.getGrammarManager().isRepeatMessagesEnabled()) {
+            if (!player.hasPermission(plugin.getGrammarManager().getBypassRepeatMessages()) && !player.hasPermission("tchat.admin")) {
                 plugin.getRepeatMessagesListener().checkRepeatMessages(event, player, message);
             }
         }
     }
 
     public String checkCap(@NotNull String message) {
-        if (message.length() > plugin.getConfigManager().getGrammarMinCharactersCap()) {
-            return message.substring(0, 1).toUpperCase() + message.substring(plugin.getConfigManager().getGrammarCapLetters());
+        if (message.length() > plugin.getGrammarManager().getGrammarMinCharactersCap()) {
+            return message.substring(0, 1).toUpperCase() + message.substring(plugin.getGrammarManager().getGrammarCapLetters());
         }
         return message;
     }
 
     public String checkDot(@NotNull String message) {
-        String dot = plugin.getConfigManager().getGrammarDotCharacter();
-        if (message.length() > plugin.getConfigManager().getGrammarMinCharactersDot() && !message.endsWith(dot)) {
+        String dot = plugin.getGrammarManager().getGrammarDotCharacter();
+        if (message.length() > plugin.getGrammarManager().getGrammarMinCharactersDot() && !message.endsWith(dot)) {
             return message + dot;
         }
         return message;

@@ -36,7 +36,7 @@ public class DeathsListener implements Listener {
             return;
         }
 
-        if (plugin.getDiscordManager().isDiscordEnabled() && plugin.getDiscordManager().isDeathEnabled()) {
+        if (plugin.getConfigManager().isDiscordEnabled() && plugin.getDiscordManager().isDeathEnabled()) {
             plugin.getDiscordHook().sendDeathMessage(playerName);
         }
 
@@ -89,7 +89,7 @@ public class DeathsListener implements Listener {
         }
 
         if (causeMessage != null) {
-            if (plugin.getConfigManager().isDeathLogs()) {
+            if (plugin.getLoggerConfigManager().isDeathLogs()) {
                 plugin.getLogsManager().logDeaths(playerName);
             }
 

@@ -28,19 +28,17 @@ public class ChatBotListener implements Listener {
         Player player = event.getPlayer();
         String message = event.getMessage();
 
-        if (chatBotManager.isEnabled()) {
-            List<String> responses = chatBotManager.getMessages(message);
+        List<String> responses = chatBotManager.getMessages(message);
 
-            if (!responses.isEmpty()) {
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        for (String response : responses) {
-                            player.sendMessage(plugin.getTranslateColors().translateColors(player, response));
-                        }
+        if (!responses.isEmpty()) {
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    for (String response : responses) {
+                        player.sendMessage(plugin.getTranslateColors().translateColors(player, response));
                     }
-                }.runTaskLater(plugin, 1L);
-            }
+                }
+            }.runTaskLater(plugin, 1L);
         }
     }
 }

@@ -10,6 +10,7 @@ public class BannedCommandsManager {
 
     private final TChat plugin;
     private final ConfigFile configFile;
+
     private List<String> bannedCommands;
     private List<String> blockedMessage;
     private List<String> noTabCompleteCommands;
@@ -32,7 +33,7 @@ public class BannedCommandsManager {
 
     public BannedCommandsManager(TChat plugin) {
         this.plugin = plugin;
-        this.configFile = new ConfigFile("banned_commands.yml", null, plugin);
+        this.configFile = new ConfigFile("banned_commands.yml", "modules", plugin);
         this.configFile.registerConfig();
         loadConfig();
     }

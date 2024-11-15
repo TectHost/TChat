@@ -1,0 +1,119 @@
+# #################################################################
+# ┌─────────────────────────────────────────────────────────────┐ #
+# │                   Anti advertising config                   │ #
+# └─────────────────────────────────────────────────────────────┘ #
+# #################################################################
+
+advertising:
+  # IPv4/domain/link whitelist
+  whitelist:
+    - "tect.host"
+  ipv4:
+    # Enable/disable anti advertising IPv4
+    enabled: true
+    # Text to check for IPv4
+    match: ".*\\b\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b.*"
+    actions:
+      message:
+        # Enable/disable message
+        enabled: true
+        # Message (list)
+        message:
+          - "&8--------- { &#c03afeT&#a72cf8C&#8e1ff1h&#7411eba&#5b03e4t &8} ---------"
+          - "  &cYou can't send IPs in the chat!"
+          - "&8---------------------------"
+      title:
+        # Enable/disable title
+        enabled: true
+        # Title
+        title: "✶ &#fe0000Y&#f50101o&#ec0202u &#e20202c&#d90303a&#d00404n&#c70505'&#bd0606t &#b40707w&#ab0707r&#a20808i&#980909t&#8f0a0ae &#860b0bt&#7d0b0bh&#730c0ca&#6a0d0dt &f✶"
+        # Subtitle (small title)
+        subtitle: "&#A5A5A5Detected IPv4 in your message."
+        # Title timings
+        fade-in: 10
+        stay: 70
+        fade-out: 20
+      actionbar:
+        # Enable/disable actionbar
+        enabled: true
+        # Actionbar
+        bar: "&7[&#c03afeT&#a72cf8C&#8e1ff1h&#7411eba&#5b03e4t&7] &#fe0000Y&#f50101o&#ec0202u &#e20202c&#d90303a&#d00404n&#c70505'&#bd0606t &#b40707w&#ab0707r&#a20808i&#980909t&#8f0a0ae &#860b0bt&#7d0b0bh&#730c0ca&#6a0d0dt"
+      sound:
+        # Enable/disable the title
+        enabled: true
+        # Sound
+        # https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Sound.html
+        sound: "ENTITY_VILLAGER_NO"
+        # Volume of the sound
+        volume: 1.0
+        # Pitch of the sound
+        pitch: 1.0
+      particles:
+        # Enable/disable particles
+        enabled: true
+        # Particle type
+        type: "VILLAGER_ANGRY"
+        # Number of particles
+        particles: 30
+  domain:
+    enabled: true
+    match: ".*\\b[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}\\b.*"
+    actions:
+      message:
+        enabled: true
+        message:
+          - "&8--------- { &#c03afeT&#a72cf8C&#8e1ff1h&#7411eba&#5b03e4t &8} ---------"
+          - "&cYou can't send domains in the chat!"
+          - "&8---------------------------"
+      title:
+        enabled: true
+        title: "✶ &#fe0000Y&#f50101o&#ec0202u &#e20202c&#d90303a&#d00404n&#c70505'&#bd0606t &#b40707w&#ab0707r&#a20808i&#980909t&#8f0a0ae &#860b0bt&#7d0b0bh&#730c0ca&#6a0d0dt &f✶"
+        subtitle: "&#A5A5A5Detected domain in your message."
+        # Title timings
+        fade-in: 10
+        stay: 70
+        fade-out: 20
+      actionbar:
+        enabled: true
+        bar: "&7[&#c03afeT&#a72cf8C&#8e1ff1h&#7411eba&#5b03e4t&7] &#fe0000Y&#f50101o&#ec0202u &#e20202c&#d90303a&#d00404n&#c70505'&#bd0606t &#b40707w&#ab0707r&#a20808i&#980909t&#8f0a0ae &#860b0bt&#7d0b0bh&#730c0ca&#6a0d0dt"
+      sound:
+        enabled: true
+        # https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Sound.html
+        sound: "ENTITY_VILLAGER_NO"
+        volume: 1.0
+        pitch: 1.0
+      particles:
+        enabled: true
+        type: "VILLAGER_ANGRY"
+        particles: 30
+  links:
+    enabled: true
+    match: ".*\\bhttps?://[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}/?.*"
+    actions:
+      message:
+        enabled: true
+        message:
+          - "&8--------- { &#c03afeT&#a72cf8C&#8e1ff1h&#7411eba&#5b03e4t &8} ---------"
+          - "&cYou can't send links in the chat!"
+          - "&8---------------------------"
+      title:
+        enabled: true
+        title: "✶ &#fe0000Y&#f50101o&#ec0202u &#e20202c&#d90303a&#d00404n&#c70505'&#bd0606t &#b40707w&#ab0707r&#a20808i&#980909t&#8f0a0ae &#860b0bt&#7d0b0bh&#730c0ca&#6a0d0dt &f✶"
+        subtitle: "&#A5A5A5Detected link in your message."
+        # Title timings
+        fade-in: 10
+        stay: 70
+        fade-out: 20
+      actionbar:
+        enabled: true
+        bar: "&7[&#c03afeT&#a72cf8C&#8e1ff1h&#7411eba&#5b03e4t&7] &#fe0000Y&#f50101o&#ec0202u &#e20202c&#d90303a&#d00404n&#c70505'&#bd0606t &#b40707w&#ab0707r&#a20808i&#980909t&#8f0a0ae &#860b0bt&#7d0b0bh&#730c0ca&#6a0d0dt"
+      sound:
+        enabled: true
+        # https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Sound.html
+        sound: "ENTITY_VILLAGER_NO"
+        volume: 1.0
+        pitch: 1.0
+      particles:
+        enabled: true
+        type: "VILLAGER_ANGRY"
+        particles: 30

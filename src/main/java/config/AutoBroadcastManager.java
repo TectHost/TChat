@@ -11,12 +11,11 @@ public class AutoBroadcastManager {
 
     private final ConfigFile autoBroadcastFile;
     private int time;
-    private boolean enabled;
     private final Map<String, Broadcast> broadcasts = new HashMap<>();
     private final HashSet<UUID> toggledPlayers = new HashSet<>();
 
     public AutoBroadcastManager(TChat plugin){
-        this.autoBroadcastFile = new ConfigFile("autobroadcast.yml", null, plugin);
+        this.autoBroadcastFile = new ConfigFile("autobroadcast.yml", "modules", plugin);
         this.autoBroadcastFile.registerConfig();
         loadConfig();
     }
@@ -26,7 +25,6 @@ public class AutoBroadcastManager {
 
         // General options
         time = config.getInt("options.time");
-        enabled = config.getBoolean("options.enabled");
 
         // Load broadcasts
         broadcasts.clear();
@@ -106,10 +104,6 @@ public class AutoBroadcastManager {
 
     public int getTime() {
         return time;
-    }
-
-    public boolean isEnabled() {
-        return enabled;
     }
 
     public Map<String, Broadcast> getBroadcasts() {

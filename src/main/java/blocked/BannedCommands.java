@@ -60,7 +60,7 @@ public class BannedCommands implements Listener {
                     player.getWorld().spawnParticle(bannedCommandsManager.getParticle(), player.getLocation(), bannedCommandsManager.getParticles());
                 }
 
-                if (plugin.getConfigManager().isLogBannedCommandsEnabled()) {
+                if (plugin.getLoggerConfigManager().isLogBannedCommandsEnabled()) {
                     plugin.getLogsManager().logBannedCommand(event.getPlayer().getName(), command);
                 }
 

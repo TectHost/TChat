@@ -43,7 +43,7 @@ public class PlaceholdersConfig {
     private List<String> hoverCommand;
 
     public PlaceholdersConfig(TChat plugin) {
-        this.configFile = new ConfigFile("placeholders.yml", null, plugin);
+        this.configFile = new ConfigFile("placeholders.yml", "modules", plugin);
         this.configFile.registerConfig();
         loadConfig();
     }

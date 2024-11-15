@@ -1,0 +1,62 @@
+# #################################################################
+# ┌─────────────────────────────────────────────────────────────┐ #
+# │                           Mentions                          │ #
+# └─────────────────────────────────────────────────────────────┘ #
+# #################################################################
+
+# The “personal” configuration is only seen by the player mentioned and the “global” configuration is seen by all other players.
+
+groups:
+  # Specific configuration for the "op" group
+  # (The groups of the mentions are extracted from groups.yml)
+  op:
+    character: "@"
+    color: "&9"
+    personal:
+      message:
+        enabled: true
+        text:
+          - "&aYou were mentioned by %mentioned%!"
+      title:
+        enabled: true
+        main: "&6Hey %player_name%!"
+        subtitle:
+          enabled: true
+          text: "&eYou've been mentioned!"
+      sound:
+        enabled: true
+        type: "entity.player.levelup"
+      particles:
+        enabled: true
+        type: "explosion_large"
+      actionbar:
+        enabled: true
+        text: "&aYou were mentioned in chat!"
+
+    global:
+      message:
+        enabled: false
+        text:
+          - "&eGlobal mention!"
+      title:
+        enabled: false
+        main: "&bAttention!"
+        subtitle:
+          enabled: false
+          text: ""
+      sound:
+        enabled: false
+        type: "entity.experience_orb.pickup"
+      particles:
+        enabled: false
+        type: "heart"
+      actionbar:
+        enabled: false
+        text: ""
+
+  # Add more groups as needed
+  # other_group:
+  #   personal:
+  #     # setting for another group...
+  #   global:
+  #     # Global configuration for another group....

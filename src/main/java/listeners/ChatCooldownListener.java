@@ -21,8 +21,8 @@ public class ChatCooldownListener implements Listener {
 
     public ChatCooldownListener(@NotNull TChat plugin) {
         this.plugin = plugin;
-        this.chatCooldownTime = plugin.getConfigManager().getCooldownChatTime();
-        this.commandCooldownTime = plugin.getConfigManager().getCooldownCommandTime();
+        this.chatCooldownTime = plugin.getCooldownsConfig().getCooldownChatTime();
+        this.commandCooldownTime = plugin.getCooldownsConfig().getCooldownCommandTime();
     }
 
     @EventHandler
@@ -34,7 +34,7 @@ public class ChatCooldownListener implements Listener {
         if (channelName != null && plugin.getChannelsConfigManager().getChannel(channelName).cooldownEnabled()) { return; }
 
         if (!player.hasPermission("tchat.admin") && !player.hasPermission("tchat.bypass.chatcooldown")) {
-            if (plugin.getConfigManager().isCooldownChat()) {
+            if (plugin.getCooldownsConfig().isCooldownChat()) {
                 long currentTime = System.currentTimeMillis();
 
                 if (isCooldownActive(player, lastChatTimes, currentTime, chatCooldownTime)) {
@@ -45,7 +45,7 @@ public class ChatCooldownListener implements Listener {
                     message = message.replace("%cooldown%", String.valueOf(timeRemaining));
                     player.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + message));
 
-                    if (plugin.getConfigManager().isDepurationChatEnabled()) {
+                    if (plugin.getCooldownsConfig().isDepurationChatEnabled()) {
                         String message1 = plugin.getMessagesManager().getDepurationChatCooldown();
                         if (message1 != null) {
                             message1 = message1.replace("%player%", player.getName());
@@ -71,7 +71,7 @@ public class ChatCooldownListener implements Listener {
         if (event.isCancelled()) { return; }
 
         if (!player.hasPermission("tchat.admin") && !player.hasPermission("tchat.bypass.commandcooldown")) {
-            if (plugin.getConfigManager().isCooldownCommand()) {
+            if (plugin.getCooldownsConfig().isCooldownCommand()) {
                 long currentTime = System.currentTimeMillis();
 
                 if (isCooldownActive(player, lastCommandTimes, currentTime, commandCooldownTime)) {
@@ -82,7 +82,7 @@ public class ChatCooldownListener implements Listener {
                     message = message.replace("%cooldown%", String.valueOf(timeRemaining));
                     player.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + message));
 
-                    if (plugin.getConfigManager().isDepurationCommandEnabled()) {
+                    if (plugin.getCooldownsConfig().isDepurationCommandEnabled()) {
                         String message1 = plugin.getMessagesManager().getDepurationCommandCooldown();
                         if (message1 != null) {
                             message1 = message1.replace("%player%", player.getName());

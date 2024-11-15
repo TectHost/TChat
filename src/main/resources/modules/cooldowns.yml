@@ -1,0 +1,21 @@
+# #################################################################
+# ┌─────────────────────────────────────────────────────────────┐ #
+# │                        Chat Cooldowns                       │ #
+# └─────────────────────────────────────────────────────────────┘ #
+# #################################################################
+
+cooldowns:
+  chat:
+    # Enable/disable chat cooldown
+    enabled: true
+    # Time in ms (1000 = 1 second)
+    time: 3000
+    # Send a message on the console
+    depuration-enabled: true
+  commands:
+    # Enable/disable command cooldown
+    enabled: true
+    # Time in ms (1000 = 1 second)
+    time: 3000
+    # Send a message on the console
+    depuration-enabled: true

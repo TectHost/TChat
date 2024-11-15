@@ -1,7 +1,9 @@
 main: minealex.tchat.TChat
 version: ${project.version}
 name: TChat
+
 author: Mine_Alex
+
 api-version: 1.13
 
 depend: [PlaceholderAPI]
@@ -11,88 +13,6 @@ commands:
     description: Reload the plugin
     aliases:
       - chat
-  chatcolor:
-    description: Open's the chatcolor menu
-  channel:
-    description: Join/leave a channel
-  msg:
-    description: Sends a private message
-  reply:
-    description: Reply to a private message
-  chatclear:
-    description: Clear's the chat
-  mutechat:
-    description: Mute the chat
-  ping:
-    description: View player ping
-  broadcast:
-    description: Send a message to all players
-  ignore:
-    description: Ignore a player
-  poll:
-    description: Create or vote for a poll
-  warning:
-    description: Send a message to all players
-  rules:
-    description: View the server rules
-  print:
-    description: Send a raw message
-  announcement:
-    description: Send a message to all players
-  autobroadcast:
-    description: Start or stop autobroadcast system
-  plugin:
-    description: View information from concrete plugin
-  bannedcommands:
-    description: Add/remove banned commands
-  helpop:
-    description: Get help from the staff
-  showitem:
-    description: Show the item in your hand
-  list:
-    description: View all online players
-  calculator:
-    description: Calculate math operations
-  player:
-    description: Show player information
-  server:
-    description: Shows server information
-  socialspy:
-    description: Configure social spy options inside Minecraft
-  commandtimer:
-    description: Add or remove command timers
-  nick:
-    description: Change the username
-  seen:
-    description: View player information
-  realname:
-    description: Show the realname
-  stafflist:
-    description: Show the staff list
-  bannedwords:
-    description: List all banned words
-  mute:
-    description: Mute other players
-  logs:
-    description: View logs
-  invsee:
-    description: View any player inventory
-  mention:
-    description: Mention a player
-  showenderchest:
-    description: Opens the enderchest
-  me:
-    description: Me command
-  showcoords:
-    description: Shows the coords
-  chatgames:
-    description: Configure chatgames inside the server
-  tags:
-    description: Select a tag
-  replacer:
-    description: Configure replacer system inside the server
-  premade:
-    description: Sends premade broadcasts
 
 permissions:
   tchat.admin.command.replacer.enable:

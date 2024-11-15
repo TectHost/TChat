@@ -34,7 +34,7 @@ public class SeenCommand implements CommandExecutor {
         Player player = Bukkit.getPlayerExact(playerName);
 
         if (player == null) {
-            String message = plugin.getMessagesManager().getNoPlayer();
+            String message = plugin.getMessagesManager().getPlayerNotFound();
             commandSender.sendMessage(plugin.getTranslateColors().translateColors(null, prefix + message));
             return false;
         }

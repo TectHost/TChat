@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>minealex.tchat</groupId>
   <artifactId>TChat</artifactId>
-  <version>4.2.3.1</version>
+  <version>4.3.0.0</version>
   <build>
     <resources>
       <resource>
@@ -48,7 +48,7 @@
     <dependency>
       <groupId>org.spigotmc</groupId>
       <artifactId>spigot-api</artifactId>
-      <version>1.21-R0.1-SNAPSHOT</version>
+      <version>1.21.3-R0.1-SNAPSHOT</version>
       <scope>provided</scope>
     </dependency>
     <dependency>

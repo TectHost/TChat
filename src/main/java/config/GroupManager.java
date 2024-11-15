@@ -83,10 +83,7 @@ public class GroupManager {
             }
         }
 
-        if (player.isOp() && opGroup != null && !opGroup.equals("none") && highestPriority == Integer.MAX_VALUE) {
-            plugin.getLogger().info("Player " + player.getName() + " is OP, assigning OP group: " + opGroup);
-            return opGroup;
-        }
+        if (player.isOp() && opGroup != null && !opGroup.equals("none") && highestPriority == Integer.MAX_VALUE) { return opGroup; }
 
         return assignedGroup;
     }

@@ -1,0 +1,36 @@
+# #################################################################
+# ┌─────────────────────────────────────────────────────────────┐ #
+# │                        Grammar config                       │ #
+# └─────────────────────────────────────────────────────────────┘ #
+# #################################################################
+
+grammar:
+  cap:
+    # Enable/disable this function
+    enabled: true
+    # Number of letters to be converted to uppercase (starting from the beginning)
+    # Example:
+    # Original message: hello
+    # If the letters option is set to 1 the message will finally be: Hello
+    # If the letters option is set to 3 the message will be finally: HELlo
+    letters: 1
+    # Minimum number of characters for the auto cap to be activated
+    min-characters: 0
+  final-dot:
+    # Enable/disable this function
+    enabled: true
+    # You can customize the dot, you can use any other character/characters, but I recommend to leave it like this
+    character: "."
+    # Minimum number of characters for the final dot to be activated
+    min-characters: 0
+  repeat-messages:
+    # Enable/disable this function
+    enabled: true
+    # Permission to bypass this function
+    bypass-permission: "tchat.bypass.grammar.repeat"
+    # Number of equal messages allowed until blocked
+    # ( 1 = no repeated messages can be sent )
+    max-repeat-messages: 1
+    # Percentage to block the message
+    # 0.75 = 75% | 1.00 = 100%
+    percent: 0.75

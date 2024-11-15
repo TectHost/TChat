@@ -25,8 +25,9 @@ public class TagsCommand implements CommandExecutor, TabCompleter {
         this.plugin = plugin;
         this.tagsManager = tagsManager;
         this.tagsInventoryManager = tagsInventoryManager;
-        Objects.requireNonNull(plugin.getCommand("tags")).setExecutor(this);
-        Objects.requireNonNull(plugin.getCommand("tags")).setTabCompleter(this);
+
+        plugin.registerCommands.registerCommand("tags", this);
+        plugin.registerCommands.registerTabCompleter("tags", this);
     }
 
     @Override
@@ -39,7 +40,7 @@ public class TagsCommand implements CommandExecutor, TabCompleter {
         }
 
         if (args.length == 0) {
-            if (plugin.getTagsMenuConfigManager().isEnabled()) {
+            if (plugin.getTagsManager().isTagsMenusEnabled()) {
                 tagsInventoryManager.openMenu(player, plugin.getTagsMenuConfigManager().getDmenu());
             } else {
                 String m = plugin.getMessagesManager().getTagsUsage();

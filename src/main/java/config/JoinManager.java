@@ -13,7 +13,7 @@ public class JoinManager {
     private final Map<String, GroupConfig> groupConfigs;
 
     public JoinManager(TChat plugin) {
-        this.configFile = new ConfigFile("joins.yml", null, plugin);
+        this.configFile = new ConfigFile("joins.yml", "modules", plugin);
         this.configFile.registerConfig();
         this.groupConfigs = new HashMap<>();
         loadConfig();
@@ -79,18 +79,6 @@ public class JoinManager {
     public void reloadConfig() {
         configFile.reloadConfig();
         loadConfig();
-    }
-
-    public EventConfig getPersonalConfig(String groupName) {
-        return groupConfigs.containsKey(groupName) ? groupConfigs.get(groupName).getPersonalConfig() : new EventConfig();
-    }
-
-    public EventConfig getGlobalConfig(String groupName) {
-        return groupConfigs.containsKey(groupName) ? groupConfigs.get(groupName).getGlobalConfig() : new EventConfig();
-    }
-
-    public EventConfig getQuitConfig(String groupName) {
-        return groupConfigs.containsKey(groupName) ? groupConfigs.get(groupName).getQuitConfig() : new EventConfig();
     }
 
     public Map<String, GroupConfig> getAllGroupConfigs() {

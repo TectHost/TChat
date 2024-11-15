@@ -27,7 +27,7 @@ public class BroadcastCommand implements CommandExecutor {
 
             String message = String.join(" ", args);
 
-            String format = plugin.getConfigManager().getBroadcastFormat();
+            String format = plugin.getBroadcastConfig().getBroadcastFormat();
 
             format = format.replace("%message%", message);
 

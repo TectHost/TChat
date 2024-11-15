@@ -1,0 +1,28 @@
+# #################################################################
+# ┌─────────────────────────────────────────────────────────────┐ #
+# │                        Command Timer                        │ #
+# └─────────────────────────────────────────────────────────────┘ #
+# #################################################################
+
+# Command tags:
+# [PLAYER] - Executes command by player
+# [CONSOLE] - Executes command by console
+
+# General options
+options:
+  time: 300
+
+commands:
+  # You can use any name
+  1:
+    # Enable/disable this command timer
+    enabled: true
+    # Actions
+    commands:
+      - "[CONSOLE] say Command_timer 1 enabled!"
+      - "[CONSOLE] say Check TChat/modules/command_timer.yml"
+  2:
+    enabled: false
+    commands:
+      - "[CONSOLE] say Command_timer 2 enabled!"
+      - "[CONSOLE] say Check TChat/modules/command_timer.yml"

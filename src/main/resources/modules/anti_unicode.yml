@@ -1,0 +1,17 @@
+# #################################################################
+# ┌─────────────────────────────────────────────────────────────┐ #
+# │                         Anti Unicode                        │ #
+# └─────────────────────────────────────────────────────────────┘ #
+# #################################################################
+
+unicode:
+  match: '^[A-Za-z0-9\-~!@#\$%^&*()<>_+=\-{}|'';:.,\[\]"/]+$'
+  # true -> Block all no latin characters
+  # false -> Block only match characters (unicode.match)
+  blockAllNonLatin: false
+  # Modes:
+  # 1 -> Blocks the message
+  # 2 -> Censors the message (replaces characters with the censor-char)
+  mode: 1
+  # The character used to replace in the censor mode
+  censor-char: "*"

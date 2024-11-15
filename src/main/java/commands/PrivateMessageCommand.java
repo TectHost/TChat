@@ -1,6 +1,6 @@
 package commands;
 
-import config.ConfigManager;
+import config.PrivateMessagesConfigManager;
 import minealex.tchat.TChat;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -48,7 +48,7 @@ public class PrivateMessageCommand implements CommandExecutor {
 
         TranslateColors translateColors = plugin.getTranslateColors();
 
-        if (senderPlayer.hasPermission(plugin.getConfigManager().getMsgPermission()) || senderPlayer.hasPermission("tchat.admin")) {
+        if (senderPlayer.hasPermission("tchat.msg") || senderPlayer.hasPermission("tchat.admin")) {
             if (args.length < 2) {
                 String message = plugin.getMessagesManager().getUsageMsg();
                 senderPlayer.sendMessage(translateColors.translateColors(senderPlayer, prefix + message));
@@ -71,13 +71,13 @@ public class PrivateMessageCommand implements CommandExecutor {
             String messageToSend = messageBuilder.toString().trim();
 
             String senderFormattedMessage = translateColors.translateColors(senderPlayer,
-                    plugin.getConfigManager().getMsgFormatSender()
+                    plugin.getPrivateMessagesConfigManager().getMsgFormatSender()
                             .replace("%sender%", sender.getName())
                             .replace("%recipient%", targetPlayer.getName())
                             .replace("%message%", messageToSend));
 
             String receiverFormattedMessage = translateColors.translateColors(targetPlayer,
-                    plugin.getConfigManager().getMsgFormatReceiver()
+                    plugin.getPrivateMessagesConfigManager().getMsgFormatReceiver()
                             .replace("%sender%", sender.getName())
                             .replace("%recipient%", targetPlayer.getName())
                             .replace("%message%", messageToSend));
@@ -85,8 +85,8 @@ public class PrivateMessageCommand implements CommandExecutor {
             String senderGroup = plugin.getGroupManager().getGroupName(senderPlayer);
             String receiverGroup = plugin.getGroupManager().getGroupName(targetPlayer);
 
-            ConfigManager.HoverConfig senderHoverConfig = plugin.getConfigManager().getPmHoverConfig(senderGroup);
-            ConfigManager.HoverConfig receiverHoverConfig = plugin.getConfigManager().getPmHoverConfig(receiverGroup);
+            PrivateMessagesConfigManager.HoverConfig senderHoverConfig = plugin.getPrivateMessagesConfigManager().getPmHoverConfig(senderGroup);
+            PrivateMessagesConfigManager.HoverConfig receiverHoverConfig = plugin.getPrivateMessagesConfigManager().getPmHoverConfig(receiverGroup);
 
             List<String> hoverSenderTextList = senderHoverConfig != null
                     ? senderHoverConfig.getSenderTexts().stream()

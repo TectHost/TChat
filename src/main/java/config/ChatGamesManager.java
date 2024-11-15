@@ -15,7 +15,7 @@ public class ChatGamesManager {
 
     public ChatGamesManager(TChat plugin) {
         this.plugin = plugin;
-        this.configFile = new ConfigFile("chatgames.yml", null, plugin);
+        this.configFile = new ConfigFile("chatgames.yml", "modules", plugin);
         this.configFile.registerConfig();
         loadGames();
     }

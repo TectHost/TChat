@@ -18,7 +18,6 @@ public class InvseeConfigManager {
     private int offhandSlot;
     private int[] glassSlots;
     private int slots;
-    private boolean enabled;
 
     public InvseeConfigManager(TChat plugin) {
         this.configFile = new ConfigFile("invsee.yml", "menus", plugin);
@@ -29,38 +28,35 @@ public class InvseeConfigManager {
     public void loadConfig() {
         FileConfiguration config = configFile.getConfig();
 
-        enabled = config.getBoolean("options.enabled", false);
-        if (enabled) {
-            inventoryTitle = config.getString("options.title", "&7%player%'s inventory");
-            slots = config.getInt("options.slots", 45);
+        inventoryTitle = config.getString("options.title", "&7%player%'s inventory");
+        slots = config.getInt("options.slots", 45);
 
-            String barrierMaterialName = config.getString("empty.material", "BARRIER");
-            Material barrierMaterial = Material.matchMaterial(barrierMaterialName);
-            assert barrierMaterial != null;
-            barrier = new ItemStack(barrierMaterial);
-            ItemMeta barrierMeta = barrier.getItemMeta();
-            if (barrierMeta != null) {
-                barrierMeta.setDisplayName(config.getString("empty.name", "&cEmpty"));
-                barrier.setItemMeta(barrierMeta);
-            }
-
-            String glassMaterialName = config.getString("glass.material", "GRAY_STAINED_GLASS_PANE");
-            Material glassMaterial = Material.matchMaterial(glassMaterialName);
-            assert glassMaterial != null;
-            glass = new ItemStack(glassMaterial);
-            ItemMeta glassMeta = glass.getItemMeta();
-            if (glassMeta != null) {
-                glassMeta.setDisplayName(config.getString("glass.name", " "));
-                glass.setItemMeta(glassMeta);
-            }
-
-            armorStartSlot = config.getInt("armor-slots.start", 41);
-            armorLength = config.getInt("armor-slots.length", 4);
-
-            offhandSlot = config.getInt("offhand-slot", 36);
-
-            glassSlots = config.getIntegerList("glass-slots").stream().mapToInt(Integer::intValue).toArray();
+        String barrierMaterialName = config.getString("empty.material", "BARRIER");
+        Material barrierMaterial = Material.matchMaterial(barrierMaterialName);
+        assert barrierMaterial != null;
+        barrier = new ItemStack(barrierMaterial);
+        ItemMeta barrierMeta = barrier.getItemMeta();
+        if (barrierMeta != null) {
+            barrierMeta.setDisplayName(config.getString("empty.name", "&cEmpty"));
+            barrier.setItemMeta(barrierMeta);
         }
+
+        String glassMaterialName = config.getString("glass.material", "GRAY_STAINED_GLASS_PANE");
+        Material glassMaterial = Material.matchMaterial(glassMaterialName);
+        assert glassMaterial != null;
+        glass = new ItemStack(glassMaterial);
+        ItemMeta glassMeta = glass.getItemMeta();
+        if (glassMeta != null) {
+            glassMeta.setDisplayName(config.getString("glass.name", " "));
+            glass.setItemMeta(glassMeta);
+        }
+
+        armorStartSlot = config.getInt("armor-slots.start", 41);
+        armorLength = config.getInt("armor-slots.length", 4);
+
+        offhandSlot = config.getInt("offhand-slot", 36);
+
+        glassSlots = config.getIntegerList("glass-slots").stream().mapToInt(Integer::intValue).toArray();
     }
 
     public void reloadConfig() {
@@ -68,7 +64,6 @@ public class InvseeConfigManager {
         loadConfig();
     }
 
-    public boolean isEnabled() {return enabled;}
     public String getInventoryTitle() {return inventoryTitle;}
     public ItemStack getBarrier() {return barrier;}
     public ItemStack getGlass() {return glass;}

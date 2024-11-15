@@ -8,7 +8,6 @@ public class DiscordManager {
     private final ConfigFile configFile;
     private final TChat plugin;
 
-    private boolean discordEnabled;
     private String discordHook;
 
     private boolean joinEnabled;
@@ -55,33 +54,30 @@ public class DiscordManager {
 
     public void loadConfig() {
         FileConfiguration config = configFile.getConfig();
-        discordEnabled = config.getBoolean("discord.enabled");
-        if (discordEnabled) {
-            discordHook = config.getString("discord.webhook");
+        discordHook = config.getString("discord.webhook");
 
-            joinEnabled = config.getBoolean("discord.join.enabled");
-            if (joinEnabled) {
+        joinEnabled = config.getBoolean("discord.join.enabled");
+        if (joinEnabled) {
             joinTitle = config.getString("discord.join.title");
             joinDescription = config.getString("discord.join.description");
             joinColor = config.getInt("discord.join.color");
             joinAvatarEnabled = config.getBoolean("discord.join.avatar-enabled");
-            }
+        }
 
-            quitEnabled = config.getBoolean("discord.quit.enabled");
-            if (quitEnabled) {
-                quitTitle = config.getString("discord.quit.title");
-                quitDescription = config.getString("discord.quit.description");
-                quitColor = config.getInt("discord.quit.color");
-                quitAvatarEnabled = config.getBoolean("discord.quit.avatar-enabled");
-            }
+        quitEnabled = config.getBoolean("discord.quit.enabled");
+        if (quitEnabled) {
+            quitTitle = config.getString("discord.quit.title");
+            quitDescription = config.getString("discord.quit.description");
+            quitColor = config.getInt("discord.quit.color");
+            quitAvatarEnabled = config.getBoolean("discord.quit.avatar-enabled");
+        }
 
-            deathEnabled = config.getBoolean("discord.death.enabled");
-            if (deathEnabled) {
-                deathTitle = config.getString("discord.death.title");
-                deathDescription = config.getString("discord.death.description");
-                deathColor = config.getInt("discord.death.color");
-                deathAvatarEnabled = config.getBoolean("discord.death.avatar-enabled");
-            }
+        deathEnabled = config.getBoolean("discord.death.enabled");
+        if (deathEnabled) {
+            deathTitle = config.getString("discord.death.title");
+            deathDescription = config.getString("discord.death.description");
+            deathColor = config.getInt("discord.death.color");
+            deathAvatarEnabled = config.getBoolean("discord.death.avatar-enabled");
         }
 
         if (plugin.getBannedWordsManager().isDiscordEnabled()) {
@@ -130,7 +126,6 @@ public class DiscordManager {
     public int getMuteColor() {return muteColor;}
     public boolean isMuteAvatar() {return muteAvatar;}
 
-    public boolean isDiscordEnabled() {return discordEnabled;}
     public String getDiscordHook() {return discordHook;}
 
     public boolean isJoinEnabled() {return joinEnabled;}

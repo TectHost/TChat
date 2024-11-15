@@ -1,0 +1,66 @@
+# #################################################################
+# ┌─────────────────────────────────────────────────────────────┐ #
+# │                        Auto Broadcast                       │ #
+# └─────────────────────────────────────────────────────────────┘ #
+# #################################################################
+
+# Placeholders:
+# - %center% - Center line text
+
+# General options
+options:
+  # Time between broadcast and broadcast
+  time: 300
+
+broadcasts:
+  broadcast1:
+    # Enable/disable this broadcast
+    enabled: true
+    # Broadcast message (supports colors &, HEX colors &#, and PlaceholderAPI)
+    message:
+      - "┌─────────────────┐"
+      - "│          Hi, %player_name%          │"
+      - "│          &aThe server use         &f│"
+      - "│                &#c03afeT&#a72cf8C&#8e1ff1h&#7411eba&#5b03e4t                &f│"
+      - "└─────────────────┘"
+    # The channel to send the broadcast
+    channel: "none"
+    # Permission to view the broadcast
+    permission: "tchat.broadcast.view.broadcast1"
+    actions:
+      title:
+        enabled: true
+        title: "&#c03afeT&#a72cf8C&#8e1ff1h&#7411eba&#5b03e4t"
+        subtitle: "&7The server is using &#c03afeT&#a72cf8C&#8e1ff1h&#7411eba&#5b03e4t"
+      sound:
+        enabled: true
+        sound: "ENTITY_VILLAGER_NO"
+      particles:
+        enabled: true
+        particle: ANGRY_VILLAGER
+        particles: 4
+      actionbar:
+        enabled: true
+        bar: "&#c03afeT&#b333fbe&#a72cf8c&#9a25f4t&#8e1ff1.&#8118eeh&#7411ebo&#680ae7s&#5b03e4t"
+  broadcast2:
+    enabled: true
+    message:
+      - "%center%&#ec4141&lANNOUNCE"
+      - "%center%&7Try Tect.host, the best hosting!"
+    channel: "none"
+    permission: "none"
+    actions:
+      title:
+        enabled: true
+        title: "&#c03afeT&#a72cf8C&#8e1ff1h&#7411eba&#5b03e4t"
+        subtitle: "&7The server is using &#c03afeT&#a72cf8C&#8e1ff1h&#7411eba&#5b03e4t"
+      sound:
+        enabled: true
+        sound: "ENTITY_VILLAGER_NO"
+      particles:
+        enabled: true
+        particle: ANGRY_VILLAGER
+        particles: 4
+      actionbar:
+        enabled: true
+        bar: "&#c03afeT&#b333fbe&#a72cf8c&#9a25f4t&#8e1ff1.&#8118eeh&#7411ebo&#680ae7s&#5b03e4t"

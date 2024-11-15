@@ -29,20 +29,25 @@ public class PollCommand implements CommandExecutor {
         }
 
         String subCommand = args[0].toLowerCase();
-        if (subCommand.equals("create")) {
-            return handleCreateCommand(sender, args);
-        } else if (subCommand.equals("vote")) {
-            return handleVoteCommand(sender, args);
-        } else if (subCommand.equals("finish")) {
-            return handleFinishCommand(sender, args);
-        } else {
-            String message = plugin.getMessagesManager().getUsagePoll();
-            sender.sendMessage(plugin.getTranslateColors().translateColors(null, prefix + message));
-            return false;
+        switch (subCommand) {
+            case "create" -> {
+                return handleCreateCommand(sender, args);
+            }
+            case "vote" -> {
+                return handleVoteCommand(sender, args);
+            }
+            case "finish" -> {
+                return handleFinishCommand(sender);
+            }
+            default -> {
+                String message = plugin.getMessagesManager().getUsagePoll();
+                sender.sendMessage(plugin.getTranslateColors().translateColors(null, prefix + message));
+                return false;
+            }
         }
     }
 
-    private boolean handleFinishCommand(@NotNull CommandSender sender, String[] args) {
+    private boolean handleFinishCommand(@NotNull CommandSender sender) {
         String prefix = plugin.getMessagesManager().getPrefix();
 
         if (sender.hasPermission("tchat.poll.finish") || sender.hasPermission("tchat.admin")) {
@@ -128,7 +133,7 @@ public class PollCommand implements CommandExecutor {
             StringBuilder resultsMessage = new StringBuilder(plugin.getTranslateColors().translateColors(null, startTitle));
             resultsMessage.append(plugin.getTranslateColors().translateColors(null, startTextTitle)).append(title).append("\n");
 
-            final int BAR_LENGTH = plugin.getConfigManager().getPollBar();
+            final int BAR_LENGTH = plugin.getPollsConfig().getPollBar();
             for (String option : options) {
                 resultsMessage.append(ChatColor.translateAlternateColorCodes('&',
                                 plugin.getMessagesManager().getStartOptionLine()
@@ -196,7 +201,7 @@ public class PollCommand implements CommandExecutor {
             resultsMessage.append(plugin.getTranslateColors().translateColors(null, updateText)).append(currentPoll.getTitle()).append("\n");
 
             int totalVotes = currentPoll.getResults().values().stream().mapToInt(Integer::intValue).sum();
-            final int BAR_LENGTH = plugin.getConfigManager().getPollBar();
+            final int BAR_LENGTH = plugin.getPollsConfig().getPollBar();
 
             for (String opt : currentPoll.getOptions()) {
                 int voteCount = currentPoll.getResults().getOrDefault(opt, 0);
@@ -206,8 +211,8 @@ public class PollCommand implements CommandExecutor {
 
                 String progressBar = ChatColor.translateAlternateColorCodes('&',
                         plugin.getMessagesManager().getUpdateProgressBar()
-                                .replace("%filled%", String.valueOf(plugin.getConfigManager().getPollFill()).repeat(filledBlocks))
-                                .replace("%empty%", String.valueOf(plugin.getConfigManager().getPollEmpty()).repeat(emptyBlocks)));
+                                .replace("%filled%", String.valueOf(plugin.getPollsConfig().getPollFill()).repeat(filledBlocks))
+                                .replace("%empty%", String.valueOf(plugin.getPollsConfig().getPollEmpty()).repeat(emptyBlocks)));
 
                 resultsMessage.append(ChatColor.translateAlternateColorCodes('&',
                                 plugin.getMessagesManager().getUpdateOptionLine()

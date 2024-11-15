@@ -53,63 +53,34 @@ public class SocialSpyCommand implements CommandExecutor, TabCompleter {
         }
 
         String message;
-        switch (action) {
-            case "enable":
-                if (plugin.getConfigManager().isSpyEnabled()) {
-                    message = plugin.getMessagesManager().getAlreadyEnabledSpy();
-                    player.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + message));
-                } else {
-                    config.set("spy.commands.enabled", true);
-                    configManager.saveConfig();
-                    configManager.reloadConfig();
-                    message = plugin.getMessagesManager().getEnabledSpy();
-                    player.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + message));
-                }
-                break;
+        if (action.equals("mode")) {
+            if (args.length < 2) {
+                message = plugin.getMessagesManager().getInvalidModeSpy();
+                player.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + message));
+                return true;
+            }
 
-            case "disable":
-                if (!plugin.getConfigManager().isSpyEnabled()) {
-                    message = plugin.getMessagesManager().getAlreadyDisabledSpy();
-                    player.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + message));
-                } else {
-                    config.set("spy.commands.enabled", false);
-                    configManager.saveConfig();
-                    message = plugin.getMessagesManager().getDisabledSpy();
-                    player.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + message));
-                }
-                break;
-
-            case "mode":
-                if (args.length < 2) {
+            try {
+                int mode = Integer.parseInt(args[1]);
+                if (mode < 1 || mode > 3) {
                     message = plugin.getMessagesManager().getInvalidModeSpy();
                     player.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + message));
                     return true;
                 }
 
-                try {
-                    int mode = Integer.parseInt(args[1]);
-                    if (mode < 1 || mode > 3) {
-                        message = plugin.getMessagesManager().getInvalidModeSpy();
-                        player.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + message));
-                        return true;
-                    }
+                config.set("spy.commands.mode", mode);
+                configManager.saveConfig();
+                configManager.reloadConfig();
+                message = plugin.getMessagesManager().getModeSpy();
+                player.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + message).replace("%mode%", String.valueOf(mode)));
 
-                    config.set("spy.commands.mode", mode);
-                    configManager.saveConfig();
-                    configManager.reloadConfig();
-                    message = plugin.getMessagesManager().getModeSpy();
-                    player.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + message).replace("%mode%", String.valueOf(mode)));
-
-                } catch (NumberFormatException e) {
-                    message = plugin.getMessagesManager().getInvalidModeSpy();
-                    player.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + message));
-                }
-                break;
-
-            default:
-                message = plugin.getMessagesManager().getUsageSocialSpy();
+            } catch (NumberFormatException e) {
+                message = plugin.getMessagesManager().getInvalidModeSpy();
                 player.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + message));
-                break;
+            }
+        } else {
+            message = plugin.getMessagesManager().getUsageSocialSpy();
+            player.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + message));
         }
 
         return true;
@@ -124,8 +95,6 @@ public class SocialSpyCommand implements CommandExecutor, TabCompleter {
         }
 
         if (args.length == 1) {
-            completions.add("enable");
-            completions.add("disable");
             completions.add("mode");
         } else if (args.length == 2 && "mode".equalsIgnoreCase(args[0])) {
             completions.add("1");

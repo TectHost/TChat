@@ -37,7 +37,6 @@ public class MessagesManager {
     private String usageMsg;
     private String usageReply;
     private String noReply;
-    private String chatClearMessage;
     private String chatMuted;
     private String chatMute;
     private String chatUnmute;
@@ -85,7 +84,6 @@ public class MessagesManager {
     private String updateProgressBar;
     private String antiUnicode;
     private String levelUp;
-    private String printUsage;
     private List<String> chatMessage;
     private String chatDisabledWorld;
     private String ignoreListEmpty;
@@ -143,10 +141,6 @@ public class MessagesManager {
     private String otherPing;
     private List<String> serverMessage;
     private String usageSocialSpy;
-    private String alreadyEnabledSpy;
-    private String alreadyDisabledSpy;
-    private String enabledSpy;
-    private String disabledSpy;
     private String invalidModeSpy;
     private String modeSpy;
     private String usageCommandTimer;
@@ -194,7 +188,6 @@ public class MessagesManager {
     private String invseeUsage;
     private String usageMention;
     private String mentionOther;
-    private String meUsage;
     private String cgUsage;
     private String cgStart;
     private String cgStop;
@@ -227,11 +220,6 @@ public class MessagesManager {
     private String replacerPermissionEnd;
     private String replacerAdded;
     private String replacerRemoved;
-    private String replacerEnabled;
-    private String replacerDisabled;
-    private String usagePremade;
-    private String broadcastPremadeNull;
-    private String broadcastSent;
     private String groupAssigned;
     private String unknownGroup;
     private String usageGroup;
@@ -249,47 +237,33 @@ public class MessagesManager {
         boolean prefixEnabled = config.getBoolean("prefix.enabled");
         if (prefixEnabled) { prefix = config.getString("prefix.prefix"); } else { prefix = ""; }
 
-        if (plugin.getConfigManager().isCooldownChat()) {
-            cooldownChat = config.getString("messages.cooldown.chat", "&cPlease wait %cooldown% seconds before sending another message.");
-            depurationChatCooldown = config.getString("messages.debug.chat-cooldown", "&cPlease wait %cooldown% seconds before executing another command.");
-        }
-        if (plugin.getConfigManager().isCooldownCommand()) {
-            cooldownCommand = config.getString("messages.cooldown.command");
-            depurationCommandCooldown = config.getString("messages.debug.command-cooldown");
-        }
-
-        if (plugin.getConfigManager().isAntibotEnabled()) {
-            if (plugin.getConfigManager().isAntibotChat()) {
-                antibotChat = config.getString("messages.antibot.antibot-chat");
+        if (plugin.getConfigManager().isCooldownsEnabled()) {
+            if (plugin.getCooldownsConfig().isCooldownChat()) {
+                cooldownChat = config.getString("messages.cooldown.chat", "&cPlease wait %cooldown% seconds before sending another message.");
+                depurationChatCooldown = config.getString("messages.debug.chat-cooldown", "&cPlease wait %cooldown% seconds before executing another command.");
             }
-            if (plugin.getConfigManager().isAntibotCommand()) {
-                antibotCommand = config.getString("messages.antibot.antibot-command");
-            }
-            if (plugin.getConfigManager().isAntibotJoin()) {
-                antibotJoin = config.getString("messages.antibot.antibot-join");
-            }
-            if (plugin.getConfigManager().isAntibotMoved()) {
-                antibotMoved = config.getString("messages.antibot.antibot-moved");
+            if (plugin.getCooldownsConfig().isCooldownCommand()) {
+                cooldownCommand = config.getString("messages.cooldown.command");
+                depurationCommandCooldown = config.getString("messages.debug.command-cooldown");
             }
         }
 
-        if (plugin.getConfigManager().isUnicodeEnabled()) {
-            antiUnicode = config.getString("messages.unicode");
+        if (plugin.getConfigManager().isAntiBotEnabled()) {
+            if (plugin.getAntiBotConfigManager().isAntibotChat()) { antibotChat = config.getString("messages.antibot.antibot-chat"); }
+            if (plugin.getAntiBotConfigManager().isAntibotCommand()) { antibotCommand = config.getString("messages.antibot.antibot-command"); }
+            if (plugin.getAntiBotConfigManager().isAntibotJoin()) { antibotJoin = config.getString("messages.antibot.antibot-join"); }
+            if (plugin.getAntiBotConfigManager().isAntibotMoved()) { antibotMoved = config.getString("messages.antibot.antibot-moved"); }
         }
 
-        usagePremade = config.getString("messages.usage.premade", "&cUsage: /premade broadcast <broadcast>");
-        broadcastPremadeNull = config.getString("messages.broadcast-null", "&cBroadcast not found or is disabled.");
-        broadcastSent = config.getString("messages.broadcast-sent", "&aBroadcast '%broadcast%' sent to all players.");
+        if (plugin.getConfigManager().isAntiUnicodeEnabled()) { antiUnicode = config.getString("messages.unicode"); }
 
-        if (plugin.getReplacerManager().getReplacerEnabled()) {
+        if (plugin.getConfigManager().isReplacerEnabled()) {
             replacerNoReplacements = config.getString("messages.replacer.no-replacements", "&cNo replacements found.");
             usageReplacer = config.getString("messages.usage.replacer", "&cUsage: /replacer <list/add/remove/enable/disable>");
             usageReplacerAdd = config.getString("messages.usage.replacer-add", "&cUsage: /replacer add <original> <replace> <permission>");
             usageReplacerRemove = config.getString("messages.usage.replacer-remove", "&cUsage: /replacer remove <original>");
             replacerAdded = config.getString("messages.replacer.added", "&aReplacement added: &e%original% &a-> &e%replacement%");
             replacerRemoved = config.getString("messages.replacer.removed", "&cReplacement removed: %original%");
-            replacerEnabled = config.getString("messages.replacer.enabled", "&aReplacer enabled.");
-            replacerDisabled = config.getString("messages.replacer.disabled", "&aReplacer disabled.");
             replacerHeader = config.getString("messages.replacer.replacements.header", "&aReplacements:");
             replacerOriginal = config.getString("messages.replacer.replacements.original", "&eOriginal: &f");
             replacerReplace = config.getString("messages.replacer.replacements.replace", "&e-> Replace: &f");
@@ -297,47 +271,43 @@ public class MessagesManager {
             replacerPermissionEnd = config.getString("messages.replacer.replacements.permission-end", "&e]");
         }
 
-        tagsUsage = config.getString("messages.usage.tags", "&cUsage: /tags list or /tags select <tag>");
-        tagsUsageSelect = config.getString("messages.usage.tags-selected", "&cUsage: /tags select <tag>");
-        tagsList = config.getString("messages.tags.list", "&aList of available tags:");
-        tagsSelected = config.getString("messages.tags.selected", "&aYou have selected the tag: &e%tag%");
-        tagsNotFound = config.getString("messages.tags.unknown", "&aThe tag '&e%tag%&a' does not exist.");
+        if (plugin.getConfigManager().isTagsEnabled()) {
+            tagsUsage = config.getString("messages.usage.tags", "&cUsage: /tags list or /tags select <tag>");
+            tagsUsageSelect = config.getString("messages.usage.tags-selected", "&cUsage: /tags select <tag>");
+            tagsList = config.getString("messages.tags.list", "&aList of available tags:");
+            tagsSelected = config.getString("messages.tags.selected", "&aYou have selected the tag: &e%tag%");
+            tagsNotFound = config.getString("messages.tags.unknown", "&aThe tag '&e%tag%&a' does not exist.");
+        }
 
-        if (plugin.getConfigManager().isFloodPercentEnabled() || plugin.getConfigManager().isFloodRepeatEnabled()) {
-            antiFlood = config.getString("messages.anti-flood");
-            if (plugin.getConfigManager().isDepurationAntiFloodEnabled()) {
-                depurationAntiFlood = config.getString("messages.debug.anti-flood");
+        if (plugin.getConfigManager().isAntiFloodEnabled()) {
+            if (plugin.getAntiFloodConfig().isFloodPercentEnabled()) {
+                antiFlood = config.getString("messages.anti-flood");
+                if (plugin.getAntiFloodConfig().isFloodRepeatEnabled()) {
+                    depurationAntiFlood = config.getString("messages.debug.anti-flood");
+                }
             }
         }
 
         if (plugin.getConfigManager().isBroadcastEnabled()) {
-            broadcastUsage = config.getString("messages.usage.usage-broadcast");
+            if (plugin.getBroadcastConfig().isBroadcastEnabled()) { broadcastUsage = config.getString("messages.usage.usage-broadcast"); }
+            if (plugin.getBroadcastConfig().isWarningEnabled()) { usageWarning = config.getString("messages.usage.usage-warning"); }
+            if (plugin.getBroadcastConfig().isAnnouncementEnabled()) { usageAnnouncement = config.getString("messages.usage.usage-announcement"); }
         }
 
-        if (plugin.getConfigManager().isMeEnabled()) {
-            meUsage = config.getString("messages.usage.me", "&cUsage: /me <player>");
+        if (plugin.getConfigManager().isChatGamesEnabled()) {
+            cgUsage = config.getString("messages.usage.cg", "&cUsage: /chatgames <start|stop|restart|add|remove>");
+            cgUsageAdd = config.getString("messages.usage.cg-add", "&cUsage: /chatgames add <name> <message1,message1,...> <keyword1,keyword2,...> <reward1,reward2,...>");
+            cgUsageRemove = config.getString("messages.usage.cg-remove", "&cUsage: /chatgames remove <name>");
+            cgAdd = config.getString("messages.chatgames.add", "&aThe game '&e%name%&a' has been added successfully.");
+            cgRemove = config.getString("messages.chatgames.remove", "&aThe game '&e%name%&a' has been removed successfully.");
+            cgRestart = config.getString("messages.chatgames.restart", "&eThe game has been restarted.");
+            cgStart = config.getString("messages.chatgames.start", "&aThe game has started.");
+            cgStop = config.getString("messages.chatgames.stop", "&aThe game has been stopped.");
+            noEnabledGames = config.getString("messages.chatgames.no-enabled-games");
+            noMessages = config.getString("messages.chatgames.no-messages");
+            timeFinished = config.getString("messages.chatgames.time-finished");
+            gameWin = config.getString("messages.chatgames.win");
         }
-
-        if (plugin.getConfigManager().isWarningEnabled()) {
-            usageWarning = config.getString("messages.usage.usage-warning");
-        }
-
-        if (plugin.getConfigManager().isAnnouncementEnabled()) {
-            usageAnnouncement = config.getString("messages.usage.usage-announcement");
-        }
-
-        if (plugin.getConfigManager().isPrintEnabled()) {
-            printUsage = config.getString("messages.usage.usage-print");
-        }
-
-        cgUsage = config.getString("messages.usage.cg", "&cUsage: /chatgames <start|stop|restart|add|remove>");
-        cgUsageAdd = config.getString("messages.usage.cg-add", "&cUsage: /chatgames add <name> <message1,message1,...> <keyword1,keyword2,...> <reward1,reward2,...>");
-        cgUsageRemove = config.getString("messages.usage.cg-remove", "&cUsage: /chatgames remove <name>");
-        cgAdd = config.getString("messages.chatgames.add", "&aThe game '&e%name%&a' has been added successfully.");
-        cgRemove = config.getString("messages.chatgames.remove", "&aThe game '&e%name%&a' has been removed successfully.");
-        cgRestart = config.getString("messages.chatgames.restart", "&eThe game has been restarted.");
-        cgStart = config.getString("messages.chatgames.start", "&aThe game has started.");
-        cgStop = config.getString("messages.chatgames.stop", "&aThe game has been stopped.");
 
         if (plugin.getConfigManager().isIgnoreEnabled()) {
             ignoreSelf = config.getString("messages.ignore.ignore-self");
@@ -355,6 +325,7 @@ public class MessagesManager {
             colorSelectedMessage = config.getString("messages.color-selected");
             invalidIdMessage = config.getString("messages.invalid-id");
             formatSelectedMessage = config.getString("messages.format-selected");
+            materialNotFound = config.getString("messages.debug.material-not-found");
         }
 
         if (plugin.getConfigManager().isPingEnabled()) {
@@ -362,21 +333,17 @@ public class MessagesManager {
             otherPing = config.getString("messages.other-ping");
         }
 
-        if (plugin.getConfigManager().isSpyEnabled()) {
+        if (plugin.getConfigManager().isSocialSpyEnabled()) {
             usageSocialSpy = config.getString("messages.usage.usage-socialspy");
-            alreadyEnabledSpy = config.getString("messages.socialspy.already-enabled");
-            alreadyDisabledSpy = config.getString("messages.socialspy.already-disabled");
-            enabledSpy = config.getString("messages.socialspy.enabled");
-            disabledSpy = config.getString("messages.socialspy.disabled");
             modeSpy = config.getString("messages.socialspy.mode");
             invalidModeSpy = config.getString("messages.socialspy.invalid-mode");
         }
 
-        if (plugin.getConfigManager().isAntiCapEnabled()) {
-            antiCapMessage = config.getString("messages.anticap");
-        }
+        if (plugin.getConfigManager().isGrammarEnabled()) { repeatMessage = config.getString("messages.repeat-message"); }
 
-        if (plugin.getBannedWordsManager().isEnabled()) {
+        if (plugin.getConfigManager().isAntiCapEnabled()) { antiCapMessage = config.getString("messages.anticap"); }
+
+        if (plugin.getConfigManager().isBannedWordsEnabled()) {
             bannedWordsUnknown = config.getString("messages.bannedwords.unknown");
             bannedWordsAlready = config.getString("messages.bannedwords.already");
             bannedWordsList = config.getString("messages.bannedwords.list");
@@ -388,7 +355,7 @@ public class MessagesManager {
             usageBannedWords = config.getString("messages.usage.bannedwords");
         }
 
-        if (plugin.getCommandTimerManager().isEnabled()) {
+        if (plugin.getConfigManager().isCommandTimerEnabled()) {
             commandTimerInvalidNumber = config.getString("messages.commandtimer.invalid-number");
             commandTimerRemoved = config.getString("messages.commandtimer.removed");
             commandTimerAdded = config.getString("messages.commandtimer.added");
@@ -399,158 +366,204 @@ public class MessagesManager {
             usageCommandTimerAdd = config.getString("messages.usage.usage-commandtimer-add");
         }
 
-        logsHeader = config.getString("messages.logs.header");
-        logsInvalid = config.getString("messages.logs.invalid");
-        logsNoRegister = config.getString("messages.logs.no-register");
-        usageLogs = config.getString("messages.usage.logs");
-
-        muted = config.getString("messages.muted");
-        muteInvalidDuration = config.getString("messages.mute.invalid-duration");
-        muteInvalidUnit = config.getString("messages.mute.invalid-unit");
-        mutePermanent = config.getString("messages.mute.permanent");
-        muteUsage = config.getString("messages.usage.mute");
-        muteTemp = config.getString("messages.mute.temp");
-
-        usageMention = config.getString("messages.usage.mention");
-        mentionOther = config.getString("messages.mention-other");
-
-        if (plugin.getLevelsManager().isEnabled()) {
-            levelUp = config.getString("messages.level-up");
+        if (plugin.getConfigManager().isLoggerEnabled()) {
+            logsHeader = config.getString("messages.logs.header");
+            logsInvalid = config.getString("messages.logs.invalid");
+            logsNoRegister = config.getString("messages.logs.no-register");
+            usageLogs = config.getString("messages.usage.logs");
         }
+
+        if (plugin.getConfigManager().isMuteEnabled()) {
+            muted = config.getString("messages.muted");
+            muteInvalidDuration = config.getString("messages.mute.invalid-duration");
+            muteInvalidUnit = config.getString("messages.mute.invalid-unit");
+            mutePermanent = config.getString("messages.mute.permanent");
+            muteUsage = config.getString("messages.usage.mute");
+            muteTemp = config.getString("messages.mute.temp");
+        }
+
+        if (plugin.getConfigManager().isInvseeEnabled()) { invseeUsage = config.getString("messages.usage.invsee"); }
+
+        if (plugin.getConfigManager().isMentionsEnabled()) {
+            usageMention = config.getString("messages.usage.mention");
+            mentionOther = config.getString("messages.mention-other");
+        }
+
+        if (plugin.getConfigManager().isLevelsEnabled()) { levelUp = config.getString("messages.level-up"); }
 
         if (plugin.getConfigManager().isRepeatCommandsEnabled()) {
             repeatCommands = config.getString("messages.repeat-commands", "&cYou cannot send the same command.");
         }
 
-        // Messages
+        if (plugin.getConfigManager().isCustomCommandsEnabled()) {
+            customCommandsArguments = config.getString("messages.cc-arguments");
+            customCommandsCooldown = config.getString("messages.custom-commands-cooldown");
+        }
+
+        if (plugin.getConfigManager().isSicEnabled()) {
+            noItemInHand = config.getString("messages.no-item-in-hand", "&cYou do not have any items in hand.");
+            invalidItemMeta = config.getString("messages.invalid-item-meta", "&cThe item has no meta.");
+        }
+
+        if (plugin.getConfigManager().isStaffListEnabled()) {
+            headerStaffList = config.getString("messages.stafflist.header");
+            footerStaffList = config.getString("messages.stafflist.footer");
+            noStaff = config.getString("messages.no-staff");
+        }
+
+        if (plugin.getConfigManager().isChannelsEnabled()) {
+            noPermissionChannelLeft = config.getString("messages.channel.channel-no-permission-left");
+            noChannel = config.getString("messages.channel.no-channel");
+            channelLeftAnnounce = config.getString("messages.channel.left-channel-announce");
+            channelJoinAnnounce = config.getString("messages.channel.join-channel-announce");
+            channelJoin = config.getString("messages.channel.join-channel");
+            channelLeft = config.getString("messages.channel.left-channel");
+            channelAlready = config.getString("messages.channel.already-channel");
+            channelNoPermissionJoin = config.getString("messages.channel.channel-no-permission-join");
+            channelNotExist = config.getString("messages.channel.channel-not-exist");
+            usageLeaveChannel = config.getString("messages.usage.leave-channel");
+            usageJoinChannel = config.getString("messages.usage.join-channel");
+            usageChannel = config.getString("messages.usage.channel");
+            cooldownChannel = config.getString("messages.cooldown-channel");
+            usageSendChannel = config.getString("messages.usage.usage-send-channel");
+            channelFull = config.getString("messages.channel.full", "&cThe channel '&e%channel%&c' is full (&a%players%&c/&e%limit%&c).");
+        }
+
+        if (plugin.getConfigManager().isRealNameEnabled()) {
+            offlineRealName = config.getString("messages.realname.offline");
+            noPlayerRealName = config.getString("messages.realname.no-player");
+            realName = config.getString("messages.realname.realname");
+            usageRealName = config.getString("messages.usage.usage-realname");
+        }
+
+        if (plugin.getConfigManager().isSeenEnabled()) {
+            usageSeen = config.getString("messages.usage.usage-seen");
+            seen = config.getStringList("seen.player");
+            seenAdmin = config.getStringList("seen.admin");
+        }
+
+        if (plugin.getConfigManager().isNickEnabled()) {
+            nickRemove = config.getString("messages.nick.remove");
+            nickSet = config.getString("messages.nick.set");
+            usageNick = config.getString("messages.usage.usage-nick");
+            usageNickSet = config.getString("messages.usage.usage-nick-set");
+        }
+
+        if (plugin.getConfigManager().isServerEnabled()) { serverMessage = config.getStringList("server"); }
+
+        if (plugin.getConfigManager().isPlayerEnabled()) {
+            playerMessageAdmin = config.getStringList("player.admin");
+            playerMessage = config.getStringList("player.global");
+            usagePlayer = config.getString("messages.usage.usage-player");
+        }
+
+        if (plugin.getConfigManager().isCalculatorEnabled()) {
+            divisionZero = config.getString("messages.division-zero");
+            invalidOperator = config.getString("messages.invalid-operator");
+            invalidNumber = config.getString("messages.invalid-number");
+            calculatorResult = config.getString("messages.calculator-result");
+            usageCalculator = config.getString("messages.usage.usage-calculator");
+        }
+
+        if (plugin.getConfigManager().isHelpOpEnabled()) {
+            usageHelpOp = config.getString("messages.usage.usage-helpop");
+            helpOp = config.getString("messages.helpop");
+        }
+
+        if (plugin.getConfigManager().isBannedCommandsEnabled()) {
+            bannedCommandsRemoved = config.getString("messages.bannedcommands.removed");
+            bannedCommandsRemovedTab = config.getString("messages.bannedcommands.removed-tab");
+            bannedCommandsNotBlocked = config.getString("messages.bannedcommands.not-blocked");
+            bannedCommandsNotBlockedTab = config.getString("messages.bannedcommands.not-blocked-tab");
+            usageBannedCommandsRemove = config.getString("messages.usage.usage-remove-bc");
+            bannedCommandsAdded = config.getString("messages.bannedcommands.added");
+            bannedCommandsAddedTab = config.getString("messages.bannedcommands.added-tab");
+            bannedCommandsAlready = config.getString("messages.bannedcommands.already");
+            bannedCommandsAlreadyTab = config.getString("messages.bannedcommands.already-tab");
+            usageBannedCommandsAdd = config.getString("messages.usage.usage-add-bc");
+            bannedCommandsBlockedList = config.getString("messages.bannedcommands.blocked-list");
+            bannedCommandsBlockedTabList = config.getString("messages.bannedcommands.no-tab-blocked");
+            bannedCommandsNoCommandsBlocked = config.getString("messages.bannedcommands.no-commands-blocked");
+            bannedCommandsNoTabBlocked = config.getString("messages.bannedcommands.blocked-tab-list");
+            usageBannedCommandsList = config.getString("messages.usage.usage-list-bannedcommands");
+            usageBannedCommands = config.getString("messages.usage.usage-bannedcommands");
+        }
+
+        if (plugin.getConfigManager().isPluginEnabled()) {
+            pluginNotFound = config.getString("messages.plugin-not-found");
+            pluginUsage = config.getString("messages.usage.usage-plugin");
+            pluginMessage = config.getStringList("plugin");
+        }
+
+        if (plugin.getConfigManager().isAutoBroadcastEnabled()) {
+            autoBroadcastActionsPrompt = config.getString("messages.autobroadcast.create.actions-prompt");
+            autoBroadcastAddOneLine = config.getString("messages.autobroadcast.create.one-line");
+            autoBroadcastAddNewLine = config.getString("messages.autobroadcast.create.new-line");
+            autoBroadcastAddAdded = config.getString("messages.autobroadcast.create.added");
+            autoBroadcastAddEnabled = config.getString("messages.autobroadcast.create.enabled");
+            autoBroadcastUsageRemove = config.getString("messages.autobroadcast.usage-remove");
+            autoBroadcastUsageAdd = config.getString("messages.autobroadcast.usage-add");
+            autoBroadcastStop = config.getString("messages.autobroadcast.stop");
+            autoBroadcastStart = config.getString("messages.autobroadcast.start");
+            autoBroadcastRestart = config.getString("messages.autobroadcast.restart");
+            autoBroadcastRemove = config.getString("messages.autobroadcast.removed");
+            autoBroadcastUsage = config.getString("messages.usage.usage-autobroadcast");
+            autoBroadcastToggleOff = config.getString("messages.autobroadcast.toggle-off", "&cThe messages has been disabled.");
+            autoBroadcastToggleOn = config.getString("messages.autobroadcast.toggle-on", "&aThe messages has been enabled.");
+        }
+
+        if (plugin.getConfigManager().isWorldsEnabled()) { chatDisabledWorld = config.getString("messages.chat-disabled-world"); }
+
+        if (plugin.getConfigManager().isPollsEnabled()) {
+            updateProgressBar = config.getString("messages.poll.message.update.progress-bar");
+            updateTitle = config.getString("messages.poll.message.update.title");
+            updateText = config.getString("messages.poll.message.update.text");
+            updateOptionLine = config.getString("messages.poll.message.update.option-line");
+            startProgressBar = config.getString("messages.poll.message.start.progress-bar");
+            startOptionLine = config.getString("messages.poll.message.start.option-line");
+            startTitle = config.getString("messages.poll.message.start.title");
+            startText = config.getString("messages.poll.message.start.text");
+            pollCreate = config.getString("messages.poll-create");
+            pollFinish = config.getString("messages.poll.finish", "&6[Poll] &aThe poll has finished!");
+            votePoll = config.getString("messages.vote");
+            invalidOptionPoll = config.getString("messages.invalid-option-poll");
+            noPoll = config.getString("messages.no-poll");
+            usagePollVote = config.getString("messages.usage.usage-poll-vote");
+            oneOption = config.getString("messages.one-option");
+            durationNumber = config.getString("messages.duration-number");
+            usagePollCreate = config.getString("messages.usage.usage-poll-create");
+            usagePoll = config.getString("messages.usage.usage-poll");
+            optionLine = config.getString("messages.poll.message.end.option-line");
+            progressBar = config.getString("messages.poll.message.end.progress-bar");
+            endTextTitle = config.getString("messages.poll.message.end.text");
+            endTitle = config.getString("messages.poll.message.end.title");
+            pollOptionsMessage = config.getString("messages.poll.join.message-options");
+            pollMessage = config.getString("messages.poll.join.message");
+        }
+
+        if (plugin.getConfigManager().isMuteChatEnabled()) {
+            chatUnmute = config.getString("messages.chat-unmute");
+            chatMute = config.getString("messages.chat-mute");
+            chatMuted = config.getString("messages.chat-muted");
+        }
+
+        if (plugin.getConfigManager().isMsgEnabled()) {
+            usageMsg = config.getString("messages.usage.usage-msg");
+            if (plugin.getConfigManager().isReplyEnabled()) {
+                noReply = config.getString("messages.no-reply");
+                usageReply = config.getString("messages.usage.usage-reply");
+            }
+        }
+
         unknownGroup = config.getString("messages.groups.unknown", "&cThe group could not be assigned. Verify that the group exists.");
         groupAssigned = config.getString("messages.groups.assigned", "&aGroup assigned correctly.");
         usageGroup = config.getString("messages.usage.group", "&cUsage: /chat group (user) (group)");
-        noItemInHand = config.getString("messages.no-item-in-hand", "&cYou do not have any items in hand.");
-        invalidItemMeta = config.getString("messages.invalid-item-meta", "&cThe item has no meta.");
-        headerStaffList = config.getString("messages.stafflist.header");
-        footerStaffList = config.getString("messages.stafflist.footer");
-        noStaff = config.getString("messages.no-staff");
-        offlineRealName = config.getString("messages.realname.offline");
-        noPlayerRealName = config.getString("messages.realname.no-player");
-        realName = config.getString("messages.realname.realname");
-        usageRealName = config.getString("messages.usage.usage-realname");
-        usageSeen = config.getString("messages.usage.usage-seen");
-        seen = config.getStringList("seen.player");
-        seenAdmin = config.getStringList("seen.admin");
-        nickRemove = config.getString("messages.nick.remove");
-        nickSet = config.getString("messages.nick.set");
-        usageNick = config.getString("messages.usage.usage-nick");
-        usageNickSet = config.getString("messages.usage.usage-nick-set");
-        serverMessage = config.getStringList("server");
-        playerMessageAdmin = config.getStringList("player.admin");
-        playerMessage = config.getStringList("player.global");
-        usagePlayer = config.getString("messages.usage.usage-player");
-        divisionZero = config.getString("messages.division-zero");
-        invalidOperator = config.getString("messages.invalid-operator");
-        invalidNumber = config.getString("messages.invalid-number");
-        calculatorResult = config.getString("messages.calculator-result");
-        usageCalculator = config.getString("messages.usage.usage-calculator");
-        usageHelpOp = config.getString("messages.usage.usage-helpop");
-        helpOp = config.getString("messages.helpop");
-        bannedCommandsRemoved = config.getString("messages.bannedcommands.removed");
-        bannedCommandsRemovedTab = config.getString("messages.bannedcommands.removed-tab");
-        bannedCommandsNotBlocked = config.getString("messages.bannedcommands.not-blocked");
-        bannedCommandsNotBlockedTab = config.getString("messages.bannedcommands.not-blocked-tab");
-        usageBannedCommandsRemove = config.getString("messages.usage.usage-remove-bc");
-        bannedCommandsAdded = config.getString("messages.bannedcommands.added");
-        bannedCommandsAddedTab = config.getString("messages.bannedcommands.added-tab");
-        bannedCommandsAlready = config.getString("messages.bannedcommands.already");
-        bannedCommandsAlreadyTab = config.getString("messages.bannedcommands.already-tab");
-        usageBannedCommandsAdd = config.getString("messages.usage.usage-add-bc");
-        bannedCommandsBlockedList = config.getString("messages.bannedcommands.blocked-list");
-        bannedCommandsBlockedTabList = config.getString("messages.bannedcommands.no-tab-blocked");
-        bannedCommandsNoCommandsBlocked = config.getString("messages.bannedcommands.no-commands-blocked");
-        bannedCommandsNoTabBlocked = config.getString("messages.bannedcommands.blocked-tab-list");
-        usageBannedCommandsList = config.getString("messages.usage.usage-list-bannedcommands");
-        customCommandsArguments = config.getString("messages.cc-arguments");
-        usageSendChannel = config.getString("messages.usage.usage-send-channel");
-        usageBannedCommands = config.getString("messages.usage.usage-bannedcommands");
-        pluginNotFound = config.getString("messages.plugin-not-found");
-        pluginUsage = config.getString("messages.usage.usage-plugin");
-        pluginMessage = config.getStringList("plugin");
-        autoBroadcastActionsPrompt = config.getString("messages.autobroadcast.create.actions-prompt");
-        autoBroadcastAddOneLine = config.getString("messages.autobroadcast.create.one-line");
-        autoBroadcastAddNewLine = config.getString("messages.autobroadcast.create.new-line");
-        autoBroadcastAddAdded = config.getString("messages.autobroadcast.create.added");
-        autoBroadcastAddEnabled = config.getString("messages.autobroadcast.create.enabled");
-        autoBroadcastUsageRemove = config.getString("messages.autobroadcast.usage-remove");
-        autoBroadcastUsageAdd = config.getString("messages.autobroadcast.usage-add");
-        autoBroadcastStop = config.getString("messages.autobroadcast.stop");
-        autoBroadcastStart = config.getString("messages.autobroadcast.start");
-        autoBroadcastRestart = config.getString("messages.autobroadcast.restart");
-        autoBroadcastRemove = config.getString("messages.autobroadcast.removed");
-        autoBroadcastUsage = config.getString("messages.usage.usage-autobroadcast");
-        autoBroadcastToggleOff = config.getString("messages.autobroadcast.toggle-off", "&cThe messages has been disabled.");
-        autoBroadcastToggleOn = config.getString("messages.autobroadcast.toggle-on", "&aThe messages has been enabled.");
-        chatDisabledWorld = config.getString("messages.chat-disabled-world");
         chatMessage = config.getStringList("messages.chat-help.message");
-        updateProgressBar = config.getString("messages.poll.message.update.progress-bar");
-        updateTitle = config.getString("messages.poll.message.update.title");
-        updateText = config.getString("messages.poll.message.update.text");
-        updateOptionLine = config.getString("messages.poll.message.update.option-line");
-        startProgressBar = config.getString("messages.poll.message.start.progress-bar");
-        startOptionLine = config.getString("messages.poll.message.start.option-line");
-        startTitle = config.getString("messages.poll.message.start.title");
-        startText = config.getString("messages.poll.message.start.text");
-        pollCreate = config.getString("messages.poll-create");
-        pollFinish = config.getString("messages.poll.finish", "&6[Poll] &aThe poll has finished!");
-        votePoll = config.getString("messages.vote");
-        invalidOptionPoll = config.getString("messages.invalid-option-poll");
-        noPoll = config.getString("messages.no-poll");
-        usagePollVote = config.getString("messages.usage.usage-poll-vote");
-        oneOption = config.getString("messages.one-option");
-        durationNumber = config.getString("messages.duration-number");
-        usagePollCreate = config.getString("messages.usage.usage-poll-create");
-        usagePoll = config.getString("messages.usage.usage-poll");
-        optionLine = config.getString("messages.poll.message.end.option-line");
-        progressBar = config.getString("messages.poll.message.end.progress-bar");
-        endTextTitle = config.getString("messages.poll.message.end.text");
-        endTitle = config.getString("messages.poll.message.end.title");
-        pollOptionsMessage = config.getString("messages.poll.join.message-options");
-        pollMessage = config.getString("messages.poll.join.message");
-        customCommandsCooldown = config.getString("messages.custom-commands-cooldown");
-        noEnabledGames = config.getString("messages.chatgames.no-enabled-games");
-        noMessages = config.getString("messages.chatgames.no-messages");
-        timeFinished = config.getString("messages.chatgames.time-finished");
-        gameWin = config.getString("messages.chatgames.win");
-        repeatMessage = config.getString("messages.repeat-message");
-        chatUnmute = config.getString("messages.chat-unmute");
-        chatMute = config.getString("messages.chat-mute");
-        chatMuted = config.getString("messages.chat-muted");
-        chatClearMessage = config.getString("messages.chat-clear");
-        noReply = config.getString("messages.no-reply");
-        usageMsg = config.getString("messages.usage.usage-msg");
-        usageReply = config.getString("messages.usage.usage-reply");
         playerNotFound = config.getString("messages.player-not-found");
-        noPermissionChannelLeft = config.getString("messages.channel.channel-no-permission-left");
-        noChannel = config.getString("messages.channel.no-channel");
-        channelLeftAnnounce = config.getString("messages.channel.left-channel-announce");
-        channelJoinAnnounce = config.getString("messages.channel.join-channel-announce");
-        channelJoin = config.getString("messages.channel.join-channel");
-        channelLeft = config.getString("messages.channel.left-channel");
-        channelAlready = config.getString("messages.channel.already-channel");
-        channelNoPermissionJoin = config.getString("messages.channel.channel-no-permission-join");
-        channelNotExist = config.getString("messages.channel.channel-not-exist");
-        usageLeaveChannel = config.getString("messages.usage.leave-channel");
-        usageJoinChannel = config.getString("messages.usage.join-channel");
-        channelFull = config.getString("messages.channel.full", "&cThe channel '&e%channel%&c' is full (&a%players%&c/&e%limit%&c).");
         noPermission = config.getString("messages.no-permission");
         versionMessage = config.getString("messages.version-message");
         reloadMessage = config.getString("messages.reload-message");
         unknownMessage = config.getString("messages.unknown-command");
-        usageChannel = config.getString("messages.usage.channel");
-        cooldownChannel = config.getString("messages.cooldown-channel");
-
-        invseeUsage = config.getString("messages.usage.invsee");
-
-        // Messages depuration
-        materialNotFound = config.getString("messages.debug.material-not-found");
         noFormatGroup = config.getString("messages.debug.no-format-group");
         noPlayer = config.getString("messages.debug.no-player");
     }
@@ -575,9 +588,6 @@ public class MessagesManager {
     public String getGroupAssigned() {return groupAssigned;}
     public String getUnknownGroup() {return unknownGroup;}
     public String getUsageGroup() {return usageGroup;}
-    public String getUsagePremade() {return usagePremade;}
-    public String getBroadcastPremadeNull() {return broadcastPremadeNull;}
-    public String getBroadcastSent() {return broadcastSent;}
     public String getUsageReplacer() {return usageReplacer;}
     public String getUsageReplacerAdd() {return usageReplacerAdd;}
     public String getUsageReplacerRemove() {return usageReplacerRemove;}
@@ -589,8 +599,6 @@ public class MessagesManager {
     public String getReplacerPermissionEnd() {return replacerPermissionEnd;}
     public String getReplacerAdded() {return replacerAdded;}
     public String getReplacerRemoved() {return replacerRemoved;}
-    public String getReplacerEnabled() {return replacerEnabled;}
-    public String getReplacerDisabled() {return replacerDisabled;}
     public String getRepeatCommands() {return repeatCommands;}
     public String getNoItemInHand() {return noItemInHand;}
     public String getInvalidItemMeta() {return invalidItemMeta;}
@@ -612,7 +620,6 @@ public class MessagesManager {
     public String getCgUsageRemove() {return cgUsageRemove;}
     public String getCgRemove() {return cgRemove;}
     public String getCgRestart() {return cgRestart;}
-    public String getMeUsage() {return meUsage;}
     public String getUsageMention() {return usageMention;}
     public String getMentionOther() {return mentionOther;}
     public String getInvseeUsage() {return invseeUsage;}
@@ -660,10 +667,6 @@ public class MessagesManager {
     public String getUsageCommandTimer() { return usageCommandTimer; }
     public String getInvalidModeSpy() { return invalidModeSpy; }
     public String getModeSpy() { return modeSpy; }
-    public String getAlreadyEnabledSpy() { return alreadyEnabledSpy; }
-    public String getAlreadyDisabledSpy() { return alreadyDisabledSpy; }
-    public String getDisabledSpy() { return disabledSpy; }
-    public String getEnabledSpy() { return enabledSpy; }
     public String getUsageSocialSpy() { return usageSocialSpy; }
     public List<String> getServerMessage() { return serverMessage; }
     public String getOtherPing() { return otherPing; }
@@ -719,7 +722,6 @@ public class MessagesManager {
     public String getIgnoreListEmpty() { return ignoreListEmpty; }
     public String getChatDisabledWorld() { return chatDisabledWorld; }
     public List<String> getChatMessage() { return chatMessage; }
-    public String getPrintUsage() { return printUsage; }
     public String getLevelUp() { return levelUp; }
     public String getAntiUnicode() { return antiUnicode; }
     public String getUpdateProgressBar() { return updateProgressBar; }
@@ -767,7 +769,6 @@ public class MessagesManager {
     public String getChatUnmute() { return chatUnmute; }
     public String getChatMute() { return chatMute; }
     public String getChatMuted() { return chatMuted; }
-    public String getChatClearMessage() { return chatClearMessage; }
     public String getNoReply() { return noReply; }
     public String getUsageReply() { return usageReply; }
     public String getUsageMsg() { return usageMsg; }

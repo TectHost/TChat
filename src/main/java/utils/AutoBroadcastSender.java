@@ -32,56 +32,54 @@ public class AutoBroadcastSender {
         broadcastTask = new BukkitRunnable() {
             @Override
             public void run() {
-                if (autoBroadcastManager.isEnabled()) {
-                    AutoBroadcastManager.Broadcast[] broadcasts = autoBroadcastManager.getBroadcasts().values().toArray(new AutoBroadcastManager.Broadcast[0]);
+                AutoBroadcastManager.Broadcast[] broadcasts = autoBroadcastManager.getBroadcasts().values().toArray(new AutoBroadcastManager.Broadcast[0]);
 
-                    if (broadcasts.length == 0) {
-                        plugin.getLogger().info("No broadcasts available.");
-                        return;
-                    }
+                if (broadcasts.length == 0) {
+                    plugin.getLogger().info("No broadcasts available.");
+                    return;
+                }
 
-                    AutoBroadcastManager.Broadcast currentBroadcast = broadcasts[currentBroadcastIndex];
+                AutoBroadcastManager.Broadcast currentBroadcast = broadcasts[currentBroadcastIndex];
 
-                    if (currentBroadcast.enabled()) {
-                        String channelName = currentBroadcast.channel();
+                if (currentBroadcast.enabled()) {
+                    String channelName = currentBroadcast.channel();
 
-                        if (currentBroadcast.channel().equalsIgnoreCase("none")) {
-                            sendMessageToPlayers(Bukkit.getOnlinePlayers(), currentBroadcast);
-                        } else {
-                            int messageMode = plugin.getChannelsConfigManager().getChannel(channelName).messageMode();
+                    if (currentBroadcast.channel().equalsIgnoreCase("none")) {
+                        sendMessageToPlayers(Bukkit.getOnlinePlayers(), currentBroadcast);
+                    } else {
+                        int messageMode = plugin.getChannelsConfigManager().getChannel(channelName).messageMode();
 
-                            switch (messageMode) {
-                                case 0:
-                                    sendMessageToPlayers(Bukkit.getOnlinePlayers(), currentBroadcast);
-                                    break;
+                        switch (messageMode) {
+                            case 0:
+                                sendMessageToPlayers(Bukkit.getOnlinePlayers(), currentBroadcast);
+                                break;
 
-                                case 1:
-                                    for (Player player : Bukkit.getOnlinePlayers()) {
-                                        String permission = plugin.getChannelsConfigManager().getChannel(channelName).permission();
-                                        if (player.hasPermission(permission)) {
-                                            sendMessageToPlayer(player, currentBroadcast);
-                                        }
-                                    }
-                                    break;
-
-                                case 2:
-                                    for (Player player : plugin.getChannelsManager().getPlayersInChannel(channelName)) {
+                            case 1:
+                                for (Player player : Bukkit.getOnlinePlayers()) {
+                                    String permission = plugin.getChannelsConfigManager().getChannel(channelName).permission();
+                                    if (player.hasPermission(permission)) {
                                         sendMessageToPlayer(player, currentBroadcast);
                                     }
-                                    break;
+                                }
+                                break;
 
-                                case 3:
-                                    break;
+                            case 2:
+                                for (Player player : plugin.getChannelsManager().getPlayersInChannel(channelName)) {
+                                    sendMessageToPlayer(player, currentBroadcast);
+                                }
+                                break;
 
-                                default:
-                                    plugin.getLogger().warning("Unknown Message Mode: " + messageMode);
-                                    break;
-                            }
+                            case 3:
+                                break;
+
+                            default:
+                                plugin.getLogger().warning("Unknown Message Mode: " + messageMode);
+                                break;
                         }
                     }
-
-                    currentBroadcastIndex = (currentBroadcastIndex + 1) % broadcasts.length;
                 }
+
+                currentBroadcastIndex = (currentBroadcastIndex + 1) % broadcasts.length;
             }
         }.runTaskTimer(plugin, 0, autoBroadcastManager.getTime() * 20L);
     }

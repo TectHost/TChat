@@ -13,7 +13,7 @@ public class ChannelsConfigManager {
     private final Map<String, Channel> channels = new HashMap<>();
 
     public ChannelsConfigManager(TChat plugin){
-        this.channelsFile = new ConfigFile("channels.yml", null, plugin);
+        this.channelsFile = new ConfigFile("channels.yml", "modules", plugin);
         this.channelsFile.registerConfig();
         loadConfig();
     }

@@ -1,0 +1,278 @@
+# #################################################################
+# ┌─────────────────────────────────────────────────────────────┐ #
+# │                       Custom Commands                       │ #
+# └─────────────────────────────────────────────────────────────┘ #
+# #################################################################
+
+# Also try LogicalChat! https://www.spigotmc.org/resources/logicalchat-1-20x-best-chat-plugin.114302/
+
+# Tags:
+# [MESSAGE] - Sends a message | - "[MESSAGE] &7Test message"
+# [DEBUG] (INFO/WARNING/SEVERE/DEBUG/ERROR) - Sends a message in the console | - "[DEBUG] INFO This is a test message"
+# [GLOBAL] - Sends a message to all online players | - "[GLOBAL] &7Test message &bfor all &#c03afeo&#ac2ff9n&#9824f4l&#8319eei&#6f0ee9n&#5b03e4e players (%player_name%)"
+# [BROADCAST] - Sends a message to all online players with broadcast format (works even if it is deactivated in config.yml) | - "[BROADCAST] Test message"
+# [WARNING] - Sends a message to all online players with warning format (works even if it is deactivated in config.yml) | - "[WARNING] Test message"
+# [ANNOUNCEMENT] - Sends a message to all online players with announcement format (works event if it is deactivated in config.yml) | - "[ANNOUNCEMENT] Test message"
+# [TITLE] - Sends a title | - "[TITLE] &aTitle;&bSubtitle"
+# [PLAYER_COMMAND] - The player will automatically execute a command | - "[PLAYER_COMMAND] spawn {player}"
+# [CONSOLE_COMMAND] - The console will automatically execute a command | - "[CONSOLE_COMMAND] give {player} diamond 1"
+# [SOUND] - Executes a sound | - "[SOUND] AMBIENT_CRIMSON_FOREST_MOOD"
+# https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Sound.html
+# [PARTICLE] - Executes a particle | - "[PARTICLE] CHERRY_LEAVES"
+# https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Particle.html
+# [TELEPORT] - Teleports the player to concrete coordinate | - "[TELEPORT] world;0;70;0"
+# [ACTION_BAR] - Executes an action bar | - "[ACTION_BAR] &eWelcome! Have a great time!"
+# [INVENTORY] - Adds/removes/changes the inventory of the player | - "[INVENTORY] ADD DIAMOND_SWORD 1" | - "[INVENTORY] REMOVE STONE_SWORD 1" | - "[INVENTORY] CHANGE DIAMOND_SWORD 1 APPLE 1"
+# [POTION_EFFECT] - Adds/removes potion effects to the player | - "[POTION_EFFECT] ADD SPEED:120:1" | - "[POTION_EFFECT] REMOVE SPEED"
+# https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/potion/PotionEffectType.html
+# [BUNGEECORD] - Moves the player to another server | - "[BUNGEECORD] survival"
+# [CLICK_ACTION] (OPEN/SUGGEST/EXECUTE) (executor) | (message) - Message with Text Component | - "[CLICK_ACTION] OPEN https://tect.host/ | Click here to go to tect.host"
+# [CHATCOLOR] (COLOR/FORMAT) - Sets the color or format of the player | - "[CHATCOLOR] COLOR &2"
+# [XP] (ADD/REMOVE/SET) - Change the chat XP (levels.yml) | - "[XP] ADD 3" - "[XP] REMOVE 5" - "[XP] SET 47"
+# [LEVEL] (ADD/REMOVE/SET) - Change the chat Level (levels.yml) | - "[LEVEL] ADD 3" - "[LEVEL] REMOVE 5" - "[LEVEL] SET 47"
+# [MUTE] (Duration) - Mute the executor (use -1 for permanent) | - "[MUTE] 5m" - "[MUTE] -1"
+# [SLEEP] (time)(s/t/m) - Wait a defined period of time before proceeding with the actions | - "[SLEEP] 2s"
+  # s = seconds | t = ticks (20 = 1 second) | m = milliseconds (1000 = 1)
+# Conditionals
+  # [IF] - Initiates a conditional within the actions | - "[IF] %player_is_op% == true"
+    # (ADD) You can use && to add conditions to the if: - "[IF] %statistic_hours_played% >= 10 && %player_is_op% == yes"
+    # (OR) You can use || to compare another condition if one of them is not met: - "[IF] %statistic_hours_played% >= 10 && %player_is_op% == yes"
+  # [ELSE IF] - If the [IF] condition is not met, it will test this condition | - "[ELSE IF] %player_ping% <= 100"
+    # (ADD) You can use && to add conditions to the if: - "[IF] %statistic_hours_played% >= 10 && %player_is_op% == yes"
+    # (OR) You can use || to compare another condition if one of them is not met: - "[IF] %statistic_hours_played% >= 10 && %player_is_op% == yes"
+  # [ELSE] - If none of the conditions ([IF] and all the [ELSE IF] if any) are not met, this will be executed | - "[ELSE]"
+  # [FI] - The condition ends, from this tag, the rest is out of this condition | - "[FI]"
+  # [RETURN] - Breaks an active conditional | - "[RETURN]"
+# Loops
+  # [FOR] - Starts a loop for a specified number of repetitions | - "[FOR] 5"
+    # Placeholders:
+      # %i% - Number of loop executions
+  # [ROF] - Ends a FOR loop | - "[ROF]"
+  # [WHILE] - Starts a loop until the condition is not met | - "[WHILE] %player_health% < 20"
+  # [ELIHW] - Ends a while loop | - "[ELIHW]"
+  # [BREAK] - Breaks an active loop | - "[BREAK]"
+
+# Placeholders:
+# %prefix% - Returns the prefix of TChat
+# %i% - Returns the repetition number of the current loop (for)
+# %player% - Returns the player name
+# %center% - Centers a message
+
+commands:
+  test:
+    permission-required: false # tchat.customcommands.test
+    args: false
+    cooldown: 0
+    actions:
+      - "[IF] %statistic_hours_played% >= 10 || %player_is_op% == yes"
+      - "[MESSAGE] Test message"
+      - "[CLICK_ACTION] OPEN https://tect.host/ | Click here to open the link"
+      - "[CLICK_ACTION] SUGGEST /warp %player% | Click here to suggest a warp command"
+      - "[CLICK_ACTION] EXECUTE /home %player% | Click here to execute the home command"
+      - "[ELSE IF] %statistic_hours_played% >= 5 && %player_is_op% == yes"
+      - "[MESSAGE] Action with 5 hours played and rank MEMBER."
+      - "[ELSE]"
+      - "[MESSAGE] You need at least 5 hours of playtime or OP to use this command"
+      - "[FI]"
+      - "[MESSAGE] Actions outside the conditional"
+  me:
+    permission-required: true
+    args: true
+    cooldown: 0
+    actions:
+      - "[GLOBAL] &5* &#3AFE09%player% &#FEAD10> &7%args%"
+  chatclear:
+    permission-required: true
+    args: false
+    cooldown: 0
+    actions:
+      - "[FOR] 100"
+      - "[GLOBAL] &f"
+      - "[ROF]"
+      - "[GLOBAL] &aChat has been cleared by an administrator."
+      - "[MESSAGE] &aChat cleared."
+  print:
+    permission-required: false
+    args: true
+    cooldown: 0
+    actions:
+      - "[GLOBAL] %args%"
+  showcoords:
+    permission-required: false
+    args: false
+    cooldown: 0
+    actions:
+      - "[GLOBAL] &7[&a%player_name%&7] &#3AFE09These are my coordinates: &#FEB322%player_x%, %player_y%, %player_z%&#3AFE09!"
+  rules:
+    permission-required: false
+    args: false
+    cooldown: 0
+    actions:
+      - "[MESSAGE] &#c03afeT&#ac2ff9C&#9824f4h&#8319eea&#6f0ee9t"
+      - "[MESSAGE] 1. Don't use hacks"
+      - "[MESSAGE] 2. No tpa-kill"
+      - "[MESSAGE] 3. Don't use other chat plugin than TChat"
+  bc:
+    permission-required: false
+    args: true
+    cooldown: 0
+    actions:
+      - "[PLAYER_COMMAND] broadcast %args%"
+  help:
+    permission-required: false
+    args: false
+    cooldown: 0
+    actions:
+      - "[MESSAGE] &aHi %player_name%!"
+      - "[MESSAGE] &7This is the custom help"
+      - "[MESSAGE] &7from &#c03afeT&#a72cf8C&#8e1ff1h&#7411eba&#5b03e4t"
+      - "[MESSAGE] &7"
+      - "[MESSAGE] &8Modify this in commands.yml file"
+  pl:
+    permission-required: false
+    cooldown: 0
+    # If there is no args section, it will be taken as false
+    actions:
+      - "[MESSAGE] &fServer Plugins (3):"
+      - "[MESSAGE] &6Bukkit Plugins:"
+      - "[MESSAGE] '  &8- &aTChat&f, &aTect.host API&f, &aPlaceholderAPI'"
+  plugins:
+    permission-required: false
+    cooldown: 0
+    actions:
+      - "[MESSAGE] &fServer Plugins (3):"
+      - "[MESSAGE] &6Bukkit Plugins:"
+      - "[MESSAGE] '  &8- &aTChat&f, &aTect.host API&f, &aPlaceholderAPI'"
+  ts3:
+    permission-required: false
+    cooldown: 0
+    actions:
+      - "[MESSAGE] %prefix% &fTeamSpeak link"
+  teamspeak:
+    permission-required: false
+    cooldown: 0
+    actions:
+      - "[MESSAGE] %prefix% &fTeamSpeak link"
+  tw:
+    permission-required: false
+    cooldown: 0
+    actions:
+      - "[MESSAGE] %prefix% &fhttps://tw.tect.host/"
+  twitter:
+    permission-required: false
+    cooldown: 0
+    actions:
+      - "[MESSAGE] %prefix% &fhttps://tw.tect.host/"
+  web:
+    permission-required: false
+    cooldown: 0
+    actions:
+      - "[MESSAGE] %prefix% &fhttps://web.tect.host/"
+  website:
+    permission-required: false
+    cooldown: 0
+    actions:
+      - "[MESSAGE] %prefix% &fhttps://web.tect.host/"
+  fb:
+    permission-required: false
+    cooldown: 0
+    actions:
+      - "[MESSAGE] %prefix% &fhttps://fb.tect.host/"
+  facebook:
+    permission-required: false
+    cooldown: 0
+    actions:
+      - "[MESSAGE] %prefix% &fhttps://fb.tect.host/"
+  tt:
+    permission-required: false
+    cooldown: 0
+    actions:
+      - "[MESSAGE] %prefix% &fhttps://tk.tect.host/"
+  tiktok:
+    permission-required: false
+    cooldown: 0
+    actions:
+      - "[MESSAGE] %prefix% &fhttps://tk.tect.host/"
+  yt:
+    permission-required: false
+    cooldown: 0
+    actions:
+      - "[MESSAGE] %prefix% &fhttps://yt.tect.host/"
+  youtube:
+    permission-required: false
+    cooldown: 0
+    actions:
+      - "[MESSAGE] %prefix% &fhttps://yt.tect.host/"
+  instagram:
+    permission-required: false
+    cooldown: 0
+    actions:
+      - "[MESSAGE] %prefix% &fhttps://ig.tect.host/"
+  ig:
+    permission-required: false
+    cooldown: 0
+    actions:
+      - "[MESSAGE] %prefix% &fhttps://ig.tect.host/"
+  dc:
+    permission-required: false
+    cooldown: 0
+    actions:
+      - "[MESSAGE] %prefix% &fhttps://dc.tect.host/"
+  discord:
+    permission-required: false
+    cooldown: 0
+    actions:
+      - "[MESSAGE] %prefix% &fhttps://dc.tect.host/"
+  r:
+    permission-required: false
+    args: true
+    cooldown: 0
+    actions:
+      - "[PLAYER_COMMAND] reply %args%"
+  tell:
+    permission-required: false
+    args: true
+    cooldown: 0
+    actions:
+      - "[PLAYER_COMMAND] msg %args%"
+  whisper:
+    permission-required: false
+    args: true
+    cooldown: 0
+    actions:
+      - "[PLAYER_COMMAND] msg %args%"
+  ewhisper:
+    permission-required: false
+    args: true
+    cooldown: 0
+    actions:
+      - "[PLAYER_COMMAND] msg %args%"
+  pm:
+    permission-required: false
+    args: true
+    cooldown: 0
+    actions:
+      - "[PLAYER_COMMAND] msg %args%"
+  emsg:
+    permission-required: false
+    args: true
+    cooldown: 0
+    actions:
+      - "[PLAYER_COMMAND] msg %args%"
+  mc:
+    permission-required: false
+    args: false
+    cooldown: 0
+    actions:
+      - "[PLAYER_COMMAND] mutechat"
+  chatmute:
+    permission-required: false
+    args: false
+    cooldown: 0
+    actions:
+      - "[PLAYER_COMMAND] mutechat"
+  cc:
+    permission-required: false
+    cooldown: 0
+    actions:
+      - "[PLAYER_COMMAND] clearchat"

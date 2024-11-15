@@ -24,7 +24,7 @@ public class BannedWords implements Listener {
 
     @EventHandler
     public void playerBannedWords(@NotNull AsyncPlayerChatEvent event) {
-        if (event.isCancelled() || !bannedWordsManager.isEnabled()) return;
+        if (event.isCancelled()) return;
 
         Player player = event.getPlayer();
         if (!player.hasPermission(bannedWordsManager.getBypassPermission()) && !player.hasPermission("tchat.admin")) {
@@ -44,7 +44,7 @@ public class BannedWords implements Listener {
                         plugin.getDiscordHook().sendBannedWordEmbed(player.getName(), word, message, bannedWordsManager.getDiscordURL());
                     }
 
-                    if (plugin.getConfigManager().isLogBannedWordsEnabled()) {
+                    if (plugin.getLoggerConfigManager().isLogBannedWordsEnabled()) {
                         plugin.getLogsManager().logBannedWords(player.getName(), word);
                     }
 

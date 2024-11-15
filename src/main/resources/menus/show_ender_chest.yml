@@ -6,8 +6,6 @@
 
 # General menu configuration
 menu:
-  # Enable/disable the menu (and command)
-  enabled: true
   # Menu title
   title: "&7%player_name%'s enderchest"
   # Number of slots

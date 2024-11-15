@@ -10,18 +10,17 @@ import java.util.Objects;
 public class ChatBotManager {
 
     private final ConfigFile chatBotFile;
-    private boolean enabled;
+
     private Map<String, List<String>> messages;
 
     public ChatBotManager(TChat plugin){
-        this.chatBotFile = new ConfigFile("chatbot.yml", null, plugin);
+        this.chatBotFile = new ConfigFile("chatbot.yml", "modules", plugin);
         this.chatBotFile.registerConfig();
         loadConfig();
     }
 
-    public void loadConfig(){
+    public void loadConfig() {
         FileConfiguration config = chatBotFile.getConfig();
-        enabled = config.getBoolean("options.enabled");
 
         messages = new HashMap<>();
         if (config.isConfigurationSection("chatbot")) {
@@ -38,8 +37,6 @@ public class ChatBotManager {
     }
 
     // Options
-    public boolean isEnabled() { return enabled; }
-
     public List<String> getMessages(String key) {
         return messages.getOrDefault(key, List.of());
     }

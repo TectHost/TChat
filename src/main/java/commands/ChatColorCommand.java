@@ -59,7 +59,7 @@ public class ChatColorCommand implements CommandExecutor {
 
         String prefix = plugin.getTranslateColors().translateColors(player, plugin.getMessagesManager().getPrefix());
 
-        if (args.length == 0 && plugin.getConfigManager().isChatColorMenuEnabled()) {
+        if (args.length == 0 && plugin.getChatColorConfig().isChatColorMenuEnabled()) {
             if (player.hasPermission("tchat.chatcolor.menu")) {
                 String title = plugin.getTranslateColors().translateColors(player, plugin.getChatColorManager().getTitle());
                 if (title.contains("%center%")) {

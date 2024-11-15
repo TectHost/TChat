@@ -1,0 +1,19 @@
+# #################################################################
+# ┌─────────────────────────────────────────────────────────────┐ #
+# │                             Tags                            │ #
+# └─────────────────────────────────────────────────────────────┘ #
+# #################################################################
+
+tags:
+  # Enable/disable all menus (and yml file, disable it if you are not using 1.21+)
+  menus-enabled: true
+  example:
+    permission: tchat.tag.example
+    display: "&a&lEXAMPLE"
+  vip:
+    permission: tchat.tag.vip
+    display: "&#1E90FF&l[&#FF69B4&lVIP&#1E90FF&l]"
+  staff:
+    permission: tchat.admin
+    display: "&#FF4500&l[&#FFD700&lSTAFF&#FF4500&l]"
+  # Add more tags

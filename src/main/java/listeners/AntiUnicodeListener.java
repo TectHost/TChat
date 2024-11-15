@@ -15,7 +15,7 @@ public class AntiUnicodeListener implements Listener {
 
     public AntiUnicodeListener(@NotNull TChat plugin) {
         this.plugin = plugin;
-        String regex = plugin.getConfigManager().getUnicodeMatch();
+        String regex = plugin.getAntiUnicodeConfig().getUnicodeMatch();
         this.allowedPattern = (regex != null && !regex.isEmpty()) ? Pattern.compile(regex) : Pattern.compile(".*");
     }
 
@@ -24,11 +24,11 @@ public class AntiUnicodeListener implements Listener {
         Player player = event.getPlayer();
         String message = event.getMessage();
 
-        if (plugin.getConfigManager().isUnicodeEnabled() && !player.hasPermission("tchat.bypass.unicode") && !player.hasPermission("tchat.admin")) {
+        if (!player.hasPermission("tchat.bypass.unicode") && !player.hasPermission("tchat.admin")) {
             if (event.isCancelled()) { return; }
 
             if (containsInvalidCharacters(message)) {
-                if (plugin.getConfigManager().getUnicodeMode() == 1) {
+                if (plugin.getAntiUnicodeConfig().getUnicodeMode() == 1) {
                     event.setCancelled(true);
                     player.sendMessage(plugin.getTranslateColors().translateColors(player, plugin.getMessagesManager().getPrefix() + plugin.getMessagesManager().getAntiUnicode()));
                 } else {
@@ -40,7 +40,7 @@ public class AntiUnicodeListener implements Listener {
     }
 
     private boolean containsInvalidCharacters(String message) {
-        if (!plugin.getConfigManager().isUnicodeBlockAll()) {
+        if (!plugin.getAntiUnicodeConfig().isUnicodeBlockAll()) {
             return !allowedPattern.matcher(message).matches();
         } else {
             for (char c : message.toCharArray()) {
@@ -56,7 +56,7 @@ public class AntiUnicodeListener implements Listener {
         StringBuilder censored = new StringBuilder();
         for (char c : message.toCharArray()) {
             if (Character.UnicodeBlock.of(c) != Character.UnicodeBlock.BASIC_LATIN) {
-                censored.append(plugin.getConfigManager().getUnicodeCensor());
+                censored.append(plugin.getAntiUnicodeConfig().getUnicodeCensor());
             } else {
                 censored.append(c);
             }

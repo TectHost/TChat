@@ -1,0 +1,24 @@
+# #################################################################
+# ┌─────────────────────────────────────────────────────────────┐ #
+# │                          Broadcast                          │ #
+# └─────────────────────────────────────────────────────────────┘ #
+# #################################################################
+
+broadcast:
+  # /broadcast (message)
+  broadcast:
+    # Enable/disable this command
+    enabled: true
+    # Broadcast format
+    format: "&4[Broadcast] &a%message%"
+  # /warning (message)
+  warning:
+    # Enable/disable this command
+    enabled: true
+    # Warning format
+    format: "&c[Warning] &2%message%"
+  announcement:
+    # Enable/disable this command
+    enabled: true
+    # Warning format
+    format: "&9[Announcement] &f%message%"

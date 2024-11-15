@@ -493,7 +493,7 @@ public class CustomCommands implements Listener {
                 Bukkit.broadcastMessage(plugin.getTranslateColors().translateColors(player, data));
                 break;
             case "[BROADCAST]":
-                String format = plugin.getConfigManager().getBroadcastFormat();
+                String format = plugin.getBroadcastConfig().getBroadcastFormat();
                 format = format.replace("%message%", data);
                 Bukkit.broadcastMessage(plugin.getTranslateColors().translateColors(player, format));
                 break;
@@ -535,7 +535,7 @@ public class CustomCommands implements Listener {
                 handleLevelAction(player, data);
                 break;
             case "[WARNING]":
-                String format1 = plugin.getConfigManager().getWarningFormat();
+                String format1 = plugin.getBroadcastConfig().getWarningFormat();
                 format1 = format1.replace("%message%", data);
                 Bukkit.broadcastMessage(plugin.getTranslateColors().translateColors(player, format1));
                 break;
@@ -571,7 +571,7 @@ public class CustomCommands implements Listener {
                         break;
                 }
             case "[ANNOUNCEMENT]":
-                String format2 = plugin.getConfigManager().getAnnouncementFormat();
+                String format2 = plugin.getBroadcastConfig().getAnnouncementFormat();
                 format2 = format2.replace("%message%", data);
                 Bukkit.broadcastMessage(plugin.getTranslateColors().translateColors(player, format2));
                 break;

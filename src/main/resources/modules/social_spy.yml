@@ -1,0 +1,18 @@
+# #################################################################
+# ┌─────────────────────────────────────────────────────────────┐ #
+# │                          Social Spy                         │ #
+# └─────────────────────────────────────────────────────────────┘ #
+# #################################################################
+
+spy:
+  commands:
+    # Format of social spy
+    format: "&7&o[Social-Spy] %player% -> %command%"
+    # Modes:
+    # - 1 (send all commands)
+    # - 2 [WHITELIST] (send only commands of the commands section)
+    # - 3 [BLACKLIST] (send all commands except the commands section)
+    mode: 2
+    # Commands for use with WHITELIST and BLACKLIST mode
+    commands:
+      - "/msg"

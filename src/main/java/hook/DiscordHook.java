@@ -1,7 +1,6 @@
 package hook;
 
 import minealex.tchat.TChat;
-import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.OutputStream;

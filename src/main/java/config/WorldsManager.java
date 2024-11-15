@@ -15,7 +15,7 @@ public class WorldsManager {
     private final Map<String, BridgeConfigData> bridgesConfig;
 
     public WorldsManager(TChat plugin) {
-        this.configFile = new ConfigFile("worlds.yml", null, plugin);
+        this.configFile = new ConfigFile("worlds.yml", "modules", plugin);
         this.configFile.registerConfig();
         this.worldsConfig = new HashMap<>();
         this.bridgesConfig = new HashMap<>();

@@ -1,0 +1,19 @@
+# #################################################################
+# ┌─────────────────────────────────────────────────────────────┐ #
+# │                          Anti Flood                         │ #
+# └─────────────────────────────────────────────────────────────┘ #
+# #################################################################
+
+flood:
+  # Send a message on the console
+  depuration: true
+  repeat:
+    # Enable/disable this function
+    enabled: true
+    # Equal letters in a row to be blocked
+    characters: 3
+  percent:
+    # Enable/disable this function
+    enabled: true
+    # Percentage of matching letters to be blocked
+    percentage: 0.75

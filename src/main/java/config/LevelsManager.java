@@ -13,15 +13,16 @@ public class LevelsManager {
 
     private final TChat plugin;
     private final ConfigFile levelsFile;
-    private boolean enabled;
+
     private int minXp;
     private int maxXp;
+
     private final Map<Integer, Level> levels;
     private final Map<String, Multiplier> multipliers;
 
     public LevelsManager(TChat plugin) {
         this.plugin = plugin;
-        this.levelsFile = new ConfigFile("levels.yml", null, plugin);
+        this.levelsFile = new ConfigFile("levels.yml", "modules", plugin);
         this.levels = new HashMap<>();
         this.multipliers = new HashMap<>();
         this.levelsFile.registerConfig();
@@ -31,32 +32,28 @@ public class LevelsManager {
     public void loadConfig() {
         FileConfiguration config = levelsFile.getConfig();
 
-        enabled = config.getBoolean("options.enabled", false);
+        minXp = config.getInt("options.min");
+        maxXp = config.getInt("options.max");
 
-        if (enabled) {
-            minXp = config.getInt("options.min");
-            maxXp = config.getInt("options.max");
+        multipliers.clear();
+        if (config.contains("multiplier")) {
+            for (String key : Objects.requireNonNull(config.getConfigurationSection("multiplier")).getKeys(false)) {
+                double xpMultiplier = config.getDouble("multiplier." + key + ".xp", 1.0);
 
-            multipliers.clear();
-            if (config.contains("multiplier")) {
-                for (String key : Objects.requireNonNull(config.getConfigurationSection("multiplier")).getKeys(false)) {
-                    double xpMultiplier = config.getDouble("multiplier." + key + ".xp", 1.0);
-
-                    Multiplier multiplier = new Multiplier(xpMultiplier);
-                    multipliers.put(key, multiplier);
-                }
+                Multiplier multiplier = new Multiplier(xpMultiplier);
+                multipliers.put(key, multiplier);
             }
+        }
 
-            levels.clear();
-            if (config.contains("levels")) {
-                for (String key : Objects.requireNonNull(config.getConfigurationSection("levels")).getKeys(false)) {
-                    int levelId = Integer.parseInt(key);
-                    int xp = config.getInt("levels." + key + ".xp");
-                    List<String> rewards = config.getStringList("levels." + key + ".rewards");
+        levels.clear();
+        if (config.contains("levels")) {
+            for (String key : Objects.requireNonNull(config.getConfigurationSection("levels")).getKeys(false)) {
+                int levelId = Integer.parseInt(key);
+                int xp = config.getInt("levels." + key + ".xp");
+                List<String> rewards = config.getStringList("levels." + key + ".rewards");
 
-                    Level level = new Level(xp, rewards);
-                    levels.put(levelId, level);
-                }
+                Level level = new Level(xp, rewards);
+                levels.put(levelId, level);
             }
         }
     }
@@ -66,7 +63,6 @@ public class LevelsManager {
         loadConfig();
     }
 
-    public boolean isEnabled() {return enabled;}
     public int getMaxXp() { return maxXp; }
     public int getMinXp() { return minXp; }
 

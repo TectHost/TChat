@@ -5,6 +5,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.jetbrains.annotations.NotNull;
 
 public class PlayerMoveListener implements Listener {
 
@@ -15,11 +16,12 @@ public class PlayerMoveListener implements Listener {
     }
 
     @EventHandler
-    public void onPlayerMove(PlayerMoveEvent event) {
+    public void onPlayerMove(@NotNull PlayerMoveEvent event) {
         Player player = event.getPlayer();
-        if (plugin.getPlayerJoinListener().isUnverified(player) && plugin.getConfigManager().isAntibotEnabled() && !player.hasPermission(plugin.getConfigManager().getAntibotBypass()) && !player.hasPermission("tchat.admin")) {
+
+        if (plugin.getPlayerJoinListener().isUnverified(player) && plugin.getConfigManager().isAntiBotEnabled() && !player.hasPermission("tchat.bypass.antibot") && !player.hasPermission("tchat.admin")) {
             plugin.getPlayerJoinListener().removeUnverifiedPlayer(player);
-            if (plugin.getConfigManager().isAntibotMoved()) {
+            if (plugin.getAntiBotConfigManager().isAntibotMoved()) {
                 String prefix = plugin.getMessagesManager().getPrefix();
                 String message = plugin.getMessagesManager().getAntibotMoved();
                 player.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + message));

@@ -26,8 +26,6 @@ public class CommandProgrammerSender {
     }
 
     private void startScheduler() {
-        if (plugin.getCommandProgrammerManager().isEnabled()) {return;}
-
         new BukkitRunnable() {
             @Override
             public void run() {

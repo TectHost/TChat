@@ -27,7 +27,7 @@ public class RepeatMessagesListener implements Listener {
 
             if (isSimilar(lastMessage, newMessage)) {
                 int count = messageCount.getOrDefault(player, 0) + 1;
-                int limit = plugin.getConfigManager().getMaxRepeatMessages();
+                int limit = plugin.getGrammarManager().getMaxRepeatMessages();
 
                 if (count >= limit) {
                     event.setCancelled(true);
@@ -60,6 +60,6 @@ public class RepeatMessagesListener implements Listener {
         }
 
         double similarity = (double) similarChars / maxLength;
-        return similarity >= plugin.getConfigManager().getRepeatMessagesPercent();
+        return similarity >= plugin.getGrammarManager().getRepeatMessagesPercent();
     }
 }

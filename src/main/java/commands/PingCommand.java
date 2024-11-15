@@ -30,7 +30,7 @@ public class PingCommand implements CommandExecutor {
                 int ping = player.getPing();
 
                 String message = plugin.getMessagesManager().getPing();
-                String color = plugin.getConfigManager().getColorForPing(ping);
+                String color = plugin.getPingConfig().getColorForPing(ping);
                 message = message.replace("%ping%", String.valueOf(ping)).replace("%color%", color);
                 sender.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + message));
                 return true;
@@ -39,7 +39,7 @@ public class PingCommand implements CommandExecutor {
                 if (target != null) {
                     int ping = target.getPing();
                     String message = plugin.getMessagesManager().getOtherPing();
-                    String color = plugin.getConfigManager().getColorForPing(ping);
+                    String color = plugin.getPingConfig().getColorForPing(ping);
                     message = message.replace("%player%", target.getName()).replace("%ping%", String.valueOf(ping)).replace("%color%", color);
                     sender.sendMessage(plugin.getTranslateColors().translateColors(player, prefix + message));
                 } else {

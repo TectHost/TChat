@@ -25,7 +25,7 @@ public class DeathManager {
     private int numberOfParticles;
 
     public DeathManager(TChat plugin){
-        this.configFile = new ConfigFile("death.yml", null, plugin);
+        this.configFile = new ConfigFile("death.yml", "modules", plugin);
         this.configFile.registerConfig();
         loadConfig();
     }

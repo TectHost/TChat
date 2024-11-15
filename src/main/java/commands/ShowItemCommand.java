@@ -74,8 +74,8 @@ public class ShowItemCommand implements CommandExecutor {
                 ((Damageable) meta).getDamage()
         );
 
-        TextComponent prefixComponent = new TextComponent(plugin.getTranslateColors().translateColors(player, plugin.getConfigManager().getSicPrefix()));
-        TextComponent suffixComponent = new TextComponent(plugin.getTranslateColors().translateColors(player, plugin.getConfigManager().getSicSuffix()));
+        TextComponent prefixComponent = new TextComponent(plugin.getTranslateColors().translateColors(player, plugin.getSicConfig().getSicPrefix()));
+        TextComponent suffixComponent = new TextComponent(plugin.getTranslateColors().translateColors(player, plugin.getSicConfig().getSicSuffix()));
 
         TextComponent itemComponent = new TextComponent(itemName);
         itemComponent.setHoverEvent(new HoverEvent(

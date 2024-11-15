@@ -27,7 +27,7 @@ public class AnnouncementCommand implements CommandExecutor {
 
             String message = String.join(" ", args);
 
-            String format = plugin.getConfigManager().getAnnouncementFormat();
+            String format = plugin.getBroadcastConfig().getAnnouncementFormat();
 
             format = format.replace("%message%", message);
 
