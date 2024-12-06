@@ -108,7 +108,7 @@ public class Placeholders extends PlaceholderExpansion {
         String tagName = plugin.getSaveManager().getSelectedTag(playerId);
         TagsManager.Tag tag = plugin.getTagsManager().getTags().get(tagName);
 
-        if (tag == null) { return "No tag"; }
+        if (tag == null) { return ""; }
 
         return tag.getDisplay();
     }
